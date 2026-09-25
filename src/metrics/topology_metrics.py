@@ -47,7 +47,32 @@ class TopologyMetricsCalculator:
         recalled = self.critical_preds.intersection(learned_set)
         return len(recalled) / len(self.critical_preds)
 
-    def compute_all_metrics(self, learned_predicates):
+    def calculate_theorem1_bounds(self, branching_factor=2, max_depth=5, min_depth_omega=1):
+        """
+        Calculates theoretical lower and upper GED bounds from Theorem 1:
+        Lower Bound = |E_pred| * sum(omega(p*))
+        Upper Bound = |E_pred| * sum(omega(p*) * b^(D - depth(p*)))
+        """
+        if not self.E_pred:
+            return 0.0, 0.0
+            
+        sum_omega = sum(self.calculate_omega(pred) for pred in self.critical_preds)
+        lower_bound = len(self.E_pred) * sum_omega
+        
+        # Upper bound cascades through descendant subtree of depth (D - depth(p*))
+        upper_bound = len(self.E_pred) * sum_omega * (branching_factor ** (max_depth - min_depth_omega))
+        return lower_bound, upper_bound
+
+    def calculate_tightness_ratio(self, actual_ged, lower_bound):
+        """
+        Computes tightness ratio T_ratio = actual_ged / lower_bound.
+        When T_ratio = 1.0, lower bound is strictly tight (Theorem 3).
+        """
+        if lower_bound == 0:
+            return 1.0
+        return actual_ged / lower_bound
+
+    def compute_all_metrics(self, learned_predicates, branching_factor=2, max_depth=5):
         ged, deleted, added = self.calculate_ged()
         per = self.calculate_per()
         cpr = self.calculate_cpr(learned_predicates)
@@ -56,11 +81,18 @@ class TopologyMetricsCalculator:
         for pred in self.critical_preds:
             omega_dict[pred] = self.calculate_omega(pred)
             
+        lower_b, upper_b = self.calculate_theorem1_bounds(branching_factor, max_depth)
+        t_ratio = self.calculate_tightness_ratio(ged, lower_b)
+            
         return {
             "GED": ged,
             "Deleted_Real_Edges": deleted,
             "Added_Phantom_Edges": added,
             "PER_Phantom_Edge_Rate": f"{per * 100:.2f}%",
             "CPR_Critical_Precondition_Recall": f"{cpr * 100:.2f}%",
-            "Topological_Cut_Weights_omega": omega_dict
+            "Topological_Cut_Weights_omega": omega_dict,
+            "Theorem1_Lower_Bound": lower_b,
+            "Theorem1_Upper_Bound": upper_b,
+            "Theorem3_Tightness_Ratio": round(t_ratio, 4)
         }
+

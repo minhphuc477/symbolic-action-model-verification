@@ -13,7 +13,10 @@ class IPCPDDLAdapter:
         self.ipc_domains = [
             "Blocksworld", "Logistics", "Satellite", "Rovers", "Transport",
             "Gripper", "Ferry", "Miconic", "Driverlog", "Zenotravel",
-            "Depots", "Scheduling", "Storage", "Termes", "Openstacks"
+            "Depots", "Scheduling", "Storage", "Termes", "Openstacks",
+            "Sokoban", "It Is Pitch Black", "Graded Sir", "Katamari", "Braid Grid",
+            "Elevator", "Nomystery", "Floortile", "Barman", "Childsnack",
+            "Data-Network", "Tidybot", "Cave-Diving", "Visitall", "Grid-World"
         ]
         
     def generate_ipc_domain_pddl(self):
