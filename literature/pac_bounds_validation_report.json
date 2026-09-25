@@ -1,0 +1,33 @@
+{
+  "delta_confidence": 0.95,
+  "avg_passive_samples_O_S_A_d": 19775390625.0,
+  "avg_active_pac_samples_O_k": 1232.6666666666667,
+  "average_sample_efficiency_gain": 16102120.925262323,
+  "theorem_1_validated": true,
+  "details": [
+    {
+      "env_id": 0,
+      "k_rules": 5,
+      "passive_sample_complexity_O_S_A_d": 19775390625.0,
+      "theoretical_active_pac_bound": 1151.2925464970228,
+      "empirical_active_samples_needed": 1252,
+      "sample_efficiency_gain_x": 15795040.435303515
+    },
+    {
+      "env_id": 1,
+      "k_rules": 5,
+      "passive_sample_complexity_O_S_A_d": 19775390625.0,
+      "theoretical_active_pac_bound": 1151.2925464970228,
+      "empirical_active_samples_needed": 1134,
+      "sample_efficiency_gain_x": 17438616.07142857
+    },
+    {
+      "env_id": 2,
+      "k_rules": 5,
+      "passive_sample_complexity_O_S_A_d": 19775390625.0,
+      "theoretical_active_pac_bound": 1151.2925464970228,
+      "empirical_active_samples_needed": 1312,
+      "sample_efficiency_gain_x": 15072706.269054879
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "Domain": "100-State Synthetic Grid M",
+  "Model_A": {
+    "Omitted_Predicate": "p_leaf (Leaf Predicate)",
+    "A_pred": "98.0%",
+    "Topological_Cut_Weight_omega": 0.01,
+    "GED": 1,
+    "Play_Regret_R_play": 0,
+    "Execution_Status": "Goal Reached (SUCCESS)"
+  },
+  "Model_B": {
+    "Omitted_Predicate": "p_critical (Bottleneck Door Predicate)",
+    "A_pred": "98.0%",
+    "Topological_Cut_Weight_omega": 0.99,
+    "GED": 99,
+    "Play_Regret_R_play": "Infinity",
+    "Execution_Status": "Trapped in Deadlock (TOTAL COLLAPSE)"
+  }
+}

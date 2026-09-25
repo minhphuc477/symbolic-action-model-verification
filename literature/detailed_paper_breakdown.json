@@ -1,0 +1,2802 @@
+[
+  {
+    "id": "L457",
+    "year": 2026,
+    "work": "A Survey of World Model Benchmarks",
+    "area": "World-model benchmark survey / evaluation validity",
+    "venue": "2026",
+    "method": "Surveys 102 representative benchmarks and organizes evaluation by capability target, protocol, metric family and data source.",
+    "results": "World-model evaluation is already a broad, rapidly formalizing benchmark field; metric/protocol claims need precise coordinates.",
+    "limitations": "Does not identify mechanic-controlled planning-burden-matched instance synthesis as an occupied benchmark class in the current audit."
+  },
+  {
+    "id": "L417",
+    "year": 2026,
+    "work": "Distributionally Robust Games via Coherent Risk Measures",
+    "area": "Robust game theory / distributional uncertainty / equilibrium",
+    "venue": "arXiv 2026",
+    "method": "Studies strategic games where payoff distributions are uncertain and players use distributionally robust/coherent-risk objectives; develops equilibrium existence/complexity/formulations and evaluates out-of-sample robustness.",
+    "results": "Distributional robustness of strategic equilibria is mature mathematical methodology outside video-game balancing.",
+    "limitations": "Not a game-design parameter-selection or evaluator-population external-validity study."
+  },
+  {
+    "id": "L424",
+    "year": 2026,
+    "work": "XGuardian: Towards Generalized, Explainable and More Effective Server-side Anti-cheat in First-Person Shooter Games",
+    "area": "Anti-cheat / cross-game generalization / explainability",
+    "venue": "USENIX Security 2026",
+    "method": "USENIX Security 2026 system uses server-side pitch/yaw trajectory features and a GRU-CNN with SHAP-style explanation. Main CS2 data cover 3,069,216 aiming operations, 31,971 trajectories and 5,486 players; generalization is evaluated across CS2, CS:GO/HAWK data and Farlight84, with public datasets/artifacts.",
+    "results": "Cross-game generalization, large-scale real-world validation, explainability and some adversarial robustness in FPS anti-cheat are directly occupied.",
+    "limitations": "Temporal calibration/false-positive drift after patches or legitimate meta/style changes is not the core evaluation."
+  },
+  {
+    "id": "L426",
+    "year": 2026,
+    "work": "Dynamic Difficulty Adjustment in Serious Games: A Literature Review",
+    "area": "DDA / systematic literature review / evaluation gaps",
+    "venue": "Information 2026",
+    "method": "Reviews 75 recent serious-game DDA studies covering rule-based, player-model, physiological/emotional and machine-learning approaches. Finds growing use of adaptive systems but heterogeneous methods/evaluation metrics and substantial unresolved evaluation opportunities.",
+    "results": "The DDA design space is broad and mature; another adaptation algorithm or isolated performance study is weak novelty.",
+    "limitations": "The review does not identify a mature line of formal closed-loop stability analysis for simultaneous player-controller learning."
+  },
+  {
+    "id": "L430",
+    "year": 2026,
+    "work": "GameWorld: A Dynamic Benchmark for Generalist Agents in Interactive Game Environments",
+    "area": "General game agents / interactive benchmark / evaluation protocol",
+    "venue": "arXiv 2026",
+    "method": "GameWorld evaluates generalist agents on 34 browser games and 170 tasks using both low-level Computer-Use and semantic Generalist interfaces, state-verifiable progress/success metrics, a paused sandbox, and a real-time track. Full-paper audit shows interface choice can reverse relative model ordering; memory/context effects also differ by interface.",
+    "results": "Large multi-game generalist-agent evaluation is current and state-verifiable; generic 'build a game-agent benchmark' is occupied.",
+    "limitations": "The paper measures repeat-run robustness but does not formalize measurement invariance or ranking robustness across interface, latency regime, action budget, reset policy, scoring rule, memory harness and task mixture."
+  },
+  {
+    "id": "L408",
+    "year": 2026,
+    "work": "Software Testing Beyond Closed Worlds: Open-World Games as an Extreme Case",
+    "area": "Open-world game testing / uncertainty / software engineering",
+    "venue": "FSE 2026",
+    "method": "FSE 2026 vision/research paper argues that open-world games violate closed-world testing assumptions through inexhaustible behavior spaces, nondeterminism, elusive behavioral boundaries and unstable test oracles. It calls for selective exploration under cost, repeated/long-running execution, behavior-oriented objectives, metrics beyond coverage/failure counts and longitudinal empirical validation.",
+    "results": "The broad research agenda 'open-world testing needs new objectives, uncertainty-aware exploration and better oracles' is explicitly occupied.",
+    "limitations": "A vision paper leaves many concrete problems open, but the same research line already produced boundary-oriented BBExplorer in ASE 2026, signaling fast author execution."
+  },
+  {
+    "id": "L407",
+    "year": 2026,
+    "work": "A Formal Framework for Critical-Mass Collapse in Online Multiplayer Games",
+    "area": "Live-service viability / dynamical systems / population collapse",
+    "venue": "arXiv 2026",
+    "method": "Defines a conditional Critical Mass Threshold Φ below which queue time, match quality or role balance makes a multiplayer game operationally non-viable under a fixed operational profile; models decline with threshold-sensitive hazards and emphasizes that Φ is really a projection of a higher-dimensional viability boundary depending on region, mode, roles, skill, party size, cross-play and time.",
+    "results": "Critical-mass/viability collapse in online games now has an explicit mathematical framework.",
+    "limitations": "Case studies are illustrative rather than formal validation. Heterogeneous subpopulations, multi-game competition, bots/AI substitution, UGC and private servers are explicit future-work directions."
+  },
+  {
+    "id": "L412",
+    "year": 2026,
+    "work": "Dynamic Balancing and Matchmaking in Competitive Live-Service Games",
+    "area": "Live-service optimization / balancing × matchmaking",
+    "venue": "2026",
+    "method": "Working paper studies balancing and matchmaking as dynamically coupled operational levers under noisy game outcomes, emphasizing that estimation errors and intervention choices can interact nonlinearly.",
+    "results": "Joint live-service balance+matchmaking optimization is already a current research object.",
+    "limitations": "Working-paper status and specific model assumptions leave room for validation, but the broad synthesis is occupied."
+  },
+  {
+    "id": "L109",
+    "year": 2026,
+    "work": "Modeling Puzzle Difficulty via A* Search Behavior, Solution Paths, and Spatial Metrics",
+    "area": "Puzzle difficulty / cross-domain metrics",
+    "venue": "Preprint July 2026",
+    "method": "Studies A* search behavior, path and spatial features across Sokoban, Safari Rush Hour and Asteroid Escape.",
+    "results": "Suggests shared latent patterns in how difficulty manifests across puzzle domains.",
+    "limitations": "Difficulty estimation is adjacent rather than representation selection; early preprint."
+  },
+  {
+    "id": "L416",
+    "year": 2026,
+    "work": "Balanced Game Design",
+    "area": "Operations research / game balance / equilibrium design",
+    "venue": "2026 working paper",
+    "method": "Formulates competitive video-game balancing as a two-stage optimization problem: the designer selects attributes that induce pairwise win rates, and players respond through a two-player zero-sum Nash equilibrium. Proves structural limits and NP-hardness, develops an approximate MIP, extends to alternative win-rate models and multi-scenario settings, and reports a real-game case study using AI-simulated gameplay.",
+    "results": "Formal game-balance design, equilibrium response, optimization hardness, approximation and multi-scenario balance are already a strong 2026 operations-research program.",
+    "limitations": "The accessible current version does not clearly establish robustness of the ACCEPTABLE BALANCE SET to evaluator-population or discovered-strategy-set shift; 'multi-scenario' makes even generic scenario-robustness a dangerous claim."
+  },
+  {
+    "id": "L409",
+    "year": 2026,
+    "work": "Turn-Based Combat Arena: A New Framework for Multiagent Training and Game Balancing",
+    "area": "Multiagent simulation / game balancing / configurable benchmark",
+    "venue": "arXiv 2026-09-02",
+    "method": "Introduces a high-throughput configurable turn-based combat environment for multiagent training/evaluation and automated unit balancing; several optimization approaches are reported to converge to comparable balance solutions.",
+    "results": "Configurable simulation frameworks for automated combat balancing are current 2026 work.",
+    "limitations": "Very recent preprint/first-in-series; current accessible evidence does not establish robustness to population/model shift. A fixed policy/evaluator can make a balance conclusion population-specific."
+  },
+  {
+    "id": "L415",
+    "year": 2026,
+    "work": "Matchmaking Strategies for Maximizing Player Engagement in Video Games",
+    "area": "Operations research / matchmaking / bots / engagement",
+    "venue": "Management Science 2026",
+    "method": "Management Science develops a dynamic matchmaking model with heterogeneous skill and loss aversion, considers bots/pay-to-win interventions, and evaluates the approach with real online-chess data.",
+    "results": "Mathematical optimization of matchmaking quality, waiting/engagement and bot interventions is mature enough to close generic live-service matchmaking theses.",
+    "limitations": "Does not estimate a critical-mass viability surface across fragmented live-service segments, but combines with current production systems to make that an incremental/high-race extension."
+  },
+  {
+    "id": "L393",
+    "year": 2026,
+    "work": "Enhancing Automated Video Game Regression Testing through Behavior-Driven Development and Imitation Learning",
+    "area": "Automated game regression testing / BDD / RL / imitation learning",
+    "venue": "GAS 2026 / IEEE-ACM",
+    "method": "Combines natural-language BDD scenarios with imitation learning pretraining and RL fine-tuning to create adaptive automated regression tests; case study uses a Super Mario Bros clone in Godot and reports reduced test-development effort, improved coverage and detection of complex regressions.",
+    "results": "BDD specifications + learned gameplay agents for regression testing are already a current Games-and-Software-Engineering contribution.",
+    "limitations": "Single case-study game; reward design and RL compute remain limitations. It does not define cross-version semantic equivalence of behavior or exploit mechanisms."
+  },
+  {
+    "id": "L132",
+    "year": 2026,
+    "work": "NitroGen: An Open Foundation Model for Generalist Gaming Agents",
+    "area": "Cross-game generalist agents",
+    "venue": "2026",
+    "method": "Vision-action foundation model trained on 40k hours across 1,000+ games; transfers to unseen games.",
+    "results": "Cross-game zero-shot/few-shot transfer of PLAYER policies at large scale is now real, not hypothetical.",
+    "limitations": "Acts in games; does not generate levels/instances or consume executable mechanics specifications."
+  },
+  {
+    "id": "L394",
+    "year": 2026,
+    "work": "CausalGame: Benchmarking Causal Thinking of LLM Agents in Games",
+    "area": "Causal reasoning / interactive games / agent diagnostics",
+    "venue": "ICML 2026",
+    "method": "ICML 2026 Oral benchmark with 14 SCM-governed interactive scenarios involving selection bias, measurement error and hidden confounding. Agents receive an experiment budget, design interventions and submit a final design plus explanation. Across 30 frontier LLM agents, the best reaches 68.0% survival versus analytical optima around 78–85%; only about 5–7% of sessions receive causal-reasoning credit. Behavioral failure analysis identifies component lock-in, bias and optimization drift.",
+    "results": "Interactive intervention design, hidden causal mechanism discovery, and judge-independent failure-mode diagnostics in games are directly occupied.",
+    "limitations": "The games model scientific discovery rather than PCG or game-rule transfer; SCM structure is hidden but fixed. It does not test complexity-separating mechanic conjunctions."
+  },
+  {
+    "id": "L135",
+    "year": 2026,
+    "work": "Mortar: Evolving Mechanics for Automatic Game Design",
+    "area": "Automatic game design / quality diversity",
+    "venue": "GECCO 2026",
+    "method": "Uses QD + LLM to evolve mechanics; evaluates their contribution to skill-based player ordering and synthesizes complete games.",
+    "results": "Mechanic generation plus skill-ordering evaluation is current 2026 prior art.",
+    "limitations": "Still relies partly on user study and generated-game quality judgement; does not measure intrinsic computational demand or cross-rule transfer."
+  },
+  {
+    "id": "L396",
+    "year": 2026,
+    "work": "High Dimensional Procedural Content Generation",
+    "area": "PCG / mechanics as coordinates / temporal-spatial representations",
+    "venue": "FDG 2026",
+    "method": "Formalizes HDPCG by promoting non-geometric gameplay dimensions to explicit coordinates. Direction-Space validates reachability in (x,y,z,layer) for mechanics such as gravity inversion/parallel worlds; Direction-Time uses time-expanded graphs for dynamic action/conflict semantics. Multiple algorithms and Unity case studies evaluate playability, robustness, structure, style and efficiency.",
+    "results": "Mechanics-aware, temporal and higher-dimensional PCG representations are already an explicit FDG 2026 framework rather than an unoccupied direction.",
+    "limitations": "The paper demonstrates selected mechanic dimensions rather than automatic representation selection, theorem-derived complexity activation or transfer laws across puzzle families."
+  },
+  {
+    "id": "L397",
+    "year": 2026,
+    "work": "Constraint-Based Four-Dimensional Spacetime Blending of Learned Game Mechanics Along Orthogonal Planes",
+    "area": "Mechanic blending / learned mechanics / constraint PCG",
+    "venue": "FDG 2026",
+    "method": "Learns tile-based mechanics from example playthroughs as changes in tile configurations, blends mechanics from separate 2D games along orthogonal planes to form a 3D game, and generates a solution jointly with the level using temporal constraints in a conceptual 4D spacetime representation.",
+    "results": "Learned cross-game mechanic blending with explicit compositional geometry and guaranteed-completion constraints is directly published in FDG 2026.",
+    "limitations": "The work targets a specific orthogonal-plane blending construction rather than algebra-preserving learned generators or frozen transfer to unseen executable dynamics."
+  },
+  {
+    "id": "L398",
+    "year": 2026,
+    "work": "PACE: Parameter Change for Unsupervised Environment Design",
+    "area": "UED / environment valuation / learning progress",
+    "venue": "arXiv May 2026",
+    "method": "Values environments by the magnitude of policy-parameter change induced by training, using a first-order approximation to realized learning progress rather than regret/value-error/Monte-Carlo proxies. Reports improved OOD IQM and optimality-gap results on MiniGrid and Craftax.",
+    "results": "Environment usefulness/learning-progress estimation is already being attacked directly with agent-update signals in 2026 UED.",
+    "limitations": "Not game-mechanic theorem structure or causal testing; environment value is still policy-dependent and not a failure-attribution mechanism."
+  },
+  {
+    "id": "L405",
+    "year": 2026,
+    "work": "A Tractability Gap Beyond Nim-Sums: It's Hard to Tell Whether a Bunch of Superstars Are Losers",
+    "area": "Combinatorial games / composition / tractability gap",
+    "venue": "Theoretical Computer Science 2026",
+    "method": "Shows that disjunctive sums of simple tepid canonical game components (superstars) are NP-hard to solve, extending a long line where sums of individually tractable games can become PSPACE/NP-hard.",
+    "results": "The broad principle 'combining simple/tractable game components can create computational intractability' is already established beyond video-game mechanics.",
+    "limitations": "Composition is algebraic/disjunctive sum, not semantic mechanic conjunction on a matched level; no finite empirical solver-activation study."
+  },
+  {
+    "id": "L406",
+    "year": 2026,
+    "work": "Where Does Balance Break? Boundary Discovery for Game Balance Testing under a Finite Simulation Budget",
+    "area": "Game balance regression / boundary discovery / simulation budget",
+    "venue": "ASE 2026",
+    "method": "ASE 2026 research paper formulates balance regression testing as discovering the boundary between balanced and unbalanced regions in a stochastic parameter space under a finite simulation budget. BBExplorer combines multi-directional candidates, two-stage budget-aware screening and adaptive step-size refinement; evaluation covers two games and reports robustness to unseen random seeds/thresholds.",
+    "results": "The generic object 'find a game-balance boundary efficiently under a finite simulation budget' is directly occupied.",
+    "limitations": "Accessible current evidence does not establish robustness to changes in evaluator/player populations or an expanding strategic response set; the reported robustness is to stochastic seeds and threshold settings."
+  },
+  {
+    "id": "L107",
+    "year": 2026,
+    "work": "Representations for the Procedural Content Generation of Puzzle Game Instances: A Systematic Literature Review",
+    "area": "Procedural puzzle generation / representation",
+    "venue": "IEEE Access 2026",
+    "method": "SLR: 931 records screened for 2020–2025, 111 studies included; classifies logical vs physical representations.",
+    "results": "Explicitly concludes a significant gap in representation selection; notes search-space topology induced by logical representation has not been prioritized.",
+    "limitations": "Review itself does not solve selection; it maps the gap. Same authors are already pursuing follow-up experiments."
+  },
+  {
+    "id": "L447",
+    "year": 2026,
+    "work": "MirrorCraft: Paired Evaluation under Hidden Rule Changes in Minecraft",
+    "area": "Game-agent evaluation / rule interventions",
+    "venue": "2026",
+    "method": "Pairs Vanilla and Mirror worlds while matching terrain, spawn, resources, objective, interface and action budget; only rules change.",
+    "results": "Paired controlled game-rule interventions are established methodology.",
+    "limitations": "Evaluates agent progress under bundled rule suites rather than decomposing true search cost vs model-learning adequacy."
+  },
+  {
+    "id": "L443",
+    "year": 2026,
+    "work": "Control-oriented system identification: Classical, learning, and physics-informed approaches",
+    "area": "System identification / control-relevant models",
+    "venue": "Annual Reviews in Control 2026",
+    "method": "Survey argues identification should preserve downstream control-relevant properties rather than minimize prediction error; highlights guarantees and sample complexity.",
+    "results": "The broader control field already treats model adequacy as downstream-task relative.",
+    "limitations": "Not about discrete game mechanics, matched interventions, or planner/model burden separation."
+  },
+  {
+    "id": "L445",
+    "year": 2026,
+    "work": "Multiverse Mechanica: A Testbed for Learning Game Mechanics via Counterfactual Worlds",
+    "area": "Game world models / causal mechanic learning",
+    "venue": "ICLR 2026",
+    "method": "Formalizes mechanics as causal counterfactual constraints and emits paired worlds plus per-mechanic causal graphs for learning/evaluation.",
+    "results": "Mechanic-level counterfactual world-model learning is now directly occupied in games.",
+    "limitations": "Targets causal consistency of generated frames and single-impact frames, not samples-to-planning-adequacy or true-game search burden."
+  },
+  {
+    "id": "L446",
+    "year": 2026,
+    "work": "When a Verified World Model Still Loses: Play-Adequacy vs Prediction-Accuracy in LLM-Synthesized Code World Models",
+    "area": "Game world models / planning adequacy",
+    "venue": "2026",
+    "method": "Shows sampled transition/state accuracy can be near perfect while a rare omitted rule causes systematic play loss; advocates search-distribution or play adequacy.",
+    "results": "Raw prediction accuracy is invalid as G078-R's model-learning endpoint; rare pivotal rules are already demonstrated.",
+    "limitations": "Single/few failure constructions; does not map mechanic interventions to both planning burden and sample-to-adequacy burden."
+  },
+  {
+    "id": "L450",
+    "year": 2026,
+    "work": "Automated planning instance generation with neuro-symbolic AI",
+    "area": "Automated planning / instance generation",
+    "venue": "Artificial Intelligence 2026",
+    "method": "Generates valid, diverse and difficult planning problems using a neuro-symbolic generative model and deep RL.",
+    "results": "Automatic valid hard-instance generation in planning is current prior art.",
+    "limitations": "Targets generic difficulty and validity, not holding one learned-model/planning burden fixed while separating the other."
+  },
+  {
+    "id": "L448",
+    "year": 2026,
+    "work": "Mortar: Evolving Mechanics for Automatic Game Design",
+    "area": "Automated game design / mechanics / QD",
+    "venue": "GECCO 2026",
+    "method": "Evolves game mechanics with QD and evaluates mechanic contribution through skill-based ordering across generated games.",
+    "results": "Mechanic contribution/attribution and mechanic evolution are occupied.",
+    "limitations": "Does not attribute mechanic effects separately to planning-search burden and planning-adequate model-learning burden."
+  },
+  {
+    "id": "L242",
+    "year": 2026,
+    "work": "Refploit: Facilitating Exploit Construction via Code-Agent Trajectory Repair",
+    "area": "Software exploit reproduction / trajectory repair",
+    "venue": "arXiv 2026",
+    "method": "Uses differential execution to decompose failed exploit trajectories into satisfied, missing and misleading subtasks, then derives preservation/repair constraints and iteratively repairs the trajectory.",
+    "results": "Semantic trajectory repair and differential exploit validation are already active in software engineering.",
+    "limitations": "Targets code-agent vulnerability reproduction, not interactive gameplay policies or causal exploit equivalence across stochastic/dynamic builds."
+  },
+  {
+    "id": "L282",
+    "year": 2026,
+    "work": "Finding Shortest Walks in Kuru Kuru Kururin",
+    "area": "Game complexity + empirical solving",
+    "venue": "FUN 2026",
+    "method": "Mechanic-wise complexity analysis plus faithful game recreation and search experiments.",
+    "results": "Directly bridges theoretical mechanic complexity and practical search difficulty in a commercial game.",
+    "limitations": "Does not use a matched factorial intervention where individually tractable mechanic families are switched on/off on the same finite instance."
+  },
+  {
+    "id": "L127",
+    "year": 2026,
+    "work": "EMemBench: Interactive Benchmarking of Episodic Memory for VLM Agents",
+    "area": "Game-based memory benchmark",
+    "venue": "2026",
+    "method": "Programmatically generates verifiable trajectory-grounded questions across 15 text games and visual settings; covers recall, induction, temporal, spatial, logical and adversarial memory.",
+    "results": "Game-based capability-specific dynamic benchmarking is rapidly maturing.",
+    "limitations": "Memory-agent evaluation, not game-level marginal demand for memory."
+  },
+  {
+    "id": "L395",
+    "year": 2026,
+    "work": "Causal Reinforcement Learning for Complex Card Games: A Magic The Gathering Benchmark",
+    "area": "Causal RL / transfer / policy auditability / games",
+    "venue": "arXiv May 2026",
+    "method": "Introduces MTG-Causal-RL with a 3,077-D partial observation, 478 masked actions, five Standard archetypes, three rewards and a hand-designed SCM. Each episode exposes causal variables, predicted intervention effects and per-factor credit traces. Evaluation includes paired-seed PPO/causal baselines, leave-one-archetype-out transfer, calibration curves and factor credit shares.",
+    "results": "SCM-grounded factor-level credit attribution plus held-out game-strategy transfer and policy auditability already coexist in a 2026 game benchmark.",
+    "limitations": "SCM is hand-designed; only five archetypes and 56 cards; opponents are fixed; headline learned-agent results use a small seed count and causal augmentation does not uniformly improve win rate."
+  },
+  {
+    "id": "L380",
+    "year": 2026,
+    "work": "Population-dependent agent performance in non-transitive games: a multi-agent rock–paper–scissors benchmark",
+    "area": "Multi-agent evaluation / population dependence",
+    "venue": "Scientific Reports 2026",
+    "method": "Evaluates 54 agents from 18 archetypes and shows rankings change with opponent roster; reports Spearman rank correlation about 0.83 between two rosters and a change in the top-ranked method.",
+    "results": "Direct 2026 evidence that rank order itself is population-dependent in a game benchmark; generic roster-induced rank reversal/instability is occupied.",
+    "limitations": "Non-transitive agent performance, not automatic game design and not mechanic contribution attribution."
+  },
+  {
+    "id": "L385",
+    "year": 2026,
+    "work": "GameRule: a multi-agent architecture for game behavior specification",
+    "area": "Game rule specification / DSL / multi-agent architecture",
+    "venue": "Multimedia Systems 2026",
+    "method": "Introduces a rule-based DSL with per-actor when-do rules, CRUD state operations, deterministic central scheduling and a Unity code-generation backend.",
+    "results": "Explicit executable rule/behavior specification for games remains an active fast-moving systems frontier; broad claims around new game-rule DSLs or executable behavior specification are high race.",
+    "limitations": "Does not address cross-game zero-shot learned designers, complexity-critical mechanic activation, or representation-selection laws."
+  },
+  {
+    "id": "L389",
+    "year": 2026,
+    "work": "Evaluating SAT Solver Metrics as Predictors of Human-Perceived Nonogram Difficulty",
+    "area": "Puzzle solver metrics × human difficulty",
+    "venue": "arXiv 2026-08-24",
+    "method": "Encodes 10×10 Nonograms in SAT; evaluates MiniSat decisions, propagations and conflicts. From 1,000 uniquely solvable puzzles, selects six and runs a 67-participant / 201-attempt user study. Puzzle-level Spearman correlations with reported difficulty are decisions −0.257, propagations −0.257 and conflicts 0.000, all nonsignificant; expertise moderates the relationship.",
+    "results": "Solver effort cannot automatically be interpreted as human-perceived difficulty; human and computational difficulty can decouple strongly.",
+    "limitations": "Small six-puzzle human sample and one puzzle family; does not study mechanic interventions or complexity-class interactions."
+  },
+  {
+    "id": "L390",
+    "year": 2026,
+    "work": "Modeling Puzzle Difficulty via A* Search Behavior, Solution Paths, and Spatial Metrics",
+    "area": "Cross-game puzzle difficulty / solver-derived features",
+    "venue": "July 2026",
+    "method": "Full-text author manuscript uses six datasets across Sokoban, Safari Rush Hour and Asteroid Escape. It extracts A*-search/solution/spatial features, tests Spearman association with expert/user difficulty, clustering consistency and intra-/inter-game generalization. Sliding-puzzle families transfer more consistently; cross-domain pairs involving Sokoban are notably less stable.",
+    "results": "Cross-dataset and cross-puzzle generalization of solver-derived difficulty features is already an explicit 2026 research question.",
+    "limitations": "Difficulty labels mix expert ratings, completion behavior and user perception; rules are fixed within each puzzle family. It does not identify causal rule/mechanic interventions or complexity-separating conjunctions."
+  },
+  {
+    "id": "L392",
+    "year": 2026,
+    "work": "Adapting a content orchestrator across game genres: From top-down adventure to 2D platformer",
+    "area": "Cross-genre PCG / content orchestration / player adaptation",
+    "venue": "Entertainment Computing 58 (Sep 2026)",
+    "method": "Adapts the existing Overlord content orchestrator from a top-down adventure game to a 2D platformer. Core level/rule/narrative orchestration and player profiling are retained with mostly small parameter/implementation changes; only the low-level room generator needs substantial modification. Mixed-methods evaluation uses 168 questionnaire responses from 103 players plus think-aloud/interviews with 11 participants.",
+    "results": "Cross-genre reuse of an existing procedural content orchestrator is now directly demonstrated in 2026, including adaptive content and human evaluation.",
+    "limitations": "The two genres share substantial structure (room exploration, combat, quests, lock-key progression); authors explicitly say radically different genres may require redesign. This is adaptation, not frozen zero-shot transfer."
+  },
+  {
+    "id": "L146",
+    "year": 2026,
+    "work": "AI Native Games: A Survey and Roadmap",
+    "area": "AI-native games / generative AI",
+    "venue": "2026",
+    "method": "Defines AI-native games via counterfactual dependence of the core loop on runtime generative AI; reviews 53 artifacts and identifies open design areas.",
+    "results": "Runtime GenAI-as-mechanic is becoming a distinct field with a fresh taxonomy.",
+    "limitations": "Most research questions involve semantic openness, human experience, controllability, evaluation and safety; poor fit for no-human MSc constraints."
+  },
+  {
+    "id": "L381",
+    "year": 2026,
+    "work": "Computational Complexity and Integer Programming Formulation of the Oredango Puzzle",
+    "area": "Puzzle complexity / exact optimization / empirical solving",
+    "venue": "IEICE Transactions 2026",
+    "method": "Proves NP- and ASP-completeness, formulates a 0-1 integer program, and reports numerical results on real Oredango instances from Nikoli and PuzzleSquare JP.",
+    "results": "The combination 'puzzle complexity theorem + solver formulation + numerical experiments on real finite instances' is explicitly occupied in 2026.",
+    "limitations": "Does not perform matched mechanic interventions, factorial ablations, cross-distribution finite activation, or solver-robust interaction estimation."
+  },
+  {
+    "id": "L201",
+    "year": 2026,
+    "work": "Constructing Maximally Difficult Sliding-Block Puzzles Using State Space Analysis",
+    "area": "Puzzle empirical hardness / generation",
+    "venue": "Bachelor thesis 2025–2026",
+    "method": "Bachelor thesis listed in LIACS 2025–2026 repository studying difficult sliding-block puzzles via state-space analysis.",
+    "results": "Shows recent empirical interest in sliding-block state-space difficulty and hard-instance construction.",
+    "limitations": "Grey literature / bachelor thesis; does not appear to target the theorem-matched 1×1→1×2 boundary."
+  },
+  {
+    "id": "L353",
+    "year": 2026,
+    "work": "Which Structural Constraints Are Learnable? A Regime Map for a Minecraft Voxel Generator",
+    "area": "PCGML / controllability",
+    "venue": "FDG 2026 PCG Workshop",
+    "method": "FDG 2026 diagnostic study fixes a VQ-VAE + autoregressive Transformer voxel pipeline and measures 14 structural properties under conditioning. Nine are controllable, four approachable and one unresponsive; a composite effective-signal × min(CV,1) predictor correlates with controllability at Spearman ρ=0.879 (permutation p=0.002, n=10 emergent properties). Authors explicitly warn this is one-pipeline association, not a universal predictor.",
+    "results": "Predicting whether structural PCG constraints are learnable/controllable and diagnosing frequency-floor vs representation-ceiling patterns is already a direct 2026 PCG object.",
+    "limitations": "Single Minecraft voxel pipeline; bottleneck labels are heuristic rather than causally identified; predictor has not been externally validated across architectures/datasets/domains."
+  },
+  {
+    "id": "L178",
+    "year": 2026,
+    "work": "ClassicLogic: A Knowledge-Driven Benchmark of Classic Puzzle Games for Evaluating Compositional Generalization",
+    "area": "Puzzle reasoning / compositional generalization",
+    "venue": "arXiv 2026",
+    "method": "Procedurally generates Sudoku, KenKen, Kakuro and Futoshiki with hierarchical strategy knowledge; evaluates cross-game zero-shot entity/relational transfer and procedural composition.",
+    "results": "Cross-puzzle compositional reasoning benchmarks are already arriving in 2026.",
+    "limitations": "Focuses reasoning agents and strategy composition, not representation effects on PCG search or frozen designer transfer."
+  },
+  {
+    "id": "L177",
+    "year": 2026,
+    "work": "Reasoning Core: A Scalable Procedural Data Generation Suite for Symbolic Pre-training and Post-Training",
+    "area": "Procedural formal reasoning / randomized domains",
+    "venue": "arXiv 2026",
+    "method": "Procedurally samples verifiable symbolic tasks including randomized PDDL domains, first-order logic, grammars and causal models with continuous difficulty and external solvers.",
+    "results": "Formal-domain procedural generation with broad distributional coverage is rapidly becoming benchmark infrastructure.",
+    "limitations": "Generates reasoning data/tasks, not game levels via a transferred learned designer."
+  },
+  {
+    "id": "L175",
+    "year": 2026,
+    "work": "Procedural Content Metageneration via Program Search and Continual Abstraction Discovery",
+    "area": "PCG metageneration / generator program search",
+    "venue": "arXiv 2026",
+    "method": "Full-text reread: evolves complete Python generator programs for Sokoban, Zelda, Dangerous Dave and Lode Runner. Main experiment is CAD × fixed Expert API (2×2), 160 completed 50-generation runs; each candidate is executed 30 times and scored on validity, benchmark quality and diversity. CAD improves mean final best fitness in all eight domain/API comparisons; exact sign test p=0.008.",
+    "results": "Generator-space evolutionary program search and search-time abstraction discovery across multiple games are already active 2026 contributions; generic 'generator of generators' and adaptive vocabulary claims are occupied.",
+    "limitations": "Each run still adapts inside one target domain. The authors explicitly list cross-run library transfer as future work and do not test one frozen learned designer/spec transferred to unseen executable dynamics."
+  },
+  {
+    "id": "L176",
+    "year": 2026,
+    "work": "Tape: A Cellular Automata Benchmark for Evaluating Rule-Shift Generalization in Reinforcement Learning",
+    "area": "Rule-shift OOD / RL",
+    "venue": "arXiv 2026",
+    "method": "Keeps observation/action spaces fixed while transition rules change; compares model-free, learned-world-model planning and meta-RL under held-out rule shifts.",
+    "results": "Rule-shift generalization itself is now explicitly benchmarked on the acting-agent side.",
+    "limitations": "Agent/world-model evaluation, not procedural designer transfer or target-level generation."
+  },
+  {
+    "id": "L189",
+    "year": 2026,
+    "work": "Simulation to Rules: A Dual-VLM Framework for Formal Visual Planning",
+    "area": "Rule induction / formal planning",
+    "venue": "ICLR 2026",
+    "method": "Learns to infer formal planning descriptions and plans from visual simulations and evaluates unseen rule variants with iterative refinement.",
+    "results": "Formal-rule generalization and unseen-rule evaluation are active in 2026.",
+    "limitations": "Planner/rule-induction setting rather than procedural instance designer; iterative refinement also differs from frozen zero-target generation."
+  },
+  {
+    "id": "L188",
+    "year": 2026,
+    "work": "Multiverse: Language-Conditioned Multi-Game Level Blending via Shared Representation",
+    "area": "Multi-game PCG / compositional generation",
+    "venue": "arXiv 2026",
+    "method": "Conditional VQ-VAE learns a shared text-level latent space across four game domains and performs zero-shot generation from unseen composite text prompts plus cross-game latent interpolation.",
+    "results": "Single-model multi-game generation and zero-shot compositional prompts are explicitly established in 2026.",
+    "limitations": "The game domains themselves are present during training; 'zero-shot' refers to unseen composite instructions, not an unseen executable game dynamics system."
+  },
+  {
+    "id": "L362",
+    "year": 2026,
+    "work": "What Game Developers Actually Want from Procedural Level Generation Tools",
+    "area": "PCG tools / developer needs",
+    "venue": "FDG 2026",
+    "method": "Empirically examines developer needs/preferences for procedural level-generation tooling.",
+    "results": "Confirms practical PCG evaluation/control concerns but shifts toward HCI/tool adoption.",
+    "limitations": "Not a low-compute formal thesis object."
+  },
+  {
+    "id": "L361",
+    "year": 2026,
+    "work": "Regular Games — an Automata-Based General Game Playing Language",
+    "area": "Formal GGP / game representation",
+    "venue": "AAAI 2026",
+    "method": "Defines a universal automata-based language for finite turn-based imperfect-information games and reports fast forward models relative to other GGP systems.",
+    "results": "New lightweight formal infrastructure for cross-game experimental research.",
+    "limitations": "Infrastructure/language, not a thesis gap itself."
+  },
+  {
+    "id": "L363",
+    "year": 2026,
+    "work": "Mortar: Evolving Mechanics for Automatic Game Design",
+    "area": "Automatic game design / mechanic attribution",
+    "venue": "GECCO 2026",
+    "method": "Evolves code-level mechanics with QD+LLM; evaluates complete games by skill-based ordering over a fixed pool of five agents and introduces CITS, a search-constrained Shapley-style mechanic contribution score.",
+    "results": "Closest direct anchor for G049: mechanic quality is explicitly attributed through an evaluator population.",
+    "limitations": "Uses one fixed agent pool; does not systematically test whether mechanic rankings/contributions persist across independent evaluator populations or agent families."
+  },
+  {
+    "id": "L369",
+    "year": 2026,
+    "work": "Best Agent Identification for General Game Playing",
+    "area": "Agent evaluation / best-arm identification",
+    "venue": "IEEE Access 2026",
+    "method": "Frames best-agent identification over many games as multiple best-arm identification problems and substantially reduces simple regret under limited trials.",
+    "results": "Efficient best-agent identification is a current solved/active research object.",
+    "limitations": "Does not explain semantic reasons why one agent fits a game."
+  },
+  {
+    "id": "L370",
+    "year": 2026,
+    "work": "Beyond Fixed Tasks: Unsupervised Environment Design for Task-Level Pairs",
+    "area": "UED / automatic curriculum",
+    "venue": "AAAI 2026",
+    "method": "AAAI 2026 full-paper line: ATLAS extends UED from fixed tasks to joint autocurricula over reward-machine task specifications and MiniGrid levels, explicitly generating solvable yet challenging task-level pairs. Structure-aware mutations over both task and level improve convergence over random pairing.",
+    "results": "Task–environment co-design, solvability-aware curriculum generation, and joint mutation of specifications and levels are occupied UED contributions.",
+    "limitations": "Does not use game-complexity mechanic theorems or attribute failures to particular rule interactions."
+  },
+  {
+    "id": "L372",
+    "year": 2026,
+    "work": "From Gameplay Traces to Game Mechanics: Causal Induction with Large Language Models",
+    "area": "Causal game-mechanic induction",
+    "venue": "arXiv 2026",
+    "method": "Infers SCMs and VGDL rules from gameplay traces; SCM-first generation improves logical consistency/fidelity over direct rule generation.",
+    "results": "Game-specific causal induction from traces is now directly occupied.",
+    "limitations": "Does not estimate causal treatment effects of controlled mechanics on players/content."
+  },
+  {
+    "id": "L354",
+    "year": 2026,
+    "work": "Quality-Diversity Algorithms under Variable Constraints Competition (QDA-VC)",
+    "area": "PCG/QD / variable constraints",
+    "venue": "AIIDE 2026",
+    "method": "AIIDE 2026 competition evaluates QD methods under changing/add-remove constraints across puzzles, Lode Runner and optimization domains.",
+    "results": "Variable constraint handling is an active benchmark frontier now.",
+    "limitations": "Competition does not causally diagnose why a constraint is unresponsive."
+  },
+  {
+    "id": "L194",
+    "year": 2026,
+    "work": "Evolutionary Wave Function Collapse",
+    "area": "Representation/operator coupling in PCG",
+    "venue": "arXiv 2026",
+    "method": "Treats WFC inputs as an evolvable genotype-to-phenotype mapping and evaluates Maze and Zelda, finding stronger results when objectives align with local structure than global constraints.",
+    "results": "Generator performance depends on how representation/operator locality matches objective structure; this relationship is actively studied.",
+    "limitations": "Not a controlled equivalent-encoding study and no held-out representation-selection model."
+  },
+  {
+    "id": "L195",
+    "year": 2026,
+    "work": "MOSAIC: Adversarial Co-evolution of Specialist Heuristics and Problem Instances for LLM-based Automated Heuristic Design",
+    "area": "Hard-instance generation / algorithm selection",
+    "venue": "arXiv 2026",
+    "method": "Co-evolves discriminative combinatorial instances and specialist heuristics in an instance-feature QD archive; maps regions where heuristics win.",
+    "results": "Feature-conditioned hard-instance generation and algorithm specialization are very active.",
+    "limitations": "General combinatorial optimization and LLM-assisted heuristic design; not theorem-linked game-mechanic causal intervention."
+  },
+  {
+    "id": "L196",
+    "year": 2026,
+    "work": "Generative Executable Algorithm Knowledge Graphs (GEAKG)",
+    "area": "Procedural knowledge transfer / combinatorial optimization",
+    "venue": "arXiv 2026",
+    "method": "Represents executable algorithm operators and learned composition patterns in a transferable knowledge graph; reports zero-shot transfer from TSP to scheduling/assignment under a shared solution representation.",
+    "results": "Zero-shot transfer of procedural algorithmic know-how across optimization domains is now explicit.",
+    "limitations": "Algorithm design/solver procedures, not game-content designers; transfer relies on shared representation protocol and domain ontologies."
+  },
+  {
+    "id": "L193",
+    "year": 2026,
+    "work": "Representing and Generating Levels Over Time through Playtrace Reconstructive Partitioning",
+    "area": "Dynamic representation / PCG",
+    "venue": "FDG 2026",
+    "method": "Full-text reread: defines the cake representation as a k×n×m Markovian sequence of game-state slices with persistent temporal entities, then introduces PRP, a time-aware reconstructive partitioning generator. Sokoban evaluation uses 12 human-authored 7×7 source levels and compares against PoD, Sturgeon-MKIII, Sturgeon-ST, two PCGRL settings, and an LSTM baseline. PRP reaches 100% playability and competitive diversity; case studies apply the same base algorithm to OvercookedAI and a new SkeleWalker domain.",
+    "results": "Dynamic temporal level representation plus domain-agnostic generation is already a full FDG 2026 contribution, including multi-domain case studies.",
+    "limitations": "The authors explicitly note domain-specific pre/post-processing, potentially lossy conversion, non-identical baseline corpora, and lack of broad statistical comparison. They do NOT isolate the causal effect of representation from generator/search algorithm, and robust evaluation is primarily Sokoban."
+  },
+  {
+    "id": "L166",
+    "year": 2026,
+    "work": "Carrying is Hard: Exploring the Gap between Hardness for NP and PSPACE for the Hanano and Jelly no Puzzles",
+    "area": "Puzzle complexity / mechanic restrictions",
+    "venue": "2026",
+    "method": "Compares complexity under restrictions for two related puzzles and identifies block carrying as a likely mechanism sustaining PSPACE-hardness.",
+    "results": "Recent puzzle theory continues isolating mechanics responsible for complexity-class differences.",
+    "limitations": "Theoretical classification only; no empirical finite-instance solver study."
+  },
+  {
+    "id": "L216",
+    "year": 2026,
+    "work": "Finding Shortest Walks in Kuru Kuru Kururin",
+    "area": "Game complexity theory + practical solving",
+    "venue": "FUN 2026",
+    "method": "Full-text reread: combines formal complexity analysis with a faithful ~4k-line C# recreation and custom A*-based KuruBot. Current experiments solve original levels under damageless/intended/unrestricted-physics settings; the paper does NOT yet benchmark a controlled level suite isolating diagonal movement, springs and moving objects one-by-one.",
+    "results": "The broad contribution 'connect computational game complexity to practical solver behavior in a commercial game' is occupied. It also demonstrates that physics/mechanic settings can be changed in practical solver experiments.",
+    "limitations": "Conclusion explicitly proposes future work to generate levels focused on individual mechanics (no diagonal moves, diagonal moves, springs, moving objects), benchmark KuruBot, and compare those results with the complexity analysis. It still does not study a conjunction whose every strict subset is tractable nor a matched Boolean-lattice interaction contrast."
+  },
+  {
+    "id": "L099",
+    "year": 2026,
+    "work": "Learning Bayesian Game Families, with Application to Mechanism Design",
+    "area": "Parameterized games / mechanism design",
+    "venue": "AAMAS 2026",
+    "method": "Learn game-family models across mechanism/environment parameters; supports parameter search/extrapolation.",
+    "results": "Game-family modeling for design-space exploration is advancing beyond one fixed game.",
+    "limitations": "Mechanism-design focus; not game-mechanic capability fingerprints."
+  },
+  {
+    "id": "L108",
+    "year": 2026,
+    "work": "Using Effective State Representations and Search to Identify Interesting Safari Rush Hour Puzzle Instances",
+    "area": "Puzzle PCG / representation / search",
+    "venue": "Preprint July 2026",
+    "method": "Full-preprint reread: proposes a cluster/enumeration representation for Safari Rush Hour, compares two traversal strategies (systematic per-board IDA*+TT vs retrograde analysis over clusters) and compares the proposed encoding against two board representations. Roughly 28-hour searches show the enumeration representation is more efficient than a naive list-of-pieces encoding, and retrograde analysis finds longer-solution instances faster.",
+    "results": "A direct 2026 representation × search study now exists in the exact puzzle-PCG community that identified representation selection as a gap.",
+    "limitations": "Single primary domain and representation/search are not fully orthogonal: the cluster representation is designed to enable retrograde exploration. It does not provide semantic-matched representation interventions or a validated cross-family selection law."
+  },
+  {
+    "id": "L442",
+    "year": 2026,
+    "work": "Stochastic Safe Action Model Learning",
+    "area": "Action-model learning / stochastic planning",
+    "venue": "COLT 2026",
+    "method": "Gives polynomial time/sample complexity for a bounded-support stochastic planning-model class and guarantees approximate completeness from offline trajectories.",
+    "results": "Planning-adequate learned models with explicit sample guarantees remain an active 2026 planning line.",
+    "limitations": "No game-mechanic counterfactual decomposition and no comparison with true-engine solver burden."
+  },
+  {
+    "id": "L246",
+    "year": 2026,
+    "work": "Multiverse Mechanica: A Testbed for Learning Game Mechanics via Counterfactual Worlds",
+    "area": "Causal game mechanics / counterfactual worlds",
+    "venue": "ICLR 2026",
+    "method": "Full-paper audit: formalizes a mechanic as causal structure plus counterfactual constraints and generates 'consistent contrasts' from parallel game worlds with shared initial conditions/random seed so non-target context remains matched. Proof-of-concept mechanics include shield/weapon and spell/element-style interactions; the learning experiment fine-tunes an image-generation model on impact-frame counterfactuals with seed-consistency and structural-alignment losses.",
+    "results": "Causal/counterfactual game-mechanic signatures, matched mechanic worlds, and causal consistency are already an ICLR 2026 research contribution.",
+    "limitations": "Current testbed is simplified and proof-of-concept; it models single impact frames rather than complete temporal rollouts. Authors identify richer 3D/continuous/temporal mechanics and causal-consistency metrics across entire rollouts as future work."
+  },
+  {
+    "id": "L260",
+    "year": 2026,
+    "work": "Distilling Game Code World Model Generation into Lightweight Large Language Models",
+    "area": "GameCWM generation / execution-based verification",
+    "venue": "arXiv 2026",
+    "method": "Introduces a 30-game dataset, structural/property-based checks and execution-based trajectory verification, then post-trains a 3B model with SFT+RLVR for GameCWM generation.",
+    "results": "Game-model verification using properties and trajectory matching is directly active in 2026; semantic adherence itself is not an empty space.",
+    "limitations": "Its verification is based on predefined properties and sparse/lightweight trajectories; it does not search over game content to construct minimal behavioral counterexamples or bounded equivalence certificates."
+  },
+  {
+    "id": "L255",
+    "year": 2026,
+    "work": "From Gameplay Traces to Game Mechanics: Causal Induction with Large Language Models",
+    "area": "Game-rule induction / VGDL / causal models",
+    "venue": "ICPR 2026 proceedings line / arXiv 2026",
+    "method": "Reverse-engineers VGDL rules from short gameplay traces using direct LLM synthesis or an SCM-mediated pipeline across representative GVGAI games.",
+    "results": "Learning executable/structured game mechanics from observations is a current 2026 research line.",
+    "limitations": "Authors note confusion between mechanically similar games when traces fail to expose distinguishing transitions; current parsability/code-similarity/judge metrics do not adequately measure causal fidelity; only one observation set per game is used."
+  },
+  {
+    "id": "L244",
+    "year": 2026,
+    "work": "State-based Parameter Evolving with Lightweight Optimization for Graph Adaptation to Evolving Shifts",
+    "area": "Graph adaptation / evolving shifts",
+    "venue": "The Web Conference 2026",
+    "method": "Uses a test-time evolving state controller and lightweight generated adapters for sequential graph domain shifts, with replay-free adaptation and stability regularization.",
+    "results": "Selective/lightweight adaptation to evolving graph shifts is now an active WWW 2026 topic.",
+    "limitations": "Does not explicitly decompose observed drift into feature/topology/label/relation sources before choosing what model component to adapt."
+  },
+  {
+    "id": "L249",
+    "year": 2026,
+    "work": "Carrying is Hard: Exploring the Gap between Hardness for NP and PSPACE for the Hanano and Jelly no Puzzles",
+    "area": "Irreversible-gravity puzzles / mechanic-induced complexity transition",
+    "venue": "RP 2026 / arXiv v2",
+    "method": "Full-text reread: one-color Hanano remains PSPACE-complete without movable gray blocks; width-1 movable blocks make Hanano NP-complete; for every constant k, Hanano and Jelly with at most k movable blocks are in P. Authors posit simulated carrying as the mechanism behind the NP→PSPACE gap rather than prove a generic necessary/sufficient carrying dichotomy.",
+    "results": "The restriction lattice and carrying hypothesis are directly owned by the theory authors; finite empirical activation is the only remaining nearby object.",
+    "limitations": "No finite-instance solver study is present. However, same-geometry 'carrying off/on' intervention is not given by the theorem and the paper's future work explicitly seeks a more general framework for carrying/sliding games."
+  },
+  {
+    "id": "L243",
+    "year": 2026,
+    "work": "DRIFT: A Benchmark for Task-Free Continual Graph Learning with Continuous Distribution Shifts",
+    "area": "Continual graph learning / task-free drift",
+    "venue": "arXiv 2026",
+    "method": "Introduces task-free graph streams with hard, blurry and continuous Gaussian distribution shifts and shows large degradation of existing continual graph methods without task boundaries.",
+    "results": "The earlier external backup premise 'task-free graph continual learning under continuous drift' is directly occupied.",
+    "limitations": "Does not attribute which source of graph drift (features/topology/labels/relations) caused failure or adapt only the implicated component."
+  },
+  {
+    "id": "L324",
+    "year": 2026,
+    "work": "AI-Native Games: A Survey and Roadmap",
+    "area": "AI-native game design",
+    "venue": "arXiv 2026",
+    "method": "Defines AI-native core-loop dependence; analyzes 53 artifacts; identifies semantic adjudication, multi-agent simulation and generative construction as underrepresented; emphasizes mechanical invariants.",
+    "results": "Mechanical invariants under runtime semantic openness are a genuine new frontier.",
+    "limitations": "Roadmap-visible gap creates high race risk; LLM safety/testing/formal validation are major adjacent literatures."
+  },
+  {
+    "id": "L261",
+    "year": 2026,
+    "work": "Mind-Studio: Executable World Models with Lookahead Evaluation for Partially Observable Games",
+    "area": "Executable world models / rollout fidelity",
+    "venue": "arXiv 2026",
+    "method": "Synthesizes pygame-style world models from object-centric trajectories and evaluates them with K-step lookahead fidelity against real Atari rollouts.",
+    "results": "Multi-step behavioral fidelity evaluation of executable game world models is already current work.",
+    "limitations": "Evaluation starts from observed snapshots/branches and does not synthesize game content or minimal counterexamples between rule hypotheses."
+  },
+  {
+    "id": "L318",
+    "year": 2026,
+    "work": "Code World Models for General Game Playing",
+    "area": "General game playing / learned executable models",
+    "venue": "ICLR 2026",
+    "method": "Learns executable Python world models from natural-language rules/traces and uses them with planning/MCTS across multiple games.",
+    "results": "Executable learned game models and multi-game transfer are now active current-frontier research.",
+    "limitations": "Does not directly study content-realizable equivalence or counterfactual rule interrogation."
+  },
+  {
+    "id": "L319",
+    "year": 2026,
+    "work": "NitroGen: A Foundation Agent for Generalist Game Playing",
+    "area": "Generalist multi-game agents",
+    "venue": "2026",
+    "method": "Large multi-game training corpus and generalist game agent; targets zero-shot/off-the-shelf and transfer across many games.",
+    "results": "Generalist game-playing is becoming a scale/foundation-model race.",
+    "limitations": "High compute and not focused on formal rule changes or game design."
+  },
+  {
+    "id": "L222",
+    "year": 2026,
+    "work": "Taming the Search Space: Solving and Generating Hitori and Binairo Puzzles",
+    "area": "Puzzle generation + empirical solver analysis",
+    "venue": "arXiv 2026",
+    "method": "Generates benchmark instances and compares optimized backtracking and SAT solving across puzzle sizes, measuring runtime, search nodes and branching behavior.",
+    "results": "Modern puzzle research already expects generated benchmarks, multiple solver paradigms and search-effort instrumentation.",
+    "limitations": "No mechanic intervention or complexity-class interaction treatment."
+  },
+  {
+    "id": "L230",
+    "year": 2026,
+    "work": "Multi-task Procedural Content Generation with Reinforcement Learning",
+    "area": "PCGRL / multi-task compositional control",
+    "venue": "Scientific Reports 2026",
+    "method": "Peer-reviewed OA article trains language-conditioned PCGRL for Mario-style surface-feature control with a DeBERTa instruction encoder and regression/contrastive/hybrid objectives. Evaluation explicitly includes single-task, additive, compositional, paraphrased and zero-shot/extrapolative instruction regimes; complex or conflicting constraints remain the weak regime.",
+    "results": "Instruction-conditioned and compositional/OOD control in PCGRL is directly being benchmarked in 2026.",
+    "limitations": "The target remains one known game/dynamics family; the generator is not frozen and transferred spec-only to unseen executable transition semantics."
+  },
+  {
+    "id": "L231",
+    "year": 2026,
+    "work": "VIPCGRL: Visual Instruction-based Procedural Content Generation via Reinforcement Learning",
+    "area": "PCGRL / multimodal representation and control",
+    "venue": "IEEE Transactions on Games 2026",
+    "method": "Uses aligned textual/visual level-sketch representations to guide RL-based generation and improve human-aligned controllability.",
+    "results": "Representation/control innovation in PCGRL is moving rapidly into multimodal/shared semantic spaces.",
+    "limitations": "Not equivalent-representation causal science and not held-out dynamics transfer."
+  },
+  {
+    "id": "L335",
+    "year": 2026,
+    "work": "Five Emerging Research Opportunities for Deep Learning in Video Games",
+    "area": "Game AI research agenda",
+    "venue": "Entertainment Computing 2026",
+    "method": "Highlights emerging opportunities including LLM agents, neural cellular automata for PCG, deep surrogate modeling, self-supervised game-state representations and interactive worlds.",
+    "results": "Independent recent agenda supports surrogate modeling and NCA as live game-AI directions.",
+    "limitations": "Agenda/opinion; does not establish a specific unoccupied research question."
+  },
+  {
+    "id": "L232",
+    "year": 2026,
+    "work": "Learning Local Constraints for Reinforcement-Learned Content Generators",
+    "area": "PCGRL + WFC / local constraints",
+    "venue": "arXiv 2026",
+    "method": "Combines learned/local WFC-style constraints with reinforcement-learned content generators and studies how local structural constraints affect generation; notes potential transfer implications.",
+    "results": "Representation/local-constraint coupling with PCGRL is an active 2026 frontier.",
+    "limitations": "Does not provide canonical equivalent representations with semantic-matched edits or cross-family representation-selection boundaries."
+  },
+  {
+    "id": "L233",
+    "year": 2026,
+    "work": "High Dimensional Procedural Content Generation",
+    "area": "PCG / mechanic-axis representation",
+    "venue": "FDG 2026",
+    "method": "Represents mechanics as additional dimensions such as layer/time and evaluates procedural generation over expanded state spaces; explicitly discusses composition of multiple dimensions as future work.",
+    "results": "Single-axis high-dimensional mechanic representations and their generation are already published.",
+    "limitations": "Axes are evaluated separately; multi-mechanic joint composition, scaling and interaction are left open, but this is explicit author future work and therefore high race risk."
+  },
+  {
+    "id": "L235",
+    "year": 2026,
+    "work": "Evolving Programmatic Skill Networks",
+    "area": "Programmatic skills / continual compositional reuse",
+    "venue": "arXiv 2026",
+    "method": "Maintains an evolving graph of executable symbolic skills with trace-based credit assignment, stabilization and refactoring; demonstrates reuse/generalization in MineDojo and Crafter.",
+    "results": "Programmatic skill libraries, compositional reuse and continual reorganization are rapidly advancing outside compact formal-game settings.",
+    "limitations": "Does not focus on cross-rule formal invariance or predicting transferability from rule structure."
+  },
+  {
+    "id": "L234",
+    "year": 2026,
+    "work": "Learning Abstractions for Hierarchical Planning in Program-Synthesis Agents",
+    "area": "Program synthesis / reusable symbolic abstractions",
+    "venue": "arXiv 2026",
+    "method": "TheoryCoder-2 learns PDDL abstractions/skills and reuses them across VGDL games, BabyAI and MiniHack; demonstrates zero-shot abstraction reuse with no domain adaptation for several tasks.",
+    "results": "Learning and reusing symbolic/programmatic abstractions across game-like domains is now directly demonstrated.",
+    "limitations": "Does not systematically characterize formal rule-structural conditions predicting positive versus negative concept transfer, but occupies the broad G031 thesis question."
+  },
+  {
+    "id": "L236",
+    "year": 2026,
+    "work": "Reward-Adaptive Iterative Discovery: A Case Study on Automated Game Testing for NHL26",
+    "area": "Automated playtesting / exploit discovery",
+    "venue": "arXiv 2026 / EA",
+    "method": "EA trains iterative RL agents to discover multiple diverse goalie exploits. The paper explicitly states that after a behavior update, absence of the exploit in a rerun or failure of the old policy is not enough to prove the exploit was fixed because policies overfit exact dynamics.",
+    "results": "Diverse exploit discovery is occupied, while reliable cross-version exploit-fix verification remains an explicit industrial limitation.",
+    "limitations": "Still requires humans to determine whether strategies are true exploits and to validate fixes; proprietary NHL setting limits reusable benchmark evidence."
+  },
+  {
+    "id": "L240",
+    "year": 2026,
+    "work": "Knowledge Graph-enhanced Large Language Model for Incremental Game PlayTesting",
+    "area": "Game testing / knowledge graphs / incremental updates",
+    "venue": "IEICE Transactions 2026",
+    "method": "Current journal audit: KLPEG maintains a knowledge graph of game elements, task dependencies and causal relationships across versions; an LLM parses update logs, uses multi-hop KG reasoning to identify impacted functionality, and generates targeted incremental playtests. Evaluated on Overcooked and Minecraft.",
+    "results": "Cross-version structured knowledge accumulation, impact localization and update-tailored game testing are directly occupied.",
+    "limitations": "The framework depends on update-log interpretation and does not define semantic equivalence of a behavior/exploit when concrete traces or implementations change."
+  },
+  {
+    "id": "L338",
+    "year": 2026,
+    "work": "Seduced by the Narrative: Assessing Rule Adherence in Semi-Open Textual Games (CoC-Seduce)",
+    "area": "LLM game adjudication / adversarial evaluation",
+    "venue": "2026",
+    "method": "Builds an adversarial benchmark on tabletop RPG mechanics with explicit rules and natural-language interaction; 5,376 samples, multiple adversarial generators and 20 adjudicator models; finds rule-adjudication robustness remains difficult.",
+    "results": "Directly occupies the idea of benchmarking LLM semantic game adjudication/rule adherence under adversarial natural-language play.",
+    "limitations": "May not cover persistent mechanical invariants/state transitions or repair architectures across model versions, but the core evaluation object is very close."
+  },
+  {
+    "id": "L349",
+    "year": 2026,
+    "work": "Finite Automata Extraction: Low-data World Model Learning as Programs from Gameplay Video",
+    "area": "Game world-model learning",
+    "venue": "FDG 2026",
+    "method": "Learns symbolic/programmatic game dynamics from very little gameplay video in Pac-Man/River Raid.",
+    "results": "Direct current evidence that low-data game-rule/world-model extraction is active.",
+    "limitations": "Does not by itself resolve observational identifiability under passive support."
+  },
+  {
+    "id": "L241",
+    "year": 2026,
+    "work": "Diffploit: Facilitating Cross-Version Exploit Migration for Open Source Library Vulnerabilities",
+    "area": "Software exploit migration / cross-version behavior",
+    "venue": "ICSE 2026",
+    "method": "Adapts failing exploits across Java library versions using behavioral discrepancies, code diffs and iterative LLM-guided repair; reports 84.2% migration over 689 tasks.",
+    "results": "Cross-version exploit migration is a mature, directly analogous software-engineering problem by 2026.",
+    "limitations": "Code/API exploit setting differs from interactive game exploits with long-horizon state/action semantics and often no useful source-level diff."
+  },
+  {
+    "id": "L313",
+    "year": 2026,
+    "work": "Synergizing Code Coverage and Gameplay Intent: Coverage-Aware Game Playtesting with LLM-Guided RL",
+    "area": "Game testing / coverage",
+    "venue": "Entertainment Computing 58 (Sep 2026)",
+    "method": "Journal-version audit: SMART interprets AST differences with an LLM, decomposes update intent into ordered gameplay subgoals, maps those subgoals to modified-code anchors, and trains RL agents with a hybrid functional+coverage reward. Evaluation spans Overcooked, Minecraft and MineDojo; reported modified-branch coverage reaches up to 98% in structured environments and 72% in MineDojo while task completion remains 79–98%.",
+    "results": "Update-aware automated game testing that connects code diffs, semantic gameplay intent, RL exploration, and structural coverage is directly occupied.",
+    "limitations": "It does not prove cross-version behavioral equivalence, exploit-mechanism persistence, or minimal causal counterexamples; LLM-extracted intent and reward construction remain framework components rather than formal guarantees."
+  },
+  {
+    "id": "L296",
+    "year": 2026,
+    "work": "Backdoors to satisfaction continued",
+    "area": "SAT / parameterized complexity review",
+    "venue": "Computer Science Review 2026",
+    "method": "Reviews current parameterized-complexity results for backdoor size, depth and treewidth into polynomial-time SAT classes.",
+    "results": "Confirms backdoor/tractability-distance theory is mature and still active in 2026.",
+    "limitations": "Review is SAT-focused; does not occupy a game-specific theorem if one exists."
+  },
+  {
+    "id": "L312",
+    "year": 2026,
+    "work": "CA2: Code-Aware Agent for Automated Game Testing",
+    "area": "Code-aware game testing",
+    "venue": "Canadian AI / PMLR 2026",
+    "method": "Uses code/call-stack context to guide automated agents toward target functions in games.",
+    "results": "Modern game testers increasingly incorporate implementation structure rather than only black-box gameplay.",
+    "limitations": "Code access assumptions differ from semantic mechanic testing."
+  },
+  {
+    "id": "L290",
+    "year": 2026,
+    "work": "Adversarial Instance Generation and Robust Training for Neural Combinatorial Optimization with Multiple Objectives",
+    "area": "Adversarial instance generation / NCO",
+    "venue": "arXiv 2026",
+    "method": "Generates hard/adversarial combinatorial instances against learned solvers and uses them for robust training.",
+    "results": "Hard-instance generators can overfit a solver and adversarial generation is established.",
+    "limitations": "Neural CO and multiobjective optimization, not mechanic-ablation interaction in games."
+  },
+  {
+    "id": "L114",
+    "year": 2025,
+    "work": "Embedded Mechanics Generation",
+    "area": "Automated mechanics generation / PCG",
+    "venue": "AIIDE 2025",
+    "method": "Generates mechanics, reconstructs levels, and creates enemies supporting newly generated mechanics; compares RL and A*-style agents and proposes DIA.",
+    "results": "Joint mechanic-level-enemy generation/evaluation is already being pursued.",
+    "limitations": "Doctoral/ongoing line; designer-intent validation and evaluation remain challenging."
+  },
+  {
+    "id": "L432",
+    "year": 2025,
+    "work": "OpenApps: Simulating Environment Variations to Measure UI-Agent Reliability",
+    "area": "Interactive agents / environment variation / reliability",
+    "venue": "2025",
+    "method": "Evaluates seven UI agents over more than 10,000 runs on configurable app variants and finds that success can change dramatically across semantically related environment versions.",
+    "results": "Reliability under environment variation is already directly studied for interactive agents.",
+    "limitations": "Variation concerns app appearance/content rather than game action-interface/latency/metric protocol and model ranking invariance."
+  },
+  {
+    "id": "L431",
+    "year": 2025,
+    "work": "Establishing Best Practices for Building Rigorous Agentic Benchmarks",
+    "area": "Agent evaluation / benchmark validity",
+    "venue": "2025",
+    "method": "Shows that task setup and reward/evaluator design can substantially distort agent benchmark results and proposes the Agentic Benchmark Checklist. Applying the checklist can materially change measured performance.",
+    "results": "Benchmark validity, evaluator confounding and rigorous agent measurement are already an explicit research line.",
+    "limitations": "Not game-specific and does not study rank invariance across game interaction protocols."
+  },
+  {
+    "id": "L459",
+    "year": 2025,
+    "work": "Integrating Reinforcement Learning, Action Model Learning, and Numeric Planning for Tackling Complex Tasks",
+    "area": "Action-model learning / Minecraft / planning",
+    "venue": "2025",
+    "method": "Compares learned numeric domain models + planning with alternative learning approaches in Minecraft tasks, including offline and online model acquisition.",
+    "results": "Game-adjacent action-model learning for planning is already empirically studied.",
+    "limitations": "Does not intervene on individual mechanics or decompose planning-search versus model-acquisition burden."
+  },
+  {
+    "id": "L413",
+    "year": 2025,
+    "work": "Different Forms of Imbalance in Strongly Playable Discrete Games I: Two-Player RPS Games",
+    "area": "Formal game balance / game theory",
+    "venue": "arXiv 2025",
+    "method": "Develops formal definitions of imbalance and playability for strongly playable discrete two-player games and relates them to dominated strategies; shows balance is mathematically richer than equal empirical win rates.",
+    "results": "Formalizing game balance metrics themselves is an active mathematical research line.",
+    "limitations": "Abstract RPS-like setting rather than live-service parameter-space robustness or player-population shift."
+  },
+  {
+    "id": "L419",
+    "year": 2025,
+    "work": "A Study on a Reinforcement Learning-based Player-Adaptive Dynamic Game Difficulty Adjustment System",
+    "area": "DDA / dual-agent learning / non-stationarity",
+    "venue": "JISPS 2025 vol.26 no.6",
+    "method": "Uses a Player Agent and Balancing Agent in a physics-based game. The paper explicitly states that simultaneous learning creates non-stationarity, so it pretrains the player DQN and only then trains the balancing agent to control gravity and maintain a 50% win-rate target.",
+    "results": "The exact co-adaptation stability problem is visible in current game-DDA literature as a practical obstacle.",
+    "limitations": "It avoids rather than characterizes simultaneous adaptation; no stability region, oscillation criterion, delay/noise robustness analysis or coupled-learning theorem is reported."
+  },
+  {
+    "id": "L118",
+    "year": 2025,
+    "work": "Repairing General Game Descriptions",
+    "area": "Formal game rules / repair",
+    "venue": "KR 2025",
+    "method": "Defines minimal repairs for faulty GDL descriptions, gives complexity results and ASP encoding.",
+    "results": "Formal verification has progressed from detection to automatic repair of game descriptions.",
+    "limitations": "Targets logical requirements of GDL descriptions, not learned procedural transfer."
+  },
+  {
+    "id": "L422",
+    "year": 2025,
+    "work": "Empowering Economic Simulation for Massively Multiplayer Online Games through Generative Agent-Based Modeling",
+    "area": "MMO economy / generative agent-based modeling / player heterogeneity",
+    "venue": "KDD 2025",
+    "method": "KDD paper builds LLM-based MMO economic agents with profile, perception, memory, reasoning, action and reflection. Player profiles are derived from logs of 16,294 real players; simulations include trading/negotiation and rich/moderate/scarce resource regimes, reproducing role specialization and price/supply-demand behavior.",
+    "results": "Modern MMO economy simulation already models heterogeneous player profiles, social trading and adaptive behavior rather than one fixed toy policy.",
+    "limitations": "Agent reliability and simulation validity remain concerns; it does not establish robust economy-policy validity under arbitrary behavior-population shift."
+  },
+  {
+    "id": "L456",
+    "year": 2025,
+    "work": "Benchmarking World-Model Learning (WorldTest / AutumnBench)",
+    "area": "World-model evaluation / downstream tests",
+    "venue": "2025",
+    "method": "Separates reward-free interaction from a scored test phase in related environments; AutumnBench includes planning, prediction and causal-dynamics-change tasks.",
+    "results": "Behavior-based planning evaluation of learned world models is already a benchmark design principle.",
+    "limitations": "Does not synthesize game-mechanic counterfactuals matched on true planning burden while separating sample-to-planning-adequacy burden."
+  },
+  {
+    "id": "L360",
+    "year": 2025,
+    "work": "Explicit Exploration for High-Welfare Equilibria in Game-Theoretic Multi-Agent Reinforcement Learning",
+    "area": "PSRO / equilibrium discovery",
+    "venue": "ICML 2025",
+    "method": "Introduces explicit strategy exploration aimed at finding high-welfare equilibria in EGTA/MARL.",
+    "results": "Even equilibrium-quality-aware strategy discovery is actively studied.",
+    "limitations": "Not mechanic-controlled game design."
+  },
+  {
+    "id": "L358",
+    "year": 2025,
+    "work": "LADDER: Level Analysis Dataset for Difficulty Evaluation and Ranking",
+    "area": "Game difficulty / benchmark",
+    "venue": "IEEE GEM 2025",
+    "method": "Combines objective player performance, level properties and perceived difficulty across multiple platformer games.",
+    "results": "Cross-level/cross-game difficulty evaluation resources are expanding.",
+    "limitations": "Dataset contribution, not agent-invariant theorem."
+  },
+  {
+    "id": "L384",
+    "year": 2025,
+    "work": "Boosting bug localization in software models of video games with simulations and component-specific genetic operations",
+    "area": "Automated game testing / bug localization",
+    "venue": "Software and Systems Modeling 2025",
+    "method": "Evolves game simulations to generate NPC traces and automatically localizes potential buggy model elements; component-specific genetic operators improve F-measure on commercial game Kromaia.",
+    "results": "Trace-driven automated bug/failure localization in games is directly occupied, weakening broad failure-attribution/testing novelty claims.",
+    "limitations": "Does not target causal attribution of PCG constraint failures or theorem-defined mechanic interactions, but it closes the broad 'game failure localization is missing' story."
+  },
+  {
+    "id": "L378",
+    "year": 2025,
+    "work": "Game Design Is Generative Design",
+    "area": "Generative game design / design research",
+    "venue": "AIIDE 2025",
+    "method": "Argues game design itself is generative design and reports surveys of 261 players and 126 designers; introduces procedural gameplay systems.",
+    "results": "The design/PCG frontier increasingly treats generative systems as core game-design objects, not niche tools.",
+    "limitations": "Conceptual/design framing, not a formal Game-AI gap."
+  },
+  {
+    "id": "L129",
+    "year": 2025,
+    "work": "PuzzlePlex: Benchmarking Foundation Models on Reasoning and Planning with Puzzles",
+    "area": "Puzzle benchmark / reasoning",
+    "venue": "2025",
+    "method": "15 puzzle types, deterministic/stochastic and single/two-player settings; fine-grained reasoning/planning evaluation.",
+    "results": "Cross-puzzle capability benchmarking is active.",
+    "limitations": "Foundation-model evaluation, not representation-induced generation topology."
+  },
+  {
+    "id": "L139",
+    "year": 2025,
+    "work": "Benchmarking Partial Observability in Reinforcement Learning with a Suite of Memory-Improvable Domains",
+    "area": "Memory demand / partial observability",
+    "venue": "2025",
+    "method": "Defines 'memory-improvable' domains via performance gaps under more vs less state information and builds POBAX benchmark.",
+    "results": "A counterfactual/intervention-style memory-demand idea is already close to one G022 axis.",
+    "limitations": "Broad RL benchmark, not a multidimensional game-level demand signature nor mechanic-to-demand causal study."
+  },
+  {
+    "id": "L141",
+    "year": 2025,
+    "work": "From Explainability to Interpretability: A Case Study on Game AI Using Program Synthesis",
+    "area": "Interpretable Game AI / program synthesis",
+    "venue": "AIIDE 2025",
+    "method": "Doctoral line on symbolic programs for explaining/controlling game agents; explicitly identifies transferability of conceptual program libraries across game domains as an open research question.",
+    "results": "Directly establishes that the G031 question is active and already owned by an ongoing research line.",
+    "limitations": "Future-work/open-question statement, not yet a demonstrated solution in the retrieved literature."
+  },
+  {
+    "id": "L130",
+    "year": 2025,
+    "work": "Beyond Fixed Tasks: UED for Task-Level Pairs (ATLAS)",
+    "area": "UED / task-level co-design",
+    "venue": "2025",
+    "method": "Generates joint autocurricula over reward-machine tasks and MiniGrid levels; structural mutations improve solvable challenging pairs.",
+    "results": "Learned/algorithmic joint task+level generation is now closer to formal specification-conditioned design.",
+    "limitations": "Still one environment family and trains/generates within the task-level space; no evidence of frozen designer transfer to unseen dynamics."
+  },
+  {
+    "id": "L128",
+    "year": 2025,
+    "work": "CHBench: A Cognitive Hierarchy Benchmark for Strategic Reasoning Capability of LLMs",
+    "area": "Strategic reasoning benchmark",
+    "venue": "2025",
+    "method": "Uses 15 normal-form games and cognitive hierarchy to estimate strategic-reasoning levels; studies memory/chat mechanisms.",
+    "results": "Strategic-reasoning capability measurement using games is occupied.",
+    "limitations": "LLM-centric and reasoning-depth focused; not general game-demand decomposition."
+  },
+  {
+    "id": "L388",
+    "year": 2025,
+    "work": "Nonogram: Complexity of Inference and Phase Transition Behavior",
+    "area": "Puzzle complexity + empirical typical-case hardness",
+    "venue": "2025 preprint / conference-style manuscript",
+    "method": "Proves Nonogram INFERENCE co-NP-complete, then empirically studies the same problem on random consistent boards. Uses 15×15, 20×20 and 25×25 boards, 250 boards per density; filled-cell density drives an inferability transition around 0.39–0.42 and normalized SAT propagation effort peaks near the transition.",
+    "results": "A puzzle paper already combines a new complexity theorem with finite empirical phase-transition/hardness analysis on the same problem.",
+    "limitations": "Rules/mechanics remain fixed; the treatment axis is instance density. It does not switch complexity-separating mechanics on/off on matched latent instances or estimate higher-order mechanic interactions."
+  },
+  {
+    "id": "L165",
+    "year": 2025,
+    "work": "Empirical Hardness in Multi-Agent Pathfinding: Research Challenges and Opportunities",
+    "area": "Empirical hardness / combinatorial search",
+    "venue": "AAMAS 2025",
+    "method": "Frames the gap between NP-hardness and instance-level hardness; highlights algorithm selection, hardness features, phase transitions/backbones and hard-instance generation.",
+    "results": "Empirical hardness as a research program is active outside games.",
+    "limitations": "MAPF, not formal game mechanics; no mechanic-complexity metatheorem bridge."
+  },
+  {
+    "id": "L368",
+    "year": 2025,
+    "work": "General Game Playing Hyper-Agents for Ludii",
+    "area": "Algorithm selection / GGP",
+    "venue": "IEEE CoG 2025",
+    "method": "Predicts optimal sub-agent and heuristics for unseen Ludii games from ludemes/concepts; trained on 460 games and evaluated on 50 unseen games.",
+    "results": "Algorithm selection from game descriptors is already directly mature in modern Ludii.",
+    "limitations": "Does not concern mechanic-value robustness."
+  },
+  {
+    "id": "L182",
+    "year": 2025,
+    "work": "Benchmarking World-Model Learning (WorldTest / AutumnBench)",
+    "area": "World-model evaluation / dynamics understanding",
+    "venue": "arXiv 2025",
+    "method": "Separates reward-free interaction from evaluation in related environments and tests prediction, planning and changes to causal dynamics across interactive grid worlds.",
+    "results": "World-model evaluation is moving toward downstream behavior and dynamics-change understanding rather than next-frame accuracy alone.",
+    "limitations": "World-model learner/agent setting; not generation of target instances by a frozen learned designer."
+  },
+  {
+    "id": "L377",
+    "year": 2025,
+    "work": "Pixie: Code-Level Mechanic Generation for Game Designers",
+    "area": "AI-assisted mechanic generation",
+    "venue": "AIIDE 2025",
+    "method": "Generates/tests code-level mechanics directly inside annotated Unity projects and discusses developer perspectives.",
+    "results": "Mechanic invention no longer requires bespoke research-only DSLs.",
+    "limitations": "Poster-scale and developer-oriented; does not solve evaluator robustness."
+  },
+  {
+    "id": "L155",
+    "year": 2025,
+    "work": "Dice, Cards, Action! The Analysis, Play and Design of Multiplayer Tabletop Board Games with Monte Carlo Tree Search",
+    "area": "Game characterization / dissertation line",
+    "venue": "Queen Mary University of London 2025",
+    "method": "PhD research line consolidating computational analysis of tabletop games using MCTS, including fingerprinting, skill depth and stochasticity.",
+    "results": "A broad program of computational game characterization already exists and was extended through 2025.",
+    "limitations": "MCTS/tabletop focused; does not replace controlled rule-intervention science."
+  },
+  {
+    "id": "L154",
+    "year": 2025,
+    "work": "A Generalized Bisimulation Metric of State Similarity between Markov Decision Processes",
+    "area": "MDP similarity / transfer theory",
+    "venue": "2025",
+    "method": "Defines a generalized bisimulation metric across pairs of MDPs and derives policy-transfer bounds and estimation results.",
+    "results": "Cross-MDP structural similarity metrics and transfer analysis are increasingly mature.",
+    "limitations": "Policy-transfer theory, not procedural-designer transfer or executable rule-conditioned generation."
+  },
+  {
+    "id": "L374",
+    "year": 2025,
+    "work": "Online Moderation in Competitive Action Games: How Intervention Affects Player Behaviors",
+    "area": "Game analytics / causal inference",
+    "venue": "PACMHCI 2025",
+    "method": "Uses quasi-experimental causal inference on industry-scale Call of Duty moderation to estimate behavioral effects of intervention timing and severity.",
+    "results": "Causal inference in live games is already real, rigorous and industry-scale.",
+    "limitations": "Focuses moderation, not core mechanics; requires proprietary-scale telemetry."
+  },
+  {
+    "id": "L373",
+    "year": 2025,
+    "work": "Human adaptation to adaptive machines converges to game-theoretic equilibria",
+    "area": "Human–AI co-adaptation / game theory",
+    "venue": "Scientific Reports 2025",
+    "method": "Empirically tests human-machine co-adaptation in general-sum games and shows machine learning rules can steer interactions toward predicted game-theoretic equilibria.",
+    "results": "Co-adaptive human-machine equilibrium selection is a substantial existing research program.",
+    "limitations": "Not video-game mechanic design specifically."
+  },
+  {
+    "id": "L192",
+    "year": 2025,
+    "work": "Encodings Effect on the Procedural Content Generation of Safari Rush Hour Puzzles",
+    "area": "Puzzle representation × generator",
+    "venue": "SCCC 2025 / peer-reviewed",
+    "method": "Compares two puzzle encodings (board-state vs piece-state) under three different metaheuristics and finds statistically significant fitness differences.",
+    "results": "Representation × search-algorithm interaction in procedural puzzle generation is already directly studied.",
+    "limitations": "Single sliding-puzzle family; no cross-family laws, landscape-mediated explanation, or held-out representation selection."
+  },
+  {
+    "id": "L197",
+    "year": 2025,
+    "work": "PuzzleJAX: A Benchmark for Reasoning and Learning",
+    "area": "Puzzle DSL / benchmark infrastructure",
+    "venue": "arXiv 2025",
+    "method": "GPU-accelerated PuzzleScript-like DSL dynamically compiles games; validates several hundred PuzzleScript games and benchmarks tree search, RL and LLM reasoning.",
+    "results": "Makes a compact executable puzzle DSL available for low-cost multi-game empirical research; strongly reduces G032 implementation risk for PuzzleScript-style mechanics.",
+    "limitations": "Infrastructure, not a study of theorem-defined mechanic activation or representation selection."
+  },
+  {
+    "id": "L209",
+    "year": 2025,
+    "work": "A Markovian Framing of WaveFunctionCollapse for Procedurally Generating Aesthetically Complex Environments",
+    "area": "PCG representation / operator locality",
+    "venue": "EXAG-INT @ AIIDE 2025 / CEUR Workshop Proceedings",
+    "method": "Reframes WFC as an MDP and compares direct evolution with WFC-constrained optimization; also compares 1D vs 2D encodings of collapse sequences and explains different optimization behavior through mutation locality/cascading effects across multiple PCG objectives/domains.",
+    "results": "Direct empirical representation → locality/stability/exploration → optimization-performance reasoning is already present in recent PCG.",
+    "limitations": "Representations are not canonical semantically equivalent puzzle encodings under an equalized phenotype-edit neighborhood; no cross-puzzle held-out representation-selection boundary."
+  },
+  {
+    "id": "L174",
+    "year": 2025,
+    "work": "The Procedural Content Generation Benchmark: An Open-source Testbed for Generative Challenges in Games",
+    "area": "PCG benchmark / multi-problem generation",
+    "venue": "FDG 2025 / peer-reviewed",
+    "method": "Standardizes multiple PCG problems and evaluates Random, evolution strategy and genetic algorithm under quality/diversity/controllability objectives. Current repository includes macro-vs-tile variants for Lode Runner and Super Mario Bros.",
+    "results": "Multi-problem standardized PCG comparison exists; representation/genotype size is already recognized as a possible source of difficulty.",
+    "limitations": "Published default experiments do not appear to perform matched equivalent-representation × operator factorial analysis or held-out representation selection."
+  },
+  {
+    "id": "L214",
+    "year": 2025,
+    "work": "Hardness of Traversing Gadget Systems with Small Bandwidth",
+    "area": "Parameterized gadget complexity",
+    "venue": "SAND 2025 / peer-reviewed",
+    "method": "Shows PSPACE-hardness for several motion-planning gadget systems even when the connection graph has constant/small bandwidth; includes locking 2-toggles, doors and interacting reversible deterministic gadgets.",
+    "results": "Worst-case hardness from interacting gadget semantics does not require globally wide/complex connection graphs.",
+    "limitations": "Theory only; no empirical runtime/node-expansion or matched semantic-intervention experiment."
+  },
+  {
+    "id": "L213",
+    "year": 2025,
+    "work": "Landscape Features in Single-Objective Continuous Optimization: Have We Hit a Wall in Algorithm Selection Generalization?",
+    "area": "OOD algorithm selection / landscape features",
+    "venue": "2025 preprint",
+    "method": "Evaluates multiple landscape representations/features for algorithm selection under out-of-distribution problems and finds that on sufficiently OOD tests the selectors do not outperform a simple single-best-solver baseline.",
+    "results": "Landscape-based selection often fails to generalize to genuinely unseen problem classes; leave-one-instance validation can be misleading.",
+    "limitations": "Continuous black-box optimization and algorithm selection, not puzzle-PCG representation choice."
+  },
+  {
+    "id": "L208",
+    "year": 2025,
+    "work": "Transformer-Based Feature Learning for Algorithm Selection in Combinatorial Optimisation",
+    "area": "Model/representation + solver selection",
+    "venue": "CP 2025 / peer-reviewed",
+    "method": "Uses Essence high-level specifications and transformer-learned features to select the best combination of alternative Conjure-generated models/representations and solvers; evaluated on Car Sequencing, Covering Array and Social Golfers.",
+    "results": "Automatic selection among alternative representations/viewpoints jointly with solvers across multiple combinatorial problem classes is already a peer-reviewed research task.",
+    "limitations": "Target is solving runtime, not procedural generation quality/diversity; it does not isolate representation effects with matched semantic edit neighborhoods or study puzzle-PCG representations."
+  },
+  {
+    "id": "L259",
+    "year": 2025,
+    "work": "Code World Models for General Game Playing",
+    "area": "Executable game world models / general game playing",
+    "venue": "arXiv 2025",
+    "method": "Synthesizes executable Python game models from natural-language rules plus a few trajectories, then uses MCTS/ISMCTS for play across perfect- and imperfect-information games, including novel games.",
+    "results": "Executable learned/synthesized game rule models are now a serious GGP artifact, making semantic model correctness operationally important.",
+    "limitations": "Verification is contingent on synthesized-model correctness and relies on available trajectories/unit tests rather than adversarial minimal content+trace counterexamples."
+  },
+  {
+    "id": "L239",
+    "year": 2025,
+    "work": "SAGE: Semantic-Aware Regression Testing for Gray-Box Game Environments",
+    "area": "Game testing / semantic regression",
+    "venue": "arXiv 2025",
+    "method": "Combines LLM-guided RL test generation, semantic multi-objective suite maintenance and update-log-aware prioritization in Overcooked and Minecraft.",
+    "results": "Gray-box semantic regression generation, maintenance and version-aware test selection are rapidly becoming occupied.",
+    "limitations": "Focuses coverage/bug detection and update relevance, not identity/equivalence of a particular exploit mechanism across changed dynamics."
+  },
+  {
+    "id": "L229",
+    "year": 2025,
+    "work": "Instructed Procedural Content Generation via Reinforcement Learning (IPCGRL)",
+    "area": "PCGRL / language control / generalization",
+    "venue": "CoG 2025 / arXiv",
+    "method": "Conditions an RL level generator on natural-language-like instructions and evaluates lexical/compositional generalization; near-OOD instructions transfer better than far-OOD or complex multitask conditions.",
+    "results": "Instruction-conditioned PCGRL and zero/few-shot control generalization are directly occupied.",
+    "limitations": "The game mechanics/domains are known during training; far-OOD semantic composition remains difficult."
+  },
+  {
+    "id": "L250",
+    "year": 2025,
+    "work": "Defying Gravity and Gadget Numerosity: The Complexity of the Hanano Puzzle and Beyond",
+    "area": "Hanano / PSPACE complexity / irreversible gravity",
+    "venue": "Information Processing Letters 187 (2025)",
+    "method": "Proves Hanano PSPACE-complete using visibility representations of NCL and a small base-gadget framework intended to generalize to irreversible-gravity games.",
+    "results": "Hanano PSPACE-completeness and a reusable gravity-hardness framework are already established.",
+    "limitations": "Theory only; does not measure practical state-space growth, shortest-solution horizons, carrying activation or empirical solver effort."
+  },
+  {
+    "id": "L323",
+    "year": 2025,
+    "work": "Closing the Loop: A Systematic Review of Experience-Driven Game Adaptation",
+    "area": "Adaptive games / player experience",
+    "venue": "2025",
+    "method": "PRISMA-style review of empirical closed-loop systems; notes limited full-loop integration, telemetry dominance, ML data/transparency challenges and underused affect sensing.",
+    "results": "Adaptive-game research gaps increasingly concern sensing/experience validity rather than algorithm novelty.",
+    "limitations": "Human/affective agenda is not ideal for a lightweight formal MSc thesis."
+  },
+  {
+    "id": "L333",
+    "year": 2025,
+    "work": "Dungeons & Replicants II: Automated Game Balancing Across Multiple Difficulty Dimensions via Deep Player Behavior Modeling",
+    "area": "Automated balancing / player simulators",
+    "venue": "IEEE Transactions on Games",
+    "method": "Uses generative player behavior models to reproduce strategies and identify class strengths/imbalances across combat challenges.",
+    "results": "Balance conclusions already account for heterogeneous learned player behaviors.",
+    "limitations": "Does not test approximation/surrogate decision equivalence against a true simulator under unseen policy populations."
+  },
+  {
+    "id": "L321",
+    "year": 2025,
+    "work": "Cross-environment Cooperation Enables Zero-shot Multi-agent Coordination",
+    "area": "Cooperative AI / cross-environment ZSC",
+    "venue": "ICML 2025",
+    "method": "Uses procedural environment diversity to learn coordination behavior that transfers to unseen partners/environments.",
+    "results": "Environment diversity and cross-environment ZSC are active, reducing novelty of generic cooperative transfer.",
+    "limitations": "Does not isolate policy-invariant coordination descriptors of generated content."
+  },
+  {
+    "id": "L228",
+    "year": 2025,
+    "work": "Video Game Level Design as a Multi-Agent Reinforcement Learning Problem",
+    "area": "PCGRL / multi-agent generation",
+    "venue": "AIIDE 2025",
+    "method": "Formulates level generation as a multi-agent RL problem and evaluates generalization beyond training layouts.",
+    "results": "Alternative generator decompositions and OOD level-shape generalization are active PCGRL topics.",
+    "limitations": "Does not transfer a frozen learned designer to unseen rule/dynamics systems."
+  },
+  {
+    "id": "L334",
+    "year": 2025,
+    "work": "World and Human Action Models towards Gameplay Ideation (WHAM)",
+    "area": "World models / game ideation",
+    "venue": "Nature 2025",
+    "method": "Generative world/action modeling for interactive gameplay ideation.",
+    "results": "World models are moving from prediction toward interactive game creation/ideation.",
+    "limitations": "High model/compute burden and no stable thesis gap from prediction alone."
+  },
+  {
+    "id": "L251",
+    "year": 2025,
+    "work": "Complexity of Jelly-No and Hanano Games with Various Constraints",
+    "area": "Gravity puzzles / restricted complexity",
+    "venue": "arXiv 2025",
+    "method": "Studies board-size/color restrictions; proves Jelly-No PSPACE-complete with unbounded colors and with one color plus black jellies, and gives additional NP-hard restricted Hanano/Jelly results.",
+    "results": "The restriction lattice for these games is already being actively filled in by 2025–26 theory work.",
+    "limitations": "No empirical finite-hardness study and no carrying-capacity activation experiment."
+  },
+  {
+    "id": "L453",
+    "year": 2025,
+    "work": "PuzzleJAX: A Benchmark for Reasoning and Learning",
+    "area": "Game benchmark / PuzzleScript / JAX",
+    "venue": "NeurIPS workshop 2025 / arXiv",
+    "method": "Compiles hundreds of PuzzleScript games into fast JAX environments and benchmarks tree search, PPO and LLM reasoning; supports custom rule DSLs.",
+    "results": "Search-vs-learning differences across games and a suitable engine already exist.",
+    "limitations": "Whole-game comparisons; no controlled mechanic-level planning/model-adequacy burden study."
+  },
+  {
+    "id": "L305",
+    "year": 2025,
+    "work": "Empirical Hardness in Multi-Agent Pathfinding: Research Challenges and Opportunities",
+    "area": "MAPF / empirical algorithmics",
+    "venue": "AAMAS 2025 Blue Sky",
+    "method": "Explicitly frames the gap between NP-hardness and individual-instance hardness; highlights structural predictors, phase transitions/backbones/backdoors, and hard-instance generation as research challenges.",
+    "results": "Validates theory→empirical hardness→hard-instance generation as a legitimate research program.",
+    "limitations": "Blue Sky agenda paper; MAPF rather than game mechanics."
+  },
+  {
+    "id": "L310",
+    "year": 2025,
+    "work": "SAGE: Semantic-Aware Gray-Box Game Regression Testing with Large Language Models",
+    "area": "Game regression testing",
+    "venue": "arXiv 2025",
+    "method": "LLM-guided RL generates tests; semantic multiobjective optimization compresses suites; update logs prioritize tests across versions; evaluated on Overcooked Plus and Minecraft.",
+    "results": "Semantic game regression generation/maintenance/prioritization is already directly occupied.",
+    "limitations": "Preprint/current frontier; does not formalize build-invariant exploit mechanisms or minimal causal witnesses."
+  },
+  {
+    "id": "L315",
+    "year": 2025,
+    "work": "Video Game Level Design as a Multi-Agent Reinforcement Learning Problem",
+    "area": "PCGRL / multi-agent generation",
+    "venue": "AIIDE 2025",
+    "method": "Frames level design as MARL; reduces reward-computation bottleneck and improves OOD map-shape generalization via local/modular policies.",
+    "results": "Distributed/multi-agent PCGRL and OOD shape generalization are occupied.",
+    "limitations": "Generator architecture paper, not causal/content-theory contribution."
+  },
+  {
+    "id": "L262",
+    "year": 2025,
+    "work": "Assessing Adaptive World Models in Machines with Novel Games",
+    "area": "Novel games / world-model induction benchmark",
+    "venue": "arXiv 2025",
+    "method": "Proposes suites of continually novel games as an evaluation paradigm for rapid world-model construction/refinement and metrics for sample-efficient adaptation.",
+    "results": "Novel-game world-model induction is a recognized research target, not a niche game-engine problem.",
+    "limitations": "Perspective/benchmark proposal; does not define content-conditioned equivalence or generate discriminating experiments for competing rule hypotheses."
+  },
+  {
+    "id": "L317",
+    "year": 2025,
+    "work": "Game Balancing via Procedural Content Generation and Simulations",
+    "area": "Automated game balancing / PCG",
+    "venue": "AIIDE 2025",
+    "method": "Develops domain-independent PCG approaches for balanced levels/economies; explicitly notes transferability and simulation cost as limitations.",
+    "results": "Simulation expense is a live game-design bottleneck and motivates surrogate/approximate simulation research.",
+    "limitations": "Doctoral-consortium scope; no strategic decision-fidelity analysis of surrogates."
+  },
+  {
+    "id": "L316",
+    "year": 2025,
+    "work": "Embedded Mechanics Generation",
+    "area": "Automated game design / mechanic generation",
+    "venue": "AIIDE 2025",
+    "method": "Generates mechanics, reconstructs levels and creates enemies that require generated mechanics; compares RL/static agents and proposes Design Impact Accuracy.",
+    "results": "Mechanic generation + mechanic-supporting content/evaluation are already direct research objects.",
+    "limitations": "Ongoing/doctoral-style work; does not formalize finite complexity activation or invariant semantics."
+  },
+  {
+    "id": "L283",
+    "year": 2025,
+    "work": "Empirical Hardness in Multi-Agent Pathfinding: Research Challenges and Opportunities",
+    "area": "Empirical hardness / MAPF",
+    "venue": "AAMAS 2025",
+    "method": "Frames algorithm selection, structural instance features, phase-transition/backbone/backdoor analysis, and hard/diverse instance generation as open empirical-hardness directions.",
+    "results": "The forward characterize-hardness → inverse hard-instance-generation research arc is already recognized outside games.",
+    "limitations": "Blue-sky/challenges paper rather than a completed mechanic-interaction study; no matched rule ablations."
+  },
+  {
+    "id": "L301",
+    "year": 2025,
+    "work": "Hardness of Traversing Gadget Systems with Small Bandwidth",
+    "area": "Motion planning / parameterized complexity",
+    "venue": "SAND 2025",
+    "method": "Shows PSPACE-completeness for several gadget systems even at constant bandwidth, hence constant pathwidth/treewidth/cliquewidth; DAG gadgets provide a positive FPT family.",
+    "results": "Strongly limits any generic 'low treewidth makes game search easy' claim.",
+    "limitations": "Different gadget systems; does not invalidate bounded-treewidth WRP on a proven restricted macrofamily."
+  },
+  {
+    "id": "L437",
+    "year": 2025,
+    "work": "PandaSkill - Player Performance and Skill Rating in Esports: Application to League of Legends",
+    "area": "Esports skill rating / Bayesian rating / temporal meta shift",
+    "venue": "2025",
+    "method": "Combines role-specific ML performance scores with OpenSkill and contextual/meta regional ratings over five years of professional LoL. The paper notes frequent balance updates/new mechanics and uses rolling temporal evaluation to account for gradual rating-distribution and possible meta shifts.",
+    "results": "Modern esports skill ratings already model roles, regions, individual contribution and temporal evaluation.",
+    "limitations": "It does not test whether the score scale itself is invariant across patches or decompose observed rating change into true skill change versus measurement-function drift."
+  },
+  {
+    "id": "L105",
+    "year": 2025,
+    "work": "Seeding for Success: Skill and Stochasticity in Tabletop Games",
+    "area": "Skill / stochasticity",
+    "venue": "IEEE Transactions on Games 2025",
+    "method": "Separates skill-related performance from stochasticity and random sources.",
+    "results": "Randomness/stochasticity dimension is already explicitly studied.",
+    "limitations": "Does not cover memory, hidden-information reasoning, opponent modelling, etc."
+  },
+  {
+    "id": "L096",
+    "year": 2025,
+    "work": "TRACED: Transition-aware Regret Approximation with Co-learnability for Environment Design",
+    "area": "UED",
+    "venue": "Preprint",
+    "method": "Teacher uses transition-prediction error + co-learnability to build curricula.",
+    "results": "Modern UED models task relationships explicitly to improve student OOD generalization.",
+    "limitations": "Still evaluates curriculum/student generalization; no formal-spec-only frozen designer transfer."
+  },
+  {
+    "id": "L091",
+    "year": 2025,
+    "work": "URS: A Unified Neural Routing Solver for Cross-Problem Zero-Shot Generalization",
+    "area": "Unified routing / constraints",
+    "venue": "Preprint",
+    "method": "One solver for >100 VRP variants; unseen variants zero-shot; raw constraints converted to executable masks.",
+    "results": "Single model + variable constraints + executable masking + zero-shot is established on solver side.",
+    "limitations": "VRP-family solver; not frozen learned content/instance designer across different game dynamics."
+  },
+  {
+    "id": "L090",
+    "year": 2025,
+    "work": "UniCO: Towards a Unified Model for Combinatorial Optimization Problems",
+    "area": "Unified neural CO",
+    "venue": "Preprint",
+    "method": "Transformer trained across 10 CO problems; reports few-shot/zero-shot generalization.",
+    "results": "One parameter set across heterogeneous CO problems is no longer a novelty claim.",
+    "limitations": "Solver-side and trajectory/token formulation; not generation of new instances/content under unseen dynamics."
+  },
+  {
+    "id": "L089",
+    "year": 2025,
+    "work": "GOAL: A Generalist Combinatorial Optimization Agent Learner",
+    "area": "Generalist combinatorial solver",
+    "venue": "ICLR 2025 / peer-reviewed",
+    "method": "Single shared backbone across routing, scheduling and graph problems; lightweight problem-specific adapters.",
+    "results": "Heterogeneous multi-problem generalist neural solving is established.",
+    "limitations": "New problems still use adapters/fine-tuning; not target-zero designer transfer."
+  },
+  {
+    "id": "L092",
+    "year": 2024,
+    "work": "Towards a Generic Representation of Combinatorial Problems for Learning-Based Approaches",
+    "area": "Generic formal representation",
+    "venue": "Peer-reviewed chapter / 2024",
+    "method": "Constraint AST/graph representation and GNN over XCSP3 constraints.",
+    "results": "Generic graph encoding of formal constraints is established.",
+    "limitations": "Representation alone does not solve zero-target procedural generation across formal dynamics."
+  },
+  {
+    "id": "L436",
+    "year": 2024,
+    "work": "The SIDO Performance Model for League of Legends",
+    "area": "Esports analytics / skill measurement / longitudinal stability",
+    "venue": "2024",
+    "method": "Hierarchical Bayesian LoL performance model explicitly evaluates metric discrimination, independence and stability. It states that stability should assure a metric measures the same thing from patch to patch, then compares rankings from patches 13.6-13.9 versus 13.14-13.18 using concordance indices.",
+    "results": "Patch-to-patch stability of esports performance metrics is directly occupied.",
+    "limitations": "Concordance cannot identify whether rank change is true player-skill change or a patch-induced change in the measurement function/construct. No explicit measurement-invariance or scale-linking test is reported."
+  },
+  {
+    "id": "L104",
+    "year": 2024,
+    "work": "Skill Depth in Tabletop Board Games",
+    "area": "Game skill-depth / computational evaluation",
+    "venue": "IEEE CoG 2024 / peer-reviewed",
+    "method": "Expands/tunes MCTS algorithmic space and measures skill traces under different configurations.",
+    "results": "Shows game skill-depth conclusions depend on algorithmic space; motivates multiple resource/capability axes.",
+    "limitations": "Still centered on MCTS/configuration; does not establish a general multidimensional capability fingerprint."
+  },
+  {
+    "id": "L115",
+    "year": 2024,
+    "work": "Sturgeon-MKIV: Constraint-Based Level and Playthrough Generation with Graph Label Rewrite Rules",
+    "area": "Constraint PCG / formal mechanics",
+    "venue": "AIIDE 2024",
+    "method": "Generates graph-based levels and example playthroughs jointly using graph label rewrite mechanics.",
+    "results": "Solvability-by-construction with explicit mechanics/playthrough generation is established beyond simple 2D grids.",
+    "limitations": "Demonstrated on a limited set of graph-based games; scalability/generality remain practical issues."
+  },
+  {
+    "id": "L113",
+    "year": 2024,
+    "work": "GAVEL: Generating Games Via Evolution and Language Models",
+    "area": "Automated game generation",
+    "venue": "Preprint 2024",
+    "method": "Uses Ludii rule code, evolutionary computation and language models to mutate/recombine mechanics and generate novel games.",
+    "results": "Whole-game/rule generation in a broad formal game language is active modern prior art.",
+    "limitations": "Evaluation of originality/quality remains difficult; LLM/evolution machinery is not suitable novelty by itself."
+  },
+  {
+    "id": "L440",
+    "year": 2024,
+    "work": "Adaptive Measurement of Change in the Context of Item Parameter Drift",
+    "area": "Psychometrics / latent change / item parameter drift",
+    "venue": "Applied Psychological Measurement 2024",
+    "method": "Simulation study shows that item-parameter drift can create false or distorted estimates of intra-individual latent change and recommends checking item stability before interpreting change.",
+    "results": "The exact statistical danger motivating G070 is already known in psychometrics.",
+    "limitations": "No esports or game-patch application; game telemetry does not map trivially to conventional test items."
+  },
+  {
+    "id": "L441",
+    "year": 2024,
+    "work": "Safe Learning of PDDL Domains with Conditional Effects",
+    "area": "Action-model learning / conditional effects",
+    "venue": "ICAPS 2024",
+    "method": "Proves that learning non-trivial safe action models with conditional effects may require exponentially many samples, then gives tractable conditions and Conditional-SAM.",
+    "results": "Specific operator constructs can provably make model learning hard.",
+    "limitations": "Does not ask whether the same operator simultaneously changes true-game planning/search burden."
+  },
+  {
+    "id": "L452",
+    "year": 2024,
+    "work": "Sample-Efficient Quality-Diversity by Cooperative Coevolution",
+    "area": "Quality-Diversity / sample efficiency",
+    "venue": "ICLR 2024",
+    "method": "Improves QD sample efficiency by decomposing the search problem; evaluated in QDAX tasks.",
+    "results": "Sample-efficient QD itself is an active method contribution and should not be reinvented.",
+    "limitations": "Policy-QD setting, not game-instance matched-burden synthesis."
+  },
+  {
+    "id": "L304",
+    "year": 2024,
+    "work": "Map Connectivity and Empirical Hardness of Grid-based Multi-Agent Pathfinding Problem",
+    "area": "MAPF / empirical hardness",
+    "venue": "ICAPS 2024",
+    "method": "Studies normalized-Laplacian λ₂ versus solver hardness and uses QD to generate maps in target λ₂ ranges; relation is not strictly monotonic.",
+    "results": "Strong neighboring example of structural finite-hardness analysis plus generator-driven instance design.",
+    "limitations": "MAPF, not games; no theorem-defined mechanic ablations."
+  },
+  {
+    "id": "L314",
+    "year": 2024,
+    "work": "PCGRL+: Scaling, Control and Generalization in Reinforcement Learning Level Generators",
+    "area": "PCGRL / scalable generation",
+    "venue": "arXiv 2024",
+    "method": "JAX/GPU PCGRL; randomized sizes and frozen pinpoints; evaluates large OOD map sizes and robust design strategies.",
+    "results": "Scaling, control and OOD size generalization are explicit PCGRL research targets already.",
+    "limitations": "Does not address theorem-linked counterfactual mechanic hardness."
+  },
+  {
+    "id": "L309",
+    "year": 2024,
+    "work": "Know Your Bugs: A Survey of Issues in Automated Game Testing Literature",
+    "area": "Automated game testing / survey",
+    "venue": "IEEE GEM 2024",
+    "method": "Literature review with open/axial coding; taxonomy of 26 automated-game-testing issues in five higher-level categories.",
+    "results": "Confirms game testing is a substantial established research area with multiple issue categories rather than an empty application niche.",
+    "limitations": "Taxonomy/review, not a method for causal counterexamples or rule-interaction attribution."
+  },
+  {
+    "id": "L274",
+    "year": 2024,
+    "work": "Hamiltonian Paths and Cycles in NP-Complete Puzzles",
+    "area": "Hamiltonicity / grid-graph hardness substrate",
+    "venue": "FUN 2024",
+    "method": "Shows Hamiltonian path/cycle on grid graphs of maximum degree 3 is an effective NP-completeness source and applies it to multiple grid puzzles.",
+    "results": "Provides a clean grid-native source problem that can eliminate the orthogonal-embedding burden in a Bloxorz theorem-derived generator.",
+    "limitations": "Theory only; no finite mechanic-factorial experiment."
+  },
+  {
+    "id": "L280",
+    "year": 2024,
+    "work": "Procedurally Puzzling: On Algorithmic Difficulty and Player Experience in QD-Generated Logic Grid Puzzles",
+    "area": "Puzzle PCG / quality diversity / solver difficulty",
+    "venue": "AIIDE 2024",
+    "method": "Uses constrained MAP-Elites to generate solvable logic-grid puzzles spanning algorithmic difficulty and studies the relation between solver loops and player-reported difficulty.",
+    "results": "Using solver effort as a generation target and generating diverse puzzles across difficulty levels are already published.",
+    "limitations": "One puzzle family and one difficulty proxy; it does not optimize a counterfactual mechanic-interaction contrast or test robustness across held-out solver families."
+  },
+  {
+    "id": "L245",
+    "year": 2024,
+    "work": "Advanced Spikes `n' Stuff: An NP-Hard Puzzle Game in Which All Tutorials Are Efficiently Solvable",
+    "area": "Game complexity / compositional mechanic theorem",
+    "venue": "FUN 2024",
+    "method": "Full-proof reread v34: ASnS({h,s}) is polynomial because all reachable 'tame' states form a polynomial-size state space when no vertical crossbows exist. ASnS({s,v}) allows exponentially many persistent vertical-crossbow flags but is polynomial via monotone deactivation: repeatedly deactivate a reachable vertical crossbow and safely retrace to the start. ASnS({h,v}) uses the same high-level strategy but repairs reverse walks by timing-adjustment moves. Full {h,s,v} is NP-complete using one-way, variable, clause and crossover gadgets; vertical-crossbow deactivation provides persistent state used to unlock clauses/crossovers.",
+    "results": "The paper owns the 3-way asymptotic interaction and shows that the strict-subset polynomial algorithms rely on different state-space compression/retrace arguments.",
+    "limitations": "No empirical finite I3, no scaling law, and no test of whether failure of those subset-specific certificates predicts solver effort."
+  },
+  {
+    "id": "L226",
+    "year": 2024,
+    "work": "Procedural Content Generation in Games: A Survey with Insights on Emerging LLM Integration",
+    "area": "PCG survey / field map",
+    "venue": "AIIDE 2024",
+    "method": "Reviews roughly two hundred recent PCG studies and maps methods, representations, evaluation and emerging LLM integration.",
+    "results": "Broad PCG, PCGML, RL-based generation and representation research are mature and rapidly diversifying.",
+    "limitations": "A survey does not resolve the narrow causal or transfer-boundary questions in G029/T002."
+  },
+  {
+    "id": "L322",
+    "year": 2024,
+    "work": "Rethinking Dynamic Difficulty Adjustment for Video Game Design",
+    "area": "Dynamic difficulty adjustment",
+    "venue": "Entertainment Computing 2024",
+    "method": "Peer-reviewed conceptual audit: rethinks DDA's foundations, challenges overreliance on Flow theory, redefines DDA in terms of game difficulty, and proposes a goal-based six-step design process.",
+    "results": "Generic DDA framing/design and the need for explicit objectives are established; a new adaptive controller alone is weak novelty.",
+    "limitations": "Does not derive stability/instability of a coupled adapting-player/controller feedback loop."
+  },
+  {
+    "id": "L327",
+    "year": 2024,
+    "work": "Surrogate-assisted Monte Carlo Tree Search for Real-time Video Games",
+    "area": "Game planning / surrogate search",
+    "venue": "Engineering Applications of AI 2024",
+    "method": "Uses surrogate assistance to accelerate MCTS in real-time games.",
+    "results": "Surrogate models also already appear on the gameplay-planning side, not only design/PCG.",
+    "limitations": "Planning speed/performance rather than fidelity of downstream game-design/equilibrium conclusions."
+  },
+  {
+    "id": "L328",
+    "year": 2024,
+    "work": "Data-driven Decision-Focused Surrogate Modeling",
+    "area": "Decision-focused surrogate modeling",
+    "venue": "AIChE Journal 2024",
+    "method": "Learns surrogates for accurate decisions rather than globally accurate predictions in optimization settings.",
+    "results": "Generic decision-focused surrogate training is established outside games.",
+    "limitations": "Does not model strategic re-equilibration/game-specific exploitability."
+  },
+  {
+    "id": "L320",
+    "year": 2024,
+    "work": "Noisy Zero-Shot Coordination: Breaking the Common Knowledge Assumption in Zero-Shot Coordination Games",
+    "area": "Cooperative AI / ZSC",
+    "venue": "arXiv 2024",
+    "method": "Formulates ZSC where agents observe noisy versions of the underlying Dec-POMDP; reduces to a meta-Dec-POMDP and trains across problem distributions.",
+    "results": "ZSC already extends beyond unseen partners to uncertain problem specifications.",
+    "limitations": "Does not answer policy-invariant content-property identification."
+  },
+  {
+    "id": "L329",
+    "year": 2024,
+    "work": "Robust Losses for Decision-Focused Learning",
+    "area": "Decision-focused learning",
+    "venue": "IJCAI 2024",
+    "method": "Studies robust losses for predict-then-optimize/decision-focused learning.",
+    "results": "The broader DFL methodology is mature and provides baselines.",
+    "limitations": "No game-theoretic re-adaptation focus."
+  },
+  {
+    "id": "L332",
+    "year": 2024,
+    "work": "On Video Game Balancing: Joining Player- and Data-Driven Analytics",
+    "area": "Game balance / player data",
+    "venue": "ACM Games: Research and Practice 2024",
+    "method": "Combines a survey of 680 participants with more than four million Guild Wars 2 combat records to compare player-driven notions of balance with telemetry-derived analytics. Shows that 'balance' is multi-dimensional and stakeholder-dependent rather than a single win-rate target, and argues that balancing should be tailored to the actual player base.",
+    "results": "Player-aware/data-aware balance definitions and large-scale telemetry analysis are established; generic 'balance should account for different players' is not novel.",
+    "limitations": "Requires large real-player data and does not define a robust parameter-space balance region under uncertain/evolving strategy populations."
+  },
+  {
+    "id": "L227",
+    "year": 2024,
+    "work": "Scaling, Control and Generalization in Reinforcement Learning Level Generators",
+    "area": "PCGRL / OOD scale generalization",
+    "venue": "CoG 2024 / arXiv",
+    "method": "Scales JAX-based PCGRL training to very large experience budgets and evaluates control/generalization to unseen map sizes and shapes; local observations materially improve OOD behavior.",
+    "results": "OOD size/shape generalization of RL content generators is directly studied.",
+    "limitations": "Unseen geometry/scale is not unseen executable dynamics, and no zero-target frozen designer protocol is tested."
+  },
+  {
+    "id": "L190",
+    "year": 2024,
+    "work": "Advanced Spikes 'n' Stuff: An NP-Hard Puzzle Game in Which All Tutorials Are Efficiently Solvable",
+    "area": "Game complexity / mechanic interaction",
+    "venue": "FUN 2024 / peer-reviewed",
+    "method": "Defines three trap mechanics h,s,v such that the full combination is NP-complete while every strict subset is polynomial-time solvable.",
+    "results": "Provides an unusually clean formal non-additive mechanic interaction: hardness exists only through the combination of all three mechanics.",
+    "limitations": "Theory only; does not measure finite-instance empirical hardness, solver effort distributions, phase transition, or practical activation of the theorem."
+  },
+  {
+    "id": "L352",
+    "year": 2024,
+    "work": "Action Model Learning with Guarantees",
+    "area": "Planning / version-space learning",
+    "venue": "KR 2024",
+    "method": "Develops sound/complete action-model learning guarantees and convergence-style results from examples.",
+    "results": "Version-space/action-model identification with guarantees already exists.",
+    "limitations": "Does not use game-content grammars as a restricted intervention/query space."
+  },
+  {
+    "id": "L356",
+    "year": 2024,
+    "work": "On the Evaluation of Procedural Level Generation Systems",
+    "area": "PCG evaluation / survey",
+    "venue": "FDG 2024",
+    "method": "Builds an evaluation taxonomy and finds lack of robust, generalisable, widely accepted PCG evaluation practice.",
+    "results": "Evaluator dependence is a real methodological problem.",
+    "limitations": "Does not define a new agent-invariant content-property theory."
+  },
+  {
+    "id": "L355",
+    "year": 2024,
+    "work": "Literally Unplayable: On Constraint-Based Generation of Uncompletable Levels",
+    "area": "Constraint PCG / mechanic necessity",
+    "venue": "FDG 2024",
+    "method": "Generates intentionally uncompletable levels and describes generating levels that require use of a special move.",
+    "results": "Counterfactual mechanic necessity in generated levels already has a direct precedent.",
+    "limitations": "Does not study complexity-class interaction/finite hardness."
+  },
+  {
+    "id": "L167",
+    "year": 2024,
+    "work": "Predicting Solvability and Difficulty of Sokoban Puzzles",
+    "area": "Puzzle empirical difficulty",
+    "venue": "SCCC 2024",
+    "method": "Uses learned surrogates to predict Sokoban solvability and push-count difficulty from puzzle boards.",
+    "results": "Empirical puzzle difficulty prediction is occupied within individual puzzle domains.",
+    "limitations": "Does not relate empirical difficulty to complexity-inducing mechanic subsets or cross-game transfer."
+  },
+  {
+    "id": "L152",
+    "year": 2024,
+    "work": "Cross-Paradigm Modelling: A Study of Puzznic",
+    "area": "Puzzle representation / modelling / instance generation",
+    "venue": "IEEE ICTAI 2024",
+    "method": "Compares constraint programming and AI planning models of Puzznic, identifies complementary strengths/weaknesses, and uses the constraint model for parameterized puzzle-instance generation.",
+    "results": "Comparing alternative modelling paradigms for a puzzle and exploiting one for generation is already occupied.",
+    "limitations": "Single puzzle family; does not perform matched multi-family representation × generator experiments or held-out representation selection."
+  },
+  {
+    "id": "L156",
+    "year": 2024,
+    "work": "On Generalization for Generative Flow Networks",
+    "area": "GFlowNet generalization",
+    "venue": "2024",
+    "method": "Formalizes GFlowNet generalization and studies the ability to reach unseen parts of the reward space, especially length generalization.",
+    "results": "Generic GFlowNet generalization is already a research topic.",
+    "limitations": "Does not train one instance generator across formal schemas then frozen-transfer it to unseen operator/dynamics semantics."
+  },
+  {
+    "id": "L376",
+    "year": 2024,
+    "work": "GAVEL: Generating Games Via Evolution and Language Models",
+    "area": "Automated game invention",
+    "venue": "NeurIPS 2024",
+    "method": "Uses LLM/evolution in Ludii to generate novel board games beyond the training-rule space.",
+    "results": "Large-scale automated game invention in expressive rule languages is already current frontier.",
+    "limitations": "Evaluation of generated-game quality remains hard, but generation itself is occupied."
+  },
+  {
+    "id": "L375",
+    "year": 2024,
+    "work": "Treatment Effect Estimation Amidst Dynamic Network Interference in Online Gaming Experiments",
+    "area": "Causal inference / multiplayer experiments",
+    "venue": "2024",
+    "method": "Develops treatment-effect estimation for online games when multiplayer interactions create transient network interference that violates standard SUTVA-style independence; evaluates the method on real mobile-game experimental data.",
+    "results": "Interference-aware causal experimentation in online gaming is already a direct methodological contribution.",
+    "limitations": "Focuses treatment-effect estimation rather than game-balance boundary robustness, but closes a generic 'network-aware LiveOps A/B testing' thesis."
+  },
+  {
+    "id": "L371",
+    "year": 2024,
+    "work": "Autoverse: An Evolvable Game Language for Learning Robust Embodied Agents",
+    "area": "Open-ended learning / game-rule curricula",
+    "venue": "2024",
+    "method": "Uses an evolvable rule language to evolve increasingly complex environments/playtraces and then continue open-ended RL via environments maximizing value-function error.",
+    "results": "Rules+maps as curriculum/environment search are already active.",
+    "limitations": "Does not study theorem-defined mechanic interaction like G032."
+  },
+  {
+    "id": "L359",
+    "year": 2024,
+    "work": "Generalized Response Objectives for Strategy Exploration in Empirical Game-Theoretic Analysis",
+    "area": "PSRO / strategy discovery",
+    "venue": "AAMAS 2024",
+    "method": "Studies response objectives that explicitly alter strategy exploration/discovered strategy sets in empirical game-theoretic analysis.",
+    "results": "Strategy discovery is an explicit research object in modern EGTA/PSRO.",
+    "limitations": "Does not use matched game-mechanic interventions."
+  },
+  {
+    "id": "L187",
+    "year": 2024,
+    "work": "GAVEL: Generating Games Via Evolution and Language Models",
+    "area": "Automated game generation / held-out games",
+    "venue": "NeurIPS 2024 / peer-reviewed",
+    "method": "Fine-tunes CodeLlama on 574 Ludii games, holds out 14 games, then initializes MAP-Elites with the full held-out game descriptions and mutates their code to generate novel games.",
+    "results": "A learned game mutator can operate on games completely held out from model training.",
+    "limitations": "The full target game artifact is supplied at deployment and target-time evolutionary search/evaluation lasts hundreds of steps; this is not spec-only generation and not zero target search."
+  },
+  {
+    "id": "L179",
+    "year": 2024,
+    "work": "Sliding Puzzles Gym: A Scalable Benchmark for State Representation in Visual Reinforcement Learning",
+    "area": "Representation / visual RL benchmark",
+    "venue": "Preprint 2024",
+    "method": "Controls observation diversity while holding transition dynamics/action space fixed, isolating representation-learning difficulty in sliding puzzles.",
+    "results": "Controlled representation studies in puzzle RL already exist.",
+    "limitations": "Observation representation for acting agents, not generator genotype/encoding and operator interaction."
+  },
+  {
+    "id": "L433",
+    "year": 2024,
+    "work": "On Automating Video Game Regression Testing by Planning and Learning",
+    "area": "Automated game testing / action-model learning / PDDL",
+    "venue": "2024",
+    "method": "Learns a PDDL action model of gameplay mechanics from detailed game logs, incrementally checks consistency, and uses planning to generate regression-test scripts. Demonstrated on Unity Creator Kit RPG. Full text notes that learned models can need manual correction and that logging abstraction/generalization are major challenges.",
+    "results": "Learning formal game mechanics from playtraces and using them for regression testing is directly occupied.",
+    "limitations": "Does not establish a new general theory of game-mechanic identifiability; it relies on sufficient developer-guided logging and gameplay coverage."
+  },
+  {
+    "id": "L434",
+    "year": 2024,
+    "work": "Action Model Learning with Guarantees",
+    "area": "Planning / action model learning / version spaces",
+    "venue": "2024",
+    "method": "Develops a version-space theory for fully observable action-model learning, maintains all consistent solutions, constructs sound/complete approximations, and proves convergence to the true transition model with sufficient examples.",
+    "results": "Identifiability/version-space guarantees for action-model learning are mature outside games.",
+    "limitations": "Not a game-specific patch-change diagnosis study under constrained interfaces."
+  },
+  {
+    "id": "L088",
+    "year": 2024,
+    "work": "Multi-Task Learning for Routing Problem with Cross-Problem Zero-Shot Generalization",
+    "area": "Neural combinatorial optimization",
+    "venue": "KDD 2024 / peer-reviewed",
+    "method": "Represents VRP variants as combinations of shared attributes; one model solves seen and unseen combinations.",
+    "results": "Cross-problem zero-shot compositional generalization with one neural solver is established.",
+    "limitations": "Restricted to related VRP family; solver, not instance/content generator."
+  },
+  {
+    "id": "L455",
+    "year": 2024,
+    "work": "Learning Abstract World Models for Value-preserving Planning with Options",
+    "area": "World models / abstraction / planning",
+    "venue": "Reinforcement Learning Journal 2024",
+    "method": "Learns abstract MDPs with conditions ensuring planning induces bounded value loss; reports improved planning/learning sample efficiency.",
+    "results": "Value-preserving learned abstractions for planning are established beyond classic VE work.",
+    "limitations": "No mechanic-intervention causal design or true-search/model-burden decomposition."
+  },
+  {
+    "id": "L086",
+    "year": 2024,
+    "work": "GenCO: Generating Diverse Designs with Combinatorial Constraints",
+    "area": "Constrained generation / PCG",
+    "venue": "ICML 2024 / peer-reviewed",
+    "method": "Deep generative model integrated with combinatorial solver; includes game-level/map generation.",
+    "results": "Neural constrained generation and solver-integrated feasibility are established.",
+    "limitations": "Does not establish frozen cross-domain designer transfer to unseen executable dynamics."
+  },
+  {
+    "id": "L420",
+    "year": 2024,
+    "work": "GEEvo: Game Economy Generation and Balancing with Evolutionary Algorithms",
+    "area": "Game economy / simulation / evolutionary balancing",
+    "venue": "IEEE CEC 2024",
+    "method": "Full-paper audit: represents economies as source/random-gate/pool/converter/drain graphs; uses one EA to generate valid economy graphs and another to tune edge weights against simulated resource objectives. 194/200 generated economies were valid. The paper explicitly notes that its example player behaves like a spammer and proposes multiple small bots with different strategies as future work; it also proposes studying positive-feedback loops.",
+    "results": "Economy generation, simulation-driven balancing and parameter optimization are occupied.",
+    "limitations": "Player-strategy robustness and feedback stability are not solved, but they are explicit/obvious next directions of the paper."
+  },
+  {
+    "id": "L134",
+    "year": 2024,
+    "work": "A Framework for Predicting the Impact of Game Balance Changes through Meta Discovery",
+    "area": "Balance change / metagame prediction",
+    "venue": "IEEE Transactions on Games 2024",
+    "method": "Full-text/current audit v35: develops Meta Discovery in Pokémon Showdown using an RL battle agent, adaptive team-building, and simulation to predict how balance changes alter the metagame. The framework can start from scratch and update team pick/win/popularity statistics as strategies evolve. A key limitation is player-skill coverage: the paper explicitly notes that metagames differ by skill level and proposes a swarm of agents with varying skill levels as future work.",
+    "results": "Dynamic strategic response to balance patches and automated metagame discovery are directly occupied; fixed-strategy evaluation is not the whole field.",
+    "limitations": "One game ecosystem and limited player-skill representation. Population-robust balance regions under explicit evaluator/skill/agent-population uncertainty are not established here, but varying-skill populations are an explicit author future-work direction."
+  },
+  {
+    "id": "L131",
+    "year": 2024,
+    "work": "Autoverse: An Evolvable Game Language for Learning Robust Embodied Agents",
+    "area": "Open-ended game generation / formal rules",
+    "venue": "2024",
+    "method": "DSL of cellular-automaton rewrite mechanics; evolves rules and initial maps to create increasingly complex environments and trains agents.",
+    "results": "Evolvable formal game rules + maps for curriculum are established.",
+    "limitations": "Evolves environments for student learning; not a pretrained frozen level-designer policy transferred to an unseen rule system."
+  },
+  {
+    "id": "L126",
+    "year": 2024,
+    "work": "LLMArena: Assessing Capabilities of LLMs in Dynamic Multi-Agent Environments",
+    "area": "Game-based capability benchmark",
+    "venue": "2024",
+    "method": "Seven games assess spatial reasoning, planning, numerical reasoning, risk, communication, opponent modelling and collaboration.",
+    "results": "A named multidimensional capability vector over game environments already exists for LLM evaluation.",
+    "limitations": "Scores agent capabilities; does not estimate how much each GAME demands a capability under controlled resource removal."
+  },
+  {
+    "id": "L124",
+    "year": 2024,
+    "work": "TeamCraft: A Benchmark for Multi-Modal Multi-Agent Systems in Minecraft",
+    "area": "Multi-agent benchmark",
+    "venue": "2024",
+    "method": "55k task variants, procedural expert demonstrations, generalization to novel goals/scenes/unseen agent counts.",
+    "results": "Team-size/generalization benchmarking in cooperative game environments is active.",
+    "limitations": "Minecraft/agent-centric; not PCG science about coordination-demand preservation."
+  },
+  {
+    "id": "L121",
+    "year": 2023,
+    "work": "Who Needs to Know? Minimal Knowledge for Optimal Coordination",
+    "area": "Cooperative games / information dependence",
+    "venue": "2023",
+    "method": "Defines strategically relevant vs irrelevant teammate information and computes compact representations by Bellman backup.",
+    "results": "Information dependence for optimal coordination is formally occupied.",
+    "limitations": "Overcooked-focused analysis; not procedural generation of content profiles."
+  },
+  {
+    "id": "L093",
+    "year": 2023,
+    "work": "Hypernetworks for Zero-Shot Transfer in Reinforcement Learning (HyperZero)",
+    "area": "Transfer RL",
+    "venue": "AAAI 2023 / peer-reviewed",
+    "method": "Hypernetwork maps MDP task parameters to value functions/policies; zero-shot new reward/transition conditions.",
+    "results": "Formal/context-conditioned zero-shot policy generation is established.",
+    "limitations": "Task parameterization is structured and policy is an acting agent, not a procedural designer in a new game-rule system."
+  },
+  {
+    "id": "L157",
+    "year": 2023,
+    "work": "One Model, Any CSP: Graph Neural Networks as Fast Global Search Heuristics for Constraint Satisfaction",
+    "area": "Universal CSP neural solver",
+    "venue": "IJCAI 2023",
+    "method": "Uses one generic GNN architecture/representation across CSPs of different arity, relations and domain sizes as a learned search heuristic.",
+    "results": "One-model formal graph machinery across heterogeneous constraint problems is occupied on the solver side.",
+    "limitations": "Search/solver heuristic rather than generator of new problem instances for unseen schemas."
+  },
+  {
+    "id": "L379",
+    "year": 2023,
+    "work": "Population-based Evaluation in Repeated Rock-Paper-Scissors as a Benchmark for Multiagent Reinforcement Learning",
+    "area": "Multi-agent evaluation / population-based benchmarking",
+    "venue": "TMLR 2023",
+    "method": "Evaluates agents against a population of 43 RPS tournament bots and argues that single-expert/head-to-head evaluation is insufficient; uses population returns and exploitability.",
+    "results": "Population-based agent evaluation in games is already an explicit, peer-reviewed methodology before G049.",
+    "limitations": "Agent evaluation only; does not attribute value to individual game mechanics or study mechanic-level Shapley sign stability."
+  },
+  {
+    "id": "L142",
+    "year": 2023,
+    "work": "Strategy Extraction for Transfer in AI Agents",
+    "area": "Strategy extraction / lifelong transfer",
+    "venue": "2023",
+    "method": "Extracts recurring behavioural action-sequence strategies from existing knowledge for transfer/generalisation; demonstrated in Pacman and a dungeon crawler.",
+    "results": "Behavioural strategy extraction for reuse across contexts is occupied.",
+    "limitations": "Not symbolic rule/program invariants across formal game-rule changes; transfer characterization is preliminary."
+  },
+  {
+    "id": "L410",
+    "year": 2023,
+    "work": "Bilevel Entropy based Mechanism Design for Balancing Meta in Video Games",
+    "area": "Game-theoretic balance / mechanism design / equilibrium meta",
+    "venue": "AAMAS 2023",
+    "method": "AAMAS paper treats game balancing as bilevel mechanism design: an upper-level designer changes game parameters while the lower level recomputes strategic response/mixed-strategy equilibrium; the objective promotes a high-entropy meta. Experiments include abstract and Pokémon-style competitive settings.",
+    "results": "Re-equilibrating strategic response after a balance change is established; balance optimization need not assume a fixed policy population.",
+    "limitations": "The strategy/game model is still an explicit modeled population/strategy space; it does not quantify how the acceptable balance region deforms as evaluator populations or discovered strategy sets change."
+  },
+  {
+    "id": "L215",
+    "year": 2023,
+    "work": "Traversability, Reconfiguration, and Reachability in the Gadget Framework",
+    "area": "Gadget objectives / complexity",
+    "venue": "Algorithmica 2023 / peer-reviewed",
+    "method": "Shows complexity can depend strongly on the objective: for reversible deterministic gadgets, reachability with non-interacting tunnels is easy while interacting tunnels is hard, but reconfiguration can be PSPACE-complete even for some non-interacting gadgets.",
+    "results": "The interacting-vs-non-interacting dichotomy is objective-specific rather than a universal statement about 'gadget difficulty'.",
+    "limitations": "Theory only; no matched empirical activation study."
+  },
+  {
+    "id": "L340",
+    "year": 2023,
+    "work": "Measuring Board Game Distance",
+    "area": "Game similarity / Ludii",
+    "venue": "Computers and Games 2023",
+    "method": "Measures distances between games using concept vectors and compares metrics; discusses limits of ludemes/concepts and subjectivity/context.",
+    "results": "Game-distance construction is established in Ludii.",
+    "limitations": "Distance is not the same as a causal/signed rule-change explanation of transfer outcomes."
+  },
+  {
+    "id": "L207",
+    "year": 2023,
+    "work": "Tools for Landscape Analysis of Optimisation Problems in Procedural Content Generation for Games",
+    "area": "PCG fitness landscape analysis",
+    "venue": "Applied Soft Computing 136 (2023) / peer-reviewed",
+    "method": "Applies diagonal walks, high-level landscape-property estimation and problem-similarity measures to search-based PCG; demonstrates on Mario/GBEA and explicitly discusses using landscape knowledge to choose PCG components including representations and optimizers.",
+    "results": "Landscape analysis for understanding PCG and informing representation/algorithm choices is already explicitly proposed.",
+    "limitations": "Primarily a vision/tutorial plus example analysis; not a multi-representation causal factorial, not puzzle-focused, and no held-out representation-selection experiment."
+  },
+  {
+    "id": "L341",
+    "year": 2023,
+    "work": "Towards a General Transfer Approach for Policy-Value Networks",
+    "area": "Transfer RL / Ludii",
+    "venue": "TMLR 2023",
+    "method": "Transfers fully convolutional AlphaZero-style policy-value networks across games and variants using shared Ludii semantics; evaluates zero-shot and fine-tuned transfer.",
+    "results": "Direct large-scale game/variant transfer evidence already exists, including negative-transfer cases.",
+    "limitations": "Does not formulate a controlled signed semantic rule-change × transferred-component causal law."
+  },
+  {
+    "id": "L254",
+    "year": 2023,
+    "work": "Sturgeon-MKIII: Simultaneous Level and Example Playthrough Generation via Constraint Satisfaction with Tile Rewrite Rules",
+    "area": "Constraint PCG / level+trace synthesis",
+    "venue": "PCG Workshop @ FDG 2023",
+    "method": "Generates tile-based game levels and example playthroughs simultaneously using constraint satisfaction and tile rewrite rules, thereby guaranteeing at least one mechanics-consistent completion trace.",
+    "results": "Joint synthesis of initial content and an action/playthrough witness under one formal rule model is already established.",
+    "limitations": "It does not compare two competing rule models, synthesize behavioral counterexamples, or certify bounded equivalence."
+  },
+  {
+    "id": "L237",
+    "year": 2023,
+    "work": "GameRTS: A Regression Testing Framework for Video Games",
+    "area": "Game regression testing / test selection",
+    "venue": "ICSE 2023",
+    "method": "Builds state-transition graphs tied to game assets/design/source changes and selects affected regression traces across commercial game versions; reports all evaluation bugs detected and two new critical bugs.",
+    "results": "Game-specific regression-test selection and change-impact analysis are established at ICSE.",
+    "limitations": "Primarily selects/adapts existing tests; not semantic equivalence of a known exploit mechanism when trajectories cease to replay."
+  },
+  {
+    "id": "L336",
+    "year": 2023,
+    "work": "Learning Properties in Simulation-Based Games",
+    "area": "Empirical game-theoretic analysis / simulation-based games",
+    "venue": "AAMAS/EGTA 2023",
+    "method": "Learns approximate utilities of simulation-based games and extends uniform-approximation guarantees to regret, equilibrium-related and welfare properties; discusses instability of welfare-optimal equilibria and stable alternatives.",
+    "results": "Direct mathematical collision with the naive G037 claim that approximate simulators need equilibrium/property fidelity guarantees.",
+    "limitations": "Works on empirical games/utility approximation rather than an extrapolative surrogate jointly over game-design parameters and unseen policy discovery."
+  },
+  {
+    "id": "L140",
+    "year": 2023,
+    "work": "Learning of Generalizable and Interpretable Knowledge in Grid-Based Reinforcement Learning Environments",
+    "area": "Interpretable strategy concepts / program synthesis",
+    "venue": "AIIDE 2023",
+    "method": "Uses DreamCoder-style program synthesis to imitate RL policies and inspect learned concept libraries across navigation and miniature Atari-style games.",
+    "results": "Interpretable concept extraction across multiple game-like domains is established.",
+    "limitations": "Does not demonstrate systematic cross-game transfer of concept libraries or characterize transfer boundaries."
+  },
+  {
+    "id": "L265",
+    "year": 2023,
+    "work": "Synthesis of Procedural Models for Deterministic Transition Systems",
+    "area": "Transition-model induction / program synthesis",
+    "venue": "ECAI 2023 / IOS Press",
+    "method": "Synthesizes executable procedural state-transition models from state-action-next-state examples across target formalisms such as STRIPS and cellular automata.",
+    "results": "Executable transition-model induction from examples is generic planning/program-synthesis prior.",
+    "limitations": "Does not actively synthesize game content/queries to distinguish hypotheses or define game-content-relative behavioral equivalence."
+  },
+  {
+    "id": "L273",
+    "year": 2023,
+    "work": "Synthesizing Reactive Test Environments for Autonomous Systems: Testing Reach-Avoid Specifications with Multi-Commodity Flows",
+    "area": "Reactive test-environment synthesis",
+    "venue": "ICRA 2023",
+    "method": "Synthesizes reactive environmental constraints that force target test behavior while preserving feasibility, using multi-commodity flows and bilevel optimization.",
+    "results": "Environment generation can be reactive and formally optimized; generic environment-as-experiment is mature.",
+    "limitations": "Not learned game-rule fidelity and not PCG semantics, but methodologically very close to G036's original environment-query idea."
+  },
+  {
+    "id": "L293",
+    "year": 2023,
+    "work": "CSP beyond tractable constraint languages",
+    "area": "Parameterized complexity / CSP backdoor depth",
+    "venue": "Constraints 2023",
+    "method": "Extends backdoor depth to CSP and proves FPT for finite tractable semi-conservative base languages parameterized by backdoor depth plus domain size.",
+    "results": "Distance-to-tractability has mature refined measures beyond simple backdoor size.",
+    "limitations": "Not a game-specific mechanic parameter and does not test empirical solver effort."
+  },
+  {
+    "id": "L306",
+    "year": 2023,
+    "work": "Predicting the Empirical Hardness of Metric TSP Instances",
+    "area": "TSP / empirical hardness prediction",
+    "venue": "AIRO Springer Series 2023",
+    "method": "Uses >45k metric TSP instances and branch-and-bound nodes to label/predict easy vs hard instances from cost-matrix features.",
+    "results": "Shows deterministic solver work counters and structural hardness prediction are established in combinatorial optimization.",
+    "limitations": "No matched mechanism intervention or game content."
+  },
+  {
+    "id": "L098",
+    "year": 2023,
+    "work": "Learning Parameterized Families of Games",
+    "area": "EGTA / parameterized games",
+    "venue": "AAMAS 2023 / peer-reviewed",
+    "method": "Environment parameters become regressor inputs for deviation payoffs/equilibria across a family.",
+    "results": "Thorough analysis of strategic incentives over continuous/discrete parameter spaces is already a research object.",
+    "limitations": "Not a formal mechanic-topology phase-transition study, but directly crowds generic phase-map claims."
+  },
+  {
+    "id": "L106",
+    "year": 2023,
+    "work": "MCU: A Task-centric Framework for Open-ended Agent Evaluation in Minecraft",
+    "area": "Multidimensional task difficulty",
+    "venue": "Preprint / benchmark line",
+    "method": "Six task difficulty dimensions; task-space analysis for Minecraft agents.",
+    "results": "Multi-dimensional task/capability characterization exists in open-ended agent evaluation.",
+    "limitations": "Dimensions are task-level and include subjective/semantic notions such as creativity/novelty; not intrinsic game computational-demand fingerprint."
+  },
+  {
+    "id": "L100",
+    "year": 2023,
+    "work": "Strategic Knowledge Transfer",
+    "area": "Multi-agent transfer / PSRO",
+    "venue": "JMLR 2023 / peer-reviewed",
+    "method": "Transfers response strategies across related games/opponents to accelerate PSRO.",
+    "results": "Strategic knowledge transfer across changing game conditions is established.",
+    "limitations": "Transfers player responses, not procedural content designers."
+  },
+  {
+    "id": "L097",
+    "year": 2023,
+    "work": "MAESTRO: Open-Ended Environment Design for Multi-Agent Reinforcement Learning",
+    "area": "Multi-agent UED",
+    "venue": "ICLR 2023 / peer-reviewed",
+    "method": "Joint curriculum over environment parameters and co-player policies.",
+    "results": "Open-ended environment design extends to competitive multi-agent games.",
+    "limitations": "No direct evidence of one frozen teacher transferred across unseen rule systems."
+  },
+  {
+    "id": "L133",
+    "year": 2023,
+    "work": "Reasoning about Causality in Games",
+    "area": "Causal games / game theory",
+    "venue": "Artificial Intelligence 2023",
+    "method": "Introduces structural causal games / mechanised games, supporting prediction, intervention and counterfactual queries over game variables and strategies.",
+    "results": "Causal reasoning in games is formally established; generic 'apply causality to games' is not novel.",
+    "limitations": "Framework-level contribution; does not study controlled videogame-mechanic perturbations across multiple solvers."
+  },
+  {
+    "id": "L087",
+    "year": 2023,
+    "work": "Compositional Diffusion-Based Continuous Constraint Solvers (Diffusion-CCSP)",
+    "area": "Compositional generation / constraints",
+    "venue": "CoRL 2023 / peer-reviewed",
+    "method": "Factor-graph formulation; compose energies of diffusion models trained for individual constraint types.",
+    "results": "Strong generalization to novel combinations of known constraints.",
+    "limitations": "Known-constraint composition, not new primitive semantics; outputs are CCSP solutions, not game-level instance designers across rule systems."
+  },
+  {
+    "id": "L454",
+    "year": 2023,
+    "work": "MDP Playground: An Analysis and Debug Testbed for Reinforcement Learning",
+    "area": "RL benchmark / controllable hardness",
+    "venue": "JAIR 2023",
+    "method": "Provides independently controllable hardness dimensions and interaction studies across toy and wrapped environments.",
+    "results": "Orthogonal hardness control and multidimensional environment difficulty are established.",
+    "limitations": "Abstract MDP knobs; does not isolate semantic executable game mechanics or world-model adequacy burden."
+  },
+  {
+    "id": "L425",
+    "year": 2023,
+    "work": "Anomaly Detection in the Open World: Normality Shift Detection, Explanation, and Adaptation",
+    "area": "Concept drift / anomaly detection / security",
+    "venue": "NDSS 2023",
+    "method": "NDSS work formalizes and detects 'normality shift' in zero-positive anomaly detection, explains the shift and adapts the model using long-term security datasets.",
+    "results": "Detect-explain-adapt under normal-behavior drift is established security methodology.",
+    "limitations": "Not game anti-cheat; no game-patch/player-meta experiment."
+  },
+  {
+    "id": "L148",
+    "year": 2023,
+    "work": "Policy Space Diversity for Non-Transitive Games",
+    "area": "Strategic diversity / PSRO",
+    "venue": "2023",
+    "method": "Defines a policy diversity metric whose improvement guarantees better Nash approximation; integrates it into PSRO.",
+    "results": "Rigorous strategic diversity metrics tied to equilibrium quality are established.",
+    "limitations": "Population/policy-side diversity, not game-mechanic-induced option diversity."
+  },
+  {
+    "id": "L144",
+    "year": 2023,
+    "work": "Deep Explainable Relational Reinforcement Learning: A Neuro-Symbolic Approach",
+    "area": "Neuro-symbolic RL / rule policies",
+    "venue": "2023",
+    "method": "Learns interpretable logical-rule policies and demonstrates generalization to modified configurations in several domains.",
+    "results": "Logical rule policies that generalize under environment modifications are established.",
+    "limitations": "Mostly within-domain structural changes; not cross-game concept-library transfer under distinct rule systems."
+  },
+  {
+    "id": "L366",
+    "year": 2023,
+    "work": "Mechanic Maker 2.0: Reinforcement Learning for Evaluating Generated Rules",
+    "area": "Automated rule generation / evaluator dependence",
+    "venue": "AIIDE 2023",
+    "method": "Replaces a static A* approximator with RL for generated-rule evaluation and finds that RL produces distinct sets of rules, potentially more usable by humans.",
+    "results": "Direct evidence that changing evaluator class changes what rules/mechanics an AGD system selects.",
+    "limitations": "Does not systematically quantify sign/rank stability of individual mechanic value across evaluator populations."
+  },
+  {
+    "id": "L180",
+    "year": 2023,
+    "work": "Procedural Content Generation via Knowledge Transformation (PCG-KT)",
+    "area": "Cross-domain PCG / survey framework",
+    "venue": "IEEE Transactions on Games 2023",
+    "method": "Formalizes PCG via transferring/transforming knowledge across domains and surveys transfer learning and blending between games.",
+    "results": "Cross-domain PCG knowledge transfer is established as a research framing.",
+    "limitations": "Surveyed approaches typically adapt/retrain or combine known domains; does not establish frozen spec-only zero-target designer transfer to unseen executable dynamics."
+  },
+  {
+    "id": "L147",
+    "year": 2023,
+    "work": "Quality Diversity in the Amorphous Fortress (QD-AF): Evolving for Complexity in 0-Player Games",
+    "area": "Open-ended game generation / artificial life",
+    "venue": "2023",
+    "method": "Uses quality diversity to generate 0-player game/environment families with emergent cooperative and competitive multi-agent dynamics.",
+    "results": "Open-ended generation of strategically/ecologically varied rule systems is established.",
+    "limitations": "Complexity descriptors are domain-specific and do not identify transferable procedural knowledge or intervention-defined game demands."
+  },
+  {
+    "id": "L136",
+    "year": 2023,
+    "work": "MDP Playground: An Analysis and Debug Testbed for Reinforcement Learning",
+    "area": "RL environment hardness / controlled factors",
+    "venue": "JAIR 2023",
+    "method": "Controls delayed rewards, reward density, sequence length, stochasticity, representations, irrelevant features and more; studies algorithm interactions on toy and complex environments.",
+    "results": "Controlled environment-hardness dimensions and factor interactions are established outside specific game mechanics.",
+    "limitations": "MDP meta-features are not the same as semantically meaningful game mechanics; focus is debugging RL agents rather than game science."
+  },
+  {
+    "id": "L094",
+    "year": 2022,
+    "work": "Environment Generation for Zero-Shot Compositional Reinforcement Learning (CoDE)",
+    "area": "UED / curriculum generation",
+    "venue": "NeurIPS 2022 / peer-reviewed",
+    "method": "Generator agent builds compositional task graphs tailored to a learner.",
+    "results": "Learned environment/task generator and compositional environment generation are established.",
+    "limitations": "Reported zero-shot generalization is primarily the student policy; generator is not shown as frozen cross-dynamics designer."
+  },
+  {
+    "id": "L161",
+    "year": 2022,
+    "work": "Celeste is PSPACE-hard",
+    "area": "Theoretical game complexity / mechanic subsets",
+    "venue": "2022",
+    "method": "Proves PSPACE-hardness in several different ways corresponding to different subsets of Celeste mechanics.",
+    "results": "Complexity analysis over alternative mechanic subsets is active beyond classic games.",
+    "limitations": "No empirical solver-hardness bridge."
+  },
+  {
+    "id": "L400",
+    "year": 2022,
+    "work": "Keke AI Competition: Solving puzzle levels in a dynamically changing mechanic space",
+    "area": "Dynamic game mechanics / automated solving / game AI competition",
+    "venue": "IEEE CoG-era competition paper 2022",
+    "method": "Builds a Baba-is-You-style competition where rules can be created/broken during play. The framework supports multiple active rule types and evaluates BFS, DFS, best-first/default and random baselines on hidden levels; baseline solve rates range roughly 33–53%. Authors explicitly motivate adaptation to combinations of changing mechanics.",
+    "results": "Solver performance across dynamically changing mechanic combinations is already an established Game AI benchmark object.",
+    "limitations": "It does not use theorem-defined complexity classes, matched mechanic-subset counterfactuals, factorial/Möbius interaction estimands, or finite activation analysis."
+  },
+  {
+    "id": "L403",
+    "year": 2022,
+    "work": "Too much information: Why CDCL solvers need to forget learned clauses",
+    "area": "SAT empirical hardness / censored runtimes",
+    "venue": "2022",
+    "method": "Empirical SAT study encounters solver runs extending beyond practical limits, introduces explicit censoring/timeouts, and states that survival analysis is necessary for the censored runtime data.",
+    "results": "Real solver-hardness studies already treat timeout censoring statistically rather than as a cosmetic benchmark detail.",
+    "limitations": "SAT-specific and observational; no game-mechanic intervention."
+  },
+  {
+    "id": "L110",
+    "year": 2022,
+    "work": "Compressing and Comparing the Generative Spaces of Procedural Content Generators",
+    "area": "PCG evaluation / generative spaces",
+    "venue": "IEEE CoG 2022",
+    "method": "Uses compression/dimensionality methods to compare PCG generative spaces across 2D tile-based game domains.",
+    "results": "Generalizable comparison of generator spaces is an established goal; observed domain inconsistency.",
+    "limitations": "Focuses generator outputs/spaces rather than controlled representation-induced search topology."
+  },
+  {
+    "id": "L421",
+    "year": 2022,
+    "work": "Market Interventions in a Large-Scale Virtual Economy",
+    "area": "Virtual economy / causal inference / live-service intervention",
+    "venue": "2022",
+    "method": "Studies an Old School RuneScape transaction tax and item sink using real market data and causal inference. The tax did not meaningfully change volume at the tax boundaries; the item sink contributed to inflation of luxury-good prices without reducing trading volume.",
+    "results": "Real causal evaluation of live-game economic policy interventions is already established.",
+    "limitations": "Does not provide simulator-policy robustness to changing player-behavior populations."
+  },
+  {
+    "id": "L277",
+    "year": 2022,
+    "work": "Universally Hard Hamiltonian Cycle Problem Instances",
+    "area": "Hamiltonicity / cross-solver empirical hardness",
+    "venue": "ECTA / IJCCI 2022",
+    "method": "Tests evolutionarily discovered hard Hamiltonian-cycle instances against six major backtracking algorithms and 91,000 randomized instances.",
+    "results": "Some structured HC instances remain hard across multiple exact backtracking algorithms, while those instances are rare in large random ensembles.",
+    "limitations": "Cross-backtracker hardness still does not prove algorithm-independent complexity, and the domain is general graphs rather than game instances."
+  },
+  {
+    "id": "L270",
+    "year": 2022,
+    "work": "MACQ: A Holistic View of Model Acquisition Techniques",
+    "area": "Planning model acquisition framework",
+    "venue": "arXiv 2022",
+    "method": "Provides a common framework for generating traces and applying multiple action-model acquisition methods, including different trace-generation/sampling strategies.",
+    "results": "Model acquisition pipelines and trace-generation design are mature enough to have general tooling.",
+    "limitations": "Not a direct content-realizability study and not Game AI specific."
+  },
+  {
+    "id": "L348",
+    "year": 2022,
+    "work": "AdaRL: What, Where, and How to Adapt in Transfer Reinforcement Learning",
+    "area": "Causal/structural transfer RL",
+    "venue": "ICLR 2022",
+    "method": "Builds a structural environment model to locate changed mechanisms and derive minimal shared/domain-specific representations for adaptation.",
+    "results": "Very close to 'which changed component should transfer/adapt?'",
+    "limitations": "Not centered on interpretable game-mechanic/ludeme edits or policy-vs-value component transfer benchmark."
+  },
+  {
+    "id": "L311",
+    "year": 2022,
+    "work": "Automated Gameplay Testing and Validation with Curiosity-Conditioned Proximal Trajectories",
+    "area": "RL game testing",
+    "venue": "IEEE Transactions on Games 2022",
+    "method": "Curiosity + imitation learning explores near expert trajectories; improves coverage and bug/design-issue discovery in complex 3D navigation; includes visual analytics.",
+    "results": "RL exploration and bug discovery are established game-testing contributions.",
+    "limitations": "Does not provide semantic causal attribution or cross-version equivalence."
+  },
+  {
+    "id": "L300",
+    "year": 2022,
+    "work": "Waypoint Routing on Bounded Treewidth Graphs",
+    "area": "Parameterized algorithms / Waypoint Routing",
+    "venue": "Information Processing Letters 2022",
+    "method": "Improves WRP on treewidth tw to 2^{O(tw)}·n and proves ETH-optimality.",
+    "results": "If the restricted Bloxorz↔WRP bridge is proven, macro-treewidth becomes a legitimate FPT tractability axis.",
+    "limitations": "The theorem applies to WRP, not arbitrary Bloxorz gadget graphs."
+  },
+  {
+    "id": "L275",
+    "year": 2022,
+    "work": "The Hardest Hamiltonian Cycle Problem Instances: The Plateau of Yes and the Cliff of No",
+    "area": "Empirical Hamiltonian hardness / hard-instance generation",
+    "venue": "SN Computer Science 2022",
+    "method": "Evolves Hamiltonian-cycle graphs to maximize a specialized backtracking solver's recursion count and analyzes hard yes/no neighborhoods and structural plateaus.",
+    "results": "Empirical hardness and adversarial generation for Hamiltonicity are established outside games.",
+    "limitations": "Uses general graphs and one specialized solver; does not test a game-mechanic conjunction or matched Bloxorz variants."
+  },
+  {
+    "id": "L449",
+    "year": 2022,
+    "work": "A Framework for Generating Informative Benchmark Instances",
+    "area": "Benchmark instance generation / solver discrimination",
+    "venue": "CP 2022",
+    "method": "Automatically generates graded instances or instances that discriminate between solving approaches.",
+    "results": "Paper 2 cannot claim novelty from generating diagnostic/discriminating instances.",
+    "limitations": "No game-mechanic semantics and no explicit matching of planning-vs-model-learning burdens."
+  },
+  {
+    "id": "L307",
+    "year": 2022,
+    "work": "Exploring the Feature Space of TSP Instances Using Quality Diversity",
+    "area": "QD / hard-instance generation",
+    "venue": "GECCO 2022",
+    "method": "Uses quality diversity to generate TSP instances across feature space and expose solver-performance differences.",
+    "results": "Hard-instance/instance-space generation with QD is established.",
+    "limitations": "No counterfactual cross-mask interaction objective."
+  },
+  {
+    "id": "L248",
+    "year": 2022,
+    "work": "Toward Cooperative Level Generation in Multiplayer Games: A User Study in Overcooked!",
+    "area": "Cooperative PCG / controllable cooperation patterns",
+    "venue": "IEEE CoG 2022",
+    "method": "Defines four cooperation patterns and a controllable level generator intended to induce diverse cooperation in two-player Overcooked.",
+    "results": "Controllable cooperative-level generation and explicit cooperation-pattern targeting are already published.",
+    "limitations": "Uses a specific game and human-facing cooperation patterns; does not establish policy-invariant formal content descriptors."
+  },
+  {
+    "id": "L391",
+    "year": 2022,
+    "work": "Verifying Maze-Like Game Levels With Model Checker SPIN",
+    "area": "Formal verification + PCG + automated game testing",
+    "venue": "IEEE Access 2022",
+    "method": "Full-text OA paper models maze, racing-maze and Sokoban-style behavior in PROMELA/SPIN, automatically tailors models to generated levels, uses counterexamples as winning action sequences, and reports five experiments including comparisons with A* and MCTS.",
+    "results": "Procedural generation + formal model checking + automatic solution/witness generation and solver comparisons are established game-testing contributions.",
+    "limitations": "Focus is level correctness/reachability in fixed behavioral templates, not causal failure attribution, mechanic interaction activation, or cross-game transfer."
+  },
+  {
+    "id": "L173",
+    "year": 2022,
+    "work": "Instance Space Analysis for Algorithm Testing: Methodology and Software Tools",
+    "area": "Instance-space analysis / algorithm selection",
+    "venue": "ACM Computing Surveys / peer-reviewed",
+    "method": "Formalizes ISA for mapping instance features to algorithm performance, benchmark coverage and per-instance algorithm strengths/weaknesses.",
+    "results": "Feature-based empirical hardness mapping and solver complementarity are mature methodology.",
+    "limitations": "General methodology; not causal/theorem-informed game-mechanic activation."
+  },
+  {
+    "id": "L367",
+    "year": 2022,
+    "work": "Searching for Balanced 2D Brawler Games: Successes and Failures of Automated Evaluation",
+    "area": "Automated game design / evaluator validity",
+    "venue": "AIIDE 2022",
+    "method": "Shows optimization of an automated balance fitness function need not translate into the hypothesized human experience in user play.",
+    "results": "Automated game-design metrics can optimize the wrong proxy even when numerically successful.",
+    "limitations": "Human-alignment concern rather than evaluator-population mechanic attribution."
+  },
+  {
+    "id": "L217",
+    "year": 2022,
+    "work": "Plotting: A Planning Problem With Complex Transitions",
+    "area": "Puzzle planning / multi-paradigm empirical solving",
+    "venue": "CP 2022 / peer-reviewed",
+    "method": "Introduces a Plotting benchmark generator with 200 synthetic puzzle instances and compares SAT, CP, MIP and Fast Downward; reports strong horizon-dependent/phase-transition-like empirical difficulty and solver differences.",
+    "results": "Generated game/puzzle instances plus multi-solver empirical hardness measurement is mature prior art.",
+    "limitations": "Not driven by a complexity-theorem mechanic intervention and does not estimate causal interaction among game mechanics."
+  },
+  {
+    "id": "L337",
+    "year": 2022,
+    "work": "Regret Pruning for Learning Equilibria in Simulation-Based Games",
+    "area": "EGTA / sample-efficient equilibrium learning",
+    "venue": "2022–23 EGTA",
+    "method": "Progressive sampling and regret-pruning reduce simulator queries while providing guarantees for approximate pure/mixed Nash equilibria of empirical games.",
+    "results": "Query-efficient equilibrium inference from expensive simulators is also established.",
+    "limitations": "Focuses sampling of fixed strategy profiles rather than game-design parameter optimization with generalizing neural surrogates."
+  },
+  {
+    "id": "L191",
+    "year": 2022,
+    "work": "The Legend of Zelda: The Complexity of Mechanics",
+    "area": "Game complexity / mechanic regimes",
+    "venue": "Preprint / theory line",
+    "method": "Classifies many individual Zelda mechanics and combinations as polynomial, NP-hard/complete or PSPACE-hard/complete using multiple gadget frameworks.",
+    "results": "A rich library of theorem-backed mechanic regimes exists inside one recognizable game family.",
+    "limitations": "No systematic finite-instance empirical multi-solver study or matched intervention analysis."
+  },
+  {
+    "id": "L346",
+    "year": 2022,
+    "work": "A Taxonomy for Similarity Metrics between Markov Decision Processes",
+    "area": "RL / MDP similarity",
+    "venue": "Machine Learning 2022",
+    "method": "Systematizes MDP similarity metrics, model/performance viewpoints and their relation to transfer/generalization.",
+    "results": "Confirms task similarity/transferability is a mature theory/method field.",
+    "limitations": "Does not isolate human-readable game-mechanic changes."
+  },
+  {
+    "id": "L123",
+    "year": 2022,
+    "work": "SMACv2: An Improved Benchmark for Cooperative Multi-Agent Reinforcement Learning",
+    "area": "Cooperative MARL benchmark",
+    "venue": "NeurIPS benchmark line",
+    "method": "Procedurally generated scenarios require generalization to unseen settings; corrects open-loop-policy weakness of SMAC.",
+    "results": "Procedural cooperative benchmark generation is established on the agent-evaluation side.",
+    "limitations": "Same-distribution scenario generalization; not cross-game content-side coordination descriptors."
+  },
+  {
+    "id": "L435",
+    "year": 2022,
+    "work": "Self-directed Learning of Action Models using Exploratory Planning",
+    "area": "Active model learning / exploratory planning / game environment",
+    "venue": "2022",
+    "method": "An agent deliberately explores to learn action preconditions/effects without expert traces or a fixed goal, using planning to reach informative contexts. Evaluation includes an exploration-focused video-game scenario.",
+    "results": "Active intervention/action selection for learning unknown mechanics/action models is already established and has a game evaluation.",
+    "limitations": "Does not focus specifically on minimal cross-version behavioral witnesses for a known pair/family of candidate game versions."
+  },
+  {
+    "id": "L120",
+    "year": 2022,
+    "work": "Stateful Active Facilitator: Coordination and Environmental Heterogeneity in Cooperative MARL",
+    "area": "Cooperative MARL / environment characterization",
+    "venue": "ICLR 2023 line",
+    "method": "Formalizes coordination level and heterogeneity level; HECOGrid provides quantitative control over both.",
+    "results": "Scalar coordination-demand control in cooperative environments is already explicit.",
+    "limitations": "Not a PCG benchmark across games/partner policies; primarily evaluates MARL algorithms."
+  },
+  {
+    "id": "L137",
+    "year": 2022,
+    "work": "The Game of Hidden Rules: A New Kind of Benchmark Challenge for Machine Learning",
+    "area": "Controlled rule difficulty / benchmark",
+    "venue": "2022",
+    "method": "Expressive rule language enables fine controlled task changes to study how rule facets affect practical learning difficulty.",
+    "results": "Fine-grained rule/task perturbation for ML difficulty is already an explicit benchmark goal.",
+    "limitations": "Primarily hidden-rule learning, not general game-mechanic demand signatures or cross-algorithm mechanic causality."
+  },
+  {
+    "id": "L116",
+    "year": 2022,
+    "work": "Verifying Maze-Like Game Levels With Model Checker SPIN",
+    "area": "Formal verification / game levels",
+    "venue": "IEEE Access 2022",
+    "method": "Uses SPIN and counterexamples to verify maze-like levels and obtain winning action sequences.",
+    "results": "Model checking for level solvability/property verification is established.",
+    "limitations": "Domain templates/abstractions are needed; scalability depends on state-space size."
+  },
+  {
+    "id": "L404",
+    "year": 2022,
+    "work": "PSPACE-Completeness of Reversible Deterministic Systems",
+    "area": "Reversibility / gadget complexity / formal systems",
+    "venue": "MCU 2022",
+    "method": "Develops a framework showing several fully reversible deterministic systems are PSPACE-complete, including deterministic constraint logic and reversible gadget systems. Thus even global reversibility/undoability does not imply tractability.",
+    "results": "A broad causal story 'loss of reversibility makes games hard' is false as a general complexity claim.",
+    "limitations": "Different systems/objectives and PSPACE regime; no finite matched mechanic experiment."
+  },
+  {
+    "id": "L119",
+    "year": 2022,
+    "work": "Policy Diagnosis via Measuring Role Diversity in Cooperative Multi-agent RL",
+    "area": "Cooperative MARL / task characterization",
+    "venue": "ICML 2022",
+    "method": "Defines role diversity from action-, trajectory-, and contribution-based perspectives and links it to MARL policy performance.",
+    "results": "A multidimensional cooperative-task characteristic is already formalized and tested on MPE/SMAC.",
+    "limitations": "Policy/task diagnosis, not procedural content generation; does not define a portable PCG target representation."
+  },
+  {
+    "id": "L350",
+    "year": 2021,
+    "work": "Offline Meta Reinforcement Learning — Identifiability Challenges and Effective Data Collection Strategies",
+    "area": "Offline meta-RL / identifiability",
+    "venue": "NeurIPS 2021",
+    "method": "Formalizes MDP ambiguity/identifiability problems when tasks are inferred from fixed offline data and studies data-collection requirements.",
+    "results": "Passive-data task/model identifiability is established theory.",
+    "limitations": "Not game-mechanic semantic observability specifically."
+  },
+  {
+    "id": "L271",
+    "year": 2021,
+    "work": "Automated Generation of Initial Configurations for Testing Component Systems",
+    "area": "Model-based testing / valid configuration synthesis",
+    "venue": "FACS 2021",
+    "method": "Enumerates symmetry-free initial component configurations that satisfy architectural, consistency and user invariants, then uses them as starting configurations for online tests.",
+    "results": "Correct-by-construction constrained initial-state/configuration generation for testing is established.",
+    "limitations": "Component architectures rather than game content; objective is testing coverage/reconfiguration, not learned game-rule distinguishability."
+  },
+  {
+    "id": "L269",
+    "year": 2021,
+    "work": "Online Learning of Action Models for PDDL Planning",
+    "area": "Online action-model learning / exploratory planning",
+    "venue": "IJCAI 2021",
+    "method": "Learns PDDL action models during execution and plans toward informative states/action contexts where missing preconditions/effects can be discovered.",
+    "results": "Planning-to-informative-states for action-model learning is established.",
+    "limitations": "No game-level generation or learned GameCWM causal-fidelity target."
+  },
+  {
+    "id": "L438",
+    "year": 2021,
+    "work": "Proper Value Equivalence",
+    "area": "Model-based RL / planning-sufficient abstraction",
+    "venue": "2021",
+    "method": "Introduces proper value equivalence and shows multiple imperfect models can still be sufficient for optimal planning.",
+    "results": "Further removes any novelty from treating exact transition recovery as unnecessary for decision making.",
+    "limitations": "No mechanic-level causal comparison of learning burden versus search burden."
+  },
+  {
+    "id": "L441",
+    "year": 2021,
+    "work": "Heterogeneous Effects of Software Patches in a Multiplayer Online Battle Arena Game",
+    "area": "Game patches / causal inference / heterogeneous player effects",
+    "venue": "FDG 2021",
+    "method": "Uses causal inference on League of Legends and shows that software patches affect players differently by skill level and break duration, with the performance gap between stronger and weaker players changing after patches.",
+    "results": "Patch effects on player performance and skill strata are directly occupied.",
+    "limitations": "Does not distinguish true ability adaptation from non-invariance of the performance/skill measurement function."
+  },
+  {
+    "id": "L326",
+    "year": 2021,
+    "work": "A Multifaceted Surrogate Model for Search-Based Procedural Content Generation",
+    "area": "Game surrogate / PCG",
+    "venue": "IEEE Transactions on Games 2021",
+    "method": "Learns mapping among levels, rules and gameplay outcomes; uses surrogate for search-based generation toward balance/match-duration targets.",
+    "results": "Surrogate-guided game design and joint level/rules outcome modeling are mature.",
+    "limitations": "Does not systematically test re-equilibrated strategic decision fidelity."
+  },
+  {
+    "id": "L247",
+    "year": 2021,
+    "work": "On the Importance of Environments in Human-Robot Coordination",
+    "area": "Cooperative environment generation / coordination measures",
+    "venue": "RSS 2021",
+    "method": "Procedurally generates solvable Overcooked environments diverse with respect to coordination measures and shows qualitatively/statistically different coordination behavior even with the same planning algorithm.",
+    "results": "Environment/content can already be optimized to induce diverse coordination measures; content→coordination is established.",
+    "limitations": "Does not test whether a coordination descriptor remains invariant across substantially different partner-policy families or team sizes."
+  },
+  {
+    "id": "L266",
+    "year": 2021,
+    "work": "Asking the Right Questions: Learning Interpretable Action Models Through Query Answering",
+    "area": "Active action-model interrogation / planning",
+    "venue": "AAAI 2021",
+    "method": "Introduces plan-outcome queries consisting of an initial state and an action plan; queries are synthesized to distinguish candidate STRIPS models, and candidate hypotheses are pruned from observed outcomes.",
+    "results": "Choosing an initial state plus an action sequence to distinguish competing transition/action models is established peer-reviewed prior art.",
+    "limitations": "Uses planning-domain states rather than game-level content grammars; AAAI experiments draw candidate initial states from random walks rather than studying level realizability as a scientific factor."
+  },
+  {
+    "id": "L272",
+    "year": 2021,
+    "work": "Synthesis of Static Test Environments for Observing Sequence-like Behaviors in Autonomous Systems",
+    "area": "Formal test-environment synthesis",
+    "venue": "arXiv 2021",
+    "method": "Synthesizes initial conditions and minimally constraining static environment restrictions so an autonomous system must exhibit target sequence-like behavior while completing its mission.",
+    "results": "Environment/test-scenario synthesis beyond choosing actions is established formal-testing prior.",
+    "limitations": "Autonomous-system behavior testing, not comparison of learned game-rule models; environment represented as graph constraints rather than game level grammar."
+  },
+  {
+    "id": "L342",
+    "year": 2021,
+    "work": "General Game Heuristic Prediction Based on Ludeme Descriptions",
+    "area": "GGP / performance prediction",
+    "venue": "IEEE CoG 2021",
+    "method": "Uses Ludii game-description/ludeme features to predict heuristic performance across games.",
+    "results": "Rule-description → AI performance prediction is established.",
+    "limitations": "Heuristic prediction differs from component-specific policy/value transfer under controlled rule edits."
+  },
+  {
+    "id": "L339",
+    "year": 2021,
+    "work": "General Board Game Concepts",
+    "area": "General Game Playing / Ludii concepts",
+    "venue": "IEEE CoG 2021",
+    "method": "Defines hundreds of interpretable concepts derived from Ludii game descriptions, with intended uses including characterization, AI selection and transfer.",
+    "results": "Creates an explicit semantic feature space for rule/game differences.",
+    "limitations": "Concept existence does not itself establish which concept changes cause positive/negative transfer."
+  },
+  {
+    "id": "L344",
+    "year": 2021,
+    "work": "Distance-Based Mapping for General Game Playing",
+    "area": "GGP / game distance",
+    "venue": "IEEE CoG 2021",
+    "method": "Introduces MMap/LMap approximations of distance/mappings between game rule graphs and evaluates transfer scenarios.",
+    "results": "Game distance + mapping for transfer is directly established.",
+    "limitations": "Not a signed mechanic-level negative-transfer attribution law."
+  },
+  {
+    "id": "L163",
+    "year": 2021,
+    "work": "General Board Game Concepts",
+    "area": "Ludii / interpretable game concepts",
+    "venue": "2021",
+    "method": "Formalizes broad game concepts derived from Ludii ludemes for states, moves and games; motivates AI selection, transfer and explanation.",
+    "results": "Interpretable mechanic/concept descriptors are available and should be reused rather than reinvented.",
+    "limitations": "Does not estimate controlled mechanic interactions or empirical-hardness activation."
+  },
+  {
+    "id": "L186",
+    "year": 2021,
+    "work": "Toward Co-creative Dungeon Generation via Transfer Learning",
+    "area": "Cross-domain learned generator transfer",
+    "venue": "PCG Workshop 2021",
+    "method": "Transfers a co-creative level-design model from Mario to Zelda dungeon rooms and fine-tunes transferred weights using approximated target-domain interaction data derived from Zelda rooms.",
+    "results": "Learned generator transfer between quite distinct level domains is already demonstrated.",
+    "limitations": "All transferred parameters remain trainable and substantial target-domain data are used; not zero-target/frozen."
+  },
+  {
+    "id": "L168",
+    "year": 2021,
+    "work": "A Phase Transition in Minesweeper",
+    "area": "Game complexity / average-case empirical hardness",
+    "venue": "FUN 2021 / peer-reviewed",
+    "method": "Empirically studies finite Minesweeper near a critical mine density; uses SAT/UNSAT reduction and grouped minimal unsatisfiable core size as a hardness metric; shows easy-hard-easy behavior and barriers for bounded inference methods.",
+    "results": "Directly demonstrates that a theoretically hard game can exhibit structured finite-instance/average-case hardness regions.",
+    "limitations": "Single game and density axis; not controlled activation/ablation of complexity-bearing mechanics across games or genuinely distinct solver families."
+  },
+  {
+    "id": "L149",
+    "year": 2021,
+    "work": "Modelling Behavioural Diversity for Learning in Open-Ended Games",
+    "area": "Strategic diversity / gamescape",
+    "venue": "2021",
+    "method": "Provides geometric behavioural-diversity interpretation and DPP metric; maximizing it enlarges the gamescape.",
+    "results": "Strategic diversity and gamescape geometry are mature enough that a new diversity metric is risky.",
+    "limitations": "Focus is learning diverse agent populations rather than causal effects of mechanics on strategic structure."
+  },
+  {
+    "id": "L150",
+    "year": 2021,
+    "work": "Fingerprinting Tabletop Games",
+    "area": "Computational game characterization / MCTS",
+    "venue": "IEEE CoG 2021",
+    "method": "Builds visual game fingerprints from repeated optimization of MCTS parameters and uses them to compare tabletop games.",
+    "results": "The phrase and core idea of computational 'game fingerprinting' are already directly occupied.",
+    "limitations": "MCTS-centric and based on optimized algorithm parameters rather than causal mechanic interventions or multi-resource counterfactuals."
+  },
+  {
+    "id": "L162",
+    "year": 2021,
+    "work": "General Game Heuristic Prediction Based on Ludeme Descriptions",
+    "area": "Ludii / game-rule features / algorithm prediction",
+    "venue": "IEEE CoG 2021",
+    "method": "Predicts performance of general-game-playing heuristics from Ludii game descriptions and analyzes ludemes defining games.",
+    "results": "Rule/ludeme descriptions have already been used to predict algorithm performance.",
+    "limitations": "Observational corpus prediction, not controlled mechanic interventions, interaction terms or worst-case-vs-empirical-hardness analysis."
+  },
+  {
+    "id": "L151",
+    "year": 2021,
+    "work": "Visualizing Multiplayer Game Spaces",
+    "area": "Computational game-space characterization",
+    "venue": "IEEE Transactions on Games 2021",
+    "method": "Embeds multiplayer board games into several game-spaces, including statistics from repeated MCTS parameter optimization; shows algorithmic game-space is interpretable and differs from simple game-tree attributes.",
+    "results": "Using optimized AI behavior/parameters to characterize and compare games is an established research line.",
+    "limitations": "Does not isolate causal effects of individual mechanics or define cross-solver resource-response estimands."
+  },
+  {
+    "id": "L143",
+    "year": 2021,
+    "work": "Transfer of Fully Convolutional Policy-Value Networks Between Games and Game Variants",
+    "area": "Cross-game policy transfer / Ludii",
+    "venue": "arXiv / CoRR 2021",
+    "method": "Uses shared semantic channels in Ludii to transfer AlphaZero-like networks between variants and distinct board games, including zero-shot tests.",
+    "results": "Cross-game transfer using formal/shared game semantics is established on PLAYER policy networks.",
+    "limitations": "Not interpretable symbolic concepts; not procedural designer transfer."
+  },
+  {
+    "id": "L414",
+    "year": 2021,
+    "work": "Heterogeneous Effects of Software Patches in a Multiplayer Online Battle Arena Game",
+    "area": "Patch effects / causal inference / player heterogeneity",
+    "venue": "2021",
+    "method": "Studies League of Legends software patches with causal/quasi-experimental methods and finds heterogeneous responses associated with player skill and time away from the game, showing that one patch can affect player strata differently.",
+    "results": "Heterogeneous player response to live-game patches is empirically established.",
+    "limitations": "Focuses behavioral/player outcomes rather than strategic balance-region deformation or robust parameter selection."
+  },
+  {
+    "id": "L122",
+    "year": 2021,
+    "work": "Reward Machines for Cooperative Multi-Agent Reinforcement Learning",
+    "area": "Formal task structure / cooperative MARL",
+    "venue": "AAMAS 2021",
+    "method": "Reward-machine decomposition explicitly encodes teammate interdependencies/independencies and verifiable task decomposition.",
+    "results": "Formal structural representation of cooperative dependence is established.",
+    "limitations": "A learning/task-decomposition method, not a content-generation benchmark."
+  },
+  {
+    "id": "L117",
+    "year": 2021,
+    "work": "Softlock Detection for Super Metroid with Computation Tree Logic",
+    "area": "Formal verification / softlocks",
+    "venue": "FDG 2021",
+    "method": "Uses CTL on a gameplay abstraction to detect non-obvious softlocks and turn counterexamples into explanations.",
+    "results": "Formal softlock detection and counterexample explanation in games are established.",
+    "limitations": "Requires compact enumerable abstraction; transfer to arbitrary games is nontrivial."
+  },
+  {
+    "id": "L423",
+    "year": 2021,
+    "work": "ERMAS: Becoming Robust to Reward Function Sim-to-Real Gaps in Multi-Agent Simulations",
+    "area": "Robust multi-agent simulation / economic policy / sim-to-real",
+    "venue": "2021",
+    "method": "Defines epsilon-robust multi-agent simulation against uncertainty in agents' reward functions and worst-case epsilon-equilibria. In AI-Economist taxation experiments, robust policies tolerate changes in agent risk aversion and can improve social welfare.",
+    "results": "Robust policy design against behavioral/reward misspecification in multi-agent economic simulations is already a formal methodology.",
+    "limitations": "Not video-game economy balancing specifically, but it removes generic 'robust to player behavior shift' as a method novelty."
+  },
+  {
+    "id": "L125",
+    "year": 2021,
+    "work": "Benchmarking the Spectrum of Agent Capabilities (Crafter)",
+    "area": "Game-based agent capability benchmark",
+    "venue": "2021",
+    "method": "Single open-world survival game evaluates achievements requiring exploration, long-term reasoning and generalization.",
+    "results": "Broad capability benchmarking inside a game is established.",
+    "limitations": "Agent-centric; achievement set does not estimate intrinsic game demand by controlled capability interventions."
+  }
+]

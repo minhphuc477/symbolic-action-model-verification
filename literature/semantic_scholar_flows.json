@@ -1,0 +1,62 @@
+{
+  "1909.07750": {
+    "title": "MDP Playground: An Analysis and Debug Testbed for Reinforcement Learning",
+    "year": 2019,
+    "citationCount": 7,
+    "referenceCount": 61,
+    "top_references": [
+      {
+        "paperId": "e7735be4f0fc427515fd7206ebc714356b97e71a",
+        "title": "The Benchmark Lottery",
+        "year": 2021
+      },
+      {
+        "paperId": "9776324620082ab89edad134aa259b1ae7bf6f1f",
+        "title": "TempoRL: Learning When to Act",
+        "year": 2021
+      },
+      {
+        "paperId": "30a41fffb0138af4c8dfab7f5f92fb3c9ea427ad",
+        "title": "Learning Task-Distribution Reward Shaping with Meta-Learning",
+        "year": 2021
+      },
+      {
+        "paperId": "c643c17b99e8e15c95f0f4544b67d3a838660a5a",
+        "title": "On the Importance of Hyperparameter Optimization for Model-based Reinforcement Learning",
+        "year": 2021
+      },
+      {
+        "paperId": "f6264b11ec0dd9133f1d88a5288a3267a93182f8",
+        "title": "What Matters for On-Policy Deep Actor-Critic Methods? A Large-Scale Study",
+        "year": 2021
+      }
+    ],
+    "top_citations": [
+      {
+        "paperId": "f1f6ce751a6a42f574d5b5e378bdb8ae0cd87aa6",
+        "title": "Issues with Measuring Task Complexity via Random Policies in Robotic Tasks",
+        "year": 2026
+      },
+      {
+        "paperId": "e4a4dc570f5b7ffd593e4ba6b5aa5a29dfcd2d7e",
+        "title": "Framework for Generating State-Space Graphs",
+        "year": 2025
+      },
+      {
+        "paperId": "26cc9b98fd5686e3a6e57a26d841901e800cccda",
+        "title": "Investigating Memory in Model-Free RL with POPGym Arcade",
+        "year": 2025
+      },
+      {
+        "paperId": "cda6aafdc7d84c9df8cc84770bf876141a1f3b1d",
+        "title": "IntersectionZoo: Eco-driving for Benchmarking Multi-Agent Contextual Reinforcement Learning",
+        "year": 2024
+      },
+      {
+        "paperId": "43ef905b6c99abc8417f63a046b39f01c8003052",
+        "title": "One-shot World Models Using a Transformer Trained on a Synthetic Prior",
+        "year": 2024
+      }
+    ]
+  }
+}

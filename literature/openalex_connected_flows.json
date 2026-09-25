@@ -1,0 +1,304 @@
+{
+  "World Models": [
+    {
+      "id": "https://openalex.org/W2163605009",
+      "title": "ImageNet classification with deep convolutional neural networks",
+      "publication_year": 2017,
+      "cited_by_count": 105035,
+      "doi": "https://doi.org/10.1145/3065386",
+      "primary_location": "Communications of the ACM",
+      "referenced_works_count": 27,
+      "related_works_count": 20
+    },
+    {
+      "id": "https://openalex.org/W2099540110",
+      "title": "NIH Image to ImageJ: 25 years of image analysis",
+      "publication_year": 2012,
+      "cited_by_count": 67247,
+      "doi": "https://doi.org/10.1038/nmeth.2089",
+      "primary_location": "Nature Methods",
+      "referenced_works_count": 13,
+      "related_works_count": 10
+    },
+    {
+      "id": "https://openalex.org/W2112796928",
+      "title": "Gradient-based learning applied to document recognition",
+      "publication_year": 1998,
+      "cited_by_count": 59880,
+      "doi": "https://doi.org/10.1109/5.726791",
+      "primary_location": "Proceedings of the IEEE",
+      "referenced_works_count": 136,
+      "related_works_count": 10
+    },
+    {
+      "id": "https://openalex.org/W2106787323",
+      "title": "Global cancer statistics",
+      "publication_year": 2011,
+      "cited_by_count": 55090,
+      "doi": "https://doi.org/10.3322/caac.20107",
+      "primary_location": "CA A Cancer Journal for Clinicians",
+      "referenced_works_count": 192,
+      "related_works_count": 10
+    }
+  ],
+  "Value Equivalence Reinforcement Learning": [
+    {
+      "id": "https://openalex.org/W1965516070",
+      "title": "Designing qualitative research",
+      "publication_year": 1989,
+      "cited_by_count": 9922,
+      "doi": "https://doi.org/10.5860/choice.27-1232",
+      "primary_location": "Choice Reviews Online",
+      "referenced_works_count": 0,
+      "related_works_count": 10
+    },
+    {
+      "id": "https://openalex.org/W32403112",
+      "title": "Q-learning",
+      "publication_year": 1992,
+      "cited_by_count": 9126,
+      "doi": "https://doi.org/10.1007/bf00992698",
+      "primary_location": "Machine Learning",
+      "referenced_works_count": 14,
+      "related_works_count": 10
+    },
+    {
+      "id": "https://openalex.org/W2107726111",
+      "title": "Reinforcement Learning: A Survey",
+      "publication_year": 1996,
+      "cited_by_count": 8968,
+      "doi": "https://doi.org/10.1613/jair.301",
+      "primary_location": "Journal of Artificial Intelligence Research",
+      "referenced_works_count": 189,
+      "related_works_count": 10
+    },
+    {
+      "id": "https://openalex.org/W2118052532",
+      "title": "Golden Eggs and Hyperbolic Discounting",
+      "publication_year": 1997,
+      "cited_by_count": 6224,
+      "doi": "https://doi.org/10.1162/003355397555253",
+      "primary_location": "The Quarterly Journal of Economics",
+      "referenced_works_count": 34,
+      "related_works_count": 10
+    },
+    {
+      "id": "https://openalex.org/W3135028703",
+      "title": "Machine Learning: Algorithms, Real-World Applications and Research Directions",
+      "publication_year": 2021,
+      "cited_by_count": 5420,
+      "doi": "https://doi.org/10.1007/s42979-021-00592-x",
+      "primary_location": "SN Computer Science",
+      "referenced_works_count": 163,
+      "related_works_count": 10
+    }
+  ],
+  "Action Model Learning PDDL": [
+    {
+      "id": "https://openalex.org/W4393065402",
+      "title": "A survey on large language model based autonomous agents",
+      "publication_year": 2024,
+      "cited_by_count": 1634,
+      "doi": "https://doi.org/10.1007/s11704-024-40231-1",
+      "primary_location": "Frontiers of Computer Science",
+      "referenced_works_count": 61,
+      "related_works_count": 10
+    },
+    {
+      "id": "https://openalex.org/W2122054842",
+      "title": "Planning as heuristic search",
+      "publication_year": 2001,
+      "cited_by_count": 967,
+      "doi": "https://doi.org/10.1016/s0004-3702(01)00108-4",
+      "primary_location": "Artificial Intelligence",
+      "referenced_works_count": 70,
+      "related_works_count": 10
+    },
+    {
+      "id": "https://openalex.org/W1479764148",
+      "title": "DAML-S: Web Service Description for the Semantic Web",
+      "publication_year": 2002,
+      "cited_by_count": 919,
+      "doi": "https://doi.org/10.1007/3-540-48005-6_27",
+      "primary_location": "Lecture notes in computer science",
+      "referenced_works_count": 30,
+      "related_works_count": 10
+    },
+    {
+      "id": "https://openalex.org/W2604799547",
+      "title": "Survey of the State of the Art in Natural Language Generation: Core tasks, applications and evaluation",
+      "publication_year": 2018,
+      "cited_by_count": 773,
+      "doi": "https://doi.org/10.1613/jair.5477",
+      "primary_location": "Journal of Artificial Intelligence Research",
+      "referenced_works_count": 734,
+      "related_works_count": 10
+    },
+    {
+      "id": "https://openalex.org/W2955808192",
+      "title": "Symbiotic human-robot collaborative assembly",
+      "publication_year": 2019,
+      "cited_by_count": 570,
+      "doi": "https://doi.org/10.1016/j.cirp.2019.05.002",
+      "primary_location": "CIRP Annals",
+      "referenced_works_count": 334,
+      "related_works_count": 10
+    }
+  ],
+  "Code World Models Planning": [
+    {
+      "id": "https://openalex.org/W2106787323",
+      "title": "Global cancer statistics",
+      "publication_year": 2011,
+      "cited_by_count": 55090,
+      "doi": "https://doi.org/10.3322/caac.20107",
+      "primary_location": "CA A Cancer Journal for Clinicians",
+      "referenced_works_count": 192,
+      "related_works_count": 10
+    },
+    {
+      "id": "https://openalex.org/W3003257820",
+      "title": "SciPy 1.0: fundamental algorithms for scientific computing in Python",
+      "publication_year": 2020,
+      "cited_by_count": 40209,
+      "doi": "https://doi.org/10.1038/s41592-019-0686-2",
+      "primary_location": "Nature Methods",
+      "referenced_works_count": 70,
+      "related_works_count": 0
+    },
+    {
+      "id": "https://openalex.org/W2105846236",
+      "title": "A new criterion for assessing discriminant validity in variance-based structural equation modeling",
+      "publication_year": 2014,
+      "cited_by_count": 37101,
+      "doi": "https://doi.org/10.1007/s11747-014-0403-8",
+      "primary_location": "Journal of the Academy of Marketing Science",
+      "referenced_works_count": 115,
+      "related_works_count": 10
+    },
+    {
+      "id": "https://openalex.org/W4393935425",
+      "title": "Global cancer statistics 2022: GLOBOCAN estimates of incidence and mortality worldwide for 36 cancers in 185 countries",
+      "publication_year": 2024,
+      "cited_by_count": 26016,
+      "doi": "https://doi.org/10.3322/caac.21834",
+      "primary_location": "CA A Cancer Journal for Clinicians",
+      "referenced_works_count": 187,
+      "related_works_count": 10
+    },
+    {
+      "id": "https://openalex.org/W2963276645",
+      "title": "Reproducible, interactive, scalable and extensible microbiome data science using QIIME 2",
+      "publication_year": 2019,
+      "cited_by_count": 25180,
+      "doi": "https://doi.org/10.1038/s41587-019-0209-9",
+      "primary_location": "Nature Biotechnology",
+      "referenced_works_count": 29,
+      "related_works_count": 10
+    }
+  ],
+  "MAP-Elites Quality Diversity Games": [
+    {
+      "id": "https://openalex.org/W2112957339",
+      "title": "Confronting the Challenges of Participatory Culture: Media Education for the 21st Century",
+      "publication_year": 2006,
+      "cited_by_count": 3192,
+      "doi": null,
+      "primary_location": "BiblioBoard Library Catalog (Open Research Library)",
+      "referenced_works_count": 11,
+      "related_works_count": 20
+    },
+    {
+      "id": "https://openalex.org/W2081314276",
+      "title": "Social Norms and Economic Theory",
+      "publication_year": 1989,
+      "cited_by_count": 2054,
+      "doi": "https://doi.org/10.1257/jep.3.4.99",
+      "primary_location": "The Journal of Economic Perspectives",
+      "referenced_works_count": 51,
+      "related_works_count": 10
+    },
+    {
+      "id": "https://openalex.org/W2340893350",
+      "title": "Reuters Institute Digital News Report 2015",
+      "publication_year": 2015,
+      "cited_by_count": 1918,
+      "doi": "https://doi.org/10.2139/ssrn.2619576",
+      "primary_location": "SSRN Electronic Journal",
+      "referenced_works_count": 11,
+      "related_works_count": 10
+    },
+    {
+      "id": "https://openalex.org/W2942231644",
+      "title": "Review of Deep Learning Algorithms and Architectures",
+      "publication_year": 2019,
+      "cited_by_count": 1891,
+      "doi": "https://doi.org/10.1109/access.2019.2912200",
+      "primary_location": "IEEE Access",
+      "referenced_works_count": 110,
+      "related_works_count": 10
+    },
+    {
+      "id": "https://openalex.org/W2591654989",
+      "title": "Culture and Institutions",
+      "publication_year": 2015,
+      "cited_by_count": 1505,
+      "doi": "https://doi.org/10.1257/jel.53.4.898",
+      "primary_location": "Journal of Economic Literature",
+      "referenced_works_count": 229,
+      "related_works_count": 10
+    }
+  ],
+  "General Game Playing Rule Transfer": [
+    {
+      "id": "https://openalex.org/W2067404301",
+      "title": "The qualitative content analysis process",
+      "publication_year": 2008,
+      "cited_by_count": 22975,
+      "doi": "https://doi.org/10.1111/j.1365-2648.2007.04569.x",
+      "primary_location": "Journal of Advanced Nursing",
+      "referenced_works_count": 53,
+      "related_works_count": 10
+    },
+    {
+      "id": "https://openalex.org/W2041404167",
+      "title": "A Mathematical Theory of Communication",
+      "publication_year": 1948,
+      "cited_by_count": 22147,
+      "doi": "https://doi.org/10.1002/j.1538-7305.1948.tb00917.x",
+      "primary_location": "Bell System Technical Journal",
+      "referenced_works_count": 11,
+      "related_works_count": 20
+    },
+    {
+      "id": "https://openalex.org/W2011303397",
+      "title": "Resilience and Stability of Ecological Systems",
+      "publication_year": 1973,
+      "cited_by_count": 18553,
+      "doi": "https://doi.org/10.1146/annurev.es.04.110173.000245",
+      "primary_location": "Annual Review of Ecology and Systematics",
+      "referenced_works_count": 37,
+      "related_works_count": 10
+    },
+    {
+      "id": "https://openalex.org/W2981731882",
+      "title": "Explainable Artificial Intelligence (XAI): Concepts, taxonomies, opportunities and challenges toward responsible AI",
+      "publication_year": 2019,
+      "cited_by_count": 10035,
+      "doi": "https://doi.org/10.1016/j.inffus.2019.12.012",
+      "primary_location": "Information Fusion",
+      "referenced_works_count": 674,
+      "related_works_count": 10
+    },
+    {
+      "id": "https://openalex.org/W2107726111",
+      "title": "Reinforcement Learning: A Survey",
+      "publication_year": 1996,
+      "cited_by_count": 8968,
+      "doi": "https://doi.org/10.1613/jair.301",
+      "primary_location": "Journal of Artificial Intelligence Research",
+      "referenced_works_count": 189,
+      "related_works_count": 10
+    }
+  ]
+}

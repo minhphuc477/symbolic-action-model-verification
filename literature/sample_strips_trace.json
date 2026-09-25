@@ -1,0 +1,18 @@
+[
+  {
+    "step": 1,
+    "action": "move-down",
+    "preconditions_satisfied": [
+      "(at box pos_1_1)",
+      "(at player pos_1_0)"
+    ],
+    "add_effects": [
+      "(at box pos_1_2)",
+      "(at player pos_1_1)"
+    ],
+    "delete_effects": [
+      "(at box pos_1_1)",
+      "(at player pos_1_0)"
+    ]
+  }
+]

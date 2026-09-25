@@ -1,0 +1,10 @@
+{
+  "GED": 1,
+  "Deleted_Real_Edges": 0,
+  "Added_Phantom_Edges": 1,
+  "PER_Phantom_Edge_Rate": "25.00%",
+  "CPR_Critical_Precondition_Recall": "0.00%",
+  "Topological_Cut_Weights_omega": {
+    "p_key": 0.5
+  }
+}
