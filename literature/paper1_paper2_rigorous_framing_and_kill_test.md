@@ -125,40 +125,6 @@ As depth $D \to \infty$ with fixed bottleneck depth $d$, execution failure proba
 | **State Merging Failure in FSMs** | Causal Bisimulation & Wasserstein Metric | $d_{\text{bisim}}(s_1,s_2) > 0 \implies \text{Spurious Cycle}$ | Mechanism for LOCM2 failure in Paper 1 |
 | **Monotonic STRIPS Expressivity Limit** | Stable Model Semantics & Default Logic | ASP Relational Refutation Bounds | Explanation of FastLAS resilience in Paper 1 |
 
-### 2.6. Advanced 4-Pillar Mathematical Synthesis & Theorems (2020–2026 Literature)
-
-#### Pillar 1: Topological Data Analysis (TDA) & Persistent Homology
-* **Theorem 1.1 (Phantom Cycle Detection via 1st Homology Group $\beta_1$):**  
-  Let $G^* = (\mathcal{S}, E^*)$ be the ground-truth transition graph and $\hat{G} = (\mathcal{S}, \hat{E})$ be the learned transition graph under precondition omission set $\Delta P = P_{\text{true}} \setminus P_{\text{learned}} \neq \emptyset$. Assuming $\pi_1(G^*) = 0$, omitting $\Delta P$ introduces spurious directed edges creating phantom 1-cycles. For filtration parameter $r^* > 0$:
-  $$\beta_1(K_{r^*}(\hat{G})) > \beta_1(K_{r^*}(G^*)) = 0$$
-  The persistence interval $(b_\gamma, d_\gamma)$ of phantom cycle $\gamma$ satisfies $d_\gamma - b_\gamma \ge \min_{s \in \text{supp}(\gamma)} \text{dist}(s, \text{PreconditionViolationSet}(\Delta P))$.
-* **Theorem 1.2 (Topological Stability under Action Perturbations):**  
-  The bottleneck distance $\mathcal{W}_\infty$ between persistence diagrams $\mathcal{D}_k(G^*)$ and $\mathcal{D}_k(\hat{G})$ under edge perturbation ratio $\eta = \frac{|E^* \triangle \hat{E}|}{|E^*|}$ is bounded by:
-  $$\mathcal{W}_\infty(\mathcal{D}_k(G^*), \mathcal{D}_k(\hat{G})) \le \mathcal{C} \cdot \eta \cdot \text{diam}(G^*)$$
-
-#### Pillar 2: Information Theory & Minimum Description Length (MDL)
-* **Theorem 2.1 (Minimum Observation Trace Bound for Schema Reconstruction):**  
-  To guarantee expected schema reconstruction error $\mathbb{E}[d(\mathcal{M}^*, \hat{\mathcal{M}})] \le \epsilon$ with probability $\ge 1 - \delta$, trace length $T$ must satisfy:
-  $$T \ge \frac{K(\mathcal{M}^*) - \log_2(1/\delta)}{I(S_{t+1}; \mathcal{M}^* \mid S_t, A_t) - R(\epsilon)}$$
-* **Theorem 2.2 (PAC-MDL Precondition Generalization Error Bound):**  
-  For model class $\mathbb{M}$ with VC-dimension $V_{\mathbb{M}}$, empirical MDL minimizer $\hat{\mathcal{M}}_{\text{MDL}}$ satisfies:
-  $$\mathcal{E}_{\text{gen}}(\hat{\mathcal{M}}_{\text{MDL}}) \le \mathcal{E}_{\text{emp}}(\hat{\mathcal{M}}_{\text{MDL}}) + \sqrt{\frac{8}{T} \left( V_{\mathbb{M}} \ln \left( \frac{2eT}{V_{\mathbb{M}}} \right) + L(\hat{\mathcal{M}}_{\text{MDL}}) \ln 2 + \ln \left( \frac{4}{\delta} \right) \right)}$$
-
-#### Pillar 3: Optimal Transport & Wasserstein Metrics
-* **Theorem 3.1 (Cumulative Tree Search Error Accumulation at Depth $d$):**  
-  The 1-Wasserstein distance between ground-truth state distribution $\mu_d$ and tree-search rollout distribution $\hat{\mu}_d$ satisfies:
-  $$W_1(\mu_d, \hat{\mu}_d) \le \epsilon_{\text{local}} \sum_{k=0}^{d-1} L_{\text{max}}^k = \epsilon_{\text{local}} \frac{L_{\text{max}}^d - 1}{L_{\text{max}} - 1} \quad (\text{for } L_{\text{max}} \neq 1)$$
-* **Theorem 3.2 (MCTS Value Suboptimality under Precondition Perturbation):**  
-  The MCTS estimated value error under perturbed model $\hat{\mathcal{M}}$ with discount factor $\gamma \in (0, 1)$ satisfies:
-  $$\| V^* - \hat{V}_{\text{MCTS}} \|_\infty \le \frac{L_R \cdot \epsilon_{\text{local}}}{(1 - \gamma)(1 - \gamma L_{\text{max}})}$$
-
-#### Pillar 4: Category Theory & Coalgebraic Transition Systems
-* **Theorem 4.1 (Soundness of Symbolic State Abstraction via $T$-Coalgebra Homomorphism):**  
-  A state abstraction mapping $f: S \to \hat{S}$ between concrete coalgebra $(S, \gamma)$ and abstract coalgebra $(\hat{S}, \hat{\gamma})$ with functor $T(X) = (O \times X)^A$ is operationally sound (zero false negative plan omissions) iff $f$ is a $T$-coalgebra homomorphism ($T(f) \circ \gamma = \hat{\gamma} \circ f$).
-* **Theorem 4.2 (Zero-Shot Monadic Rule Transfer Bound in Kleisli Category $\mathcal{K}l(M)$):**  
-  Pushforward rule $\psi_*(r)$ transferred across domains via monad morphism $\psi: M_1 \Rightarrow M_2$ satisfies zero-shot safety bound:
-  $$P_{\text{succ}}(\psi_*(r)) \ge 1 - \epsilon_1 - D_{\text{TV}}(\text{ker}(\psi), \mathcal{D}_2)$$
-
 ---
 
 ## 3. Complete Framing for PAPER 2 (Artificial Intelligence Journal / AAAI / ICAPS)

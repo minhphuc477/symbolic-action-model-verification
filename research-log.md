@@ -85,3 +85,17 @@
      - Proved exact node/edge counts: Full tree has 15 nodes, 14 edges. Ground truth $G_T$ blocked at $d=1$ by $p^*$ ($|E_T|=7$). Omitting $p^*$ unblocks 7 phantom edges ($d_\triangle=7$), yielding test set $|\mathcal{D}_{\text{test}}|=14$, $A_{\text{pred}}=50.0\%$, and $R_{\text{play}}=\infty$.
   4. **Scoped Supporting Theory (DSO & Min-Cut)**:
      - Cited Distance Sensitivity Oracles (Chechik et al. 2008) and Min-Cut Graph Search bounds as supporting theory for $d_\triangle$, ensuring clean scientific attribution while satisfying strict AIJ reviewer standards.
+
+## Entry 011 - Purging Scope Creep & Fixing Reviewer Vulnerabilities
+- **Date**: 2026-09-26
+- **Key Actions & Decisions**:
+  1. **Purged Unvalidated Scope Creep (TDA, MDL, OT, Coalgebras)**:
+     - Permanently removed the 4 unvalidated mathematical frontiers (TDA Persistent Homology, MDL Rate-Distortion Loss, Wasserstein Optimal Transport, Coalgebraic Monads) from Paper 1 manuscript, abstract, and literature framing.
+     - Kept the paper focused strictly on the core, mathematically sound proof chain:
+       $$\text{Precondition Omission } p^* \xrightarrow{\text{Lemma 1 \& Prop 1}} d_\triangle = \Omega(b^{D-d}) \xrightarrow{\text{Theorem 2}} \text{Phantom Path} \xrightarrow{\text{Corollary 1}} R_{\text{play}} = \infty \xrightarrow{\text{Corollary 1.1}} P(\text{Failure}) \to 1$$
+  2. **Removed Synthetic / Implausible Placeholders**:
+     - Purged implausible placeholder statistics (e.g. Cohen's $d = 10.51$).
+     - Purged fake repository URLs (`github.com/msc-thesis-research/...`, `zenodo.10849201`).
+     - Fixed author list to single author: **Minh-Phuc Tran**.
+  3. **Purged Over-claiming & Mathiness**:
+     - Eliminated arrogant "100% verified" claims in favor of humble, precise scientific phrasing ("we provide formal proofs under stated assumptions").
