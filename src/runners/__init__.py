@@ -1,1 +1,2 @@
-from .benchmark_suite_runner import Paper1BenchmarkRunner
+from .benchmark_suite_runner import RealPaper1BenchmarkRunner
+from .real_external_runner import NativeProcessRunner, RealExecutionError
