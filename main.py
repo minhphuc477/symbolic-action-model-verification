@@ -13,12 +13,14 @@ def main():
     print("  MSc THESIS GAME AI RESEARCH PROGRAM: BENCHMARK HARNESS v1.0   ")
     print("================================================================")
     
-    # 1. Run 100-State Counterexample Verification
-    print("\n[1/3] Running 100-State Counterexample Verification...")
+    # 1. Run Standardized Counterexample Verification (Linear Chain & Binary Tree)
+    print("\n[1/3] Running Proposition 1 Counterexample Verification...")
     counterexample_res = run_counterexample_verification()
     print(" -> Counterexample Verification Passed!")
-    print(f"    Model A GED: {counterexample_res['Model_A']['GED']}, R_play: {counterexample_res['Model_A']['Play_Regret_R_play']}")
-    print(f"    Model B GED: {counterexample_res['Model_B']['GED']}, R_play: {counterexample_res['Model_B']['Play_Regret_R_play']}")
+    chain_res = counterexample_res['Linear_Chain_b1_D100']
+    tree_res = counterexample_res['Binary_Tree_b2_D3']
+    print(f"    Linear Chain (b=1, D=100) -> d_delta: {chain_res['d_delta']}, A_pred: {chain_res['A_pred']*100:.1f}%, R_play: {chain_res['Play_Regret_R_play']}")
+    print(f"    Binary Tree  (b=2, D=3)   -> d_delta: {tree_res['d_delta']}, A_pred: {tree_res['A_pred']*100:.1f}%, R_play: {tree_res['Play_Regret_R_play']}")
     
     # 2. Run PuzzleScript Adapter Test
     print("\n[2/3] Testing PuzzleScript-to-PDDL Adapter Pipeline...")

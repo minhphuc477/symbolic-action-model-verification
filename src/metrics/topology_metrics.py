@@ -72,10 +72,22 @@ class TopologyMetricsCalculator:
             return 1.0
         return actual_ged / lower_bound
 
+    def calculate_accuracy(self):
+        r"""
+        Calculates passive transition prediction accuracy A_pred on D_test = E_real U (E_pred \ E_real):
+        A_pred = |E_real| / (|E_real| + |E_pred \ E_real|)
+        """
+        phantom_edges = len(self.E_pred - self.E_real)
+        d_test_size = len(self.E_real) + phantom_edges
+        if d_test_size == 0:
+            return 1.0
+        return len(self.E_real) / d_test_size
+
     def compute_all_metrics(self, learned_predicates, branching_factor=2, max_depth=5):
         ged, deleted, added = self.calculate_ged()
         per = self.calculate_per()
         cpr = self.calculate_cpr(learned_predicates)
+        acc = self.calculate_accuracy()
         
         omega_dict = {}
         for pred in self.critical_preds:
@@ -88,6 +100,8 @@ class TopologyMetricsCalculator:
             "GED": ged,
             "Deleted_Real_Edges": deleted,
             "Added_Phantom_Edges": added,
+            "Accuracy": acc,
+            "Accuracy_A_pred_pct": f"{acc * 100:.2f}%",
             "PER_Phantom_Edge_Rate": f"{per * 100:.2f}%",
             "CPR_Critical_Precondition_Recall": f"{cpr * 100:.2f}%",
             "Topological_Cut_Weights_omega": omega_dict,
