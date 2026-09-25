@@ -8,6 +8,13 @@
 
 ## 1. Định nghĩa Toán học Formal Chi tiết (Formal Mathematical Definitions)
 
+### 1.0. Phân loại 4 Tầng Quy tắc trong Nghiên cứu (4-Tier Rule Taxonomy)
+Để tránh nhầm lẫn khái niệm trong toàn bộ bài báo, các quy tắc (rules) được phân định rõ ràng thành 4 tầng riêng biệt:
+1. **Tầng 1: Game Rules (PuzzleScript DSL)**: Luật chơi game viết dưới dạng quy tắc thay thế mẫu 2D grid (`[ Player | Crate ] -> [ Player | > Crate ]`). Đây là nguồn gốc hành vi môi trường, được biên dịch sang PDDL.
+2. **Tầng 2: Action Model Rules (STRIPS Action Schemas)**: Quy tắc hành động logic ký hiệu $\mathcal{M} = \langle \text{Pre}, \text{Add}, \text{Del} \rangle$ (ví dụ: `precondition: (at ?p ?l)`). **Tầng này là đối tượng học của thuật toán và đối tượng áp dụng của Định lý 1.**
+3. **Tầng 3: Intervention Rules (Type I–X AST Mutations)**: Quy tắc can thiệp logic đột biến cây cú pháp AST ($\Delta DSL = 1..5$) trên Action Model Schemas để thử nghiệm độ bền vững của mô hình.
+4. **Tầng 4: Benchmark Protocol Rules**: Quy tắc giao thức thực nghiệm (30 miền, 5 thuật toán học, 10 cấp can thiệp, 50 seeds, Benjamini-Hochberg FDR correction, Cohen's $d$).
+
 ### 1.1. Cây Tìm kiếm (Search Tree $G_T$)
 Cho một miền lập kế hoạch ký hiệu rời rạc $\mathcal{M} = \langle S, A, T, s_0, S_G \rangle$. Cây tìm kiếm được sinh ra bởi mô hình $\hat{T}$ với độ sâu tối đa $D$ và hệ số nhánh $b$ được định nghĩa formal:
 $$\hat{G}_T \;\triangleq\; (\hat{V}_T, \hat{E}_T, s_0, D, b)$$

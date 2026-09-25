@@ -8,7 +8,7 @@
 
 ## Abstract
 
-Model-based artificial intelligence relies on world models to forecast state transitions and plan sequences of actions. While model learning traditionally optimizes one-step predictive likelihood or transition accuracy ($A_{\text{pred}}$), high accuracy on passive observation traces does not guarantee plan validity during active goal-directed search—a phenomenon known in continuous domains as *objective mismatch*. In this paper, we extend this investigation to discrete symbolic action model learning under structured logic modifications. We formalize **Theorems 1–4**, proving that the search-tree Graph Edit Distance ($\text{GED}$) between the ground-truth transition model $T'$ and a learned model $\hat{T}$ is bounded by the topological cut-weight $\omega(p^*)$ of omitted critical preconditions, independently of global transition accuracy $A_{\text{pred}}$, and establish the necessary and sufficient tightness conditions (Theorem 3) and linear time complexity bounds (Theorem 4). To severe-test symbolic learning paradigms under rule changes without relying on subjective human evaluation, we replace user surveys with three rigorous alternatives: real-system Sokoban/PuzzleScript level verification case studies, downstream task evaluation across 30 IPC classical planning domains, and comparison against expert human-written PDDL baselines. Across 50,000 empirical runs comparing 5 symbolic learning paradigms (FAMA, FastLAS, LOCM2, ARMS, and SLAF/LLM-baseline) under 10 AST rule intervention levels ($\Delta DSL = 1..5$), we demonstrate that passive accuracy $A_{\text{pred}} \ge 98.0\%$ frequently co-occurs with $100\%$ execution failure ($R_{\text{play}} = \infty$) when critical bottleneck preconditions are omitted ($CPR < 20\%$). Our findings establish that FastLAS achieves superior topology preservation ($\text{GED} = 14.12$) under latent counter interventions, whereas LOCM2 experiences complete search-tree topology collapse.
+Model-based artificial intelligence relies on world models to forecast state transitions and plan sequences of actions. While model learning traditionally optimizes one-step predictive likelihood or transition accuracy ($A_{\text{pred}}$), high accuracy on passive observation traces does not guarantee plan validity during active goal-directed search—a phenomenon known in continuous domains as *objective mismatch*. In this paper, we extend this investigation to discrete symbolic action model learning under structured logic modifications. We formalize **Theorems 1–4**, proving that the search-tree Graph Edit Distance ($\text{GED}$) between the ground-truth transition model $T'$ and a learned model $\hat{T}$ is bounded by the topological cut-weight $\omega(p^*)$ of omitted critical preconditions, independently of global transition accuracy $A_{\text{pred}}$, and establish the necessary and sufficient tightness conditions (Theorem 3) and linear time complexity bounds (Theorem 4). To severe-test symbolic learning paradigms under rule changes without relying on subjective human evaluation, we replace user surveys with three option alternatives: real-system Sokoban/PuzzleScript level verification case studies, downstream task evaluation across 30 IPC classical planning domains, and comparison against expert human-written PDDL baselines. Across 50,000 empirical runs comparing 5 symbolic learning paradigms (FAMA, FastLAS, LOCM2, ARMS, and SLAF/LLM-baseline) under 10 AST rule intervention levels ($\Delta DSL = 1..5$), we demonstrate that passive accuracy $A_{\text{pred}} \ge 98.0\%$ frequently co-occurs with $100\%$ execution failure ($R_{\text{play}} = \infty$) when critical bottleneck preconditions are omitted ($CPR < 20\%$). Our findings establish that FastLAS achieves superior topology preservation ($\text{GED} = 14.12$) under latent counter interventions, whereas LOCM2 experiences complete search-tree topology collapse.
 
 ---
 
@@ -20,24 +20,31 @@ Traditionally, symbolic action model learning algorithms—such as LOCM2, FAMA, 
 
 ```mermaid
 flowchart TD
-    subgraph Passive Model Training
-        T1["Action Trace Data (s, a, s')"] --> T2["Symbolic Action Model Learning<br/>(FAMA / FastLAS / LOCM2 / ARMS / SLAF)"]
-        T2 --> T3["Learned Action Schema (A_pred >= 98.0%)"]
+    subgraph Rule Hierarchy & Pipeline
+        R1["1. Game Rules (PuzzleScript DSL)<br/>[Player | Crate] -> [Player | > Crate]"] --> C1["PuzzleScript-to-PDDL Compiler"]
+        C1 --> R2["2. Action Model Rules (STRIPS Schemas)<br/>Pre: (at player ?p) AND (clear ?c)"]
+        R2 --> R3["3. Rule Interventions (Type I-X)<br/>AST Mutations (Delta DSL = 1..5)"]
+        R3 --> R4["4. Execution Trace Generation (s, a, s')"]
+        R4 --> L1["Symbolic Learners<br/>(FAMA / FastLAS / LOCM2 / ARMS / SLAF)"]
+        L1 --> L2["Learned Action Schema (A_pred >= 98.0%)"]
     end
 
-    subgraph Active Search-Tree Planning
-        T3 --> P1["A* Search-Tree Expansion (G_hat_T)"]
+    subgraph Active Search-Tree Topology Verification
+        L2 --> P1["A* Search-Tree Expansion (G_hat_T)"]
         P1 --> P2{"Does G_hat_T Contain<br/>Phantom Paths?"}
         P2 -- "Yes (Omitted Bottleneck Gate)" --> P3["Search-Tree Topology Collapse<br/>GED Explosion & R_play = Infinity"]
         P2 -- "No (Topological Integrity)" --> P4["Plan Execution Success<br/>R_play = 0"]
     end
 ```
 
-### Main Contributions
-1. **Mathematical Monograph (Theorems 1–4)**: We prove Theorem 1 (Two-Sided Search-Tree Topology Bound), Theorem 2 (Conditional Independence of $A_{\text{pred}}$ and $R_{\text{play}}$), Theorem 3 (Necessary & Sufficient Tightness Conditions), and Theorem 4 (Linear Graph Complexity).
-2. **Three Human Evaluation Replacements**: We replace human user surveys with three rigorous objective protocols: (1) Real-System Sokoban & PuzzleScript level verification case studies, (2) Downstream task evaluation on 30 IPC planning domains, and (3) Comparison against human-written expert PDDL domain models.
-3. **10-Level AST Rule Intervention Taxonomy**: We introduce a 10-level AST mutation taxonomy ($\Delta DSL = 1..5$, Type I–X) stress-testing symbolic learners under leaf omissions, bottleneck omissions, redundant effects, inverted buffer conditions, phase shifts, variable renamings, LHS order swaps, grid parameter mutations, goal check omissions, and 3-AST combinatorial mutations.
-4. **Multi-Learner Benchmark Suite**: We release an open-source, CPU-native benchmark suite evaluating 5 symbolic learning paradigms across 30 domains and 50,000 execution runs with 95% Bootstrap CIs, Benjamini-Hochberg FDR correction ($\alpha = 0.01$), and Cohen's $d = 5.42$ effect sizes.
+### Clarification of the 4-Tier Rule Hierarchy in Paper 1
+
+To avoid conceptual ambiguity, we explicitly distinguish four distinct operational tiers of "rules" across our theoretical and empirical framework:
+
+1. **Tier 1: Game Rules (PuzzleScript DSL)**: High-level 2D tile-based pattern-replacement rewrite rules (e.g., `[ Player | Crate ] -> [ Player | > Crate ]`). These form the underlying domain behavior origin and are compiled into PDDL.
+2. **Tier 2: Action Model Rules (STRIPS Action Schemas)**: Formal first-order logic action schemas $\mathcal{M} = \langle \text{Pre}, \text{Add}, \text{Del} \rangle$ (e.g., `precondition: (at ?p ?l) ^ (connected ?l ?l2)`). **This tier is the primary target of Theorem 1 and symbolic learning algorithms.**
+3. **Tier 3: Rule Interventions (Type I–X AST Mutations)**: Precise logic modification operators altering action schemas ($\Delta DSL = 1..5$) to stress-test learning paradigms under structural rule shifts.
+4. **Tier 4: Benchmark Protocol Rules**: Controlled experimental execution parameters (30 domains, 5 symbolic learners, 10 intervention types, 50 seeds, Benjamini-Hochberg FDR correction, Cohen's $d$).
 
 ---
 
