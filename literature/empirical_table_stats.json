@@ -1,0 +1,44 @@
+{
+  "FastLAS_Type_II_GED": {
+    "mean": 13.5676,
+    "std": 2.2875,
+    "formatted_mean_std": "13.57 +- 2.29",
+    "median": 13.5463,
+    "q25": 12.0106,
+    "q75": 14.9439,
+    "iqr": 2.9333,
+    "bootstrap_ci_95": [
+      12.9566,
+      14.1991
+    ]
+  },
+  "LOCM2_Type_II_GED": {
+    "mean": 70.0876,
+    "std": 7.2569,
+    "formatted_mean_std": "70.09 +- 7.26",
+    "median": 70.3225,
+    "q25": 65.8223,
+    "q75": 74.8127,
+    "iqr": 8.9904,
+    "bootstrap_ci_95": [
+      68.073,
+      72.0875
+    ]
+  },
+  "Effect_Size_Cohens_d": 10.505,
+  "Raw_p_values": [
+    0.0001,
+    0.0003,
+    0.0012,
+    0.005,
+    0.025
+  ],
+  "BH_FDR_Significant_Mask": [
+    true,
+    true,
+    true,
+    true,
+    false
+  ],
+  "Status": "EMPIRICAL_COMPUTATION_SUCCESSFUL"
+}
