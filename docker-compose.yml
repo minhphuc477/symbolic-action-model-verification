@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  thesis_paper1_benchmark:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: paper1_reproducibility_suite
+    volumes:
+      - ./literature:/app/literature
+      - ./papers:/app/papers
+    environment:
+      - PYTHONUNBUFFERED=1
+      - PYTHONPATH=/app
+    command: python3 main.py
