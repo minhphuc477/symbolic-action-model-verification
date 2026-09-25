@@ -56,6 +56,33 @@ class StatisticalRigorEngine:
         upper_p = 100 - lower_p
         return np.percentile(boot_means, lower_p), np.percentile(boot_means, upper_p)
 
+    @staticmethod
+    def compute_full_summary_statistics(data):
+        """
+        Computes complete distribution metrics: Mean, Std, Median, IQR (Q25, Q75), and 95% Bootstrap CIs.
+        Ensures strict reporting standards (Mean +- Std) without single bare numbers.
+        """
+        data_arr = np.array(data)
+        mean_val = float(np.mean(data_arr))
+        std_val = float(np.std(data_arr, ddof=1))
+        median_val = float(np.median(data_arr))
+        q25 = float(np.percentile(data_arr, 25))
+        q75 = float(np.percentile(data_arr, 75))
+        iqr_val = q75 - q25
+        ci_low, ci_high = StatisticalRigorEngine.bootstrap_ci(data_arr)
+        
+        return {
+            "mean": round(mean_val, 4),
+            "std": round(std_val, 4),
+            "formatted_mean_std": f"{mean_val:.2f} +- {std_val:.2f}",
+            "median": round(median_val, 4),
+            "q25": round(q25, 4),
+            "q75": round(q75, 4),
+            "iqr": round(iqr_val, 4),
+            "bootstrap_ci_95": [round(ci_low, 4), round(ci_high, 4)]
+        }
+
+
 # Sample Verification Run
 if __name__ == "__main__":
     np.random.seed(42)
