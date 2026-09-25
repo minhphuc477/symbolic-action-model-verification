@@ -1,0 +1,1 @@
+from .benchmark_suite_runner import Paper1BenchmarkRunner

@@ -1,0 +1,248 @@
+{
+  "LOCM2": {
+    "Type_I_MicroLocalShift": {
+      "SA_mean": 93.0,
+      "SA_95_CI": [
+        92.97,
+        93.03
+      ],
+      "CPR_mean": 91.62,
+      "PER_mean": 3.09,
+      "GED_mean": 2.64,
+      "GED_95_CI": [
+        2.51,
+        2.78
+      ],
+      "PVR_mean": 94.89,
+      "Infinite_Rplay_Ratio": "0/300 (0.0%)"
+    },
+    "Type_II_LatentCounter": {
+      "SA_mean": 92.05,
+      "SA_95_CI": [
+        91.99,
+        92.12
+      ],
+      "CPR_mean": 17.56,
+      "PER_mean": 25.0,
+      "GED_mean": 69.94,
+      "GED_95_CI": [
+        68.03,
+        71.94
+      ],
+      "PVR_mean": 20.46,
+      "Infinite_Rplay_Ratio": "300/300 (100.0%)"
+    },
+    "Type_III_DisjunctiveCondition": {
+      "SA_mean": 91.5,
+      "SA_95_CI": [
+        91.4,
+        91.6
+      ],
+      "CPR_mean": 40.11,
+      "PER_mean": 15.03,
+      "GED_mean": 34.34,
+      "GED_95_CI": [
+        33.33,
+        35.4
+      ],
+      "PVR_mean": 50.11,
+      "Infinite_Rplay_Ratio": "183/300 (61.0%)"
+    },
+    "Type_IV_SpatialCoupling": {
+      "SA_mean": 90.38,
+      "SA_95_CI": [
+        90.28,
+        90.47
+      ],
+      "CPR_mean": 32.53,
+      "PER_mean": 24.07,
+      "GED_mean": 54.57,
+      "GED_95_CI": [
+        53.29,
+        55.84
+      ],
+      "PVR_mean": 35.82,
+      "Infinite_Rplay_Ratio": "300/300 (100.0%)"
+    },
+    "Type_V_GlobalPhaseShift": {
+      "SA_mean": 71.32,
+      "SA_95_CI": [
+        70.82,
+        71.77
+      ],
+      "CPR_mean": 12.95,
+      "PER_mean": 55.05,
+      "GED_mean": 115.49,
+      "GED_95_CI": [
+        113.23,
+        117.82
+      ],
+      "PVR_mean": 7.78,
+      "Infinite_Rplay_Ratio": "300/300 (100.0%)"
+    }
+  },
+  "FAMA": {
+    "Type_I_MicroLocalShift": {
+      "SA_mean": 95.01,
+      "SA_95_CI": [
+        94.98,
+        95.04
+      ],
+      "CPR_mean": 91.41,
+      "PER_mean": 2.9,
+      "GED_mean": 2.54,
+      "GED_95_CI": [
+        2.41,
+        2.67
+      ],
+      "PVR_mean": 95.19,
+      "Infinite_Rplay_Ratio": "0/300 (0.0%)"
+    },
+    "Type_II_LatentCounter": {
+      "SA_mean": 94.06,
+      "SA_95_CI": [
+        93.99,
+        94.12
+      ],
+      "CPR_mean": 17.77,
+      "PER_mean": 25.01,
+      "GED_mean": 69.07,
+      "GED_95_CI": [
+        67.16,
+        71.02
+      ],
+      "PVR_mean": 19.83,
+      "Infinite_Rplay_Ratio": "300/300 (100.0%)"
+    },
+    "Type_III_DisjunctiveCondition": {
+      "SA_mean": 93.44,
+      "SA_95_CI": [
+        93.34,
+        93.54
+      ],
+      "CPR_mean": 39.95,
+      "PER_mean": 15.17,
+      "GED_mean": 33.66,
+      "GED_95_CI": [
+        32.72,
+        34.66
+      ],
+      "PVR_mean": 49.59,
+      "Infinite_Rplay_Ratio": "0/300 (0.0%)"
+    },
+    "Type_IV_SpatialCoupling": {
+      "SA_mean": 92.48,
+      "SA_95_CI": [
+        92.38,
+        92.58
+      ],
+      "CPR_mean": 62.62,
+      "PER_mean": 13.09,
+      "GED_mean": 19.74,
+      "GED_95_CI": [
+        19.11,
+        20.38
+      ],
+      "PVR_mean": 77.86,
+      "Infinite_Rplay_Ratio": "0/300 (0.0%)"
+    },
+    "Type_V_GlobalPhaseShift": {
+      "SA_mean": 73.83,
+      "SA_95_CI": [
+        73.32,
+        74.33
+      ],
+      "CPR_mean": 12.38,
+      "PER_mean": 54.82,
+      "GED_mean": 113.18,
+      "GED_95_CI": [
+        110.89,
+        115.53
+      ],
+      "PVR_mean": 7.76,
+      "Infinite_Rplay_Ratio": "300/300 (100.0%)"
+    }
+  },
+  "FastLAS": {
+    "Type_I_MicroLocalShift": {
+      "SA_mean": 97.49,
+      "SA_95_CI": [
+        97.46,
+        97.52
+      ],
+      "CPR_mean": 91.44,
+      "PER_mean": 3.08,
+      "GED_mean": 2.59,
+      "GED_95_CI": [
+        2.46,
+        2.72
+      ],
+      "PVR_mean": 95.07,
+      "Infinite_Rplay_Ratio": "0/300 (0.0%)"
+    },
+    "Type_II_LatentCounter": {
+      "SA_mean": 96.49,
+      "SA_95_CI": [
+        96.43,
+        96.56
+      ],
+      "CPR_mean": 69.91,
+      "PER_mean": 8.67,
+      "GED_mean": 13.08,
+      "GED_95_CI": [
+        12.69,
+        13.46
+      ],
+      "PVR_mean": 77.07,
+      "Infinite_Rplay_Ratio": "0/300 (0.0%)"
+    },
+    "Type_III_DisjunctiveCondition": {
+      "SA_mean": 96.01,
+      "SA_95_CI": [
+        95.91,
+        96.12
+      ],
+      "CPR_mean": 89.75,
+      "PER_mean": 4.03,
+      "GED_mean": 4.52,
+      "GED_95_CI": [
+        4.32,
+        4.72
+      ],
+      "PVR_mean": 93.99,
+      "Infinite_Rplay_Ratio": "0/300 (0.0%)"
+    },
+    "Type_IV_SpatialCoupling": {
+      "SA_mean": 95.04,
+      "SA_95_CI": [
+        94.94,
+        95.13
+      ],
+      "CPR_mean": 31.92,
+      "PER_mean": 24.07,
+      "GED_mean": 54.02,
+      "GED_95_CI": [
+        52.66,
+        55.41
+      ],
+      "PVR_mean": 35.09,
+      "Infinite_Rplay_Ratio": "300/300 (100.0%)"
+    },
+    "Type_V_GlobalPhaseShift": {
+      "SA_mean": 76.04,
+      "SA_95_CI": [
+        75.51,
+        76.5
+      ],
+      "CPR_mean": 12.8,
+      "PER_mean": 54.82,
+      "GED_mean": 114.13,
+      "GED_95_CI": [
+        111.79,
+        116.39
+      ],
+      "PVR_mean": 7.25,
+      "Infinite_Rplay_Ratio": "300/300 (100.0%)"
+    }
+  }
+}
