@@ -92,11 +92,11 @@ $$d_\triangle(G_T, \hat{G}_T) = \Omega\left(b^{D-d}\right) \quad \text{and} \qua
 3. Under Fresh-Subtree Assumption, each phantom subtree contains $\Theta(b^{D-d})$ distinct edges, so $|\hat{E}_T \setminus E_T| = \Omega(b^{D-d})$.
 4. Ground-truth tree size is $|E_T| = \Theta(b^D)$.
 5. On $\mathcal{D}_{\text{test}}$, $A_{\text{pred}}(\hat{M}) = \frac{|E_T|}{|E_T| + |\hat{E}_T \setminus E_T|} \ge \frac{\Theta(b^D)}{\Theta(b^D) + \Theta(b^{D-d})} \ge 1 - b^{-d}$.
-6. As $D \to \infty$ with $b \ge 2$, $b^{-d} \to 0 \implies A_{\text{pred}} \to 1$, while $d_\triangle = \Omega(b^{D-d}) \to \infty$. $\blacksquare$
+6. **Decoupling Precision Statement:** For any $\epsilon > 0$, there exists bottleneck depth $d \ge \left\lceil \log_b(1/\epsilon) \right\rceil$ such that passive accuracy satisfies $A_{\text{pred}}(\hat{M}) \ge 1 - \epsilon$, while the graph edit distance $d_\triangle(G_T, \hat{G}_T) = \Omega\left(b^{D-d}\right)$ explodes exponentially as tree depth $D \to \infty$. $\blacksquare$
 
 #### Standardized Counterexamples
 * **Linear Chain ($b=1, D=100$):** $G_T$ has $|E_T|=50$ (blocked at $s_{50}$ by $p_{50}$). Omitting $p_{50}$ generates 50 phantom edges ($s_{50} \to s_{100}$). $d_\triangle = 50 = \Omega(100-50)$, $\mathcal{D}_{\text{test}}=100$, $A_{\text{pred}}=50\%$ on $\mathcal{D}_{\text{test}}$ (100% on $E_T$), $R_{\text{play}}=\infty$.
-* **Binary Tree ($b=2, D=10$):** $G_T$ blocked at depth $d=1$ ($|E_T|=1023$). Omitting $p^*$ unblocks $512$ phantom edges. $d_\triangle = 512 = \Omega(2^{10-1})$, $\mathcal{D}_{\text{test}}=1535$, $A_{\text{pred}} \approx 66.6\%$.
+* **Binary Tree ($b=2, D=3$):** Full tree has 15 nodes ($2^{3+1}-1$) and 14 edges. Ground truth $G_T$ is blocked at $s_0 \to s_2$ by $p^*$ at depth $d=1$. $G_T$ contains only root $s_0$ and left subtree (8 nodes, 7 edges, so $|E_T|=7$). Omitting $p^*$ unblocks $(s_0, a_{\text{right}}, s_2)$ and the entire right subtree (7 phantom edges: $s_2$ entry + 2 edges at depth 2 + 4 edges at depth 3). $d_\triangle = 7 = \Omega(2^{3-1+1}-1)$, $\mathcal{D}_{\text{test}} = 7 + 7 = 14$ edges, $A_{\text{pred}} = 7/14 = 50.0\%$. If $p^*$ were at depth $d=2$ instead, $|E_T|=11$, phantom edges = 3, $A_{\text{pred}} = 11/14 = 78.6\%$.
 
 #### Theorem 2 (Phantom Path Existence via Cut-Crossing)
 Let $G_T = (V_T, E_T)$ be the ground-truth search tree with cut $C$ separating $s_0$ from $S_g$. Let $V_{s_0} = \{v \in V_T \mid s_0 \rightsquigarrow v \text{ in } G_T \setminus C\}$ and $V_{S_g} = \{v \in V_T \mid v \rightsquigarrow S_g \text{ in } G_T \setminus C\}$. Let $\hat{G}_T = (V_T, \hat{E}_T)$ be the learned search tree with $\hat{E}_T \supseteq E_T$.
