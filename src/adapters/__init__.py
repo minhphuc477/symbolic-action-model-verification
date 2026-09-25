@@ -1,1 +1,2 @@
 from .puzzlescript_adapter import PuzzleScriptAdapter
+from .ipc_pddl_adapter import IPCPDDLAdapter
