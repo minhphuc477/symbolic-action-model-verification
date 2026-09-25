@@ -98,11 +98,29 @@ $$d_\triangle(G_T, \hat{G}_T) = \Omega\left(b^{D-d}\right) \quad \text{and} \qua
 * **Linear Chain ($b=1, D=100$):** $G_T$ has $|E_T|=50$ (blocked at $s_{50}$ by $p_{50}$). Omitting $p_{50}$ generates 50 phantom edges ($s_{50} \to s_{100}$). $d_\triangle = 50 = \Omega(100-50)$, $\mathcal{D}_{\text{test}}=100$, $A_{\text{pred}}=50\%$ on $\mathcal{D}_{\text{test}}$ (100% on $E_T$), $R_{\text{play}}=\infty$.
 * **Binary Tree ($b=2, D=10$):** $G_T$ blocked at depth $d=1$ ($|E_T|=1023$). Omitting $p^*$ unblocks $512$ phantom edges. $d_\triangle = 512 = \Omega(2^{10-1})$, $\mathcal{D}_{\text{test}}=1535$, $A_{\text{pred}} \approx 66.6\%$.
 
+#### Theorem 2 (Phantom Path Existence via Cut-Crossing)
+Let $G_T = (V_T, E_T)$ be the ground-truth search tree with cut $C$ separating $s_0$ from $S_g$. Let $V_{s_0} = \{v \in V_T \mid s_0 \rightsquigarrow v \text{ in } G_T \setminus C\}$ and $V_{S_g} = \{v \in V_T \mid v \rightsquigarrow S_g \text{ in } G_T \setminus C\}$. Let $\hat{G}_T = (V_T, \hat{E}_T)$ be the learned search tree with $\hat{E}_T \supseteq E_T$.
+If there exists a phantom edge $(u^*, a^*, v^*) \in \hat{E}_T \setminus E_T$ crossing $C$ ($u^* \in V_{s_0}$ and $v^* \in V_{S_g}$), then there exists a path $\pi$ in $\hat{G}_T$ from $s_0$ to $S_g$ containing at least one phantom edge.
+*Proof:*
+1. Since $u^* \in V_{s_0}$, there exists path $\pi_1: s_0 \rightsquigarrow u^*$ in $G_T \setminus C \subseteq \hat{E}_T$.
+2. Since $v^* \in V_{S_g}$, there exists path $\pi_2: v^* \rightsquigarrow S_g$ in $G_T \setminus C \subseteq \hat{E}_T$.
+3. Concatenate $\pi = s_0 \xrightarrow{\pi_1} u^* \xrightarrow{(u^*,a^*,v^*)} v^* \xrightarrow{\pi_2} S_g$, which is valid in $\hat{G}_T$ and contains phantom edge $(u^*,a^*,v^*)$. $\blacksquare$
+
+#### Corollary 1 (Invalid Execution & Play Regret Collapse)
+Let plan $\pi$ contain phantom cut-crossing edge $(u^*, a^*, v^*)$.
+- **Part A (No-Replanning):** If the agent executes $\pi$ without replanning, execution fails at $u^*$ because $u^* \not\models \text{Pre}^*(a^*)$. Since $u^* \notin S_g$, the goal is never reached, yielding $R_{\text{play}} = \infty$.
+- **Part B (Replanning):** If the agent replans at $u^*$, and no valid path in $M^*$ from $u^*$ to $S_g$ exists, every replan in $\hat{M}$ selects phantom edges and fails, yielding $R_{\text{play}} = \infty$. $\blacksquare$
+
+#### Corollary 1.1 (Asymptotic Failure Probability Bound)
+Let $k = \Omega(b^{D-d})$ be the number of phantom cut-crossing edges. Under uniform random plan sampling of length $L = \Omega(D)$ from $\hat{G}_T$:
+$$P(\text{Failure}) \ge 1 - \left(1 - \frac{k}{|\hat{E}_T|}\right)^L \xrightarrow{D \to \infty} 1$$
+As depth $D \to \infty$ with fixed bottleneck depth $d$, execution failure probability approaches 1. $\blacksquare$
+
 ### 2.5. Integrative 2020–2026 Mathematical Frameworks Matrix
 
 | Theoretical Limitation | Mathematical Framework | Governing Theorem / Bound | Role in Thesis Package |
 | :--- | :--- | :--- | :--- |
-| **Phantom Path Search Tree Explosion** | Fault-Tolerant DSO & Min-Cut | $d_{G^*}(s,t) \le (2k+1) d_G(s,t)$; Collapse iff $k \ge \text{min-cut}(s,t)$ | Core of Paper 1 (Proposition 1) |
+| **Phantom Path Search Tree Explosion** | Fault-Tolerant DSO & Min-Cut | $d_{G^*}(s,t) \le (2k+1) d_G(s,t)$ (Chechik 2008); Theorem 2 (Cut-Crossing) | Core of Paper 1 (Proposition 1 & Theorem 2) |
 | **High CEGIS Query Complexity** | Angluin $L^*$ & Horn Clause RTD | $N_{\text{queries}} = \mathcal{O}(k \log n + k \cdot d)$ | Core of Paper 2 (Theorem 1) |
 | **State Merging Failure in FSMs** | Causal Bisimulation & Wasserstein Metric | $d_{\text{bisim}}(s_1,s_2) > 0 \implies \text{Spurious Cycle}$ | Mechanism for LOCM2 failure in Paper 1 |
 | **Monotonic STRIPS Expressivity Limit** | Stable Model Semantics & Default Logic | ASP Relational Refutation Bounds | Explanation of FastLAS resilience in Paper 1 |
