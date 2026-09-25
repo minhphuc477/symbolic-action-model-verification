@@ -72,3 +72,16 @@
   2. **Unified Theoretical Architecture**:
      - **Paper 1 Enhancement**: Combined TDA ($\beta_1$ persistence) with Two-Part MDL to create a topologically regularized MDL loss function $\mathcal{L}_{TDA-MDL}(\mathcal{M}, \mathcal{D}_T) = L(\mathcal{M}) + L(\mathcal{D}_T \mid \mathcal{M}) + \lambda \cdot \mathcal{W}_\infty(\mathcal{D}_1, \emptyset)$.
      - **Paper 2 Enhancement**: Combined Wasserstein OT error bounds with Coalgebraic Bisimulation to trigger active CEGIS queries dynamically whenever $W_1$ tree divergence exceeds bisimulation metric radius.
+
+## Entry 010 - Venue Lock (Elsevier AIJ) & Formal Decoupling Precision Refinement
+- **Date**: 2026-09-26
+- **Key Actions & Decisions**:
+  1. **Primary Venue Locked for Both Papers**:
+     - **Paper 1 Target**: Elsevier Artificial Intelligence Journal (AIJ) / IEEE Transactions on Games (Month 7).
+     - **Paper 2 Target**: Elsevier Artificial Intelligence Journal (AIJ) / AAAI / ICAPS (Month 15).
+  2. **Decoupling Precision Formalized**:
+     - Refined Proposition 1 proof step 6 to explicitly prove: $\forall \epsilon > 0, \exists d \ge \lceil \log_b(1/\epsilon) \rceil$ such that passive transition accuracy $A_{\text{pred}}(\hat{M}) \ge 1 - \epsilon$, while search-tree edit distance $d_\triangle(G_T, \hat{G}_T) = \Omega(b^{D-d}) \to \infty$ as tree depth $D \to \infty$.
+  3. **Exact Binary Tree Counterexample ($b=2, D=3$) Formalized**:
+     - Proved exact node/edge counts: Full tree has 15 nodes, 14 edges. Ground truth $G_T$ blocked at $d=1$ by $p^*$ ($|E_T|=7$). Omitting $p^*$ unblocks 7 phantom edges ($d_\triangle=7$), yielding test set $|\mathcal{D}_{\text{test}}|=14$, $A_{\text{pred}}=50.0\%$, and $R_{\text{play}}=\infty$.
+  4. **Scoped Supporting Theory (DSO & Min-Cut)**:
+     - Cited Distance Sensitivity Oracles (Chechik et al. 2008) and Min-Cut Graph Search bounds as supporting theory for $d_\triangle$, ensuring clean scientific attribution while satisfying strict AIJ reviewer standards.

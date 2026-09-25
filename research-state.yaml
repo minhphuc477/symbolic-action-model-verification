@@ -53,11 +53,11 @@ metrics:
 two_paper_target:
   paper_1:
     title: "Benchmarking Search-Tree Topology Collapse in Lightweight Symbolic Action Models under Rule Interventions"
-    target_venue: "IEEE Transactions on Games / ACM FDG"
+    target_venue: "Artificial Intelligence Journal (AIJ) / IEEE Transactions on Games"
     target_month: "Month 7"
-    theory_foundation: "Proposition 1 (Search-Tree Phantom Path Divergence: d_delta = Omega(b^(D-d)) + Min-Cut + Causal Bisimulation Metric)"
+    theory_foundation: "Lemma 1 + Proposition 1 (Search-Tree Phantom Path Divergence: d_delta = Omega(b^(D-d))) + Theorem 2 + Corollaries 1 & 1.1 + Min-Cut + DSO (Chechik 2008)"
   paper_2:
     title: "Goal-Directed Counterexample-Guided Active Synthesis for Repairing Symbolic World Models under Sparse Rule Modifications"
     target_venue: "Artificial Intelligence Journal (AIJ) / AAAI / ICAPS / ICLR"
     target_month: "Month 15"
-    theory_foundation: "Theorem 1 (Angluin L* & Horn Clause RTD Active Repair Sample Complexity K_CEGIS <= O(k * d * log n) + Galois Connections)"
+    theory_foundation: "Angluin L* & Horn Clause RTD Active Repair Sample Complexity K_CEGIS <= O(k * d * log n) + Coalgebraic Bisimulation + Galois Connections"
