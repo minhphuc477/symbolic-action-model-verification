@@ -1,6 +1,6 @@
 # Research Integrity & Workflow Rules (RESEARCH_RULES.md)
 
-> **Mục đích**: Bắt buộc tuân thủ tính trung thực khoa học tuyệt đối, cấm bịa đặt số liệu giả lập, cấm dùng ngôn từ sáo rỗng/thổi phồng, cấm tuyên bố quá đà (overclaiming), cấm đọc lướt abstract, và đảm bảo mọi quy trình nghiên cứu đều dựa trên việc đọc trọn vẹn toàn văn bài báo (full-text reading), trích dẫn chính xác và thực nghiệm thật.
+> **Mục đích**: Bắt buộc tuân thủ tính trung thực khoa học tuyệt đối, cấm bịa đặt số liệu giả lập, cấm dùng ngôn từ sáo rỗng/thổi phồng, cấm tuyên bố quá đà (overclaiming), cấm đọc lướt abstract, đảm bảo quy trình Git source control chuyên nghiệp và tuân thủ nguyên tắc đọc trọn vẹn toàn văn bài báo (full-text reading), trích dẫn chính xác và thực nghiệm thật.
 
 ---
 
@@ -77,3 +77,20 @@ flowchart TD
 ### Bước 5: Thực Thi Thực Nghiệm Verified & Biên Soạn Bài Báo (Verified Execution)
 * Ghi nhận logs thực thi thực tế vào file JSON.
 * Soạn thảo bài báo dựa trên 100% dữ liệu thực tế đã qua kiểm tra.
+
+---
+
+## 5. QUY TRÌNH QUẢN LÝ MÃ NGUỒN VÀ TRIỂN KHAI CHUYÊN NGHIỆP (PROFESSIONAL SOURCE CONTROL & DEPLOYMENT ENGINEER RULE)
+
+1. **Bắt buộc Git Version Control & Commit Chuyên nghiệp (Mandatory Git Discipline)**:
+   * Mọi mốc công việc, thay đổi mã nguồn, chuyên luận lý thuyết, bài báo full-text reading notes, hay kết quả thực nghiệm MUST được theo dõi và commit qua Git.
+   * Sử dụng chuẩn **Semantic Commit Messages** (`feat`, `docs`, `fix`, `refactor`, `test`, `build`, `ci`).
+   * Tuyệt đối không commit tệp rác, binary assets, PDF thô, hay `venv/`; bắt buộc duy trì `.gitignore` chuẩn hóa.
+
+2. **Cách Ly Môi Trường & Đóng Gói Mô-đun (Environment Isolation & Clean Architecture)**:
+   * Mọi mã nguồn Python phải chạy trong Virtual Environment độc lập (`venv`).
+   * Mã nguồn dự án được tổ chức dạng mô-đun chuẩn (`src/adapters/`, `src/metrics/`, `src/verification/`, `src/stats/`) với file kiểm thử tích hợp `main.py`.
+
+3. **Quy trình Triển khai Tự động hóa & Tái lập 100% (CI/CD & Computational Reproducibility)**:
+   * Đảm bảo mọi script kiểm thử và thực nghiệm có khả năng tái lập 100% kết quả trên môi trường thuần CPU.
+   * Cung cấp các script tự động hóa kiểm định và chạy thử nghiệm mà không có thao tác can thiệp thủ công.
