@@ -94,3 +94,22 @@ flowchart TD
 3. **Quy trình Triển khai Tự động hóa & Tái lập 100% (CI/CD & Computational Reproducibility)**:
    * Đảm bảo mọi script kiểm thử và thực nghiệm có khả năng tái lập 100% kết quả trên môi trường thuần CPU.
    * Cung cấp các script tự động hóa kiểm định và chạy thử nghiệm mà không có thao tác can thiệp thủ công.
+
+---
+
+## 6. NGUYÊN TẮC QUY ĐỊNH GHI CHÉP CHI TIẾT VÀ CHẶT CHẼ TOÁN HỌC (MATHEMATICAL RIGOR & MANDATORY LOGGING RULES)
+
+1. **Bắt buộc Ghi chép Chi tiết vĩnh viễn (Mandatory Detailed Research Logging)**:
+   * Mọi phát kiến lý thuyết, kết quả chứng minh, định lý, bổ đề, và ma trận phân tích toán học thu được sau các đợt nghiên cứu sâu MUST được ghi chép lại đầy đủ, chi tiết và chính xác vào `research-log.md`, `research-state.yaml` và tài liệu chuyên luận tương ứng trong `literature/`.
+   * Tuyệt đối không để kết quả nghiên cứu chỉ nằm trong câu trả lời hội thoại tạm thời.
+
+2. **Quy định về Chặt chẽ Toán học & Loại bỏ Mathiness (Strict Mathematical Rigor Rule)**:
+   * Mọi định lý (Theorems), mệnh đề (Propositions), và bổ đề (Lemmas) phải được xây dựng dựa trên lý thuyết toán học chính thống (Lý thuyết Đồ thị, Lý thuyết Học PAC, Trừu tượng Nhân quả, Logic Phi Đơn điệu, Đại số Đồng cấu TDA, Optimal Transport).
+   * Tuyệt đối cấm bịa ra các bất đẳng thức tautology, circular reasoning, hoặc "mathiness" hình thức.
+   * Mọi phát biểu Proposition phải có đầy đủ: (1) Bổ đề phụ trợ (Lemma), (2) Giả định formal rõ ràng, (3) Các bước chứng minh 5-6 bước minh bạch, và (4) Các phản ví dụ (counterexamples) được tính toán chuẩn xác.
+
+3. **Áp dụng 4 Trụ cột Toán học Chuẩn mực (The 4 Mathematical Pillars for World Models)**:
+   * **Trụ cột 1 (TDA & Persistent Homology)**: Betti numbers $\beta_0, \beta_1$ và persistent barcodes để đo lường lỗ hổng topo và chu trình ảo.
+   * **Trụ cột 2 (Information Theory & MDL)**: Rate-Distortion bounds $R(\epsilon)$ và hai phần nén MDL để lý giải bản chất bẫy Verified-vs-Correct Gap.
+   * **Trụ cột 3 (Optimal Transport & Wasserstein Metrics)**: Cận tích lũy sai số $W_1$ trên cây tìm kiếm $A^*$/MCTS để định hướng truy vấn phản ví dụ.
+   * **Trụ cột 4 (Category Theory & Coalgebras)**: Mô hình hóa Coalgebra $T(X) = (O \times X)^A$ và Monadic rule transfer bounds đảm bảo tính tổng quát xuyên miền (Grid DSL, Datapacks, Code Repos).

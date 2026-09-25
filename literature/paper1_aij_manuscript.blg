@@ -1,0 +1,52 @@
+This is BibTeX, Version 0.99e
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: paper1_aij_manuscript.aux
+Reallocating 'name_of_file' (item size: 1) to 15 items.
+The style file: elsarticle-num.bst
+Reallocating 'name_of_file' (item size: 1) to 11 items.
+Database file #1: references.bib
+Warning--can't use both volume and number fields in Law2020AAAI
+Warning--empty pages in Grand2025ICML
+Warning--can't use both volume and number fields in Fan2021AAAI
+You've used 18 entries,
+            2952 wiz_defined-function locations,
+            796 strings with 8371 characters,
+and the built_in function-call counts, 7003 in all, are:
+= -- 689
+> -- 173
+< -- 14
++ -- 69
+- -- 51
+* -- 426
+:= -- 857
+add.period$ -- 18
+call.type$ -- 18
+change.case$ -- 19
+chr.to.int$ -- 6
+cite$ -- 21
+duplicate$ -- 262
+empty$ -- 808
+format.name$ -- 67
+if$ -- 1854
+int.to.chr$ -- 0
+int.to.str$ -- 18
+missing$ -- 19
+newline$ -- 62
+num.names$ -- 18
+pop$ -- 138
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 509
+stack$ -- 0
+substring$ -- 524
+swap$ -- 105
+text.length$ -- 12
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 0
+warning$ -- 3
+while$ -- 59
+width$ -- 20
+write$ -- 163
+(There were 3 warnings)

@@ -1,0 +1,92 @@
+\begin{thebibliography}{10}
+\expandafter\ifx\csname url\endcsname\relax
+  \def\url#1{\texttt{#1}}\fi
+\expandafter\ifx\csname urlprefix\endcsname\relax\def\urlprefix{URL }\fi
+\expandafter\ifx\csname href\endcsname\relax
+  \def\href#1#2{#2} \def\path#1{#1}\fi
+
+\bibitem{Aineto2019AIJ}
+D.~Aineto, S.~Jim{\'e}nez, E.~Onaindia, Learning action models with minimal
+  observability, Artificial Intelligence 275 (2019) 614--637.
+
+\bibitem{Lambert2020CoRL}
+N.~Lambert, B.~Amos, O.~Yadan, R.~Calandra, Objective mismatch in model-based
+  reinforcement learning, in: Proceedings of the Conference on Robot Learning
+  (CoRL), 2020, pp. 1433--1445.
+
+\bibitem{Cresswell2011ICAPS}
+S.~Cresswell, P.~Gregory, Generalised action model acquisition from state
+  observations, in: Proceedings of the International Conference on Automated
+  Planning and Scheduling (ICAPS), Vol.~21, 2011, pp. 42--49.
+
+\bibitem{Law2020AAAI}
+M.~Law, A.~Russo, E.~Bertino, K.~Broda, Fastlas: Scalable inductive logic
+  programming for answer set programming, in: Proceedings of the AAAI
+  Conference on Artificial Intelligence (AAAI), Vol.~34, 2020, pp. 2863--2870.
+
+\bibitem{Yang2007IJCAI}
+Q.~Yang, K.~Wu, Y.~Jiang, Learning action models from plan traces, in:
+  Proceedings of the 20th International Joint Conference on Artificial
+  Intelligence (IJCAI), 2007, pp. 1914--1919.
+
+\bibitem{Amir2008AAAI}
+E.~Amir, A.~Chang, Learning partially observable action models, in: Proceedings
+  of the AAAI Conference on Artificial Intelligence (AAAI), 2008, pp.
+  1433--1439.
+
+\bibitem{Amir2008JAIR}
+E.~Amir, A.~Chang, Learning partially observable deterministic action models,
+  Journal of Artificial Intelligence Research 33 (2008) 349--402.
+
+\bibitem{Helmert2006JAIR}
+M.~Helmert, The fast downward planning system, Journal of Artificial
+  Intelligence Research 26 (2006) 191--246.
+
+\bibitem{Valmeekam2023NeurIPS}
+K.~Valmeekam, A.~Olmo, S.~Sreedharan, S.~Kambhampati, Planbench: An extensible
+  benchmark for evaluating large language models on planning and reasoning, in:
+  Advances in Neural Information Processing Systems (NeurIPS), Vol.~36, 2023,
+  pp. 42101--42115.
+
+\bibitem{Liu2023LLMP}
+B.~Liu, Y.~Jiang, X.~Zhang, Q.~Liu, S.~Zhang, P.~Stone, Llm+p: Empowering large
+  language models with optimal planning, in: Proceedings of the IEEE
+  International Conference on Robotics and Automation (ICRA), 2023, pp.
+  8912--8918.
+
+\bibitem{Grand2025ICML}
+G.~Grand, J.~B. Tenenbaum, V.~Mansinghka, Worldcoder: Program synthesis for
+  world models in autonomous agents, in: Proceedings of the 42nd International
+  Conference on Machine Learning (ICML), 2025.
+
+\bibitem{Zeng2009VLDB}
+Z.~Zeng, A.~K.~H. Tung, W.~Wang, J.~Jiao, Z.~Li, Comparing stars: On
+  approximating graph edit distance, Proceedings of the VLDB Endowment 2~(1)
+  (2009) 25--36.
+
+\bibitem{Riesen2009PR}
+K.~Riesen, H.~Bunke, Approximate graph edit distance computation using
+  bipartite matching, Pattern Recognition 42~(11) (2009) 2889--2901.
+
+\bibitem{Riesen2014PRL}
+K.~Riesen, X.~Jiang, H.~Bunke, Exact and approximate graph matching using
+  hausdorff edit distance, Pattern Recognition Letters 36 (2014) 205--212.
+
+\bibitem{Zhang1989Algorithmica}
+K.~Zhang, D.~Shasha, Simple fast algorithms for the editing distance between
+  trees and related problems, Algorithmica 4~(1) (1989) 377--397.
+
+\bibitem{Seipp2018AIJ}
+J.~Seipp, M.~Helmert, Counterexample-guided abstraction refinement for
+  classical planning, Artificial Intelligence 262 (2018) 287--316.
+
+\bibitem{Fan2021AAAI}
+Z.~Fan, R.~C. Holte, Spurious paths in state space abstractions, in:
+  Proceedings of the AAAI Conference on Artificial Intelligence (AAAI),
+  Vol.~35, 2021, pp. 12341--12349.
+
+\bibitem{Pearl2009Causal}
+J.~Pearl, Causality: Models, Reasoning and Inference, 2nd Edition, Cambridge
+  University Press, 2009.
+
+\end{thebibliography}

@@ -54,23 +54,37 @@ class FastLASRunner(BaseLearnerRunner):
                 "Build 'github.com/spike-imperial/FastLAS' to execute real ASP ILP solver. Mocking numbers is forbidden."
             )
 
-class ARMSRunner(BaseLearnerRunner):
-    """Action Relation Mining System (ARMS) Learner Strategy."""
+class SLAFRunner(BaseLearnerRunner):
+    """SLAF: Symbolic Learning via Action Filtering (Amir & Chang, AAAI/JAIR 2008).
+    Classical logical filtering algorithm for action model learning. NOT an LLM.
+    """
     
-    def execute(self, trace_file: str = "", **kwargs) -> str:
-        return f"ARMS learner executed on {trace_file} using frequent action pattern mining."
-
-class SLAFLLMRunner(BaseLearnerRunner):
-    """SLAF / LLM-Prompted Counterexample-Guided Symbolic Learner Strategy."""
-    
-    def execute(self, domain_pddl: str = "", prompt_spec: str = "symbolic_prompt_v1", **kwargs) -> str:
-        return f"SLAF/LLM baseline executed on {domain_pddl} with prompt spec length {len(prompt_spec)}."
+    def execute(self, domain_pddl: str = "", observation_traces: str = "", **kwargs) -> str:
+        slaf_bin = "slaf"
+        if not os.path.exists(slaf_bin) and not shutil.which("slaf"):
+            raise RealExecutionError(
+                "SLAF binary/script not found. "
+                "SLAF is Symbolic Learning via Action Filtering (Amir & Chang, 2008). "
+                "Mocking execution output is strictly forbidden."
+            )
+        cmd = [slaf_bin, domain_pddl, observation_traces]
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=60)
+        return result.stdout
 
 class LOCM2Runner(BaseLearnerRunner):
-    """LOCM2 Finite State Machine (FSM) Learner Strategy."""
+    """LOCM2 Finite State Machine Learner Strategy (Cresswell & Gregory, ICAPS 2011)."""
     
-    def execute(self, domain_name: str = "", intervention_type: str = "", **kwargs) -> str:
-        return f"LOCM2 FSM learner executed on domain {domain_name} under intervention {intervention_type}."
+    def execute(self, trace_file: str = "", **kwargs) -> str:
+        locm2_bin = "locm2"
+        if not os.path.exists(locm2_bin) and not shutil.which("locm2"):
+            raise RealExecutionError(
+                "LOCM2 executable not found. "
+                "LOCM2 is Learning Action Models from Traces (Cresswell & Gregory, 2011). "
+                "Mocking execution output is strictly forbidden."
+            )
+        cmd = [locm2_bin, trace_file]
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=60)
+        return result.stdout
 
 class NodeJSPuzzleScriptRunner:
     """Native Node.js PuzzleScript Execution Engine Wrapper."""
@@ -101,8 +115,7 @@ class NativeProcessRunner:
         self.runners: Dict[str, BaseLearnerRunner] = {
             "FAMA": FAMARunner(),
             "FastLAS": FastLASRunner(),
-            "ARMS": ARMSRunner(),
-            "SLAF_LLM": SLAFLLMRunner(),
+            "SLAF": SLAFRunner(),
             "LOCM2": LOCM2Runner(),
         }
 
@@ -115,10 +128,8 @@ class NativeProcessRunner:
     def run_fastlas_solver(self, asp_domain_file: str) -> str:
         return self.runners["FastLAS"].execute(asp_domain_file=asp_domain_file)
 
-    def run_arms_learner(self, trace_file: str) -> str:
-        return self.runners["ARMS"].execute(trace_file=trace_file)
-
-    def run_slaf_llm_baseline(self, domain_pddl: str, prompt_spec: str) -> str:
+    def run_slaf_learner(self, domain_pddl: str, observation_traces: str) -> str:
+        return self.runners["SLAF"].execute(domain_pddl=domain_pddl, observation_traces=observation_traces)
         return self.runners["SLAF_LLM"].execute(domain_pddl=domain_pddl, prompt_spec=prompt_spec)
 
     def run_learner(self, model_name: str, **kwargs) -> str:
