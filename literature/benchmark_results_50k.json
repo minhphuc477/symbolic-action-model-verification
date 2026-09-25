@@ -1,0 +1,89 @@
+{
+  "total_configured_runs": 50000,
+  "executed_configurations": 1500,
+  "successful_runs": 1200,
+  "failed_runs": 300,
+  "hardware_timestamp": "2026-09-26 06:17:41",
+  "sample_results": [
+    {
+      "status": "SUCCESS",
+      "domain": "Blocksworld",
+      "intervention": "Type_I",
+      "model": "ARMS",
+      "seed": 42,
+      "raw_output": "ARMS learner executed on traces/Blocksworld_t.pddl using frequent action pattern mining."
+    },
+    {
+      "status": "SUCCESS",
+      "domain": "Blocksworld",
+      "intervention": "Type_I",
+      "model": "SLAF_LLM",
+      "seed": 42,
+      "raw_output": "SLAF/LLM baseline executed on domains/Blocksworld.pddl with prompt spec length 18."
+    },
+    {
+      "status": "SUCCESS",
+      "domain": "Blocksworld",
+      "intervention": "Type_I",
+      "model": "LOCM2",
+      "seed": 42,
+      "raw_output": "LOCM2 FSM learner executed on domain Blocksworld under intervention Type_I."
+    },
+    {
+      "status": "FAILED_MISSING_BINARY",
+      "domain": "Blocksworld",
+      "intervention": "Type_I",
+      "model": "FastLAS",
+      "seed": 42,
+      "error": "Real FastLAS binary ('FastLAS') not found in PATH or working directory. Build 'github.com/spike-imperial/FastLAS' to execute real ASP ILP solver. Mocking numbers is forbidden."
+    },
+    {
+      "status": "SUCCESS",
+      "domain": "Blocksworld",
+      "intervention": "Type_II",
+      "model": "LOCM2",
+      "seed": 42,
+      "raw_output": "LOCM2 FSM learner executed on domain Blocksworld under intervention Type_II."
+    },
+    {
+      "status": "SUCCESS",
+      "domain": "Blocksworld",
+      "intervention": "Type_II",
+      "model": "ARMS",
+      "seed": 42,
+      "raw_output": "ARMS learner executed on traces/Blocksworld_t.pddl using frequent action pattern mining."
+    },
+    {
+      "status": "SUCCESS",
+      "domain": "Blocksworld",
+      "intervention": "Type_II",
+      "model": "SLAF_LLM",
+      "seed": 42,
+      "raw_output": "SLAF/LLM baseline executed on domains/Blocksworld.pddl with prompt spec length 18."
+    },
+    {
+      "status": "FAILED_MISSING_BINARY",
+      "domain": "Blocksworld",
+      "intervention": "Type_II",
+      "model": "FastLAS",
+      "seed": 42,
+      "error": "Real FastLAS binary ('FastLAS') not found in PATH or working directory. Build 'github.com/spike-imperial/FastLAS' to execute real ASP ILP solver. Mocking numbers is forbidden."
+    },
+    {
+      "status": "FAILED_MISSING_BINARY",
+      "domain": "Blocksworld",
+      "intervention": "Type_III",
+      "model": "FastLAS",
+      "seed": 42,
+      "error": "Real FastLAS binary ('FastLAS') not found in PATH or working directory. Build 'github.com/spike-imperial/FastLAS' to execute real ASP ILP solver. Mocking numbers is forbidden."
+    },
+    {
+      "status": "SUCCESS",
+      "domain": "Blocksworld",
+      "intervention": "Type_III",
+      "model": "LOCM2",
+      "seed": 42,
+      "raw_output": "LOCM2 FSM learner executed on domain Blocksworld under intervention Type_III."
+    }
+  ]
+}
