@@ -1,0 +1,42 @@
+project:
+  name: "Quality-Diversity Environment Synthesis for Causal World Model Verification"
+  lead: "MSc Candidate & AI Research Agent"
+  status: "active"
+  current_phase: "domain_agnostic_research_program_locked"
+  selected_track: "Domain-Agnostic Multi-Domain Code World Model Verification (Grid DSL + Minecraft Datapacks + SWE-bench)"
+
+research_question:
+  primary: "How can Quality-Diversity (PCG-QD) environment synthesis and Active Search-Tree Probing co-evolve to certify Code World Models under sparse rule interventions without human study?"
+  sub_questions:
+    - "RQ1: How can CMA-ME and ZDDs automatically generate diverse, constraint-verifiable game level archives and paired rule interventions?"
+    - "RQ2: To what extent does active search-tree frontier probing eliminate the Verified-vs-Correct gap in Code World Models across QD feature archives?"
+    - "RQ3: What is the Sparse-Intervention PAC bound and wall-clock compute Pareto frontier for co-evolutionary world model certification?"
+
+hypotheses:
+  - id: "H1"
+    statement: "PCG-QD level archives (CMA-ME) synthesize severe test cases that expose pivotal rule omissions in Code World Models 5x faster than random trajectory sampling."
+    status: "untested"
+    priority: "high"
+
+  - id: "H2"
+    statement: "Active Counterexample-Guided Tree Synthesis (ACE-Tree) on QD archives achieves O(k) sample complexity bounds and zero Play Regret under paired rule interventions."
+    status: "untested"
+    priority: "high"
+
+metrics:
+  primary_metric: "Play Regret (R_play) / QD Archive Coverage"
+  secondary_metrics:
+    - "Rule Intervention Effect (RIE)"
+    - "Transition Accuracy (A_pred)"
+    - "Sample Complexity (N_samples)"
+    - "QD Fitness / Diversity Score"
+
+two_paper_target:
+  paper_1:
+    title: "PCG-QD Interventional Benchmark: Automated Quality-Diversity Synthesis of Rule Perturbations for Code World Model Verification"
+    target_venue: "IEEE Transactions on Games / ACM FDG"
+    target_month: "Month 7"
+  paper_2:
+    title: "Co-Evolutionary World Model Probing: Zero-Shot Causal Adaptation via Active Counterexample-Guided Tree Synthesis on QD Archives"
+    target_venue: "ICLR / NeurIPS / AIJ"
+    target_month: "Month 15"

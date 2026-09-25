@@ -22,3 +22,9 @@ htmlcov/
 # OS generated files
 .DS_Store
 Thumbs.db
+
+# External repositories
+daineto-meta-planning/
+PuzzleScript/
+FastLAS/
+
