@@ -48,10 +48,20 @@ class RealPaper1BenchmarkRunner:
                 domain_name=domain,
                 intervention_type=itype
             )
+            parsed_metrics = {}
+            if isinstance(raw_out, str):
+                try:
+                    parsed_metrics = json.loads(raw_out)
+                except Exception:
+                    parsed_metrics = {"raw": raw_out}
+            elif isinstance(raw_out, dict):
+                parsed_metrics = raw_out
         except RealExecutionError as err:
             return {"status": "FAILED_MISSING_BINARY", "domain": domain, "intervention": itype, "model": model, "seed": seed, "error": str(err)}
             
-        return {"status": "SUCCESS", "domain": domain, "intervention": itype, "model": model, "seed": seed, "raw_output": raw_out}
+        res_entry = {"status": "SUCCESS", "domain": domain, "intervention": itype, "model": model, "seed": seed}
+        res_entry.update(parsed_metrics)
+        return res_entry
 
     def run_full_50k_benchmark_suite(self, max_workers: int = 8, output_filename: str = "benchmark_results_50k.json") -> str:
         """
@@ -67,7 +77,7 @@ class RealPaper1BenchmarkRunner:
             "Data-Network", "Tidybot", "Cave-Diving", "Visitall", "Grid-World"
         ]
         intervention_types = [f"Type_{i}" for i in ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"]]
-        models = ["FAMA", "FastLAS", "LOCM2", "ARMS", "SLAF_LLM"]
+        models = ["FAMA", "FastLAS", "LOCM2", "ARMS", "SLAF"]
         
         tasks = []
         # Sample subset task generator for verified execution output
@@ -98,7 +108,7 @@ class RealPaper1BenchmarkRunner:
             "successful_runs": sum(1 for r in results if r.get("status") == "SUCCESS"),
             "failed_runs": sum(1 for r in results if r.get("status") != "SUCCESS"),
             "hardware_timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
-            "sample_results": results[:10]
+            "all_results": results
         }
         with open(out_path, "w", encoding="utf-8") as f:
             json.dump(summary_data, f, indent=2)
