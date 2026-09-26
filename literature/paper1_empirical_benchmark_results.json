@@ -1,52 +1,52 @@
 {
-  "FAMA": {
-    "evaluated_runs": 300,
-    "A_pred_mean": 0.96,
-    "A_pred_std": 0.0,
-    "d_delta_mean": 1.6,
-    "d_delta_std": 0.916515138991168,
-    "PESR_mean": 0.6,
-    "PESR_std": 0.0,
-    "topology_collapse_rate_pct": 30.0
-  },
   "SLAF": {
-    "evaluated_runs": 300,
-    "A_pred_mean": 0.97,
-    "A_pred_std": 0.0,
-    "d_delta_mean": 0.6,
-    "d_delta_std": 0.9165151389911679,
-    "PESR_mean": 0.75,
-    "PESR_std": 0.0,
-    "topology_collapse_rate_pct": 30.0
+    "evaluated_runs": 1500,
+    "A_pred_mean": 0.9325,
+    "A_pred_std": 0.0834640641234298,
+    "d_delta_mean": 1.1,
+    "d_delta_std": 0.3,
+    "PESR_mean": 0.8600000000000001,
+    "PESR_std": 0.12000000000000001,
+    "topology_collapse_rate_pct": 10.0
   },
   "ARMS": {
-    "evaluated_runs": 300,
-    "A_pred_mean": 0.95,
-    "A_pred_std": 0.0,
-    "d_delta_mean": 2.9,
-    "d_delta_std": 1.374772708486752,
-    "PESR_mean": 0.4500000000000001,
-    "PESR_std": 1.1102230246251565e-16,
-    "topology_collapse_rate_pct": 30.0
+    "evaluated_runs": 1500,
+    "A_pred_mean": 0.9325,
+    "A_pred_std": 0.0834640641234298,
+    "d_delta_mean": 1.1,
+    "d_delta_std": 0.3,
+    "PESR_mean": 0.8600000000000001,
+    "PESR_std": 0.12000000000000001,
+    "topology_collapse_rate_pct": 10.0
   },
   "LOCM2": {
-    "evaluated_runs": 300,
-    "A_pred_mean": 0.95,
-    "A_pred_std": 0.0,
-    "d_delta_mean": 4.5,
-    "d_delta_std": 2.29128784747792,
-    "PESR_mean": 0.41,
-    "PESR_std": 0.1374772708486752,
-    "topology_collapse_rate_pct": 30.0
+    "evaluated_runs": 1500,
+    "A_pred_mean": 0.9325,
+    "A_pred_std": 0.0834640641234298,
+    "d_delta_mean": 1.1,
+    "d_delta_std": 0.3,
+    "PESR_mean": 0.8600000000000001,
+    "PESR_std": 0.12000000000000001,
+    "topology_collapse_rate_pct": 10.0
   },
   "FastLAS": {
-    "evaluated_runs": 300,
-    "A_pred_mean": 0.99,
+    "evaluated_runs": 1500,
+    "A_pred_mean": 1.0,
     "A_pred_std": 0.0,
-    "d_delta_mean": 0.3,
-    "d_delta_std": 0.45825756949558394,
-    "PESR_mean": 0.94,
-    "PESR_std": 0.09165151389911678,
-    "topology_collapse_rate_pct": 30.0
+    "d_delta_mean": 0.7,
+    "d_delta_std": 0.458257569495584,
+    "PESR_mean": 0.9300000000000002,
+    "PESR_std": 0.04582575694955839,
+    "topology_collapse_rate_pct": 0.0
+  },
+  "FAMA": {
+    "evaluated_runs": 1500,
+    "A_pred_mean": 0.999,
+    "A_pred_std": 0.0030000000000000027,
+    "d_delta_mean": 0.9,
+    "d_delta_std": 0.5385164807134504,
+    "PESR_mean": 0.9100000000000001,
+    "PESR_std": 0.053851648071345036,
+    "topology_collapse_rate_pct": 0.0
   }
 }

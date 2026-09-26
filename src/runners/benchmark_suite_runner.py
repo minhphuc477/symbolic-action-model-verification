@@ -80,11 +80,12 @@ class RealPaper1BenchmarkRunner:
         models = ["FAMA", "FastLAS", "LOCM2", "ARMS", "SLAF"]
         
         tasks = []
-        # Sample subset task generator for verified execution output
+        seeds = [42, 101, 202, 303, 404] # 5 random seeds per configuration = 7,500 runs
         for d in domains:
             for it in intervention_types:
                 for m in models:
-                    tasks.append((d, it, m, 42))
+                    for seed in seeds:
+                        tasks.append((d, it, m, seed))
 
         print(f"=== Initializing High-Parallel Execution for {len(tasks)} Benchmark Configurations ===")
         results = []
