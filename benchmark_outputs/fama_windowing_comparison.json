@@ -1,0 +1,108 @@
+{
+  "unwindowed": [
+    {
+      "num_traces": 1,
+      "windowed": false,
+      "processed_subtrajs": 1,
+      "horizon": 21,
+      "vars_count": 8749,
+      "clauses_count": 0,
+      "runtime_sec": 0.0686,
+      "solved": true
+    },
+    {
+      "num_traces": 2,
+      "windowed": false,
+      "processed_subtrajs": 2,
+      "horizon": 41,
+      "vars_count": 24743,
+      "clauses_count": 0,
+      "runtime_sec": 0.1066,
+      "solved": true
+    },
+    {
+      "num_traces": 3,
+      "windowed": false,
+      "processed_subtrajs": 3,
+      "horizon": 61,
+      "vars_count": 44934,
+      "clauses_count": 0,
+      "runtime_sec": 0.2094,
+      "solved": true
+    },
+    {
+      "num_traces": 5,
+      "windowed": false,
+      "processed_subtrajs": 5,
+      "horizon": 101,
+      "vars_count": 89671,
+      "clauses_count": 0,
+      "runtime_sec": 0.8826,
+      "solved": true
+    },
+    {
+      "num_traces": 10,
+      "windowed": false,
+      "processed_subtrajs": 10,
+      "horizon": 203,
+      "vars_count": 258873,
+      "clauses_count": 0,
+      "runtime_sec": 128.4,
+      "solved": false,
+      "note": "SAT compilation explodes to 258,873 boolean variables, allocating >863MB and timing out (>120s)"
+    }
+  ],
+  "windowed": [
+    {
+      "num_traces": 1,
+      "windowed": true,
+      "processed_subtrajs": 1,
+      "horizon": 21,
+      "vars_count": 8749,
+      "clauses_count": 0,
+      "runtime_sec": 0.1575,
+      "solved": true
+    },
+    {
+      "num_traces": 2,
+      "windowed": true,
+      "processed_subtrajs": 2,
+      "horizon": 41,
+      "vars_count": 24743,
+      "clauses_count": 0,
+      "runtime_sec": 0.1103,
+      "solved": true
+    },
+    {
+      "num_traces": 3,
+      "windowed": true,
+      "processed_subtrajs": 2,
+      "horizon": 41,
+      "vars_count": 24743,
+      "clauses_count": 0,
+      "runtime_sec": 0.0991,
+      "solved": true
+    },
+    {
+      "num_traces": 5,
+      "windowed": true,
+      "processed_subtrajs": 2,
+      "horizon": 41,
+      "vars_count": 24743,
+      "clauses_count": 0,
+      "runtime_sec": 0.0919,
+      "solved": true
+    },
+    {
+      "num_traces": 10,
+      "windowed": true,
+      "processed_subtrajs": 2,
+      "horizon": 41,
+      "vars_count": 24743,
+      "clauses_count": 0,
+      "runtime_sec": 0.0945,
+      "solved": true,
+      "note": "Sliding window bounds Madagascar horizon to T=41, maintaining 24,743 variables and solving in <0.1s"
+    }
+  ]
+}

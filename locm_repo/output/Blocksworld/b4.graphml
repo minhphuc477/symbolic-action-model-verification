@@ -35,14 +35,14 @@
     <edge source="stack.2" target="unstack.2">
       <data key="d0">5</data>
     </edge>
-    <edge source="unstack.2" target="unstack.1">
-      <data key="d0">2</data>
-    </edge>
     <edge source="unstack.2" target="stack.2">
       <data key="d0">1</data>
     </edge>
     <edge source="unstack.2" target="pick.1">
       <data key="d0">1</data>
+    </edge>
+    <edge source="unstack.2" target="unstack.1">
+      <data key="d0">2</data>
     </edge>
   </graph>
 </graphml>

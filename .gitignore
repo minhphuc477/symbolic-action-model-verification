@@ -19,9 +19,16 @@ papers/images/
 
 # Output logs & cache
 *.log
+*.aux
+*.out
 .pytest_cache/
 .coverage
 htmlcov/
+
+# Madagascar / FAMA temporary compilation artifacts
+compiled_domain
+compiled_problem
+planner_out
 
 # OS generated files
 .DS_Store
