@@ -5,13 +5,17 @@ __pycache__/
 
 # Virtual Environment
 venv/
+venv_linux/
 .venv/
 env/
 ENV/
+wsl_ubuntu/
+
 
 # Large PDF downloads & binary assets
 papers/*.pdf
 papers/images/
+*.tar.gz
 
 # Output logs & cache
 *.log

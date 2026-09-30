@@ -297,7 +297,7 @@ def get_adjacency_matrix_with_holes(adjacency_matrix_list):
     for index,adjacency_matrix in enumerate(adjacency_matrix_list):
         # print("\n ROWS ===========")
         df = adjacency_matrix.copy()
-        df1 = adjacency_matrix.copy()
+        df1 = adjacency_matrix.copy().astype(object)
 
         # for particular adjacency matrix's copy, loop over all pairs of rows
         for i in range(df.shape[0] - 1):
