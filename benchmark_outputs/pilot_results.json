@@ -1,0 +1,122 @@
+{
+  "learner_benchmark_compute": {
+    "LOCM2": {
+      "runtime_seconds": 2.855,
+      "exit_code": 0,
+      "output_summary": "{'e(stack.2)|s(unstack.2)': 0, 'e(unstack.2)|e(putdown.1)|e(stack.1)|s(stack.2)|s(unstack.1)|s(pick.1)': 1, 'e(pick.1)|e(unstack.1)|s(stack.1)|s(putdown.1)': 2}"
+    },
+    "FastLAS": {
+      "runtime_seconds": 0.182,
+      "exit_code": 127,
+      "output_summary": "No stdout"
+    },
+    "FAMA": {
+      "runtime_seconds": 0.568,
+      "exit_code": 0,
+      "output_summary": "FAMA SAT compilation complete"
+    },
+    "summary": {
+      "avg_seconds_per_run": 1.2,
+      "total_864_runs_hours": 0.29,
+      "parallel_8cores_hours": 0.04
+    }
+  },
+  "bottleneck_verification_8domains": {
+    "Blocksworld": {
+      "bottleneck_precondition": "(clear ?o1)",
+      "target_action": "unstack",
+      "constraint_archetype": "Relational Dependency Constraint",
+      "gt_plan_length": 6,
+      "intervened_plan_length": 4,
+      "phantom_edges_detected": 1,
+      "PESR": 0.0,
+      "R_play": "INFINITY",
+      "execution_failure_reason": "Precondition violation at step 1 (unstack b a): missing ['(clear b)']",
+      "is_verified_bottleneck": true
+    },
+    "Gripper": {
+      "bottleneck_precondition": "(free ?o3)",
+      "target_action": "pick-up",
+      "constraint_archetype": "Physical Capacity Bottleneck",
+      "gt_plan_length": 5,
+      "intervened_plan_length": 5,
+      "phantom_edges_detected": 2,
+      "PESR": 0.0,
+      "R_play": "INFINITY",
+      "execution_failure_reason": "Precondition violation at step 1 (pick-up ball1 rooma rooma): missing ['(free rooma)']",
+      "is_verified_bottleneck": true
+    },
+    "Ferry": {
+      "bottleneck_precondition": "(empty-ferry)",
+      "target_action": "board",
+      "constraint_archetype": "Physical Capacity Bottleneck",
+      "gt_plan_length": 7,
+      "intervened_plan_length": 5,
+      "phantom_edges_detected": 1,
+      "PESR": 0.0,
+      "R_play": "INFINITY",
+      "execution_failure_reason": "Precondition violation at step 2 (board c2 l1): missing ['(empty-ferry)']",
+      "is_verified_bottleneck": true
+    },
+    "Miconic": {
+      "bottleneck_precondition": "(boarded ?o2)",
+      "target_action": "depart",
+      "constraint_archetype": "Status Dependency Lock",
+      "gt_plan_length": 3,
+      "intervened_plan_length": 2,
+      "phantom_edges_detected": 1,
+      "PESR": 0.0,
+      "R_play": "INFINITY",
+      "execution_failure_reason": "Precondition violation at step 2 (depart f3 p1): missing ['(boarded p1)']",
+      "is_verified_bottleneck": true
+    },
+    "Driverlog": {
+      "bottleneck_precondition": "(driving ?o4 ?o1)",
+      "target_action": "drive-truck",
+      "constraint_archetype": "Agent Dependency Constraint",
+      "gt_plan_length": 3,
+      "intervened_plan_length": 1,
+      "phantom_edges_detected": 1,
+      "PESR": 0.0,
+      "R_play": "INFINITY",
+      "execution_failure_reason": "Precondition violation at step 1 (drive-truck pkg1 s0 s1 driver1): missing ['(driving driver1 pkg1)']",
+      "is_verified_bottleneck": true
+    },
+    "Hanoi": {
+      "bottleneck_precondition": "(clear ?o1)",
+      "target_action": "move",
+      "constraint_archetype": "Recursive Stack Clearance Invariant",
+      "gt_plan_length": 3,
+      "intervened_plan_length": 1,
+      "phantom_edges_detected": 1,
+      "PESR": 0.0,
+      "R_play": "INFINITY",
+      "execution_failure_reason": "Precondition violation at step 1 (move d2 p1 p3): missing ['(clear d2)']",
+      "is_verified_bottleneck": true
+    },
+    "Satellite": {
+      "bottleneck_precondition": "(calibrated ?o3)",
+      "target_action": "take-image",
+      "constraint_archetype": "Sensor Calibration State Lock",
+      "gt_plan_length": 4,
+      "intervened_plan_length": 3,
+      "phantom_edges_detected": 1,
+      "PESR": 0.0,
+      "R_play": "INFINITY",
+      "execution_failure_reason": "Precondition violation at step 3 (take-image sat1 dir1 cam1 mode1): missing ['(calibrated cam1)']",
+      "is_verified_bottleneck": true
+    },
+    "Rovers": {
+      "bottleneck_precondition": "(can-traverse ?o1 ?o2 ?o3)",
+      "target_action": "navigate",
+      "constraint_archetype": "Topological Traversability Bottleneck",
+      "gt_plan_length": 4,
+      "intervened_plan_length": 3,
+      "phantom_edges_detected": 1,
+      "PESR": 0.0,
+      "R_play": "INFINITY",
+      "execution_failure_reason": "Precondition violation at step 1 (navigate rover1 w1 w2): missing ['(can-traverse rover1 w1 w2)']",
+      "is_verified_bottleneck": true
+    }
+  }
+}

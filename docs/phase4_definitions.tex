@@ -131,16 +131,26 @@ Let $M^*$ be the ground truth domain. Suppose $\widehat{M}$ omits a necessary pr
 2. The state transition graph of $\widehat{M}$ is $G(\widehat{M}) = (S, E^* \cup E_{\text{phantom}})$, where $E_{\text{phantom}} = \{ (s, s') : s \models \text{Pre}(\widehat{a}) \wedge s \not\models p \}$. If the forward planner finds a plan $\pi_{\widehat{M}}$ traversing at least one edge in $E_{\text{phantom}}$ that is shorter than any path in $G(M^*)$, $\pi_{\widehat{M}}$ will be selected. When executed on $M^*$, applicability is checked against $\text{Pre}^*(a)$ at state $s$. Since $s \not\models p$, execution halts immediately. By Definition 2, $R_{\text{play}} = \infty$. Because positive traces never observe execution failures, inductive learners cannot infer the necessity of $p$, yielding $B = \infty$.
 \end{proof}
 
-\begin{proposition}[\textbf{Asymmetric Sample Complexity under Positive Observational Traces}]
+\begin{proposition}[\textbf{Asymmetric Sample Complexity and Bidirectional Search Divergence}]
 Let $D$ be a distribution over valid execution traces generated on $M^*$. For any inductive logic or SAT-based learner $L$ operating under the minimal description length (MDL) or subset-maximization objective without negative counterfactual examples ($s \not\models \text{Pre}^*(a)$):
 \begin{equation}
 \lim_{n \to \infty} \mathbb{P}_{T \sim D^n}\left[ p \in \text{Pre}(L(T)) \right] < 1 \implies B_{L, D, P, \varepsilon} = \infty
 \end{equation}
-while planning burden on the relaxed model satisfies $H_P(\widehat{M}, x) \le H_P(M^*, x)$.
+Furthermore, the marginal shift in planning burden $\Delta H_P = H_P(\widehat{M}, x) - H_P(M^*, x)$ is bidirectionally decoupled from $\Delta B$:
+\begin{enumerate}
+    \item \textbf{Phantom Shortcut ($\Delta H_P < 0$):} If phantom edges provide a shorter path bridging the bottleneck between $s_0$ and $S_g$, the planner synthesizes an illusory plan expanding fewer nodes: $N_{\text{exp}}(\widehat{M}) < N_{\text{exp}}(M^*)$.
+    \item \textbf{Phantom Detour ($\Delta H_P > 0$):} If phantom edges inflate the local branching factor into unpromising subtrees without reaching $S_g$ faster, the search frontier expands additional illusory states: $N_{\text{exp}}(\widehat{M}) > N_{\text{exp}}(M^*)$.
+\end{enumerate}
+Consequently, $\Delta H_P$ does not monotonically bound or predict $\Delta B$, proving that planning difficulty and learning sample complexity are structurally decoupled.
 \end{proposition}
 
 \begin{proof}
-In positive traces, every visitation of action $a$ satisfies all ground truth preconditions $p \in \text{Pre}^*(a)$ as well as extraneous coincident fluents $q \in s$. Without negative counterfactual transitions (i.e. demonstrations of action failure when $p$ is absent), the hypothesis that $p$ is necessary is underdetermined against the hypothesis that $p$ is merely a coincident fluent. For learners employing greedy coverage or Horn clause minimization (such as FastLAS or SAT compilations without complete negative constraints), the minimal model omitting non-discriminating preconditions is consistent with all positive data. Consequently, increasing $n$ on the positive support of $M^*$ fails to provide the counterfactual evidence needed to eliminate the phantom edge, forcing $\mathbb{E}[R_{\text{play}}] = \infty > \varepsilon$ and $B = \infty$. Meanwhile, adding phantom edges weakly increases connectivity in $G(\widehat{M})$, ensuring shortest paths are non-increasing and $N_{\text{exp}}(\widehat{M}) \le N_{\text{exp}}(M^*)$, which establishes $H_P(\widehat{M}, x) \le H_P(M^*, x)$.
+In positive traces, every execution of action $a$ satisfies $p \in \text{Pre}^*(a)$ as well as extraneous coincident fluents $q \in s$. Without negative counterfactual transitions demonstrating failure when $p$ is violated, the hypothesis that $p$ is a mandatory precondition is underdetermined against the hypothesis that $p$ is merely a coincident fluent. For learners seeking minimal representations (FastLAS, FAMA, LOCM2), the minimal hypothesis omitting non-discriminating preconditions is consistent with all observed data. Hence, increasing sample size $n$ over the positive support of $M^*$ cannot eliminate the phantom edge, forcing $\mathbb{E}[R_{\text{play}}] = \infty > \varepsilon$ and $B = \infty$.
+
+Meanwhile, the effect on search burden $H_P = \log_2(1 + N_{\text{exp}})$ is strictly topology-dependent:
+If a phantom edge $(s, s')$ bridges a bottleneck cut between $s_0$ and $S_g$, path length decreases, pruning deep branch expansions and yielding $N_{\text{exp}}(\widehat{M}) < N_{\text{exp}}(M^*) \implies \Delta H_P < 0$.
+Conversely, if phantom edges multiply outgoing transitions into unpromising subtrees, the effective branching factor $b_{\widehat{M}} > b_{M^*}$ forces additional node expansions before goal attainment, yielding $N_{\text{exp}}(\widehat{M}) > N_{\text{exp}}(M^*) \implies \Delta H_P > 0$.
+Thus, $\Delta H_P$ can be strictly negative, zero, or positive, while $B$ diverges to $\infty$, establishing formal decoupling.
 \end{proof}
 
 \section{Algorithmic Pseudocode}
@@ -243,9 +253,9 @@ Every action schema, parameter binding, and precondition literal across all 8 IP
                      &                     & \texttt{take-image(?o1, ?o2, ?o3, ?o4)} & \texttt{(calibrated ?o3), (on-board ?o3 ?o1), (pointing ?o1 ?o2), \dots} & Omit \texttt{(calibrated ?o3)} \\
                      &                     & \texttt{take-image(?o1, ?o2, ?o3, ?o4)} & \texttt{(calibrated ?o3), (on-board ?o3 ?o1), (pointing ?o1 ?o2), \dots} & Omit \texttt{(pointing ?o1 ?o2)} \\
 \midrule
-\textbf{Rovers}      & Energy \& Storage   & \texttt{sample-soil(?o1, ?o2, ?o3)} & \texttt{(at ?o1 ?o3), (equipped-for-soil ?o1), (store-of ?o2 ?o1), (empty ?o2)} & Omit \texttt{(empty ?o2)} \\
+\textbf{Rovers}      & Energy \& Storage   & \texttt{navigate(?o1, ?o2, ?o3)}    & \texttt{(can-traverse ?o1 ?o2 ?o3), (at ?o1 ?o2), (available ?o1), \dots} & Omit \texttt{(can-traverse ?o1 ?o2 ?o3)} \\
+                     &                     & \texttt{sample-soil(?o1, ?o2, ?o3)} & \texttt{(at ?o1 ?o3), (equipped-for-soil ?o1), (store-of ?o2 ?o1), (empty ?o2)} & Omit \texttt{(empty ?o2)} \\
                      &                     & \texttt{communicate-soil(?o1, \dots)} & \texttt{(at ?o1 ?o4), (have-soil ?o1 ?o3), (available ?o1), (channel-free ?o2)} & Omit \texttt{(available ?o1)} \\
-                     &                     & \texttt{take-image(?o1, ?o2, ?o3, ?o4, ?o5)} & \texttt{(calibrated ?o4 ?o1), (on-board ?o4 ?o1), (at ?o1 ?o2), \dots} & Omit \texttt{(calibrated ?o4 ?o1)} \\
 \bottomrule
 \end{tabular}
 \caption{Audited 8-Domain Benchmark Matrix with Verified Precondition Signatures and Interventions.}
