@@ -12,16 +12,21 @@ When an action model M_hat omits a precondition p in an action schema:
 4. Concurrently, passive transition prediction accuracy (A_pred) over non-bottleneck traces
    can remain arbitrarily high (e.g. >90%), proving the Verified-vs-Correct Gap.
 
-Strictly adheres to RESEARCH_RULES.md:
-- Real forward graph search (BFS / A*).
-- Step-by-step real execution validation on Ground Truth M*.
-- Real transition accuracy A_pred evaluated over 100 genuine trajectory transitions.
-- ZERO mock data, ZERO hardcoded formulas.
+Exhaustive Phase 3 Suite:
+- Systematically tests all 9 individual precondition omissions in Blocksworld.
+- Evaluates across 3 diverse benchmark tasks (Tower Inversion, Disassembly to Table, Tower Reassembly).
+- Measures:
+  * Passive Transition Accuracy (A_pred) over 100 genuine test transitions
+  * Plan existence and plan length
+  * Number of phantom edges in plan
+  * Step-by-step real execution validation on M* (PESR, R_play, exact failure reason)
+- Evaluates real learned models: FAMA and LOCM2.
 """
 
 import os
 import sys
 import collections
+import json
 import re
 from typing import Dict, List, Set, Tuple, Optional, Any
 
@@ -57,7 +62,7 @@ class PDDLForwardPlanner:
         return grounded
 
     def solve(self, init_state: Set[str], goal_literals: Set[str]) -> Tuple[Optional[List[Tuple[str, List[str]]]], int]:
-        """Runs forward breadth-first search to find shortest optimal plan."""
+        """Runs forward breadth-first search on M_hat to find the shortest plan."""
         queue = collections.deque([(frozenset(init_state), [])])
         visited = {frozenset(init_state)}
         ground_actions = self.get_ground_actions()
@@ -96,10 +101,9 @@ class PDDLForwardPlanner:
                 return False, i, f"Action '{act_name}' does not exist in Ground Truth."
             gt_schema = gt_actions[act_name]
             pmap = {p: a for p, a in zip(gt_schema.params, args)}
-            
+
             # Check applicability in true physics M*
             if not gt_schema.is_applicable(cur_state, pmap):
-                # Identify violated ground truth preconditions
                 violated = []
                 for pre in gt_schema.preconditions:
                     gp = safe_ground(pre, pmap)
@@ -120,155 +124,205 @@ class PDDLForwardPlanner:
         if reached:
             return True, len(plan), None
         else:
-            return False, len(plan), "Plan finished but Goal conditions not satisfied in M*."
+            return False, len(plan), "Plan executed but Goal conditions not satisfied in M*."
 
-def run_precondition_intervention_suite() -> Dict[str, Any]:
-    """
-    Executes controlled precondition interventions to test Proposition 1.
-    """
-    # 1. Load Ground Truth Domain
-    gt_file = "benchmark_outputs/ground_truth.pddl"
-    with open(gt_file, "r", encoding="utf-8") as f:
-        gt_pddl = f.read()
-    gt_models = parse_pddl_model(gt_pddl)
-
-    # Standard Tower Inversion Task: 3 blocks (a, b, c)
-    # Init: C on B, B on A, A on table, C clear, hand empty.
+def get_benchmark_tasks() -> Dict[str, Dict[str, Any]]:
+    """Defines 3 canonical planning tasks in Blocksworld."""
     objects = ["a", "b", "c"]
-    init_state = {
-        "(on c b)", "(on b a)", "(ontable a)",
-        "(clear c)", "(handempty)"
+    return {
+        "Task 1: Tower Inversion": {
+            "objects": objects,
+            "init": {"(on c b)", "(on b a)", "(ontable a)", "(clear c)", "(handempty)"},
+            "goal": {"(on a b)", "(on b c)"},
+            "optimal_cost": 6
+        },
+        "Task 2: Disassembly to Table": {
+            "objects": objects,
+            "init": {"(on c b)", "(on b a)", "(ontable a)", "(clear c)", "(handempty)"},
+            "goal": {"(ontable c)", "(ontable b)", "(ontable a)", "(handempty)"},
+            "optimal_cost": 4
+        },
+        "Task 3: Reassembly from Table": {
+            "objects": objects,
+            "init": {"(ontable a)", "(ontable b)", "(ontable c)", "(clear a)", "(clear b)", "(clear c)", "(handempty)"},
+            "goal": {"(on a b)", "(on b c)"},
+            "optimal_cost": 4
+        }
     }
-    # Goal: A on B, B on C, C on table.
-    goal_state = {"(on a b)", "(on b c)"}
 
+def get_precondition_interventions(gt_pddl: str) -> Dict[str, Dict[str, str]]:
+    """Defines all 9 single-precondition omissions plus learned models."""
     with open("benchmark_outputs/fama_normalized.pddl", "r", encoding="utf-8") as f:
         fama_pddl = f.read()
     with open("benchmark_outputs/locm2_normalized.pddl", "r", encoding="utf-8") as f:
         locm2_pddl = f.read()
 
-    # 2. Define Experimental Conditions
-    interventions = {
+    return {
         "Control (Ground Truth M*)": {
             "pddl": gt_pddl,
-            "description": "All preconditions intact (baseline)"
+            "action": "none", "omitted": "none",
+            "desc": "All preconditions intact (baseline)"
         },
+        # 1. pick-up omissions
+        "Omit (clear ?o1) in pick-up": {
+            "pddl": gt_pddl.replace("(and (clear ?o1) (ontable ?o1) (handempty))", "(and (ontable ?o1) (handempty))"),
+            "action": "pick-up", "omitted": "(clear ?o1)",
+            "desc": "Permits picking up covered blocks directly from table"
+        },
+        "Omit (ontable ?o1) in pick-up": {
+            "pddl": gt_pddl.replace("(and (clear ?o1) (ontable ?o1) (handempty))", "(and (clear ?o1) (handempty))"),
+            "action": "pick-up", "omitted": "(ontable ?o1)",
+            "desc": "Permits picking up blocks from the top of stacks without unstacking"
+        },
+        "Omit (handempty) in pick-up": {
+            "pddl": gt_pddl.replace("(and (clear ?o1) (ontable ?o1) (handempty))", "(and (clear ?o1) (ontable ?o1))"),
+            "action": "pick-up", "omitted": "(handempty)",
+            "desc": "Permits picking up a block while already holding another"
+        },
+        # 2. put-down omissions
+        "Omit (holding ?o1) in put-down": {
+            "pddl": gt_pddl.replace("(and (holding ?o1))", "(and )"),
+            "action": "put-down", "omitted": "(holding ?o1)",
+            "desc": "Permits putting down blocks out of thin air"
+        },
+        # 3. stack omissions
+        "Omit (holding ?o1) in stack": {
+            "pddl": gt_pddl.replace("(and (holding ?o1) (clear ?o2))", "(and (clear ?o2))"),
+            "action": "stack", "omitted": "(holding ?o1)",
+            "desc": "Permits stacking a block without holding it"
+        },
+        "Omit (clear ?o2) in stack": {
+            "pddl": gt_pddl.replace("(and (holding ?o1) (clear ?o2))", "(and (holding ?o1))"),
+            "action": "stack", "omitted": "(clear ?o2)",
+            "desc": "Permits stacking onto already covered blocks"
+        },
+        # 4. unstack omissions
+        "Omit (on ?o1 ?o2) in unstack": {
+            "pddl": gt_pddl.replace("(and (on ?o1 ?o2) (clear ?o1) (handempty))", "(and (clear ?o1) (handempty))"),
+            "action": "unstack", "omitted": "(on ?o1 ?o2)",
+            "desc": "Permits unstacking blocks that are on table"
+        },
+        "Omit (clear ?o1) in unstack": {
+            "pddl": gt_pddl.replace("(and (on ?o1 ?o2) (clear ?o1) (handempty))", "(and (on ?o1 ?o2) (handempty))"),
+            "action": "unstack", "omitted": "(clear ?o1)",
+            "desc": "Permits unstacking covered blocks from inside a tower"
+        },
+        "Omit (handempty) in unstack": {
+            "pddl": gt_pddl.replace("(and (on ?o1 ?o2) (clear ?o1) (handempty))", "(and (on ?o1 ?o2) (clear ?o1))"),
+            "action": "unstack", "omitted": "(handempty)",
+            "desc": "Permits unstacking while already holding a block"
+        },
+        # Real Learned Models
         "FAMA Learned Model": {
             "pddl": fama_pddl,
-            "description": "FAMA omission of (handempty) in pick-up"
+            "action": "pick-up", "omitted": "(handempty) [learned omission]",
+            "desc": "SAT learner omitted (handempty) and delete effect in pick-up"
         },
         "LOCM2 Learned Model": {
             "pddl": locm2_pddl,
-            "description": "LOCM2 omission of delete effects and precondition conflation"
-        },
-
-
-        "Intervention: Omit (clear ?o1) in unstack": {
-            "pddl": gt_pddl.replace(
-                "(:action unstack\n\t     :parameters (?o1 ?o2)\n\t     :precondition (and (on ?o1 ?o2) (clear ?o1) (handempty))",
-                "(:action unstack\n\t     :parameters (?o1 ?o2)\n\t     :precondition (and (on ?o1 ?o2) (handempty))"
-            ),
-            "description": "Permits unstacking covered blocks (phantom shortcut)"
-        },
-        "Intervention: Omit (handempty) in unstack": {
-            "pddl": gt_pddl.replace(
-                "(:action unstack\n\t     :parameters (?o1 ?o2)\n\t     :precondition (and (on ?o1 ?o2) (clear ?o1) (handempty))",
-                "(:action unstack\n\t     :parameters (?o1 ?o2)\n\t     :precondition (and (on ?o1 ?o2) (clear ?o1))"
-            ),
-            "description": "Permits unstacking while already holding a block"
-        },
-        "Intervention: Omit (clear ?o2) in stack": {
-            "pddl": gt_pddl.replace(
-                "(:action stack\n\t     :parameters (?o1 ?o2)\n\t     :precondition (and (holding ?o1) (clear ?o2))",
-                "(:action stack\n\t     :parameters (?o1 ?o2)\n\t     :precondition (and (holding ?o1))"
-            ),
-            "description": "Permits stacking on top of covered blocks"
+            "action": "all", "omitted": "missing deletes & corrupted preconditions",
+            "desc": "FSM learner lacks delete effects and conflates relations"
         }
     }
 
-    results = {}
+def run_full_proposition1_matrix() -> Dict[str, Any]:
+    """Runs all 12 model configurations across all 3 benchmark tasks."""
+    gt_file = "benchmark_outputs/ground_truth.pddl"
+    with open(gt_file, "r", encoding="utf-8") as f:
+        gt_pddl = f.read()
+    gt_models = parse_pddl_model(gt_pddl)
 
-    for name, config in interventions.items():
-        pddl_text = config["pddl"]
+    tasks = get_benchmark_tasks()
+    interventions = get_precondition_interventions(gt_pddl)
+
+    suite_results = {}
+
+    for int_name, int_config in interventions.items():
+        pddl_text = int_config["pddl"]
         model = parse_pddl_model(pddl_text)
-        planner = PDDLForwardPlanner(model, objects)
 
-        # A* / BFS Search on learned/intervened model
-        plan, nodes = planner.solve(init_state, goal_state)
-
-        # Check for phantom transitions in the plan
-        phantom_edges = 0
-        if plan:
-            sim_state = set(init_state)
-            for act_name, args in plan:
-                gt_schema = gt_models[act_name]
-                pmap = {p: a for p, a in zip(gt_schema.params, args)}
-                # If illegal in GT M*, this step is a phantom edge!
-                if not gt_schema.is_applicable(sim_state, pmap):
-                    phantom_edges += 1
-                # Advance simulation using learned model
-                lrn_schema = model[act_name]
-                lrn_pmap = {p: a for p, a in zip(lrn_schema.params, args)}
-                sim_state = lrn_schema.apply(sim_state, lrn_pmap)
-
-        # Real Execution on Ground Truth M*
-        if plan:
-            success, steps, fail_reason = planner.execute_plan(init_state, plan, gt_models, goal_state)
-            pesr = 1.0 if success else 0.0
-            r_play = "0" if success else "INFINITY"
-        else:
-            success, steps, fail_reason = False, 0, "No plan found"
-            pesr = 0.0
-            r_play = "INFINITY"
-
-        # Calculate genuine passive transition accuracy over 100 test transitions
+        # 1. Passive Transition Prediction Accuracy on genuine 100 test transitions
         t_eval = evaluate_transition_accuracy(pddl_text)
         a_pred = t_eval["a_pred"]
 
-        results[name] = {
-            "description": config["description"],
-            "plan_found": plan is not None,
-            "plan_length": len(plan) if plan else 0,
-            "nodes_explored": nodes,
-            "phantom_edges": phantom_edges,
-            "PESR": pesr,
-            "R_play": r_play,
-            "fail_reason": fail_reason,
+        int_results = {
+            "action": int_config["action"],
+            "omitted": int_config["omitted"],
+            "description": int_config["desc"],
             "A_pred": a_pred,
-            "plan_str": " -> ".join([f"{a[0]}({','.join(a[1])})" for a in plan]) if plan else "None"
+            "tasks": {}
         }
 
-    return results
+        # 2. Evaluate planning and execution across all tasks
+        for task_name, task_data in tasks.items():
+            planner = PDDLForwardPlanner(model, task_data["objects"])
+            plan, nodes = planner.solve(task_data["init"], task_data["goal"])
 
-def print_proposition1_report(results: Dict[str, Any]):
-    print("\n" + "="*110)
-    print("PROPOSITION 1 EMPIRICAL VERIFICATION REPORT: PRECONDITION INTERVENTIONS & PHANTOM COLLAPSE")
-    print("="*110)
-    fmt = "{:<42} | {:<8} | {:<7} | {:<10} | {:<8} | {:<10}"
-    print(fmt.format("Condition", "A_pred", "PlanLen", "Phantom", "PESR", "R_play"))
-    print("-" * 110)
-    for name, r in results.items():
-        print(fmt.format(
-            name[:42],
-            f"{r['A_pred']:.3f}",
-            r['plan_length'],
-            f"{r['phantom_edges']}/{r['plan_length']}",
-            f"{r['PESR']:.1f}",
-            r['R_play']
-        ))
-    print("="*110)
+            phantom_edges = 0
+            if plan:
+                sim_state = set(task_data["init"])
+                for act_name, args in plan:
+                    gt_schema = gt_models[act_name]
+                    pmap = {p: a for p, a in zip(gt_schema.params, args)}
+                    if not gt_schema.is_applicable(sim_state, pmap):
+                        phantom_edges += 1
+                    lrn_schema = model[act_name]
+                    lrn_pmap = {p: a for p, a in zip(lrn_schema.params, args)}
+                    sim_state = lrn_schema.apply(sim_state, lrn_pmap)
 
-    print("\nDetailed Diagnostic Breakdown per Condition:")
+                success, steps, fail_reason = planner.execute_plan(
+                    task_data["init"], plan, gt_models, task_data["goal"]
+                )
+                pesr = 1.0 if success else 0.0
+                plan_cost = len(plan)
+                opt_cost = task_data["optimal_cost"]
+                r_play = str(max(0, plan_cost - opt_cost)) if success else "INFINITY"
+            else:
+                success, steps, fail_reason = False, 0, "No plan found"
+                pesr = 0.0
+                r_play = "INFINITY"
+
+            int_results["tasks"][task_name] = {
+                "plan_found": plan is not None,
+                "plan_length": len(plan) if plan else 0,
+                "phantom_edges": phantom_edges,
+                "PESR": pesr,
+                "R_play": r_play,
+                "fail_reason": fail_reason,
+                "plan_str": " -> ".join([f"{a[0]}({','.join(a[1])})" for a in plan]) if plan else "None"
+            }
+
+        suite_results[int_name] = int_results
+
+    return suite_results
+
+def print_full_matrix_report(results: Dict[str, Any]):
+    print("\n" + "="*125)
+    print("PHASE 3: EXHAUSTIVE PROPOSITION 1 EXPERIMENTAL MATRIX (ALL 9 PRECONDITION OMISSIONS + LEARNED MODELS)")
+    print("="*125)
+    header = f"{'Intervention Condition':<35} | {'A_pred':<7} | {'Task 1 (Invert)':<22} | {'Task 2 (Disassemble)':<22} | {'Task 3 (Reassemble)':<22}"
+    print(header)
+    print(f"{'':<35} | {'':<7} | {'PESR | R_play | Phantom':<22} | {'PESR | R_play | Phantom':<22} | {'PESR | R_play | Phantom':<22}")
+    print("-" * 125)
+
     for name, r in results.items():
-        print(f"\n--- {name} ---")
-        print(f"  Description:    {r['description']}")
-        print(f"  Plan Found:     {r['plan_str']}")
-        print(f"  Nodes Explored: {r['nodes_explored']}")
-        print(f"  Phantom Edges:  {r['phantom_edges']}")
-        print(f"  Plan Execution: PESR={r['PESR']}, R_play={r['R_play']}")
-        if r['fail_reason']:
-            print(f"  Execution Halt: {r['fail_reason']}")
+        t1 = r["tasks"]["Task 1: Tower Inversion"]
+        t2 = r["tasks"]["Task 2: Disassembly to Table"]
+        t3 = r["tasks"]["Task 3: Reassembly from Table"]
+
+        s1 = f"{t1['PESR']:.1f}  | {t1['R_play']:<8} | {t1['phantom_edges']}"
+        s2 = f"{t2['PESR']:.1f}  | {t2['R_play']:<8} | {t2['phantom_edges']}"
+        s3 = f"{t3['PESR']:.1f}  | {t3['R_play']:<8} | {t3['phantom_edges']}"
+
+        print(f"{name[:35]:<35} | {r['A_pred']:<7.3f} | {s1:<22} | {s2:<22} | {s3:<22}")
+
+    print("="*125)
+
+run_precondition_intervention_suite = run_full_proposition1_matrix
 
 if __name__ == "__main__":
-    res = run_precondition_intervention_suite()
-    print_proposition1_report(res)
+    matrix_results = run_full_proposition1_matrix()
+
+    print_full_matrix_report(matrix_results)
+    with open("benchmark_outputs/proposition1_full_matrix.json", "w", encoding="utf-8") as f:
+        json.dump(matrix_results, f, indent=2)

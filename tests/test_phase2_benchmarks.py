@@ -100,17 +100,20 @@ class TestEmpiricalMetrics(unittest.TestCase):
     def test_proposition1_phantom_divergence(self):
         from src.verification.proposition1_precondition_intervention import run_precondition_intervention_suite
         res = run_precondition_intervention_suite()
-        # Verify Control achieves PESR = 1.0, R_play = 0
-        self.assertEqual(res["Control (Ground Truth M*)"]["PESR"], 1.0)
-        self.assertEqual(res["Control (Ground Truth M*)"]["R_play"], "0")
+        # Verify Control achieves PESR = 1.0, R_play = 0 on Task 1
+        ctrl_t1 = res["Control (Ground Truth M*)"]["tasks"]["Task 1: Tower Inversion"]
+        self.assertEqual(ctrl_t1["PESR"], 1.0)
+        self.assertEqual(ctrl_t1["R_play"], "0")
         
         # Verify Omit (clear ?o1) in unstack achieves A_pred = 1.0 but collapses PESR = 0.0, R_play = INFINITY
-        omit_clear = res["Intervention: Omit (clear ?o1) in unstack"]
+        omit_clear = res["Omit (clear ?o1) in unstack"]
         self.assertEqual(omit_clear["A_pred"], 1.0)
-        self.assertEqual(omit_clear["PESR"], 0.0)
-        self.assertEqual(omit_clear["R_play"], "INFINITY")
-        self.assertEqual(omit_clear["phantom_edges"], 1)
+        omit_t1 = omit_clear["tasks"]["Task 1: Tower Inversion"]
+        self.assertEqual(omit_t1["PESR"], 0.0)
+        self.assertEqual(omit_t1["R_play"], "INFINITY")
+        self.assertEqual(omit_t1["phantom_edges"], 1)
 
 if __name__ == "__main__":
     unittest.main()
+
 

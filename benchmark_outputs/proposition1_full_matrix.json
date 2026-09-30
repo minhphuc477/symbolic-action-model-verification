@@ -1,0 +1,422 @@
+{
+  "Control (Ground Truth M*)": {
+    "action": "none",
+    "omitted": "none",
+    "description": "All preconditions intact (baseline)",
+    "A_pred": 1.0,
+    "tasks": {
+      "Task 1: Tower Inversion": {
+        "plan_found": true,
+        "plan_length": 6,
+        "phantom_edges": 0,
+        "PESR": 1.0,
+        "R_play": "0",
+        "fail_reason": null,
+        "plan_str": "unstack(c,b) -> put-down(c) -> unstack(b,a) -> stack(b,c) -> pick-up(a) -> stack(a,b)"
+      },
+      "Task 2: Disassembly to Table": {
+        "plan_found": true,
+        "plan_length": 4,
+        "phantom_edges": 0,
+        "PESR": 1.0,
+        "R_play": "0",
+        "fail_reason": null,
+        "plan_str": "unstack(c,b) -> put-down(c) -> unstack(b,a) -> put-down(b)"
+      },
+      "Task 3: Reassembly from Table": {
+        "plan_found": true,
+        "plan_length": 4,
+        "phantom_edges": 0,
+        "PESR": 1.0,
+        "R_play": "0",
+        "fail_reason": null,
+        "plan_str": "pick-up(b) -> stack(b,c) -> pick-up(a) -> stack(a,b)"
+      }
+    }
+  },
+  "Omit (clear ?o1) in pick-up": {
+    "action": "pick-up",
+    "omitted": "(clear ?o1)",
+    "description": "Permits picking up covered blocks directly from table",
+    "A_pred": 1.0,
+    "tasks": {
+      "Task 1: Tower Inversion": {
+        "plan_found": true,
+        "plan_length": 6,
+        "phantom_edges": 0,
+        "PESR": 1.0,
+        "R_play": "0",
+        "fail_reason": null,
+        "plan_str": "unstack(c,b) -> put-down(c) -> unstack(b,a) -> stack(b,c) -> pick-up(a) -> stack(a,b)"
+      },
+      "Task 2: Disassembly to Table": {
+        "plan_found": true,
+        "plan_length": 4,
+        "phantom_edges": 0,
+        "PESR": 1.0,
+        "R_play": "0",
+        "fail_reason": null,
+        "plan_str": "unstack(c,b) -> put-down(c) -> unstack(b,a) -> put-down(b)"
+      },
+      "Task 3: Reassembly from Table": {
+        "plan_found": true,
+        "plan_length": 4,
+        "phantom_edges": 1,
+        "PESR": 0.0,
+        "R_play": "INFINITY",
+        "fail_reason": "Precondition violation at step 3 (pick-up b): missing ['(clear b)']",
+        "plan_str": "pick-up(a) -> stack(a,b) -> pick-up(b) -> stack(b,c)"
+      }
+    }
+  },
+  "Omit (ontable ?o1) in pick-up": {
+    "action": "pick-up",
+    "omitted": "(ontable ?o1)",
+    "description": "Permits picking up blocks from the top of stacks without unstacking",
+    "A_pred": 1.0,
+    "tasks": {
+      "Task 1: Tower Inversion": {
+        "plan_found": true,
+        "plan_length": 6,
+        "phantom_edges": 0,
+        "PESR": 1.0,
+        "R_play": "0",
+        "fail_reason": null,
+        "plan_str": "unstack(c,b) -> put-down(c) -> unstack(b,a) -> stack(b,c) -> pick-up(a) -> stack(a,b)"
+      },
+      "Task 2: Disassembly to Table": {
+        "plan_found": true,
+        "plan_length": 4,
+        "phantom_edges": 1,
+        "PESR": 0.0,
+        "R_play": "INFINITY",
+        "fail_reason": "Precondition violation at step 3 (pick-up b): missing ['(ontable b)']",
+        "plan_str": "unstack(c,b) -> put-down(c) -> pick-up(b) -> put-down(b)"
+      },
+      "Task 3: Reassembly from Table": {
+        "plan_found": true,
+        "plan_length": 4,
+        "phantom_edges": 0,
+        "PESR": 1.0,
+        "R_play": "0",
+        "fail_reason": null,
+        "plan_str": "pick-up(b) -> stack(b,c) -> pick-up(a) -> stack(a,b)"
+      }
+    }
+  },
+  "Omit (handempty) in pick-up": {
+    "action": "pick-up",
+    "omitted": "(handempty)",
+    "description": "Permits picking up a block while already holding another",
+    "A_pred": 1.0,
+    "tasks": {
+      "Task 1: Tower Inversion": {
+        "plan_found": true,
+        "plan_length": 6,
+        "phantom_edges": 1,
+        "PESR": 0.0,
+        "R_play": "INFINITY",
+        "fail_reason": "Precondition violation at step 4 (pick-up a): missing ['(handempty)']",
+        "plan_str": "unstack(c,b) -> put-down(c) -> unstack(b,a) -> pick-up(a) -> stack(b,c) -> stack(a,b)"
+      },
+      "Task 2: Disassembly to Table": {
+        "plan_found": true,
+        "plan_length": 4,
+        "phantom_edges": 0,
+        "PESR": 1.0,
+        "R_play": "0",
+        "fail_reason": null,
+        "plan_str": "unstack(c,b) -> put-down(c) -> unstack(b,a) -> put-down(b)"
+      },
+      "Task 3: Reassembly from Table": {
+        "plan_found": true,
+        "plan_length": 4,
+        "phantom_edges": 1,
+        "PESR": 0.0,
+        "R_play": "INFINITY",
+        "fail_reason": "Precondition violation at step 2 (pick-up b): missing ['(handempty)']",
+        "plan_str": "pick-up(a) -> pick-up(b) -> stack(b,c) -> stack(a,b)"
+      }
+    }
+  },
+  "Omit (holding ?o1) in put-down": {
+    "action": "put-down",
+    "omitted": "(holding ?o1)",
+    "description": "Permits putting down blocks out of thin air",
+    "A_pred": 1.0,
+    "tasks": {
+      "Task 1: Tower Inversion": {
+        "plan_found": true,
+        "plan_length": 5,
+        "phantom_edges": 1,
+        "PESR": 0.0,
+        "R_play": "INFINITY",
+        "fail_reason": "Precondition violation at step 1 (put-down b): missing ['(holding b)']",
+        "plan_str": "put-down(b) -> unstack(b,a) -> stack(b,c) -> pick-up(a) -> stack(a,b)"
+      },
+      "Task 2: Disassembly to Table": {
+        "plan_found": true,
+        "plan_length": 2,
+        "phantom_edges": 2,
+        "PESR": 0.0,
+        "R_play": "INFINITY",
+        "fail_reason": "Precondition violation at step 1 (put-down b): missing ['(holding b)']",
+        "plan_str": "put-down(b) -> put-down(c)"
+      },
+      "Task 3: Reassembly from Table": {
+        "plan_found": true,
+        "plan_length": 4,
+        "phantom_edges": 0,
+        "PESR": 1.0,
+        "R_play": "0",
+        "fail_reason": null,
+        "plan_str": "pick-up(b) -> stack(b,c) -> pick-up(a) -> stack(a,b)"
+      }
+    }
+  },
+  "Omit (holding ?o1) in stack": {
+    "action": "stack",
+    "omitted": "(holding ?o1)",
+    "description": "Permits stacking a block without holding it",
+    "A_pred": 1.0,
+    "tasks": {
+      "Task 1: Tower Inversion": {
+        "plan_found": true,
+        "plan_length": 2,
+        "phantom_edges": 2,
+        "PESR": 0.0,
+        "R_play": "INFINITY",
+        "fail_reason": "Precondition violation at step 1 (stack b c): missing ['(holding b)']",
+        "plan_str": "stack(b,c) -> stack(a,b)"
+      },
+      "Task 2: Disassembly to Table": {
+        "plan_found": true,
+        "plan_length": 4,
+        "phantom_edges": 0,
+        "PESR": 1.0,
+        "R_play": "0",
+        "fail_reason": null,
+        "plan_str": "unstack(c,b) -> put-down(c) -> unstack(b,a) -> put-down(b)"
+      },
+      "Task 3: Reassembly from Table": {
+        "plan_found": true,
+        "plan_length": 2,
+        "phantom_edges": 2,
+        "PESR": 0.0,
+        "R_play": "INFINITY",
+        "fail_reason": "Precondition violation at step 1 (stack a b): missing ['(holding a)']",
+        "plan_str": "stack(a,b) -> stack(b,c)"
+      }
+    }
+  },
+  "Omit (clear ?o2) in stack": {
+    "action": "stack",
+    "omitted": "(clear ?o2)",
+    "description": "Permits stacking onto already covered blocks",
+    "A_pred": 1.0,
+    "tasks": {
+      "Task 1: Tower Inversion": {
+        "plan_found": true,
+        "plan_length": 6,
+        "phantom_edges": 0,
+        "PESR": 1.0,
+        "R_play": "0",
+        "fail_reason": null,
+        "plan_str": "unstack(c,b) -> put-down(c) -> unstack(b,a) -> stack(b,c) -> pick-up(a) -> stack(a,b)"
+      },
+      "Task 2: Disassembly to Table": {
+        "plan_found": true,
+        "plan_length": 4,
+        "phantom_edges": 0,
+        "PESR": 1.0,
+        "R_play": "0",
+        "fail_reason": null,
+        "plan_str": "unstack(c,b) -> put-down(c) -> unstack(b,a) -> put-down(b)"
+      },
+      "Task 3: Reassembly from Table": {
+        "plan_found": true,
+        "plan_length": 4,
+        "phantom_edges": 0,
+        "PESR": 1.0,
+        "R_play": "0",
+        "fail_reason": null,
+        "plan_str": "pick-up(b) -> stack(b,c) -> pick-up(a) -> stack(a,b)"
+      }
+    }
+  },
+  "Omit (on ?o1 ?o2) in unstack": {
+    "action": "unstack",
+    "omitted": "(on ?o1 ?o2)",
+    "description": "Permits unstacking blocks that are on table",
+    "A_pred": 1.0,
+    "tasks": {
+      "Task 1: Tower Inversion": {
+        "plan_found": true,
+        "plan_length": 6,
+        "phantom_edges": 0,
+        "PESR": 1.0,
+        "R_play": "0",
+        "fail_reason": null,
+        "plan_str": "unstack(c,b) -> put-down(c) -> unstack(b,a) -> stack(b,c) -> pick-up(a) -> stack(a,b)"
+      },
+      "Task 2: Disassembly to Table": {
+        "plan_found": true,
+        "plan_length": 4,
+        "phantom_edges": 0,
+        "PESR": 1.0,
+        "R_play": "0",
+        "fail_reason": null,
+        "plan_str": "unstack(c,b) -> put-down(c) -> unstack(b,a) -> put-down(b)"
+      },
+      "Task 3: Reassembly from Table": {
+        "plan_found": true,
+        "plan_length": 4,
+        "phantom_edges": 0,
+        "PESR": 1.0,
+        "R_play": "0",
+        "fail_reason": null,
+        "plan_str": "pick-up(b) -> stack(b,c) -> pick-up(a) -> stack(a,b)"
+      }
+    }
+  },
+  "Omit (clear ?o1) in unstack": {
+    "action": "unstack",
+    "omitted": "(clear ?o1)",
+    "description": "Permits unstacking covered blocks from inside a tower",
+    "A_pred": 1.0,
+    "tasks": {
+      "Task 1: Tower Inversion": {
+        "plan_found": true,
+        "plan_length": 4,
+        "phantom_edges": 1,
+        "PESR": 0.0,
+        "R_play": "INFINITY",
+        "fail_reason": "Precondition violation at step 1 (unstack b a): missing ['(clear b)']",
+        "plan_str": "unstack(b,a) -> stack(b,c) -> pick-up(a) -> stack(a,b)"
+      },
+      "Task 2: Disassembly to Table": {
+        "plan_found": true,
+        "plan_length": 4,
+        "phantom_edges": 1,
+        "PESR": 0.0,
+        "R_play": "INFINITY",
+        "fail_reason": "Precondition violation at step 1 (unstack b a): missing ['(clear b)']",
+        "plan_str": "unstack(b,a) -> put-down(b) -> unstack(c,b) -> put-down(c)"
+      },
+      "Task 3: Reassembly from Table": {
+        "plan_found": true,
+        "plan_length": 4,
+        "phantom_edges": 0,
+        "PESR": 1.0,
+        "R_play": "0",
+        "fail_reason": null,
+        "plan_str": "pick-up(b) -> stack(b,c) -> pick-up(a) -> stack(a,b)"
+      }
+    }
+  },
+  "Omit (handempty) in unstack": {
+    "action": "unstack",
+    "omitted": "(handempty)",
+    "description": "Permits unstacking while already holding a block",
+    "A_pred": 1.0,
+    "tasks": {
+      "Task 1: Tower Inversion": {
+        "plan_found": true,
+        "plan_length": 6,
+        "phantom_edges": 0,
+        "PESR": 1.0,
+        "R_play": "0",
+        "fail_reason": null,
+        "plan_str": "unstack(c,b) -> put-down(c) -> unstack(b,a) -> stack(b,c) -> pick-up(a) -> stack(a,b)"
+      },
+      "Task 2: Disassembly to Table": {
+        "plan_found": true,
+        "plan_length": 4,
+        "phantom_edges": 0,
+        "PESR": 1.0,
+        "R_play": "0",
+        "fail_reason": null,
+        "plan_str": "unstack(c,b) -> put-down(c) -> unstack(b,a) -> put-down(b)"
+      },
+      "Task 3: Reassembly from Table": {
+        "plan_found": true,
+        "plan_length": 4,
+        "phantom_edges": 0,
+        "PESR": 1.0,
+        "R_play": "0",
+        "fail_reason": null,
+        "plan_str": "pick-up(b) -> stack(b,c) -> pick-up(a) -> stack(a,b)"
+      }
+    }
+  },
+  "FAMA Learned Model": {
+    "action": "pick-up",
+    "omitted": "(handempty) [learned omission]",
+    "description": "SAT learner omitted (handempty) and delete effect in pick-up",
+    "A_pred": 0.66,
+    "tasks": {
+      "Task 1: Tower Inversion": {
+        "plan_found": true,
+        "plan_length": 6,
+        "phantom_edges": 1,
+        "PESR": 0.0,
+        "R_play": "INFINITY",
+        "fail_reason": "Precondition violation at step 4 (pick-up a): missing ['(handempty)']",
+        "plan_str": "unstack(c,b) -> put-down(c) -> unstack(b,a) -> pick-up(a) -> stack(b,c) -> stack(a,b)"
+      },
+      "Task 2: Disassembly to Table": {
+        "plan_found": true,
+        "plan_length": 3,
+        "phantom_edges": 1,
+        "PESR": 0.0,
+        "R_play": "INFINITY",
+        "fail_reason": "Precondition violation at step 2 (pick-up b): missing ['(ontable b)', '(handempty)']",
+        "plan_str": "unstack(c,b) -> pick-up(b) -> put-down(c)"
+      },
+      "Task 3: Reassembly from Table": {
+        "plan_found": true,
+        "plan_length": 4,
+        "phantom_edges": 0,
+        "PESR": 0.0,
+        "R_play": "INFINITY",
+        "fail_reason": "Precondition violation at step 2 (pick-up b): missing ['(handempty)']",
+        "plan_str": "pick-up(a) -> pick-up(b) -> stack(b,c) -> stack(a,b)"
+      }
+    }
+  },
+  "LOCM2 Learned Model": {
+    "action": "all",
+    "omitted": "missing deletes & corrupted preconditions",
+    "description": "FSM learner lacks delete effects and conflates relations",
+    "A_pred": 0.0,
+    "tasks": {
+      "Task 1: Tower Inversion": {
+        "plan_found": false,
+        "plan_length": 0,
+        "phantom_edges": 0,
+        "PESR": 0.0,
+        "R_play": "INFINITY",
+        "fail_reason": "No plan found",
+        "plan_str": "None"
+      },
+      "Task 2: Disassembly to Table": {
+        "plan_found": false,
+        "plan_length": 0,
+        "phantom_edges": 0,
+        "PESR": 0.0,
+        "R_play": "INFINITY",
+        "fail_reason": "No plan found",
+        "plan_str": "None"
+      },
+      "Task 3: Reassembly from Table": {
+        "plan_found": false,
+        "plan_length": 0,
+        "phantom_edges": 0,
+        "PESR": 0.0,
+        "R_play": "INFINITY",
+        "fail_reason": "No plan found",
+        "plan_str": "None"
+      }
+    }
+  }
+}
