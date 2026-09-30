@@ -1,0 +1,39 @@
+name: CMake
+
+on:
+  push:
+    branches: [ "master" ]
+
+env:
+  BUILD_TYPE: Release
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - name: Install PyClingo
+        run: pip3 install clingo
+
+      - name: Install Boost
+        run: sudo apt-get install -y libboost-program-options-dev
+
+      - name: Install Clingo
+        working-directory: FastLAS2/testing/clingo
+        run: sudo apt-get install -y gringo
+
+      - name: Configure CMake
+        working-directory: FastLAS2/implementation
+        run: cmake -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} CMakeLists.txt
+
+      - name: Build
+        working-directory: FastLAS2/implementation
+        run: make -j
+
+      - name: Test
+        working-directory: FastLAS2/testing
+        run: ./test_all.rb

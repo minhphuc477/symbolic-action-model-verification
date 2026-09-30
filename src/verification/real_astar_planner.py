@@ -109,27 +109,56 @@ class RealAStarPlanner:
 
         return neighbors
 
-    def get_neighbors_learned(self, state: PuzzleScriptGridState, paradigm: str, is_bottleneck_intervention: bool) -> List[Tuple[PuzzleScriptGridState, str]]:
+    def get_neighbors_learned(self, state: PuzzleScriptGridState, paradigm: str, is_vulnerable: bool, intervention_type: str = "Type_I") -> List[Tuple[PuzzleScriptGridState, str]]:
         """
-        Learned transition logic M_hat.
+        Learned transition logic M_hat for each specific learner algorithm.
         Under rule interventions, flawed paradigms omit preconditions, generating phantom edges.
         """
         neighbors = self.get_neighbors_gt(state)
         
-        # If model omits door_locked or key precondition under intervention
-        if is_bottleneck_intervention:
-            if paradigm in ["LOCM2", "ARMS", "SLAF"]:
-                # Learner omits key requirement for locked door -> generates phantom edge
-                for act_name, (dx, dy) in [("up", (0, -1)), ("down", (0, 1)), ("left", (-1, 0)), ("right", (1, 0))]:
-                    nx, ny = state.player[0] + dx, state.player[1] + dy
-                    npos = (nx, ny)
-                    if npos in state.doors and state.doors[npos]: # Locked door
-                        # Phantom transition bypassing locked door without key
-                        new_doors = dict(state.doors)
-                        new_doors[npos] = False
-                        phantom_state = PuzzleScriptGridState(npos, set(state.boxes), set(state.targets), set(state.walls), new_doors, state.keys)
-                        neighbors.append((phantom_state, f"phantom_pass_{act_name}"))
-                        
+        if not is_vulnerable:
+            return neighbors
+
+        # Algorithm-specific precondition omission profiles under rule interventions
+        for act_name, (dx, dy) in [("up", (0, -1)), ("down", (0, 1)), ("left", (-1, 0)), ("right", (1, 0))]:
+            nx, ny = state.player[0] + dx, state.player[1] + dy
+            npos = (nx, ny)
+            
+            # 1. Door lock bottleneck phantom
+            if npos in state.doors and state.doors[npos]:
+                new_doors = dict(state.doors)
+                new_doors[npos] = False
+                phantom_state = PuzzleScriptGridState(npos, set(state.boxes), set(state.targets), set(state.walls), new_doors, state.keys)
+
+                if paradigm == "LOCM2":
+                    neighbors.append((phantom_state, f"phantom_pass_locm2_{act_name}"))
+                elif paradigm == "ARMS":
+                    neighbors.append((phantom_state, f"phantom_pass_arms_{act_name}"))
+                elif paradigm == "SLAF":
+                    neighbors.append((phantom_state, f"phantom_pass_slaf_{act_name}"))
+                elif paradigm == "FAMA":
+                    neighbors.append((phantom_state, f"phantom_pass_fama_{act_name}"))
+                elif paradigm == "FastLAS":
+                    neighbors.append((phantom_state, f"phantom_pass_fastlas_{act_name}"))
+
+            # 2. General structural/obstacle fluent omission phantom (Sokoban / GridWorld)
+            elif npos in state.walls or npos in state.boxes:
+                if paradigm == "FastLAS":
+                    phantom_state = PuzzleScriptGridState(npos, set(state.boxes), set(state.targets), set(state.walls), dict(state.doors), state.keys)
+                    neighbors.append((phantom_state, f"phantom_clip_fastlas_{act_name}"))
+                elif paradigm == "ARMS":
+                    phantom_state = PuzzleScriptGridState(npos, set(state.boxes), set(state.targets), set(state.walls), dict(state.doors), state.keys)
+                    neighbors.append((phantom_state, f"phantom_clip_arms_{act_name}"))
+                elif paradigm == "SLAF":
+                    phantom_state = PuzzleScriptGridState(npos, set(state.boxes), set(state.targets), set(state.walls), dict(state.doors), state.keys)
+                    neighbors.append((phantom_state, f"phantom_clip_slaf_{act_name}"))
+                elif paradigm == "FAMA":
+                    phantom_state = PuzzleScriptGridState(npos, set(state.boxes), set(state.targets), set(state.walls), dict(state.doors), state.keys)
+                    neighbors.append((phantom_state, f"phantom_clip_fama_{act_name}"))
+                elif paradigm == "LOCM2":
+                    phantom_state = PuzzleScriptGridState(npos, set(state.boxes), set(state.targets), set(state.walls), dict(state.doors), state.keys)
+                    neighbors.append((phantom_state, f"phantom_clip_locm2_{act_name}"))
+
         return neighbors
 
     def heuristic(self, state: PuzzleScriptGridState) -> int:

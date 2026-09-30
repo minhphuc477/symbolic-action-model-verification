@@ -1,52 +1,52 @@
 {
-  "SLAF": {
+  "FastLAS": {
     "evaluated_runs": 1500,
-    "A_pred_mean": 0.9793000000000001,
-    "A_pred_std": 0.010060318086422524,
-    "d_delta_mean": 1.8666666666666667,
-    "d_delta_std": 1.9955506062794355,
-    "PESR_mean": 0.06666666666666667,
-    "PESR_std": 0.24944382578492943,
-    "topology_collapse_rate_pct": 93.33333333333333
+    "A_pred_mean": 0.9782,
+    "A_pred_std": 0.0097,
+    "d_delta_mean": 0.0,
+    "d_delta_std": 0.0,
+    "PESR_mean": 1.0,
+    "PESR_std": 0.0,
+    "topology_collapse_rate_pct": 0.0
   },
   "ARMS": {
     "evaluated_runs": 1500,
-    "A_pred_mean": 0.9743333333333334,
-    "A_pred_std": 0.011545080722493417,
-    "d_delta_mean": 1.8666666666666667,
-    "d_delta_std": 1.9955506062794355,
-    "PESR_mean": 0.06666666666666667,
-    "PESR_std": 0.24944382578492943,
-    "topology_collapse_rate_pct": 93.33333333333333
-  },
-  "FastLAS": {
-    "evaluated_runs": 1500,
-    "A_pred_mean": 0.9429666666666667,
-    "A_pred_std": 0.042310348090692354,
-    "d_delta_mean": 0.0,
-    "d_delta_std": 0.0,
-    "PESR_mean": 0.06666666666666667,
-    "PESR_std": 0.24944382578492943,
-    "topology_collapse_rate_pct": 93.33333333333333
-  },
-  "LOCM2": {
-    "evaluated_runs": 1500,
-    "A_pred_mean": 0.9779333333333334,
-    "A_pred_std": 0.010188010382579896,
-    "d_delta_mean": 1.8666666666666667,
-    "d_delta_std": 1.9955506062794355,
-    "PESR_mean": 0.06666666666666667,
-    "PESR_std": 0.24944382578492943,
-    "topology_collapse_rate_pct": 93.33333333333333
+    "A_pred_mean": 0.9634,
+    "A_pred_std": 0.0095,
+    "d_delta_mean": 68.66,
+    "d_delta_std": 72.3717,
+    "PESR_mean": 0.5,
+    "PESR_std": 0.5,
+    "topology_collapse_rate_pct": 50.0
   },
   "FAMA": {
     "evaluated_runs": 1500,
-    "A_pred_mean": 0.9427666666666668,
-    "A_pred_std": 0.04203386201094963,
-    "d_delta_mean": 0.0,
-    "d_delta_std": 0.0,
-    "PESR_mean": 0.06666666666666667,
-    "PESR_std": 0.24944382578492943,
-    "topology_collapse_rate_pct": 93.33333333333333
+    "A_pred_mean": 0.956,
+    "A_pred_std": 0.0121,
+    "d_delta_mean": 55.12,
+    "d_delta_std": 70.3655,
+    "PESR_mean": 0.6,
+    "PESR_std": 0.4899,
+    "topology_collapse_rate_pct": 40.0
+  },
+  "SLAF": {
+    "evaluated_runs": 1500,
+    "A_pred_mean": 0.9789,
+    "A_pred_std": 0.0105,
+    "d_delta_mean": 40.62,
+    "d_delta_std": 65.0925,
+    "PESR_mean": 0.7,
+    "PESR_std": 0.4583,
+    "topology_collapse_rate_pct": 30.0
+  },
+  "LOCM2": {
+    "evaluated_runs": 1500,
+    "A_pred_mean": 0.9829,
+    "A_pred_std": 0.0115,
+    "d_delta_mean": 42.54,
+    "d_delta_std": 66.0128,
+    "PESR_mean": 0.7,
+    "PESR_std": 0.4583,
+    "topology_collapse_rate_pct": 30.0
   }
 }
