@@ -55,30 +55,34 @@ def parse_atoms(sexpr: Optional[str]) -> List[str]:
     if not sexpr:
         return []
     s = sexpr.strip()
-    if s.startswith('(') and s.endswith(')'):
-        s = s[1:-1].strip()
-    if s.lower().startswith('and'):
-        s = s[3:].strip()
-    atoms = []
-    depth = 0
-    cur = ''
-    for ch in s:
-        if ch == '(':
-            if depth == 0:
-                cur = ''
-            depth += 1
-            cur += ch
-        elif ch == ')':
-            depth -= 1
-            cur += ch
-            if depth == 0:
-                atom = re.sub(r'\s+', ' ', cur.strip().lower()).replace('( ', '(').replace(' )', ')')
-                if atom and atom not in ["(0)", "0"]:
-                    atoms.append(atom)
-                cur = ''
-        elif depth > 0:
-            cur += ch
-    return atoms
+    if not s.startswith('(') or not s.endswith(')'):
+        return []
+    inner = s[1:-1].strip()
+    if inner.lower().startswith('and'):
+        s = inner[3:].strip()
+        atoms = []
+        depth = 0
+        cur = ''
+        for ch in s:
+            if ch == '(':
+                if depth == 0:
+                    cur = ''
+                depth += 1
+                cur += ch
+            elif ch == ')':
+                depth -= 1
+                cur += ch
+                if depth == 0:
+                    atom = re.sub(r'\s+', ' ', cur.strip().lower()).replace('( ', '(').replace(' )', ')')
+                    if atom and atom not in ["(0)", "0"]:
+                        atoms.append(atom)
+                    cur = ''
+            elif depth > 0:
+                cur += ch
+        return atoms
+    else:
+        atom = re.sub(r'\s+', ' ', s.strip().lower()).replace('( ', '(').replace(' )', ')')
+        return [atom] if atom and atom not in ["(0)", "0"] else []
 
 class ActionSchema:
     def __init__(self, name: str, params: List[str], preconditions: List[str], effects: List[str]):

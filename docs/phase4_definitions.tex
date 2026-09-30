@@ -1,0 +1,228 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{geometry}
+\usepackage{microtype}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
+\geometry{margin=1in}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+\newtheorem{hypothesis}{Hypothesis}
+\newtheorem{proposition}{Proposition}
+\newtheorem{remark}{Remark}
+
+\title{\textbf{Phase 4 Formal Framework: Decoupled Planning and Learning Burdens in Symbolic Action Models}}
+\author{\textbf{MSc Thesis Research Program} \\ \textit{Target Venue: ICAPS 2027 / AAAI 2027}}
+\date{October 1, 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+This document establishes the formal theoretical framework, research objectives, research questions, hypotheses, algorithms, and statistical analysis protocol for Phase 4 of the research program: \textit{Mechanic-Induced Planning--Model Burden Decomposition}. We formalize the distinction between Planning Burden ($H_P$) and Learning Burden ($B$), formulate the Decoupling Hypothesis and Zone B (the critical blindspot where models appear accurate under passive evaluation yet induce catastrophic planning failure), present complete algorithmic pseudocode, specify an 8-domain International Planning Competition (IPC) empirical matrix, and detail the statistical testing pipeline.
+\end{abstract}
+
+\section{Context, Problem Statement, and Research Gaps}
+
+\subsection{Discrete Symbolic Planning vs. Continuous Control World Models}
+In continuous deep world models (e.g., DreamerV3, PlaNet), state representations lie in metric spaces ($\mathbb{R}^d$), and dynamics prediction errors typically manifest as gradual drift measured by mean squared error (MSE) across rollout horizons. In contrast, \textbf{symbolic planning environments possess discrete, combinatorial topology governed by first-order logic constraints}. 
+
+A single omitted precondition in an action schema does not cause a continuous numerical perturbation; rather, it performs a discrete topological relaxation on the state-space reachability graph $\mathcal{R}(s_0)$. This creates \textit{phantom transition shortcuts} that a forward search planner greedily exploits, causing catastrophic real-world execution failure.
+
+\subsection{The Three-Tier Problem Statement}
+\begin{enumerate}[leftmargin=*]
+    \item \textbf{Tier 1 (Known Phenomenon):} High passive transition prediction accuracy ($A_{\text{pred}} \ge 98\%$) does not guarantee planning success (\textit{Verified-vs-Correct Gap}, Aguilar Mart{\'\i}n et al., 2026).
+    \item \textbf{Tier 2 (The Unformalized Gap):} Prior literature (PDDLGym, 2020; TCP, 2026) observed runtime and sample complexity variation across planning domains, but \textbf{there is no formal framework to decompose and quantify} planning search difficulty ($H_P$) independently from model-learning sample complexity ($B$).
+    \item \textbf{Tier 3 (The Decoupling Frontier):} No formal theory or empirical benchmark has demonstrated that $H_P$ and $B$ can be \textbf{causally decoupled} under minimal rule interventions---meaning that specific operator modifications can leave planning search tractable while rendering passive model learning infinitely inadequate.
+\end{enumerate}
+
+\section{Research Objectives (RO) and Research Questions (RQ)}
+
+\subsection{Research Objectives (RO)}
+\begin{itemize}[leftmargin=*]
+    \item \textbf{RO1 (Formalization):} Formalize Planning Burden $H_P$ and Learning Burden $B$ as independent, mathematically well-defined computational estimands.
+    \item \textbf{RO2 (Empirical Decoupling \& Zone B Existence):} Empirically prove the existence of \textbf{Zone B} (tractable planning burden $H_P$, but divergent/infinite learning burden $B$) across 8 diverse IPC planning domains under single-precondition interventions.
+    \item \textbf{RO3 (Diagnostic Benchmark Synthesis):} Formulate an automated diagnostic benchmark protocol that synthesizes minimal rule interventions to detect Zone B vulnerabilities before deployment.
+\end{itemize}
+
+\subsection{Research Questions (RQ)}
+\begin{itemize}[leftmargin=*]
+    \item \textbf{RQ1 (Burden Decoupling):} Do marginal changes in planning burden ($\Delta H_P$) and learning burden ($\Delta B$) causally decouple ($|\rho| < 0.30$) when isolated operator preconditions are modified?
+    \item \textbf{RQ2 (Zone B Blindness):} Is Zone B the primary mathematical driver of passive evaluation failure in action model learning?
+    \item \textbf{RQ3 (Diagnostic Benchmark Generation):} Can minimal rule interventions systematically synthesize test instances that expose Zone B failures where passive accuracy remains $A_{\text{pred}} = 1.000$?
+\end{itemize}
+
+\section{Formal Definitions and Theoretical Foundations}
+
+Let $M^* = \langle \mathcal{P}, \mathcal{A}, \mathcal{T}^* \rangle$ denote the ground-truth STRIPS domain, where $\mathcal{P}$ is the set of first-order predicates, $\mathcal{A}$ is the set of action schemas $a = \langle \text{Pre}(a), \text{Add}(a), \text{Del}(a) \rangle$, and $\mathcal{T}^*$ represents true state transitions. Let $\mathcal{X} = \langle s_0, S_g \rangle$ be a planning problem instance.
+
+\begin{definition}[\textbf{Planning Burden $H_P$}]
+Given an executable domain model $M$, problem instance $x = \langle s_0, S_g \rangle$, and planner $P$, the \textbf{Planning Burden} is defined as:
+\begin{equation}
+H_P(M, x) \triangleq \log_2(1 + N_{\text{exp}}(P, M, x))
+\end{equation}
+where $N_{\text{exp}}(P, M, x)$ is the exact number of state nodes expanded by planner $P$ to return a valid plan $\pi_M$ (or determine unsolvability).
+\end{definition}
+
+\begin{definition}[\textbf{Play Regret $R_{\text{play}}$}]
+Given a candidate model $\widehat{M}$, ground-truth domain $M^*$, and instance $x$, let $\pi_{\widehat{M}}$ be the plan synthesized by planner $P$ on $\widehat{M}$. The \textbf{Play Regret} of executing $\pi_{\widehat{M}}$ in true physics $M^*$ is:
+\begin{equation}
+R_{\text{play}}(\pi_{\widehat{M}}, M^*, x) \triangleq \begin{cases}
+\text{cost}_{M^*}(\pi_{\widehat{M}}) - \text{cost}_{M^*}(\pi^*_{M^*}) & \text{if } \pi_{\widehat{M}} \text{ executes successfully to reach } S_g \text{ in } M^*, \\
+\infty & \text{if execution violates any } \text{Pre}^*(a_t) \text{ or fails to reach } S_g.
+\end{cases}
+\end{equation}
+\end{definition}
+
+\begin{definition}[\textbf{Learning Burden $B$}]
+Given an inductive learner $L$, training trace distribution $D$ generated by valid executions on $M^*$, planner $P$, and regret tolerance $\varepsilon \ge 0$, the \textbf{Learning Burden} is:
+\begin{equation}
+B_{L, D, P, \varepsilon}(M^*, x) \triangleq \min \left\{ n \in \mathbb{N} : \mathbb{E}_{T \sim D^n}\left[ R_{\text{play}}(P(L(T)), M^*, x) \right] \le \varepsilon \right\}
+\end{equation}
+If no finite sample size $n$ guarantees expected regret $\le \varepsilon$, then $B = \infty$.
+\end{definition}
+
+\begin{definition}[\textbf{Burden Decoupling}]
+Let $\Delta_m H_P = H_P(M^* \setminus \{m\}, x) - H_P(M^*, x)$ and $\Delta_m B = B(M^* \setminus \{m\}, x) - B(M^*, x)$ be the marginal shifts induced by mechanic intervention $m$. The burdens are \textbf{decoupled} if their rank correlation across interventions satisfies:
+\begin{equation}
+|\rho_{\text{Spearman}}(\Delta H_P, \Delta B)| < 0.30
+\end{equation}
+\end{definition}
+
+\begin{definition}[\textbf{The Four Hardness Zones}]
+The $(\Delta H_P, \Delta B)$ plane partitions into four distinct operational quadrants:
+\begin{itemize}
+    \item \textbf{Zone A (Tractable / Robust):} Low $H_P$, Low $B$.
+    \item \textbf{Zone B (Dangerous Blindspot):} Low/Normal $H_P$, Divergent/Infinite $B$ ($R_{\text{play}} = \infty$).
+    \item \textbf{Zone C (Planning-Heavy / Model-Light):} High $H_P$, Low $B$.
+    \item \textbf{Zone D (Intrinsically Hard):} High $H_P$, High/Infinite $B$.
+\end{itemize}
+\end{definition}
+
+\section{Propositions and Proofs}
+
+\begin{proposition}[\textbf{Phantom Edges and Passive Blindness}]
+Let $M^*$ be the ground truth domain. Suppose $\widehat{M}$ omits a necessary precondition $p \in \text{Pre}^*(a)$ such that $\text{Pre}(\widehat{a}) = \text{Pre}^*(a) \setminus \{p\}$ while $\text{Eff}(\widehat{a}) = \text{Eff}^*(a)$. 
+\begin{enumerate}
+    \item On any observational trace distribution $D \sim M^*$, every transition $(s, a, s')$ satisfies $s \models \text{Pre}^*(a) \implies s \models \text{Pre}(\widehat{a})$. Consequently, passive transition prediction accuracy is identically:
+    \begin{equation}
+    A_{\text{pred}}(\widehat{M}) = 1.000
+    \end{equation}
+    \item The state reachability graph satisfies $\mathcal{R}(s_0; \widehat{M}) \supseteq \mathcal{R}(s_0; M^*)$. If the optimal plan in $\widehat{M}$ traverses an edge enabled by $s \not\models p$, then $\pi_{\widehat{M}}$ fails on step 1 of that edge in $M^*$, yielding:
+    \begin{equation}
+    R_{\text{play}}(\pi_{\widehat{M}}, M^*, x) = \infty \implies B_{L, D, P, \varepsilon} = \infty
+    \end{equation}
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+In $D \sim M^*$, all recorded transitions originate from valid executions on $M^*$. Hence, $\forall (s_t, a_t, s_{t+1}) \in D$, $s_t \models \text{Pre}^*(a_t)$ holds. Since $\text{Pre}(\widehat{a}_t) \subset \text{Pre}^*(a_t)$, it follows trivially that $s_t \models \text{Pre}(\widehat{a}_t)$. Because $\text{Eff}(\widehat{a}_t) = \text{Eff}^*(a_t)$, the predicted state $\widehat{s}_{t+1} = (s_t \setminus \text{Del}(\widehat{a}_t)) \cup \text{Add}(\widehat{a}_t) = s_{t+1}$ matches the true state with zero error, establishing $A_{\text{pred}} = 1.000$.
+
+However, in planning on $\widehat{M}$, forward search explores the relaxed state graph $G(\widehat{M})$. The relaxation adds directed edges $E_{\text{phantom}} = \{ (s, s') : s \models \text{Pre}(\widehat{a}) \wedge s \not\models p \}$. If any such edge provides a shortcut towards $S_g$, the optimal planner selects it. Executing this step on physical domain $M^*$ tests $s \models \text{Pre}^*(a)$, which fails because $s \not\models p$. By Definition 2, execution halts with $R_{\text{play}} = \infty$. Because positive traces from $D$ never supply counterfactual evidence of illegal actions, an inductive learner cannot recover $p$, forcing $B = \infty$.
+\end{proof}
+
+\section{Algorithmic Pseudocode}
+
+\begin{algorithm}[h!]
+\caption{Computation of Planning Burden $H_P$}
+\begin{algorithmic}[1]
+\Require Domain model $M$, Problem $x = \langle s_0, S_g \rangle$, Forward Planner $P$, Node cutoff $N_{\text{max}}$
+\Ensure Planning burden $H_P$, Plan $\pi_M$, Node count $N_{\text{exp}}$
+\State Initialize search queue $Q \gets [s_0]$, visited set $V \gets \{s_0\}$, $N_{\text{exp}} \gets 0$
+\While{$Q$ is not empty and $N_{\text{exp}} < N_{\text{max}}$}
+    \State Pop state $s \gets Q.\text{pop}()$, $N_{\text{exp}} \gets N_{\text{exp}} + 1$
+    \If{$S_g \subseteq s$}
+        \State \Return $\log_2(1 + N_{\text{exp}})$, reconstruct plan $\pi_M$, $N_{\text{exp}}$
+    \EndIf
+    \For{ground action $a$ applicable in $s$ under $M$}
+        \State $s' \gets \text{apply}(s, a, M)$
+        \If{$s' \notin V$}
+            \State $V.\text{add}(s')$, $Q.\text{push}(s')$
+        \EndIf
+    \EndFor
+\EndWhile
+\State \Return $\log_2(1 + N_{\text{exp}})$, $\text{None}$, $N_{\text{exp}}$
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[h!]
+\caption{Computation of Learning Burden $B$}
+\begin{algorithmic}[1]
+\Require Learner $L$, Ground truth $M^*$, Problem $x$, Trace generator $D$, Planner $P$, Regret threshold $\varepsilon$, Sample sizes $\{n_1, \dots, n_k\}$, Seeds $K$
+\Ensure Learning burden $B \in \mathbb{N} \cup \{\infty\}$, Regret curve
+\For{$n \in \{n_1, \dots, n_k\}$}
+    \State $\text{regrets} \gets []$
+    \For{$\text{seed} \in \{1, \dots, K\}$}
+        \State Traces $T \gets D.\text{sample}(n, \text{seed})$
+        \State Learned model $\widehat{M} \gets L.\text{learn}(T)$
+        \State Plan $\pi \gets P.\text{solve}(\widehat{M}, x)$
+        \State Success, cost $\gets \text{execute\_plan}(\pi, M^*, x)$
+        \If{Success}
+            \State $\text{regrets}.\text{append}(\text{cost} - \text{optimal\_cost}(M^*, x))$
+        \Else
+            \State $\text{regrets}.\text{append}(\infty)$
+        \EndIf
+    \EndFor
+    \If{$\text{mean}(\text{regrets}) \le \varepsilon$}
+        \State \Return $n$, recorded regret curve
+    \EndIf
+\EndFor
+\State \Return $\infty$, recorded regret curve
+\end{algorithmic}
+\end{algorithm}
+
+\section{Expanded Multi-Domain Experiment Matrix (8 IPC Domains)}
+
+The empirical matrix expands across \textbf{8 representative IPC domains}, ensuring topological and structural diversity:
+
+\begin{table}[h!]
+\centering
+\small
+\begin{tabular}{llll}
+\toprule
+\textbf{Domain} & \textbf{Topological Class} & \textbf{Bottleneck Mechanism} & \textbf{Precondition Interventions} \\
+\midrule
+\textbf{Blocksworld} & Relational Stacking & Spatial clearance, hand capacity & Omit \texttt{clear}, \texttt{ontable}, \texttt{holding} \\
+\textbf{Gripper} & Resource Bottleneck & Two-handed carrying capacity & Omit \texttt{free}, \texttt{at-robby}, \texttt{carry} \\
+\textbf{Ferry} & Vehicle Routing & Single-car capacity constraint & Omit \texttt{empty-ferry}, \texttt{at-ferry}, \texttt{on} \\
+\textbf{Miconic} & Passenger Elevators & Floor ordering, boarding constraints & Omit \texttt{lift-at}, \texttt{boarded}, \texttt{above} \\
+\textbf{Driverlog} & Multi-Vehicle Logistics & Truck boarding, path connectivity & Omit \texttt{empty}, \texttt{at}, \texttt{driving} \\
+\textbf{Hanoi} & Recursive Depth & Strict disk ordering ($o_1 < o_2$) & Omit \texttt{smaller}, \texttt{clear} \\
+\textbf{Satellite} & Sensor Scheduling & Sensor calibration, instrument pointing & Omit \texttt{calibrated}, \texttt{pointing}, \texttt{power-avail} \\
+\textbf{Rovers} & Energy \& Store-Forward & Battery, sample store, line-of-sight & Omit \texttt{empty}, \texttt{at}, \texttt{available} \\
+\bottomrule
+\end{tabular}
+\caption{The 8 IPC Benchmark Domains and Target Interventions for Phase 4.}
+\end{table}
+
+\section{Statistical Analysis Protocol}
+\begin{enumerate}[leftmargin=*]
+    \item \textbf{Decoupling Hypothesis Test:} Spearman's rank correlation $\rho(\Delta H_P, \Delta B)$ is calculated over all intervention conditions. The null hypothesis $H_0: |\rho| \ge 0.30$ is tested against $H_1: |\rho| < 0.30$ at significance level $\alpha = 0.05$.
+    \item \textbf{Bootstrap Confidence Intervals:} 95\% confidence intervals for $\rho$, $\Delta H_P$, and $\Delta B$ are derived using 1,000 bootstrap resamples across problem seeds.
+    \item \textbf{Effect Size Analysis:} Cohen's $d$ is computed for shifts in expanded nodes ($\Delta N_{\text{exp}}$) and sample complexity ($\Delta B$) relative to baseline $M^*$.
+    \item \textbf{Quadrant Scatter Analysis:} Every intervention is projected onto the $(\Delta H_P, \log_{10} B)$ coordinate plane with median dividers to empirically delineate Zones A, B, C, and D.
+\end{enumerate}
+
+\section{Core Contributions and Scoped Limitations}
+
+\subsection{Packaged Contributions}
+\begin{itemize}[leftmargin=*]
+    \item \textbf{C1 (Burden Decomposition Framework):} The first formal framework defining Planning Burden ($H_P$) and Learning Burden ($B$) as orthogonal, mathematically decoupled estimands.
+    \item \textbf{C2 (Theoretical Proof of Decoupling \& Zone B):} Theoretical proof (Proposition 1) and empirical demonstration that passive predictive accuracy ($A_{\text{pred}}$) fails to detect Zone B planning collapse.
+    \item \textbf{C3 (8-Domain Diagnostic Benchmark):} An open-source, reproducible diagnostic benchmark spanning 8 IPC domains that systematically isolates phantom shortcuts across diverse symbolic learners (FAMA, LOCM2, FastLAS).
+\end{itemize}
+
+\subsection{Explicit Limitations}
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Discrete STRIPS Scope:} The current formalization is restricted to discrete, deterministic STRIPS domains; continuous state variables and stochastic transitions require future hybrid extensions.
+    \item \textbf{Planner Sensitivity:} $H_P$ is defined relative to state-space forward search (BFS/A*); while relative ordering remains robust, exact node counts vary under alternative planning paradigms (e.g., SAT/symbolic planners).
+    \item \textbf{Passive Trace Assumption:} Learning burden $B$ is analyzed under positive observational traces; active counterfactual query synthesis is left to Paper 2.
+\end{itemize}
+
+\end{document}
