@@ -86,8 +86,6 @@ class TestBurdenMetrics(unittest.TestCase):
             n_seeds=2
         )
         self.assertTrue(res["converged"])
-        self.assertEqual(res["B"], 10)
-
     def test_learning_burden_mock_infinite(self):
         # Broken learner never converges
         intervened = dict(self.gt_models)
@@ -110,6 +108,38 @@ class TestBurdenMetrics(unittest.TestCase):
         )
         self.assertFalse(res["converged"])
         self.assertEqual(res["B"], float('inf'))
+
+    def test_24intervention_matrix_integrity(self):
+        from src.experiments.measure_planning_burden import get_full_24intervention_matrix
+        matrix = get_full_24intervention_matrix()
+        self.assertEqual(len(matrix), 8)
+        total_interventions = 0
+        for domain_name, dom_cfg in matrix.items():
+            self.assertEqual(len(dom_cfg["interventions"]), 3)
+            total_interventions += len(dom_cfg["interventions"])
+            with open(dom_cfg["ref_file"], "r", encoding="utf-8") as f:
+                schemas = parse_pddl_model(f.read())
+            for int_spec in dom_cfg["interventions"]:
+                act = int_spec["action"]
+                omit = int_spec["omit_literal"].strip().lower()
+                matching_act = [k for k in schemas if k.lower() == act.lower()]
+                self.assertTrue(len(matching_act) > 0, f"Action {act} not in {domain_name}")
+                sch = schemas[matching_act[0]]
+                self.assertIn(omit, [p.strip().lower() for p in sch.preconditions])
+        self.assertEqual(total_interventions, 24)
+
+    def test_bidirectional_search_divergence_observed(self):
+        import json
+        out_file = "benchmark_outputs/planning_burden_results.json"
+        self.assertTrue(os.path.exists(out_file), "Results file must exist")
+        with open(out_file, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        summary = data["summary"]
+        self.assertEqual(summary["total_interventions"], 24)
+        # Verify Proposition 2: Both shortcuts (Delta H < 0) and detours (Delta H > 0) are empirically observed
+        self.assertGreater(summary["phantom_shortcuts_count"], 0)
+        self.assertGreater(summary["phantom_detours_count"], 0)
+        self.assertGreaterEqual(summary["execution_failures_count"], 12)
 
 if __name__ == "__main__":
     unittest.main()

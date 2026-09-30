@@ -229,8 +229,8 @@ Every action schema, parameter binding, and precondition literal across all 8 IP
                      &                     & \texttt{pick-up(?o1)}       & \texttt{(clear ?o1), (ontable ?o1), (handempty)} & Omit \texttt{(ontable ?o1)} \\
                      &                     & \texttt{put-down(?o1)}      & \texttt{(holding ?o1)}                          & Omit \texttt{(holding ?o1)} \\
 \midrule
-\textbf{Gripper}     & Capacity Bottleneck & \texttt{pick(?o1, ?o2, ?o3)}& \texttt{(at ?o1 ?o2), (at-robby ?o2), (free ?o3)}& Omit \texttt{(free ?o3)} \\
-                     &                     & \texttt{pick(?o1, ?o2, ?o3)}& \texttt{(at ?o1 ?o2), (at-robby ?o2), (free ?o3)}& Omit \texttt{(at-robby ?o2)} \\
+\textbf{Gripper}     & Capacity Bottleneck & \texttt{pick-up(?o1, ?o2, ?o3)}& \texttt{(at ?o1 ?o2), (at-robby ?o2), (free ?o3)}& Omit \texttt{(free ?o3)} \\
+                     &                     & \texttt{pick-up(?o1, ?o2, ?o3)}& \texttt{(at ?o1 ?o2), (at-robby ?o2), (free ?o3)}& Omit \texttt{(at-robby ?o2)} \\
                      &                     & \texttt{drop(?o1, ?o2, ?o3)}& \texttt{(carry ?o1 ?o3), (at-robby ?o2)}        & Omit \texttt{(carry ?o1 ?o3)} \\
 \midrule
 \textbf{Ferry}       & Vehicle Transport   & \texttt{board(?o1, ?o2)}    & \texttt{(at ?o1 ?o2), (at-ferry ?o2), (empty-ferry)} & Omit \texttt{(empty-ferry)} \\
