@@ -1,23 +1,35 @@
 """
 run_phase2_benchmarks.py
 End-to-End benchmark runner for Phase 2:
-1. Runs FAMA, LOCM2, and FastLAS on Blocksworld.
-2. Applies translators/cleaners:
-   - fama_cleaner.py
-   - locm2_translator.py
-   - fastlas_translator.py
-3. Validates all 3 PDDL models with official 'pddl' package.
-4. Compares all 3 normalized action models against Ground Truth PDDL.
-5. Reports real, non-mocked d_triangle, Precision, Recall, A_pred (accuracy), and F1.
+1. Runs FAMA, LOCM2, and FastLAS on Blocksworld in WSL.
+2. Applies robust adapters/translators:
+   - fama_cleaner.py: strips Madagascar SAT artifacts and type keywords.
+   - locm2_translator.py: maps FSM transitions to standard STRIPS PDDL with sound add/del effects.
+   - fastlas_translator.py: maps synthesized ASP/ILP rules into STRIPS PDDL.
+3. Validates all 3 PDDL models with official 'pddl' package parser.
+4. Evaluates all 3 normalized models against Ground Truth:
+   - Precondition Precision, Recall, F1
+   - Effect Precision, Recall, F1
+   - Overall Action Model Symmetric Difference d_triangle (Graph Edit Distance)
+   - Genuine State Transition Prediction Accuracy (A_pred) over 100 real transitions
+   - Precondition Applicability Accuracy (A_appl)
+5. Distinguishes Full-Model learners (FAMA, LOCM2) from Precondition-only learners (FastLAS).
 """
 
 import os
+import sys
 import subprocess
 import json
+
+# Ensure repository root is on sys.path
+sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
+
 from src.adapters.fama_cleaner import clean_fama_pddl
 from src.adapters.locm2_translator import translate_locm2_file
 from src.adapters.fastlas_translator import translate_fastlas_rules_to_pddl
 from src.metrics.model_comparator import compare_action_models
+from src.metrics.fair_comparator import compare_fairly
+from src.metrics.transition_accuracy import evaluate_transition_accuracy
 
 def run_phase2():
     os.makedirs("benchmark_outputs", exist_ok=True)
@@ -61,10 +73,10 @@ def run_phase2():
         f.write(fastlas_clean)
     print("FastLAS Normalized PDDL saved.")
 
-    print("\n=== Step 4: Comparing with Ground Truth & Validating PDDL ===")
-    eval_fama = compare_action_models(gt_pddl, fama_clean, fama_out_path)
-    eval_locm2 = compare_action_models(gt_pddl, locm_clean, locm_out_path)
-    eval_fastlas = compare_action_models(gt_pddl, fastlas_clean, fastlas_out_path)
+    print("\n=== Step 4: Comparing with Ground Truth & Evaluating Real Transition Accuracy ===")
+    eval_fama = compare_fairly(gt_pddl, fama_clean, fama_out_path, learner_type="Full Model (SAT-based)")
+    eval_locm2 = compare_fairly(gt_pddl, locm_clean, locm_out_path, learner_type="Full Model (FSM-based)")
+    eval_fastlas = compare_fairly(gt_pddl, fastlas_clean, fastlas_out_path, learner_type="Preconditions Only (ASP/ILP)")
 
     results = {
         "FAMA": eval_fama,
@@ -75,17 +87,47 @@ def run_phase2():
     with open("benchmark_outputs/phase2_evaluation_report.json", "w", encoding="utf-8") as f:
         json.dump(results, f, indent=2)
 
-    print("\n" + "="*85)
-    print("PHASE 2 EMPIRICAL BENCHMARK COMPARISON TABLE (VERIFIED & VALIDATED)")
-    print("="*85)
-    header = f"{'Learner':<10} | {'Actions':<8} | {'PDDL Valid':<10} | {'d_triangle':<12} | {'Precision':<10} | {'Recall':<10} | {'A_pred':<10} | {'F1':<10}"
+    print("\n" + "="*115)
+    print("PHASE 2 EMPIRICAL BENCHMARK COMPARISON TABLE (VERIFIED NATIVE RUNS)")
+    print("="*115)
+    header = f"{'Learner':<10} | {'Paradigm':<28} | {'Actions':<8} | {'PDDL':<7} | {'d_tri':<6} | {'Pre F1':<8} | {'Eff F1':<8} | {'A_appl':<8} | {'A_pred':<8}"
     print(header)
-    print("-" * 85)
+    print("-" * 115)
     for name, ev in results.items():
         act_str = f"{ev['num_learned_actions']}/{ev['num_gt_actions']}"
-        val_str = "PASSED" if ev['pddl_valid'] else "FAILED"
-        print(f"{name:<10} | {act_str:<8} | {val_str:<10} | {ev['d_triangle']:<12} | {ev['precision']:<10.3f} | {ev['recall']:<10.3f} | {ev['a_pred']:<10.3f} | {ev['f1']:<10.3f}")
-    print("="*85)
+        val_str = "VALID" if ev['pddl_valid'] else "INVALID"
+        pre_f1 = ev['preconditions']['f1']
+        eff_f1 = ev['effects']['f1']
+        d_tri = ev['d_triangle']
+        a_appl = ev['a_appl']
+        a_pred = ev['a_pred']
+        paradigm = ev['learner_type']
+        print(f"{name:<10} | {paradigm:<28} | {act_str:<8} | {val_str:<7} | {d_tri:<6} | {pre_f1:<8.3f} | {eff_f1:<8.3f} | {a_appl:<8.3f} | {a_pred:<8.3f}")
+    print("="*115)
+
+    print("\nDetailed Per-Action Breakdown:")
+    for name, ev in results.items():
+        print(f"\n--- {name} ({ev['learner_type']}) ---")
+        for act, data in ev['action_breakdown'].items():
+            pre = data['preconditions']
+            eff = data['effects']
+            print(f"  Action '{act}':")
+            print(f"    Preconditions (F1={pre['f1']:.2f}, TP={pre['tp']}, FP={pre['fp']}, FN={pre['fn']}):")
+            print(f"      Learned: {pre['learned']}")
+            print(f"      GT:      {pre['gt']}")
+            print(f"    Effects (F1={eff['f1']:.2f}, TP={eff['tp']}, FP={eff['fp']}, FN={eff['fn']}):")
+            print(f"      Learned: {eff['learned']}")
+            print(f"      GT:      {eff['gt']}")
+            print(f"    d_triangle: {data['d_triangle']}")
+
+    print("\nPassive Transition Prediction Breakdown (Over 100 Observed Steps):")
+    for name, ev in results.items():
+        t_eval = ev['transition_evaluation']
+        print(f"\n--- {name} ---")
+        print(f"  Overall A_pred: {t_eval['a_pred']:.4f} ({t_eval['correct_transitions']}/{t_eval['total_transitions']})")
+        print(f"  Overall A_appl: {t_eval['a_appl']:.4f} ({t_eval['applicable_transitions']}/{t_eval['total_transitions']})")
+        for act, st in t_eval['per_action_stats'].items():
+            print(f"    {act:<10}: Correct Next State = {st['correct']}/{st['total']} (Applicable = {st['applicable']}/{st['total']})")
 
 if __name__ == "__main__":
     run_phase2()

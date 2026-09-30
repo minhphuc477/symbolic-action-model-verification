@@ -7,64 +7,28 @@ Rigorously computes:
 - Precision: TP / (TP + FP)
 - Recall: TP / (TP + FN)
 - F1 Score: 2 * Precision * Recall / (Precision + Recall)
-- A_pred: Action Model Literal Classification Accuracy: (TP + TN) / Total Candidates = 1 - (d_triangle / |U|)
+- A_pred: Passive State Transition Accuracy over genuine execution traces:
+          (1 / N) * sum_{i=1}^N I[ M_pred(s_i, a_i) == s_{i+1} ]
 - PDDL Syntax & Semantic Validation (zero unbound variables, valid STRIPS domain)
 """
 
+import os
+import sys
 import re
 from typing import Dict, List, Set, Tuple
+
+# Ensure repository root is on sys.path
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
+
 import pddl
+from src.metrics.transition_accuracy import evaluate_transition_accuracy, extract_sexpr, parse_atoms
 
-def extract_sexpr(text: str, keyword: str):
-    idx = text.lower().find(keyword.lower())
-    if idx == -1:
-        return None
-    start = text.find('(', idx)
-    if start == -1:
-        return None
-    depth = 0
-    for i in range(start, len(text)):
-        if text[i] == '(':
-            depth += 1
-        elif text[i] == ')':
-            depth -= 1
-            if depth == 0:
-                return text[start:i+1]
-    return None
-
-def parse_atoms(sexpr: str) -> List[str]:
-    if not sexpr:
-        return []
-    s = sexpr.strip()
-    if s.startswith('(') and s.endswith(')'):
-        s = s[1:-1].strip()
-    if s.lower().startswith('and'):
-        s = s[3:].strip()
-    atoms = []
-    depth = 0
-    cur = ''
-    for ch in s:
-        if ch == '(':
-            if depth == 0:
-                cur = ''
-            depth += 1
-            cur += ch
-        elif ch == ')':
-            depth -= 1
-            cur += ch
-            if depth == 0:
-                clean_atom = cur.strip()
-                if clean_atom not in ["(0)", "0", ""]:
-                    atoms.append(clean_atom)
-                cur = ''
-        elif depth > 0:
-            cur += ch
-    return atoms
 
 def normalize_atom(atom_str: str, param_map: Dict[str, str]) -> str:
     norm = atom_str.lower()
     for old_p, new_p in param_map.items():
-        norm = re.sub(rf'\{old_p}\b', new_p, norm)
+        v = old_p.lstrip('?')
+        norm = re.sub(rf'\?{v}\b', new_p, norm)
     norm = re.sub(r'\s+', ' ', norm).strip()
     norm = norm.replace("( ", "(").replace(" )", ")")
     return norm
@@ -103,33 +67,6 @@ def parse_pddl_actions(pddl_text: str) -> Dict[str, Dict[str, Set[str]]]:
         }
     return actions
 
-def get_candidate_literal_universe(action_name: str, num_params: int) -> Set[str]:
-    """
-    Generates the universe U of all potential candidate precondition and effect literals
-    for an action in Blocksworld.
-    """
-    candidates = set()
-    params = [f"?p{i+1}" for i in range(num_params)]
-    
-    # 0-arity predicates
-    candidates.add("(handempty)")
-    candidates.add("(not (handempty))")
-    
-    # 1-arity predicates over parameters
-    for p in params:
-        for pred in ["ontable", "clear", "holding"]:
-            candidates.add(f"({pred} {p})")
-            candidates.add(f"(not ({pred} {p}))")
-            
-    # 2-arity predicates over parameters
-    for p1 in params:
-        for p2 in params:
-            if p1 != p2:
-                candidates.add(f"(on {p1} {p2})")
-                candidates.add(f"(not (on {p1} {p2}))")
-                
-    return candidates
-
 def validate_pddl_domain(pddl_file_path: str) -> Tuple[bool, str]:
     """Validates domain using official pddl package parser."""
     try:
@@ -156,7 +93,6 @@ def compare_action_models(ground_truth_pddl: str, learned_pddl: str, domain_file
     total_tp = 0
     total_fp = 0
     total_fn = 0
-    total_universe = 0
     
     action_breakdown = {}
 
@@ -164,9 +100,6 @@ def compare_action_models(ground_truth_pddl: str, learned_pddl: str, domain_file
         gt_a = gt_actions.get(a, {"parameters": [], "preconditions": set(), "effects": set()})
         pred_a = pred_actions.get(a, {"parameters": [], "preconditions": set(), "effects": set()})
 
-        num_params = max(len(gt_a["parameters"]), len(pred_a["parameters"]), 1)
-        universe = get_candidate_literal_universe(a, num_params)
-        
         # Combine preconditions and effects for action
         gt_all = gt_a["preconditions"].union(gt_a["effects"])
         pred_all = pred_a["preconditions"].union(pred_a["effects"])
@@ -175,16 +108,11 @@ def compare_action_models(ground_truth_pddl: str, learned_pddl: str, domain_file
         fp = len(pred_all - gt_all)
         fn = len(gt_all - pred_all)
         d_tri = fp + fn
-        
-        # Candidate universe for this action: both precondition and effect spaces (2 * |universe|)
-        act_universe_size = 2 * len(universe)
-        tn = act_universe_size - (tp + fp + fn)
 
         total_tp += tp
         total_fp += fp
         total_fn += fn
         total_d_triangle += d_tri
-        total_universe += act_universe_size
 
         action_breakdown[a] = {
             "gt_params": gt_a["parameters"],
@@ -203,8 +131,10 @@ def compare_action_models(ground_truth_pddl: str, learned_pddl: str, domain_file
     recall = total_tp / (total_tp + total_fn) if (total_tp + total_fn) > 0 else 0.0
     f1 = 2 * precision * recall / (precision + recall) if (precision + recall) > 0 else 0.0
     
-    total_tn = total_universe - (total_tp + total_fp + total_fn)
-    a_pred = (total_tp + total_tn) / total_universe if total_universe > 0 else 0.0
+    # Calculate genuine passive transition prediction accuracy A_pred over observed trajectories
+    trans_eval = evaluate_transition_accuracy(learned_pddl)
+    a_pred = trans_eval["a_pred"]
+    a_appl = trans_eval["a_appl"]
 
     return {
         "pddl_valid": is_valid,
@@ -214,22 +144,22 @@ def compare_action_models(ground_truth_pddl: str, learned_pddl: str, domain_file
         "recall": recall,
         "f1": f1,
         "a_pred": a_pred,
+        "a_appl": a_appl,
+        "transition_evaluation": trans_eval,
         "num_gt_actions": len(gt_actions),
         "num_learned_actions": len(pred_actions),
-        "total_universe_candidates": total_universe,
         "total_true_positives": total_tp,
         "total_false_positives": total_fp,
         "total_false_negatives": total_fn,
-        "total_true_negatives": total_tn,
         "action_breakdown": action_breakdown
     }
 
 if __name__ == "__main__":
     import sys
     if len(sys.argv) >= 3:
-        with open(sys.argv[1], "r") as f:
+        with open(sys.argv[1], "r", encoding="utf-8") as f:
             gt = f.read()
-        with open(sys.argv[2], "r") as f:
+        with open(sys.argv[2], "r", encoding="utf-8") as f:
             pred = f.read()
         res = compare_action_models(gt, pred, sys.argv[2])
         print(f"PDDL Valid: {res['pddl_valid']} ({res['validation_message']})")
@@ -238,3 +168,4 @@ if __name__ == "__main__":
         print(f"Recall:     {res['recall']:.3f}")
         print(f"F1 Score:   {res['f1']:.3f}")
         print(f"A_pred:     {res['a_pred']:.3f}")
+        print(f"A_appl:     {res['a_appl']:.3f}")

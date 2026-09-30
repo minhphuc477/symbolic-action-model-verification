@@ -1,437 +1,658 @@
 {
   "FAMA": {
+    "learner_type": "Full Model (SAT-based)",
     "pddl_valid": true,
     "validation_message": "Valid domain with 4 actions",
-    "d_triangle": 2,
-    "precision": 1.0,
-    "recall": 0.9259259259259259,
-    "f1": 0.9615384615384615,
-    "a_pred": 0.9807692307692307,
     "num_gt_actions": 4,
     "num_learned_actions": 4,
-    "total_universe_candidates": 104,
-    "total_true_positives": 25,
-    "total_false_positives": 0,
-    "total_false_negatives": 2,
-    "total_true_negatives": 77,
+    "d_triangle": 2,
+    "preconditions": {
+      "precision": 1.0,
+      "recall": 0.8888888888888888,
+      "f1": 0.9411764705882353,
+      "tp": 8,
+      "fp": 0,
+      "fn": 1
+    },
+    "effects": {
+      "precision": 1.0,
+      "recall": 0.9444444444444444,
+      "f1": 0.9714285714285714,
+      "tp": 17,
+      "fp": 0,
+      "fn": 1
+    },
+    "overall_model": {
+      "precision": 1.0,
+      "recall": 0.9259259259259259,
+      "f1": 0.9615384615384615,
+      "tp": 25,
+      "fp": 0,
+      "fn": 2
+    },
+    "transition_evaluation": {
+      "a_pred": 0.66,
+      "a_appl": 1.0,
+      "total_transitions": 100,
+      "correct_transitions": 66,
+      "applicable_transitions": 100,
+      "per_action_stats": {
+        "unstack": {
+          "total": 16,
+          "correct": 16,
+          "applicable": 16
+        },
+        "put-down": {
+          "total": 39,
+          "correct": 39,
+          "applicable": 39
+        },
+        "stack": {
+          "total": 11,
+          "correct": 11,
+          "applicable": 11
+        },
+        "pick-up": {
+          "total": 34,
+          "correct": 0,
+          "applicable": 34
+        }
+      }
+    },
+    "a_pred": 0.66,
+    "a_appl": 1.0,
     "action_breakdown": {
       "pick-up": {
-        "gt_params": [
-          "?p1"
-        ],
-        "pred_params": [
-          "?p1"
-        ],
-        "pre_gt": [
-          "(clear ?p1)",
-          "(handempty)",
-          "(ontable ?p1)"
-        ],
-        "pre_learned": [
-          "(clear ?p1)",
-          "(ontable ?p1)"
-        ],
-        "eff_gt": [
-          "(holding ?p1)",
-          "(not (clear ?p1))",
-          "(not (handempty))",
-          "(not (ontable ?p1))"
-        ],
-        "eff_learned": [
-          "(holding ?p1)",
-          "(not (clear ?p1))",
-          "(not (ontable ?p1))"
-        ],
-        "d_triangle": 2,
-        "tp": 5,
-        "fp": 0,
-        "fn": 2
+        "preconditions": {
+          "gt": [
+            "(clear ?p1)",
+            "(handempty)",
+            "(ontable ?p1)"
+          ],
+          "learned": [
+            "(clear ?p1)",
+            "(ontable ?p1)"
+          ],
+          "precision": 1.0,
+          "recall": 0.6666666666666666,
+          "f1": 0.8,
+          "tp": 2,
+          "fp": 0,
+          "fn": 1
+        },
+        "effects": {
+          "gt": [
+            "(holding ?p1)",
+            "(not (clear ?p1))",
+            "(not (handempty))",
+            "(not (ontable ?p1))"
+          ],
+          "learned": [
+            "(holding ?p1)",
+            "(not (clear ?p1))",
+            "(not (ontable ?p1))"
+          ],
+          "precision": 1.0,
+          "recall": 0.75,
+          "f1": 0.8571428571428571,
+          "tp": 3,
+          "fp": 0,
+          "fn": 1
+        },
+        "d_triangle": 2
       },
       "put-down": {
-        "gt_params": [
-          "?p1"
-        ],
-        "pred_params": [
-          "?p1"
-        ],
-        "pre_gt": [
-          "(holding ?p1)"
-        ],
-        "pre_learned": [
-          "(holding ?p1)"
-        ],
-        "eff_gt": [
-          "(clear ?p1)",
-          "(handempty)",
-          "(not (holding ?p1))",
-          "(ontable ?p1)"
-        ],
-        "eff_learned": [
-          "(clear ?p1)",
-          "(handempty)",
-          "(not (holding ?p1))",
-          "(ontable ?p1)"
-        ],
-        "d_triangle": 0,
-        "tp": 5,
-        "fp": 0,
-        "fn": 0
+        "preconditions": {
+          "gt": [
+            "(holding ?p1)"
+          ],
+          "learned": [
+            "(holding ?p1)"
+          ],
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        },
+        "effects": {
+          "gt": [
+            "(clear ?p1)",
+            "(handempty)",
+            "(not (holding ?p1))",
+            "(ontable ?p1)"
+          ],
+          "learned": [
+            "(clear ?p1)",
+            "(handempty)",
+            "(not (holding ?p1))",
+            "(ontable ?p1)"
+          ],
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "tp": 4,
+          "fp": 0,
+          "fn": 0
+        },
+        "d_triangle": 0
       },
       "stack": {
-        "gt_params": [
-          "?p1",
-          "?p2"
-        ],
-        "pred_params": [
-          "?p1",
-          "?p2"
-        ],
-        "pre_gt": [
-          "(clear ?p2)",
-          "(holding ?p1)"
-        ],
-        "pre_learned": [
-          "(clear ?p2)",
-          "(holding ?p1)"
-        ],
-        "eff_gt": [
-          "(clear ?p1)",
-          "(handempty)",
-          "(not (clear ?p2))",
-          "(not (holding ?p1))",
-          "(on ?p1 ?p2)"
-        ],
-        "eff_learned": [
-          "(clear ?p1)",
-          "(handempty)",
-          "(not (clear ?p2))",
-          "(not (holding ?p1))",
-          "(on ?p1 ?p2)"
-        ],
-        "d_triangle": 0,
-        "tp": 7,
-        "fp": 0,
-        "fn": 0
+        "preconditions": {
+          "gt": [
+            "(clear ?p2)",
+            "(holding ?p1)"
+          ],
+          "learned": [
+            "(clear ?p2)",
+            "(holding ?p1)"
+          ],
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "tp": 2,
+          "fp": 0,
+          "fn": 0
+        },
+        "effects": {
+          "gt": [
+            "(clear ?p1)",
+            "(handempty)",
+            "(not (clear ?p2))",
+            "(not (holding ?p1))",
+            "(on ?p1 ?p2)"
+          ],
+          "learned": [
+            "(clear ?p1)",
+            "(handempty)",
+            "(not (clear ?p2))",
+            "(not (holding ?p1))",
+            "(on ?p1 ?p2)"
+          ],
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "tp": 5,
+          "fp": 0,
+          "fn": 0
+        },
+        "d_triangle": 0
       },
       "unstack": {
-        "gt_params": [
-          "?p1",
-          "?p2"
-        ],
-        "pred_params": [
-          "?p1",
-          "?p2"
-        ],
-        "pre_gt": [
-          "(clear ?p1)",
-          "(handempty)",
-          "(on ?p1 ?p2)"
-        ],
-        "pre_learned": [
-          "(clear ?p1)",
-          "(handempty)",
-          "(on ?p1 ?p2)"
-        ],
-        "eff_gt": [
-          "(clear ?p2)",
-          "(holding ?p1)",
-          "(not (clear ?p1))",
-          "(not (handempty))",
-          "(not (on ?p1 ?p2))"
-        ],
-        "eff_learned": [
-          "(clear ?p2)",
-          "(holding ?p1)",
-          "(not (clear ?p1))",
-          "(not (handempty))",
-          "(not (on ?p1 ?p2))"
-        ],
-        "d_triangle": 0,
-        "tp": 8,
-        "fp": 0,
-        "fn": 0
+        "preconditions": {
+          "gt": [
+            "(clear ?p1)",
+            "(handempty)",
+            "(on ?p1 ?p2)"
+          ],
+          "learned": [
+            "(clear ?p1)",
+            "(handempty)",
+            "(on ?p1 ?p2)"
+          ],
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "tp": 3,
+          "fp": 0,
+          "fn": 0
+        },
+        "effects": {
+          "gt": [
+            "(clear ?p2)",
+            "(holding ?p1)",
+            "(not (clear ?p1))",
+            "(not (handempty))",
+            "(not (on ?p1 ?p2))"
+          ],
+          "learned": [
+            "(clear ?p2)",
+            "(holding ?p1)",
+            "(not (clear ?p1))",
+            "(not (handempty))",
+            "(not (on ?p1 ?p2))"
+          ],
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "tp": 5,
+          "fp": 0,
+          "fn": 0
+        },
+        "d_triangle": 0
       }
     }
   },
   "LOCM2": {
+    "learner_type": "Full Model (FSM-based)",
     "pddl_valid": true,
     "validation_message": "Valid domain with 4 actions",
-    "d_triangle": 10,
-    "precision": 1.0,
-    "recall": 0.6296296296296297,
-    "f1": 0.7727272727272727,
-    "a_pred": 0.9038461538461539,
     "num_gt_actions": 4,
     "num_learned_actions": 4,
-    "total_universe_candidates": 104,
-    "total_true_positives": 17,
-    "total_false_positives": 0,
-    "total_false_negatives": 10,
-    "total_true_negatives": 77,
+    "d_triangle": 0,
+    "preconditions": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "tp": 9,
+      "fp": 0,
+      "fn": 0
+    },
+    "effects": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "tp": 18,
+      "fp": 0,
+      "fn": 0
+    },
+    "overall_model": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "tp": 27,
+      "fp": 0,
+      "fn": 0
+    },
+    "transition_evaluation": {
+      "a_pred": 1.0,
+      "a_appl": 1.0,
+      "total_transitions": 100,
+      "correct_transitions": 100,
+      "applicable_transitions": 100,
+      "per_action_stats": {
+        "unstack": {
+          "total": 16,
+          "correct": 16,
+          "applicable": 16
+        },
+        "put-down": {
+          "total": 39,
+          "correct": 39,
+          "applicable": 39
+        },
+        "stack": {
+          "total": 11,
+          "correct": 11,
+          "applicable": 11
+        },
+        "pick-up": {
+          "total": 34,
+          "correct": 34,
+          "applicable": 34
+        }
+      }
+    },
+    "a_pred": 1.0,
+    "a_appl": 1.0,
     "action_breakdown": {
       "pick-up": {
-        "gt_params": [
-          "?p1"
-        ],
-        "pred_params": [
-          "?p1"
-        ],
-        "pre_gt": [
-          "(clear ?p1)",
-          "(handempty)",
-          "(ontable ?p1)"
-        ],
-        "pre_learned": [
-          "(handempty)",
-          "(ontable ?p1)"
-        ],
-        "eff_gt": [
-          "(holding ?p1)",
-          "(not (clear ?p1))",
-          "(not (handempty))",
-          "(not (ontable ?p1))"
-        ],
-        "eff_learned": [
-          "(holding ?p1)",
-          "(ontable ?p1)"
-        ],
-        "d_triangle": 4,
-        "tp": 3,
-        "fp": 0,
-        "fn": 4
+        "preconditions": {
+          "gt": [
+            "(clear ?p1)",
+            "(handempty)",
+            "(ontable ?p1)"
+          ],
+          "learned": [
+            "(clear ?p1)",
+            "(handempty)",
+            "(ontable ?p1)"
+          ],
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "tp": 3,
+          "fp": 0,
+          "fn": 0
+        },
+        "effects": {
+          "gt": [
+            "(holding ?p1)",
+            "(not (clear ?p1))",
+            "(not (handempty))",
+            "(not (ontable ?p1))"
+          ],
+          "learned": [
+            "(holding ?p1)",
+            "(not (clear ?p1))",
+            "(not (handempty))",
+            "(not (ontable ?p1))"
+          ],
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "tp": 4,
+          "fp": 0,
+          "fn": 0
+        },
+        "d_triangle": 0
       },
       "put-down": {
-        "gt_params": [
-          "?p1"
-        ],
-        "pred_params": [
-          "?p1"
-        ],
-        "pre_gt": [
-          "(holding ?p1)"
-        ],
-        "pre_learned": [
-          "(clear ?p1)",
-          "(holding ?p1)"
-        ],
-        "eff_gt": [
-          "(clear ?p1)",
-          "(handempty)",
-          "(not (holding ?p1))",
-          "(ontable ?p1)"
-        ],
-        "eff_learned": [
-          "(clear ?p1)",
-          "(handempty)"
-        ],
-        "d_triangle": 2,
-        "tp": 3,
-        "fp": 0,
-        "fn": 2
+        "preconditions": {
+          "gt": [
+            "(holding ?p1)"
+          ],
+          "learned": [
+            "(holding ?p1)"
+          ],
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        },
+        "effects": {
+          "gt": [
+            "(clear ?p1)",
+            "(handempty)",
+            "(not (holding ?p1))",
+            "(ontable ?p1)"
+          ],
+          "learned": [
+            "(clear ?p1)",
+            "(handempty)",
+            "(not (holding ?p1))",
+            "(ontable ?p1)"
+          ],
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "tp": 4,
+          "fp": 0,
+          "fn": 0
+        },
+        "d_triangle": 0
       },
       "stack": {
-        "gt_params": [
-          "?p1",
-          "?p2"
-        ],
-        "pred_params": [
-          "?p1",
-          "?p2"
-        ],
-        "pre_gt": [
-          "(clear ?p2)",
-          "(holding ?p1)"
-        ],
-        "pre_learned": [
-          "(clear ?p2)",
-          "(holding ?p1)"
-        ],
-        "eff_gt": [
-          "(clear ?p1)",
-          "(handempty)",
-          "(not (clear ?p2))",
-          "(not (holding ?p1))",
-          "(on ?p1 ?p2)"
-        ],
-        "eff_learned": [
-          "(clear ?p1)",
-          "(handempty)",
-          "(on ?p1 ?p2)"
-        ],
-        "d_triangle": 2,
-        "tp": 5,
-        "fp": 0,
-        "fn": 2
+        "preconditions": {
+          "gt": [
+            "(clear ?p2)",
+            "(holding ?p1)"
+          ],
+          "learned": [
+            "(clear ?p2)",
+            "(holding ?p1)"
+          ],
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "tp": 2,
+          "fp": 0,
+          "fn": 0
+        },
+        "effects": {
+          "gt": [
+            "(clear ?p1)",
+            "(handempty)",
+            "(not (clear ?p2))",
+            "(not (holding ?p1))",
+            "(on ?p1 ?p2)"
+          ],
+          "learned": [
+            "(clear ?p1)",
+            "(handempty)",
+            "(not (clear ?p2))",
+            "(not (holding ?p1))",
+            "(on ?p1 ?p2)"
+          ],
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "tp": 5,
+          "fp": 0,
+          "fn": 0
+        },
+        "d_triangle": 0
       },
       "unstack": {
-        "gt_params": [
-          "?p1",
-          "?p2"
-        ],
-        "pred_params": [
-          "?p1",
-          "?p2"
-        ],
-        "pre_gt": [
-          "(clear ?p1)",
-          "(handempty)",
-          "(on ?p1 ?p2)"
-        ],
-        "pre_learned": [
-          "(clear ?p1)",
-          "(handempty)",
-          "(on ?p1 ?p2)"
-        ],
-        "eff_gt": [
-          "(clear ?p2)",
-          "(holding ?p1)",
-          "(not (clear ?p1))",
-          "(not (handempty))",
-          "(not (on ?p1 ?p2))"
-        ],
-        "eff_learned": [
-          "(clear ?p2)",
-          "(holding ?p1)",
-          "(not (handempty))"
-        ],
-        "d_triangle": 2,
-        "tp": 6,
-        "fp": 0,
-        "fn": 2
+        "preconditions": {
+          "gt": [
+            "(clear ?p1)",
+            "(handempty)",
+            "(on ?p1 ?p2)"
+          ],
+          "learned": [
+            "(clear ?p1)",
+            "(handempty)",
+            "(on ?p1 ?p2)"
+          ],
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "tp": 3,
+          "fp": 0,
+          "fn": 0
+        },
+        "effects": {
+          "gt": [
+            "(clear ?p2)",
+            "(holding ?p1)",
+            "(not (clear ?p1))",
+            "(not (handempty))",
+            "(not (on ?p1 ?p2))"
+          ],
+          "learned": [
+            "(clear ?p2)",
+            "(holding ?p1)",
+            "(not (clear ?p1))",
+            "(not (handempty))",
+            "(not (on ?p1 ?p2))"
+          ],
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "tp": 5,
+          "fp": 0,
+          "fn": 0
+        },
+        "d_triangle": 0
       }
     }
   },
   "FastLAS": {
+    "learner_type": "Preconditions Only (ASP/ILP)",
     "pddl_valid": true,
     "validation_message": "Valid domain with 4 actions",
-    "d_triangle": 18,
-    "precision": 1.0,
-    "recall": 0.3333333333333333,
-    "f1": 0.5,
-    "a_pred": 0.8269230769230769,
     "num_gt_actions": 4,
     "num_learned_actions": 4,
-    "total_universe_candidates": 104,
-    "total_true_positives": 9,
-    "total_false_positives": 0,
-    "total_false_negatives": 18,
-    "total_true_negatives": 77,
+    "d_triangle": 18,
+    "preconditions": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "tp": 9,
+      "fp": 0,
+      "fn": 0
+    },
+    "effects": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "tp": 0,
+      "fp": 0,
+      "fn": 18
+    },
+    "overall_model": {
+      "precision": 1.0,
+      "recall": 0.3333333333333333,
+      "f1": 0.5,
+      "tp": 9,
+      "fp": 0,
+      "fn": 18
+    },
+    "transition_evaluation": {
+      "a_pred": 0.0,
+      "a_appl": 1.0,
+      "total_transitions": 100,
+      "correct_transitions": 0,
+      "applicable_transitions": 100,
+      "per_action_stats": {
+        "unstack": {
+          "total": 16,
+          "correct": 0,
+          "applicable": 16
+        },
+        "put-down": {
+          "total": 39,
+          "correct": 0,
+          "applicable": 39
+        },
+        "stack": {
+          "total": 11,
+          "correct": 0,
+          "applicable": 11
+        },
+        "pick-up": {
+          "total": 34,
+          "correct": 0,
+          "applicable": 34
+        }
+      }
+    },
+    "a_pred": 0.0,
+    "a_appl": 1.0,
     "action_breakdown": {
       "pick-up": {
-        "gt_params": [
-          "?p1"
-        ],
-        "pred_params": [
-          "?p1"
-        ],
-        "pre_gt": [
-          "(clear ?p1)",
-          "(handempty)",
-          "(ontable ?p1)"
-        ],
-        "pre_learned": [
-          "(clear ?p1)",
-          "(handempty)",
-          "(ontable ?p1)"
-        ],
-        "eff_gt": [
-          "(holding ?p1)",
-          "(not (clear ?p1))",
-          "(not (handempty))",
-          "(not (ontable ?p1))"
-        ],
-        "eff_learned": [],
-        "d_triangle": 4,
-        "tp": 3,
-        "fp": 0,
-        "fn": 4
+        "preconditions": {
+          "gt": [
+            "(clear ?p1)",
+            "(handempty)",
+            "(ontable ?p1)"
+          ],
+          "learned": [
+            "(clear ?p1)",
+            "(handempty)",
+            "(ontable ?p1)"
+          ],
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "tp": 3,
+          "fp": 0,
+          "fn": 0
+        },
+        "effects": {
+          "gt": [
+            "(holding ?p1)",
+            "(not (clear ?p1))",
+            "(not (handempty))",
+            "(not (ontable ?p1))"
+          ],
+          "learned": [],
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 4
+        },
+        "d_triangle": 4
       },
       "put-down": {
-        "gt_params": [
-          "?p1"
-        ],
-        "pred_params": [
-          "?p1"
-        ],
-        "pre_gt": [
-          "(holding ?p1)"
-        ],
-        "pre_learned": [
-          "(holding ?p1)"
-        ],
-        "eff_gt": [
-          "(clear ?p1)",
-          "(handempty)",
-          "(not (holding ?p1))",
-          "(ontable ?p1)"
-        ],
-        "eff_learned": [],
-        "d_triangle": 4,
-        "tp": 1,
-        "fp": 0,
-        "fn": 4
+        "preconditions": {
+          "gt": [
+            "(holding ?p1)"
+          ],
+          "learned": [
+            "(holding ?p1)"
+          ],
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        },
+        "effects": {
+          "gt": [
+            "(clear ?p1)",
+            "(handempty)",
+            "(not (holding ?p1))",
+            "(ontable ?p1)"
+          ],
+          "learned": [],
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 4
+        },
+        "d_triangle": 4
       },
       "stack": {
-        "gt_params": [
-          "?p1",
-          "?p2"
-        ],
-        "pred_params": [
-          "?p1",
-          "?p2"
-        ],
-        "pre_gt": [
-          "(clear ?p2)",
-          "(holding ?p1)"
-        ],
-        "pre_learned": [
-          "(clear ?p2)",
-          "(holding ?p1)"
-        ],
-        "eff_gt": [
-          "(clear ?p1)",
-          "(handempty)",
-          "(not (clear ?p2))",
-          "(not (holding ?p1))",
-          "(on ?p1 ?p2)"
-        ],
-        "eff_learned": [],
-        "d_triangle": 5,
-        "tp": 2,
-        "fp": 0,
-        "fn": 5
+        "preconditions": {
+          "gt": [
+            "(clear ?p2)",
+            "(holding ?p1)"
+          ],
+          "learned": [
+            "(clear ?p2)",
+            "(holding ?p1)"
+          ],
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "tp": 2,
+          "fp": 0,
+          "fn": 0
+        },
+        "effects": {
+          "gt": [
+            "(clear ?p1)",
+            "(handempty)",
+            "(not (clear ?p2))",
+            "(not (holding ?p1))",
+            "(on ?p1 ?p2)"
+          ],
+          "learned": [],
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 5
+        },
+        "d_triangle": 5
       },
       "unstack": {
-        "gt_params": [
-          "?p1",
-          "?p2"
-        ],
-        "pred_params": [
-          "?p1",
-          "?p2"
-        ],
-        "pre_gt": [
-          "(clear ?p1)",
-          "(handempty)",
-          "(on ?p1 ?p2)"
-        ],
-        "pre_learned": [
-          "(clear ?p1)",
-          "(handempty)",
-          "(on ?p1 ?p2)"
-        ],
-        "eff_gt": [
-          "(clear ?p2)",
-          "(holding ?p1)",
-          "(not (clear ?p1))",
-          "(not (handempty))",
-          "(not (on ?p1 ?p2))"
-        ],
-        "eff_learned": [],
-        "d_triangle": 5,
-        "tp": 3,
-        "fp": 0,
-        "fn": 5
+        "preconditions": {
+          "gt": [
+            "(clear ?p1)",
+            "(handempty)",
+            "(on ?p1 ?p2)"
+          ],
+          "learned": [
+            "(clear ?p1)",
+            "(handempty)",
+            "(on ?p1 ?p2)"
+          ],
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "tp": 3,
+          "fp": 0,
+          "fn": 0
+        },
+        "effects": {
+          "gt": [
+            "(clear ?p2)",
+            "(holding ?p1)",
+            "(not (clear ?p1))",
+            "(not (handempty))",
+            "(not (on ?p1 ?p2))"
+          ],
+          "learned": [],
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 5
+        },
+        "d_triangle": 5
       }
     }
   }
