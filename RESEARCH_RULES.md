@@ -95,6 +95,11 @@ flowchart TD
    * Đảm bảo mọi script kiểm thử và thực nghiệm có khả năng tái lập 100% kết quả trên môi trường thuần CPU.
    * Cung cấp các script tự động hóa kiểm định và chạy thử nghiệm mà không có thao tác can thiệp thủ công.
 
+4. **Bắt buộc Git Commit & Push khi có thay đổi Mã nguồn (Mandatory Git Commit & Push Rule)**:
+   * Bất kỳ lúc nào có thay đổi mã nguồn, file script, cấu hình, file kiểm thử hoặc tài liệu nghiên cứu, agent MUST lập tức thực hiện `git add`, `git commit` với thông điệp chuẩn Semantic Commit và `git push` đẩy trực tiếp lên GitHub repository `minhphuc477/symbolic-action-model-verification`.
+   * Tuyệt đối không để lại mã nguồn thay đổi ở trạng thái uncommitted hoặc unpushed trên local workspace.
+
+
 ---
 
 ## 6. NGUYÊN TẮC QUY ĐỊNH GHI CHÉP CHI TIẾT VÀ CHẶT CHẼ TOÁN HỌC (MATHEMATICAL RIGOR & MANDATORY LOGGING RULES)
