@@ -3,11 +3,16 @@ fair_comparator.py
 Fair, multi-faceted comparison of action model learners:
 1. Distinguishes Precondition-only learners (e.g. FastLAS) from Full-model learners (e.g. FAMA, LOCM2).
 2. Computes granular metrics:
-   - Precondition Precision, Recall, F1 (Macro & Micro)
-   - Effect Precision, Recall, F1 (Macro & Micro)
-   - Action Model Symmetric Difference d_triangle (FP + FN)
-   - Empirical State Transition Accuracy (A_pred) over real execution trajectories
-   - Applicability Accuracy (A_appl)
+   - For FastLAS (Precondition-only):
+     * Precondition Precision, Recall, F1
+     * Applicability Accuracy (A_appl)
+     * Transition Accuracy (A_pred) is NOT evaluated (marked as N/A).
+   - For FAMA & LOCM2 (Full-model learners):
+     * Precondition Precision, Recall, F1
+     * Effect Precision, Recall, F1
+     * Action Model Symmetric Difference d_triangle (FP + FN)
+     * Empirical State Transition Accuracy (A_pred) over real execution trajectories
+     * Applicability Accuracy (A_appl)
 3. Evaluates syntax and STRIPS validity via official pddl parser.
 """
 
@@ -21,7 +26,6 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../.
 
 import pddl
 from src.metrics.transition_accuracy import evaluate_transition_accuracy, safe_ground, extract_sexpr, parse_atoms
-
 
 def normalize_atom(atom_str: str, param_map: Dict[str, str]) -> str:
     """Normalizes atom by mapping parameters to canonical ?p1, ?p2... without ? bugs."""
@@ -94,12 +98,12 @@ def compare_fairly(gt_pddl: str, learned_pddl: str, pddl_filepath: Optional[str]
     learned_actions = parse_pddl_schemas(learned_pddl)
 
     all_actions = sorted(set(gt_actions.keys()).union(set(learned_actions.keys())))
+    is_pre_only = "precondition" in learner_type.lower()
 
     # Precondition aggregates
     pre_tp = pre_fp = pre_fn = 0
     # Effect aggregates
     eff_tp = eff_fp = eff_fn = 0
-    # Overall aggregates
     total_d_triangle = 0
 
     per_action_breakdown = {}
@@ -118,7 +122,7 @@ def compare_fairly(gt_pddl: str, learned_pddl: str, pddl_filepath: Optional[str]
         pre_fp += p_fp
         pre_fn += p_fn
 
-        # Effects
+        # Effects (evaluated only if not precondition-only learner)
         e_tp = len(gt_a["effects"].intersection(lrn_a["effects"]))
         e_fp = len(lrn_a["effects"] - gt_a["effects"])
         e_fn = len(gt_a["effects"] - lrn_a["effects"])
@@ -128,7 +132,11 @@ def compare_fairly(gt_pddl: str, learned_pddl: str, pddl_filepath: Optional[str]
         eff_fp += e_fp
         eff_fn += e_fn
 
-        act_d_tri = (p_fp + p_fn) + (e_fp + e_fn)
+        if is_pre_only:
+            act_d_tri = p_fp + p_fn
+        else:
+            act_d_tri = (p_fp + p_fn) + (e_fp + e_fn)
+            
         total_d_triangle += act_d_tri
 
         per_action_breakdown[a] = {
@@ -143,9 +151,9 @@ def compare_fairly(gt_pddl: str, learned_pddl: str, pddl_filepath: Optional[str]
             "effects": {
                 "gt": sorted(list(gt_a["effects"])),
                 "learned": sorted(list(lrn_a["effects"])),
-                "precision": e_prec,
-                "recall": e_rec,
-                "f1": e_f1,
+                "precision": e_prec if not is_pre_only else None,
+                "recall": e_rec if not is_pre_only else None,
+                "f1": e_f1 if not is_pre_only else None,
                 "tp": e_tp, "fp": e_fp, "fn": e_fn
             },
             "d_triangle": act_d_tri
@@ -154,17 +162,12 @@ def compare_fairly(gt_pddl: str, learned_pddl: str, pddl_filepath: Optional[str]
     overall_pre_p, overall_pre_r, overall_pre_f1 = compute_prf(pre_tp, pre_fp, pre_fn)
     overall_eff_p, overall_eff_r, overall_eff_f1 = compute_prf(eff_tp, eff_fp, eff_fn)
 
-    # Combined model PRF
-    total_tp = pre_tp + eff_tp
-    total_fp = pre_fp + eff_fp
-    total_fn = pre_fn + eff_fn
-    overall_p, overall_r, overall_f1 = compute_prf(total_tp, total_fp, total_fn)
-
     # Empirical transition accuracy over real execution dataset
     trans_eval = evaluate_transition_accuracy(learned_pddl)
 
     return {
         "learner_type": learner_type,
+        "is_precondition_only": is_pre_only,
         "pddl_valid": is_valid,
         "validation_message": val_msg,
         "num_gt_actions": len(gt_actions),
@@ -177,19 +180,13 @@ def compare_fairly(gt_pddl: str, learned_pddl: str, pddl_filepath: Optional[str]
             "tp": pre_tp, "fp": pre_fp, "fn": pre_fn
         },
         "effects": {
-            "precision": overall_eff_p,
-            "recall": overall_eff_r,
-            "f1": overall_eff_f1,
+            "precision": overall_eff_p if not is_pre_only else None,
+            "recall": overall_eff_r if not is_pre_only else None,
+            "f1": overall_eff_f1 if not is_pre_only else None,
             "tp": eff_tp, "fp": eff_fp, "fn": eff_fn
         },
-        "overall_model": {
-            "precision": overall_p,
-            "recall": overall_r,
-            "f1": overall_f1,
-            "tp": total_tp, "fp": total_fp, "fn": total_fn
-        },
-        "transition_evaluation": trans_eval,
-        "a_pred": trans_eval["a_pred"],
+        "transition_evaluation": trans_eval if not is_pre_only else None,
+        "a_pred": trans_eval["a_pred"] if not is_pre_only else None,
         "a_appl": trans_eval["a_appl"],
         "action_breakdown": per_action_breakdown
     }

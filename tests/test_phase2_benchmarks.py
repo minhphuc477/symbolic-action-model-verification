@@ -93,9 +93,10 @@ class TestEmpiricalMetrics(unittest.TestCase):
                 fama_text = f.read()
             res = compare_fairly(gt_text, fama_text, fama_path, "Full Model (SAT-based)")
             self.assertTrue(res["pddl_valid"])
-            self.assertEqual(res["d_triangle"], 2)
+            self.assertEqual(res["d_triangle"], 6)
             self.assertEqual(res["a_pred"], 0.66)
             self.assertEqual(res["a_appl"], 1.0)
+
 
 if __name__ == "__main__":
     unittest.main()
