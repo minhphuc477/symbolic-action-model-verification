@@ -97,6 +97,20 @@ class TestEmpiricalMetrics(unittest.TestCase):
             self.assertEqual(res["a_pred"], 0.66)
             self.assertEqual(res["a_appl"], 1.0)
 
+    def test_proposition1_phantom_divergence(self):
+        from src.verification.proposition1_precondition_intervention import run_precondition_intervention_suite
+        res = run_precondition_intervention_suite()
+        # Verify Control achieves PESR = 1.0, R_play = 0
+        self.assertEqual(res["Control (Ground Truth M*)"]["PESR"], 1.0)
+        self.assertEqual(res["Control (Ground Truth M*)"]["R_play"], "0")
+        
+        # Verify Omit (clear ?o1) in unstack achieves A_pred = 1.0 but collapses PESR = 0.0, R_play = INFINITY
+        omit_clear = res["Intervention: Omit (clear ?o1) in unstack"]
+        self.assertEqual(omit_clear["A_pred"], 1.0)
+        self.assertEqual(omit_clear["PESR"], 0.0)
+        self.assertEqual(omit_clear["R_play"], "INFINITY")
+        self.assertEqual(omit_clear["phantom_edges"], 1)
 
 if __name__ == "__main__":
     unittest.main()
+
