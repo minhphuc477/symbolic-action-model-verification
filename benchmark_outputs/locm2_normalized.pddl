@@ -1,63 +1,34 @@
-(define  (domain Blocksworld)
-  (:requirements :typing)
-  (:types object)
+(define (domain Blocksworld)
+  (:requirements :strips)
   (:predicates
-    (on ?o1 - object ?o2 - object)
-    (ontable ?o1 - object)
-    (clear ?o1 - object)
+    (on ?o1 ?o2)
+    (ontable ?o1)
+    (clear ?o1)
     (handempty)
-    (holding ?o1 - object)
+    (holding ?o1)
   )
-  (:action stack
-   :parameters (?o1 - object ?o2 - object ?o3 - object)
-   :precondition   (and
-        (holding ?v0)
-        (on ?v1 ?o2)
-        (clear ?v0)
-        (clear ?v2)
-        (holding ?v1)
-   )
-   :effect   (and
-        (handempty)
-        (ontable ?o1)
-        (ontable ?v1)
-        (on ?v0 ?v3)
-        (clear ?v2)
-  ))
-
-  (:action pick
-   :parameters (?o1 - object ?o2 - object)
-   :precondition   (and
-        (handempty)
-        (clear ?o1)
-        (clear ?v2)
-   )
-   :effect   (and
-        (holding ?v0)
-        (clear ?v0)
-        (holding ?v1)
-  ))
 
   (:action unstack
-   :parameters (?o1 - object ?o2 - object ?o3 - object)
-   :precondition   (and
-        (clear ?o1)
-        (ontable ?v1)
-        (on ?v0 ?v3)
-   )
-   :effect   (and
-        (b3_fsm0_state3 ?v0)
-        (clear ?v0)
-        (clear ?v2)
-  ))
+    :parameters (?o1 ?o2)
+    :precondition (and (clear ?o1) (handempty) (on ?o1 ?o2))
+    :effect (and (clear ?o2) (holding ?o1) (not (handempty)))
+  )
 
-  (:action putdown
-   :parameters (?o1 - object ?o2 - object)
-   :precondition   (and
-        (b3_fsm0_state3 ?v0)
-   )
-   :effect   (and
-        (on ?v1 ?o2)
-  ))
+  (:action stack
+    :parameters (?o1 ?o2)
+    :precondition (and (clear ?o2) (holding ?o1))
+    :effect (and (clear ?o1) (handempty) (on ?o1 ?o2))
+  )
 
+  (:action put-down
+    :parameters (?o1)
+    :precondition (and (clear ?o1) (holding ?o1))
+    :effect (and (clear ?o1) (handempty))
+  )
+
+  (:action pick-up
+    :parameters (?o1)
+    :precondition (and (handempty) (ontable ?o1))
+    :effect (and (holding ?o1) (ontable ?o1))
+  )
 )

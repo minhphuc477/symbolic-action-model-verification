@@ -6,8 +6,9 @@ End-to-End benchmark runner for Phase 2:
    - fama_cleaner.py
    - locm2_translator.py
    - fastlas_translator.py
-3. Compares all 3 normalized action models against Ground Truth PDDL.
-4. Reports real, non-mocked d_triangle, Precision, Recall, and A_pred.
+3. Validates all 3 PDDL models with official 'pddl' package.
+4. Compares all 3 normalized action models against Ground Truth PDDL.
+5. Reports real, non-mocked d_triangle, Precision, Recall, A_pred (accuracy), and F1.
 """
 
 import os
@@ -32,13 +33,13 @@ def run_phase2():
     fama_cmd = 'wsl bash -c "/mnt/f/Thesis/venv_linux/bin/python /mnt/f/Thesis/run_fama_test.py"'
     res_fama = subprocess.run(fama_cmd, shell=True, capture_output=True, text=True)
     fama_stdout = res_fama.stdout
-    # Extract learned PDDL block
     if "LEARNED PDDL DOMAIN MODEL:" in fama_stdout:
         fama_raw_pddl = fama_stdout.split("LEARNED PDDL DOMAIN MODEL:")[1].strip()
     else:
         fama_raw_pddl = fama_stdout.strip()
     fama_clean = clean_fama_pddl(fama_raw_pddl)
-    with open("benchmark_outputs/fama_normalized.pddl", "w", encoding="utf-8") as f:
+    fama_out_path = "benchmark_outputs/fama_normalized.pddl"
+    with open(fama_out_path, "w", encoding="utf-8") as f:
         f.write(fama_clean)
     print("FAMA Normalized PDDL saved.")
 
@@ -46,7 +47,8 @@ def run_phase2():
     locm_cmd = 'wsl bash -c "cd /mnt/f/Thesis/locm_repo && /mnt/f/Thesis/venv_linux/bin/python locm2.py"'
     subprocess.run(locm_cmd, shell=True, capture_output=True, text=True)
     locm_raw_path = "locm_repo/output/Blocksworld/Blocksworld.pddl"
-    locm_clean = translate_locm2_file(locm_raw_path, "benchmark_outputs/locm2_normalized.pddl")
+    locm_out_path = "benchmark_outputs/locm2_normalized.pddl"
+    locm_clean = translate_locm2_file(locm_raw_path, locm_out_path)
     print("LOCM2 Normalized PDDL saved.")
 
     print("\n=== Step 3: Running & Translating FastLAS ===")
@@ -54,14 +56,15 @@ def run_phase2():
     res_fastlas = subprocess.run(fastlas_cmd, shell=True, capture_output=True, text=True)
     fastlas_rules = res_fastlas.stdout.strip()
     fastlas_clean = translate_fastlas_rules_to_pddl(fastlas_rules)
-    with open("benchmark_outputs/fastlas_normalized.pddl", "w", encoding="utf-8") as f:
+    fastlas_out_path = "benchmark_outputs/fastlas_normalized.pddl"
+    with open(fastlas_out_path, "w", encoding="utf-8") as f:
         f.write(fastlas_clean)
     print("FastLAS Normalized PDDL saved.")
 
-    print("\n=== Step 4: Comparing with Ground Truth ===")
-    eval_fama = compare_action_models(gt_pddl, fama_clean)
-    eval_locm2 = compare_action_models(gt_pddl, locm_clean)
-    eval_fastlas = compare_action_models(gt_pddl, fastlas_clean)
+    print("\n=== Step 4: Comparing with Ground Truth & Validating PDDL ===")
+    eval_fama = compare_action_models(gt_pddl, fama_clean, fama_out_path)
+    eval_locm2 = compare_action_models(gt_pddl, locm_clean, locm_out_path)
+    eval_fastlas = compare_action_models(gt_pddl, fastlas_clean, fastlas_out_path)
 
     results = {
         "FAMA": eval_fama,
@@ -72,15 +75,17 @@ def run_phase2():
     with open("benchmark_outputs/phase2_evaluation_report.json", "w", encoding="utf-8") as f:
         json.dump(results, f, indent=2)
 
-    print("\n" + "="*70)
-    print("PHASE 2 EMPIRICAL BENCHMARK COMPARISON TABLE")
-    print("="*70)
-    print(f"{'Learner':<10} | {'Actions':<8} | {'d_triangle':<12} | {'Precision':<10} | {'Recall':<10} | {'A_pred':<10} | {'F1':<10}")
-    print("-" * 75)
+    print("\n" + "="*85)
+    print("PHASE 2 EMPIRICAL BENCHMARK COMPARISON TABLE (VERIFIED & VALIDATED)")
+    print("="*85)
+    header = f"{'Learner':<10} | {'Actions':<8} | {'PDDL Valid':<10} | {'d_triangle':<12} | {'Precision':<10} | {'Recall':<10} | {'A_pred':<10} | {'F1':<10}"
+    print(header)
+    print("-" * 85)
     for name, ev in results.items():
         act_str = f"{ev['num_learned_actions']}/{ev['num_gt_actions']}"
-        print(f"{name:<10} | {act_str:<8} | {ev['d_triangle']:<12} | {ev['precision']:<10.3f} | {ev['recall']:<10.3f} | {ev['a_pred']:<10.3f} | {ev['f1']:<10.3f}")
-    print("="*70)
+        val_str = "PASSED" if ev['pddl_valid'] else "FAILED"
+        print(f"{name:<10} | {act_str:<8} | {val_str:<10} | {ev['d_triangle']:<12} | {ev['precision']:<10.3f} | {ev['recall']:<10.3f} | {ev['a_pred']:<10.3f} | {ev['f1']:<10.3f}")
+    print("="*85)
 
 if __name__ == "__main__":
     run_phase2()

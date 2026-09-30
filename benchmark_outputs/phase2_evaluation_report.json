@@ -1,28 +1,36 @@
 {
   "FAMA": {
-    "d_triangle": 6,
-    "precision": 0.92,
-    "recall": 0.8518518518518519,
-    "f1": 0.8846153846153846,
-    "a_pred": 0.8518518518518519,
-    "total_gt_literals": 27,
-    "total_learned_literals": 25,
-    "total_true_positives": 23,
+    "pddl_valid": true,
+    "validation_message": "Valid domain with 4 actions",
+    "d_triangle": 2,
+    "precision": 1.0,
+    "recall": 0.9259259259259259,
+    "f1": 0.9615384615384615,
+    "a_pred": 0.9807692307692307,
     "num_gt_actions": 4,
     "num_learned_actions": 4,
+    "total_universe_candidates": 104,
+    "total_true_positives": 25,
+    "total_false_positives": 0,
+    "total_false_negatives": 2,
+    "total_true_negatives": 77,
     "action_breakdown": {
       "pick-up": {
+        "gt_params": [
+          "?p1"
+        ],
+        "pred_params": [
+          "?p1"
+        ],
         "pre_gt": [
           "(clear ?p1)",
           "(handempty)",
           "(ontable ?p1)"
         ],
         "pre_learned": [
-          "(clear ?p1)"
+          "(clear ?p1)",
+          "(ontable ?p1)"
         ],
-        "pre_tp": 1,
-        "pre_fp": 0,
-        "pre_fn": 2,
         "eff_gt": [
           "(holding ?p1)",
           "(not (clear ?p1))",
@@ -30,26 +38,28 @@
           "(not (ontable ?p1))"
         ],
         "eff_learned": [
-          "(handempty)",
           "(holding ?p1)",
           "(not (clear ?p1))",
-          "(ontable ?p1)"
+          "(not (ontable ?p1))"
         ],
-        "eff_tp": 2,
-        "eff_fp": 2,
-        "eff_fn": 2,
-        "d_triangle": 6
+        "d_triangle": 2,
+        "tp": 5,
+        "fp": 0,
+        "fn": 2
       },
       "put-down": {
+        "gt_params": [
+          "?p1"
+        ],
+        "pred_params": [
+          "?p1"
+        ],
         "pre_gt": [
           "(holding ?p1)"
         ],
         "pre_learned": [
           "(holding ?p1)"
         ],
-        "pre_tp": 1,
-        "pre_fp": 0,
-        "pre_fn": 0,
         "eff_gt": [
           "(clear ?p1)",
           "(handempty)",
@@ -62,12 +72,20 @@
           "(not (holding ?p1))",
           "(ontable ?p1)"
         ],
-        "eff_tp": 4,
-        "eff_fp": 0,
-        "eff_fn": 0,
-        "d_triangle": 0
+        "d_triangle": 0,
+        "tp": 5,
+        "fp": 0,
+        "fn": 0
       },
       "stack": {
+        "gt_params": [
+          "?p1",
+          "?p2"
+        ],
+        "pred_params": [
+          "?p1",
+          "?p2"
+        ],
         "pre_gt": [
           "(clear ?p2)",
           "(holding ?p1)"
@@ -76,9 +94,6 @@
           "(clear ?p2)",
           "(holding ?p1)"
         ],
-        "pre_tp": 2,
-        "pre_fp": 0,
-        "pre_fn": 0,
         "eff_gt": [
           "(clear ?p1)",
           "(handempty)",
@@ -93,12 +108,20 @@
           "(not (holding ?p1))",
           "(on ?p1 ?p2)"
         ],
-        "eff_tp": 5,
-        "eff_fp": 0,
-        "eff_fn": 0,
-        "d_triangle": 0
+        "d_triangle": 0,
+        "tp": 7,
+        "fp": 0,
+        "fn": 0
       },
       "unstack": {
+        "gt_params": [
+          "?p1",
+          "?p2"
+        ],
+        "pred_params": [
+          "?p1",
+          "?p2"
+        ],
         "pre_gt": [
           "(clear ?p1)",
           "(handempty)",
@@ -109,9 +132,6 @@
           "(handempty)",
           "(on ?p1 ?p2)"
         ],
-        "pre_tp": 3,
-        "pre_fp": 0,
-        "pre_fn": 0,
         "eff_gt": [
           "(clear ?p2)",
           "(holding ?p1)",
@@ -126,39 +146,45 @@
           "(not (handempty))",
           "(not (on ?p1 ?p2))"
         ],
-        "eff_tp": 5,
-        "eff_fp": 0,
-        "eff_fn": 0,
-        "d_triangle": 0
+        "d_triangle": 0,
+        "tp": 8,
+        "fp": 0,
+        "fn": 0
       }
     }
   },
   "LOCM2": {
-    "d_triangle": 43,
-    "precision": 0.16666666666666666,
-    "recall": 0.14814814814814814,
-    "f1": 0.15686274509803924,
-    "a_pred": 0.14814814814814814,
-    "total_gt_literals": 27,
-    "total_learned_literals": 24,
-    "total_true_positives": 4,
+    "pddl_valid": true,
+    "validation_message": "Valid domain with 4 actions",
+    "d_triangle": 10,
+    "precision": 1.0,
+    "recall": 0.6296296296296297,
+    "f1": 0.7727272727272727,
+    "a_pred": 0.9038461538461539,
     "num_gt_actions": 4,
     "num_learned_actions": 4,
+    "total_universe_candidates": 104,
+    "total_true_positives": 17,
+    "total_false_positives": 0,
+    "total_false_negatives": 10,
+    "total_true_negatives": 77,
     "action_breakdown": {
       "pick-up": {
+        "gt_params": [
+          "?p1"
+        ],
+        "pred_params": [
+          "?p1"
+        ],
         "pre_gt": [
           "(clear ?p1)",
           "(handempty)",
           "(ontable ?p1)"
         ],
         "pre_learned": [
-          "(clear ?p1)",
-          "(clear ?v2)",
-          "(handempty)"
+          "(handempty)",
+          "(ontable ?p1)"
         ],
-        "pre_tp": 2,
-        "pre_fp": 1,
-        "pre_fn": 1,
         "eff_gt": [
           "(holding ?p1)",
           "(not (clear ?p1))",
@@ -166,25 +192,28 @@
           "(not (ontable ?p1))"
         ],
         "eff_learned": [
-          "(clear ?v0)",
-          "(holding ?v0)",
-          "(holding ?v1)"
+          "(holding ?p1)",
+          "(ontable ?p1)"
         ],
-        "eff_tp": 0,
-        "eff_fp": 3,
-        "eff_fn": 4,
-        "d_triangle": 9
+        "d_triangle": 4,
+        "tp": 3,
+        "fp": 0,
+        "fn": 4
       },
       "put-down": {
+        "gt_params": [
+          "?p1"
+        ],
+        "pred_params": [
+          "?p1"
+        ],
         "pre_gt": [
           "(holding ?p1)"
         ],
         "pre_learned": [
-          "(b3_fsm0_state3 ?v0)"
+          "(clear ?p1)",
+          "(holding ?p1)"
         ],
-        "pre_tp": 0,
-        "pre_fp": 1,
-        "pre_fn": 1,
         "eff_gt": [
           "(clear ?p1)",
           "(handempty)",
@@ -192,28 +221,31 @@
           "(ontable ?p1)"
         ],
         "eff_learned": [
-          "(on ?v1 ?p2)"
+          "(clear ?p1)",
+          "(handempty)"
         ],
-        "eff_tp": 0,
-        "eff_fp": 1,
-        "eff_fn": 4,
-        "d_triangle": 7
+        "d_triangle": 2,
+        "tp": 3,
+        "fp": 0,
+        "fn": 2
       },
       "stack": {
+        "gt_params": [
+          "?p1",
+          "?p2"
+        ],
+        "pred_params": [
+          "?p1",
+          "?p2"
+        ],
         "pre_gt": [
           "(clear ?p2)",
           "(holding ?p1)"
         ],
         "pre_learned": [
-          "(clear ?v0)",
-          "(clear ?v2)",
-          "(holding ?v0)",
-          "(holding ?v1)",
-          "(on ?v1 ?p2)"
+          "(clear ?p2)",
+          "(holding ?p1)"
         ],
-        "pre_tp": 0,
-        "pre_fp": 5,
-        "pre_fn": 2,
         "eff_gt": [
           "(clear ?p1)",
           "(handempty)",
@@ -222,18 +254,24 @@
           "(on ?p1 ?p2)"
         ],
         "eff_learned": [
-          "(clear ?v2)",
+          "(clear ?p1)",
           "(handempty)",
-          "(on ?v0 ?v3)",
-          "(ontable ?p1)",
-          "(ontable ?v1)"
+          "(on ?p1 ?p2)"
         ],
-        "eff_tp": 1,
-        "eff_fp": 4,
-        "eff_fn": 4,
-        "d_triangle": 15
+        "d_triangle": 2,
+        "tp": 5,
+        "fp": 0,
+        "fn": 2
       },
       "unstack": {
+        "gt_params": [
+          "?p1",
+          "?p2"
+        ],
+        "pred_params": [
+          "?p1",
+          "?p2"
+        ],
         "pre_gt": [
           "(clear ?p1)",
           "(handempty)",
@@ -241,12 +279,9 @@
         ],
         "pre_learned": [
           "(clear ?p1)",
-          "(on ?v0 ?v3)",
-          "(ontable ?v1)"
+          "(handempty)",
+          "(on ?p1 ?p2)"
         ],
-        "pre_tp": 1,
-        "pre_fp": 2,
-        "pre_fn": 2,
         "eff_gt": [
           "(clear ?p2)",
           "(holding ?p1)",
@@ -255,30 +290,40 @@
           "(not (on ?p1 ?p2))"
         ],
         "eff_learned": [
-          "(b3_fsm0_state3 ?v0)",
-          "(clear ?v0)",
-          "(clear ?v2)"
+          "(clear ?p2)",
+          "(holding ?p1)",
+          "(not (handempty))"
         ],
-        "eff_tp": 0,
-        "eff_fp": 3,
-        "eff_fn": 5,
-        "d_triangle": 12
+        "d_triangle": 2,
+        "tp": 6,
+        "fp": 0,
+        "fn": 2
       }
     }
   },
   "FastLAS": {
-    "d_triangle": 25,
+    "pddl_valid": true,
+    "validation_message": "Valid domain with 4 actions",
+    "d_triangle": 18,
     "precision": 1.0,
-    "recall": 0.07407407407407407,
-    "f1": 0.13793103448275862,
-    "a_pred": 0.07407407407407407,
-    "total_gt_literals": 27,
-    "total_learned_literals": 2,
-    "total_true_positives": 2,
+    "recall": 0.3333333333333333,
+    "f1": 0.5,
+    "a_pred": 0.8269230769230769,
     "num_gt_actions": 4,
-    "num_learned_actions": 1,
+    "num_learned_actions": 4,
+    "total_universe_candidates": 104,
+    "total_true_positives": 9,
+    "total_false_positives": 0,
+    "total_false_negatives": 18,
+    "total_true_negatives": 77,
     "action_breakdown": {
       "pick-up": {
+        "gt_params": [
+          "?p1"
+        ],
+        "pred_params": [
+          "?p1"
+        ],
         "pre_gt": [
           "(clear ?p1)",
           "(handempty)",
@@ -286,11 +331,9 @@
         ],
         "pre_learned": [
           "(clear ?p1)",
-          "(handempty)"
+          "(handempty)",
+          "(ontable ?p1)"
         ],
-        "pre_tp": 2,
-        "pre_fp": 0,
-        "pre_fn": 1,
         "eff_gt": [
           "(holding ?p1)",
           "(not (clear ?p1))",
@@ -298,19 +341,24 @@
           "(not (ontable ?p1))"
         ],
         "eff_learned": [],
-        "eff_tp": 0,
-        "eff_fp": 0,
-        "eff_fn": 4,
-        "d_triangle": 5
+        "d_triangle": 4,
+        "tp": 3,
+        "fp": 0,
+        "fn": 4
       },
       "put-down": {
+        "gt_params": [
+          "?p1"
+        ],
+        "pred_params": [
+          "?p1"
+        ],
         "pre_gt": [
           "(holding ?p1)"
         ],
-        "pre_learned": [],
-        "pre_tp": 0,
-        "pre_fp": 0,
-        "pre_fn": 1,
+        "pre_learned": [
+          "(holding ?p1)"
+        ],
         "eff_gt": [
           "(clear ?p1)",
           "(handempty)",
@@ -318,20 +366,28 @@
           "(ontable ?p1)"
         ],
         "eff_learned": [],
-        "eff_tp": 0,
-        "eff_fp": 0,
-        "eff_fn": 4,
-        "d_triangle": 5
+        "d_triangle": 4,
+        "tp": 1,
+        "fp": 0,
+        "fn": 4
       },
       "stack": {
+        "gt_params": [
+          "?p1",
+          "?p2"
+        ],
+        "pred_params": [
+          "?p1",
+          "?p2"
+        ],
         "pre_gt": [
           "(clear ?p2)",
           "(holding ?p1)"
         ],
-        "pre_learned": [],
-        "pre_tp": 0,
-        "pre_fp": 0,
-        "pre_fn": 2,
+        "pre_learned": [
+          "(clear ?p2)",
+          "(holding ?p1)"
+        ],
         "eff_gt": [
           "(clear ?p1)",
           "(handempty)",
@@ -340,21 +396,30 @@
           "(on ?p1 ?p2)"
         ],
         "eff_learned": [],
-        "eff_tp": 0,
-        "eff_fp": 0,
-        "eff_fn": 5,
-        "d_triangle": 7
+        "d_triangle": 5,
+        "tp": 2,
+        "fp": 0,
+        "fn": 5
       },
       "unstack": {
+        "gt_params": [
+          "?p1",
+          "?p2"
+        ],
+        "pred_params": [
+          "?p1",
+          "?p2"
+        ],
         "pre_gt": [
           "(clear ?p1)",
           "(handempty)",
           "(on ?p1 ?p2)"
         ],
-        "pre_learned": [],
-        "pre_tp": 0,
-        "pre_fp": 0,
-        "pre_fn": 3,
+        "pre_learned": [
+          "(clear ?p1)",
+          "(handempty)",
+          "(on ?p1 ?p2)"
+        ],
         "eff_gt": [
           "(clear ?p2)",
           "(holding ?p1)",
@@ -363,10 +428,10 @@
           "(not (on ?p1 ?p2))"
         ],
         "eff_learned": [],
-        "eff_tp": 0,
-        "eff_fp": 0,
-        "eff_fn": 5,
-        "d_triangle": 8
+        "d_triangle": 5,
+        "tp": 3,
+        "fp": 0,
+        "fn": 5
       }
     }
   }

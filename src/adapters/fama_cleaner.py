@@ -1,7 +1,9 @@
 """
 fama_cleaner.py
-Cleans artifacts from FAMA / Madagascar SAT planner PDDL output.
-Specifically strips trailing '0' artifact literals in effect blocks.
+Cleans artifacts from FAMA / Madagascar SAT planner PDDL output:
+1. Strips trailing '0' artifact literals in effect blocks.
+2. Strips redundant '(:types object)' and '- object' parameter annotations to conform
+   strictly to standard STRIPS PDDL and pass strict PDDL validators.
 """
 
 import re
@@ -9,12 +11,16 @@ import sys
 
 def clean_fama_pddl(pddl_text: str) -> str:
     """
-    Removes artifact '0' tokens from action effect blocks in FAMA learned PDDL.
+    Removes artifact '0' tokens from action effect blocks and normalizes types in FAMA learned PDDL.
     """
     # Remove lines containing only '0' or whitespace with '0'
     cleaned = re.sub(r'^\s*0\s*$', '', pddl_text, flags=re.MULTILINE)
     # Remove standalone '0' inside parenthesized expressions: e.g. '(and ... 0)' -> '(and ...)'
     cleaned = re.sub(r'\s+0\s*(?=\))', '', cleaned)
+    # Remove (:types object) keyword conflict for PDDL validators
+    cleaned = re.sub(r'\(:types\s+object\s*\)', '', cleaned, flags=re.IGNORECASE)
+    # Remove '- object' typing from parameters
+    cleaned = re.sub(r'\s+-\s+object\b', '', cleaned, flags=re.IGNORECASE)
     # Remove multiple consecutive blank lines
     cleaned = re.sub(r'\n\s*\n\s*\n+', '\n\n', cleaned)
     return cleaned.strip() + "\n"
