@@ -1,0 +1,132 @@
+{
+  "scale_verification": {
+    "blocksworld": [
+      {
+        "n_blocks": 3,
+        "gt_nodes": 14,
+        "gt_hp": 3.907,
+        "intv_nodes": 47,
+        "intv_hp": 5.585,
+        "delta_hp": 1.678,
+        "pesr": 0.0,
+        "execution_failure_reason": "Precondition violation at step 1 (unstack b a): missing ['(clear b)']"
+      },
+      {
+        "n_blocks": 4,
+        "gt_nodes": 48,
+        "gt_hp": 5.615,
+        "intv_nodes": 685,
+        "intv_hp": 9.422,
+        "delta_hp": 3.807,
+        "pesr": 0.0,
+        "execution_failure_reason": "Precondition violation at step 1 (unstack c b): missing ['(clear c)']"
+      },
+      {
+        "n_blocks": 5,
+        "gt_nodes": 185,
+        "gt_hp": 7.539,
+        "intv_nodes": 11971,
+        "intv_hp": 13.547,
+        "delta_hp": 6.008,
+        "pesr": 0.0,
+        "execution_failure_reason": "Precondition violation at step 1 (unstack d c): missing ['(clear d)']"
+      }
+    ],
+    "hanoi": [
+      {
+        "n_disks": 2,
+        "gt_nodes": 6,
+        "gt_hp": 2.807,
+        "intv_nodes": 5,
+        "intv_hp": 2.585,
+        "delta_hp": -0.222,
+        "pesr": 0.0,
+        "execution_failure_reason": "Precondition violation at step 1 (move d2 p1 p3): missing ['(clear d2)']"
+      },
+      {
+        "n_disks": 3,
+        "gt_nodes": 26,
+        "gt_hp": 4.755,
+        "intv_nodes": 7,
+        "intv_hp": 3.0,
+        "delta_hp": -1.755,
+        "pesr": 0.0,
+        "execution_failure_reason": "Precondition violation at step 1 (move d3 p1 p3): missing ['(clear d3)']"
+      }
+    ]
+  },
+  "binding_verification": {
+    "MIC_I1": {
+      "domain": "Miconic",
+      "action": "board",
+      "precondition": "(lift-at ?o1)",
+      "task_setup": "Non-colocated passenger (lift at f1, passenger origin f2)",
+      "pesr": 0.0,
+      "r_play": "INFINITY",
+      "failure_reason": "Precondition violation at step 1 (board f2 p1): missing ['(lift-at f2)']"
+    },
+    "DLG_I3": {
+      "domain": "Driverlog",
+      "action": "load-truck",
+      "precondition": "(at ?o1 ?o3)",
+      "task_setup": "Remote package (truck at s0, package at s1)",
+      "pesr": 0.0,
+      "r_play": "INFINITY",
+      "failure_reason": "Precondition violation at step 1 (load-truck pkg1 driver1 s0): missing ['(at pkg1 s0)']"
+    },
+    "BW_I2": {
+      "domain": "Blocksworld",
+      "action": "pick-up",
+      "precondition": "(ontable ?o1)",
+      "task_setup": "Stacked block pick-up (b stacked on a, picking up without unstacking)",
+      "pesr": 0.0,
+      "r_play": "INFINITY",
+      "failure_reason": "Precondition violation at step 1 (pick-up b): missing ['(ontable b)']"
+    },
+    "MIC_I3": {
+      "domain": "Miconic",
+      "action": "up",
+      "precondition": "(above ?o1 ?o2)",
+      "task_setup": "Downwards journey using unconstrained 'up' action",
+      "pesr": 0.0,
+      "r_play": "INFINITY",
+      "failure_reason": "Precondition violation at step 2 (up f3 f1): missing ['(above f3 f1)']"
+    },
+    "SAT_I1": {
+      "domain": "Satellite",
+      "action": "switch-on",
+      "precondition": "(power-avail ?o2)",
+      "task_setup": "Dual instrument power draw exceeding satellite capacity",
+      "pesr": 0.0,
+      "r_play": "INFINITY",
+      "failure_reason": "Precondition violation at step 2 (switch-on cam2 sat1): missing ['(power-avail sat1)']"
+    },
+    "HAN_I1": {
+      "domain": "Hanoi",
+      "action": "move",
+      "precondition": "(smaller ?o3 ?o1)",
+      "task_setup": "Direct placement of larger disk on smaller disk",
+      "pesr": 0.0,
+      "r_play": "INFINITY",
+      "failure_reason": "Precondition violation at step 2 (move d2 p1 d1): missing ['(smaller d1 d2)']"
+    },
+    "ROV_I2": {
+      "domain": "Rovers",
+      "action": "sample-soil",
+      "precondition": "(empty ?o2)",
+      "task_setup": "Sample into already full storage container",
+      "pesr": 0.0,
+      "r_play": "INFINITY",
+      "failure_reason": "Precondition violation at step 1 (sample-soil rover1 s1 w1): missing ['(empty s1)']"
+    },
+    "ROV_I3": {
+      "domain": "Rovers",
+      "action": "communicate-soil-data",
+      "precondition": "(available ?o1)",
+      "task_setup": "Data transmission while transceiver hardware is locked",
+      "pesr": 0.0,
+      "r_play": "INFINITY",
+      "failure_reason": "Precondition violation at step 1 (communicate-soil-data rover1 l1 w1 w1 w1): missing ['(available rover1)']"
+    }
+  }
+}

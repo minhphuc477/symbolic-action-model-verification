@@ -62,6 +62,8 @@ class GeneralForwardPlanner:
         Executes plan step-by-step strictly against Ground Truth domain M*.
         Returns (success, steps_completed, failure_reason).
         """
+        if plan is None:
+            return False, 0, "No plan provided (planning failed)."
         cur_state = set(init_state)
         for i, (act_name, args) in enumerate(plan):
             if act_name not in gt_actions:

@@ -141,5 +141,32 @@ class TestBurdenMetrics(unittest.TestCase):
         self.assertGreater(summary["phantom_detours_count"], 0)
         self.assertGreaterEqual(summary["execution_failures_count"], 12)
 
+    def test_scale_verification_exponential_divergence(self):
+        import json
+        out_file = "benchmark_outputs/scale_and_binding_results.json"
+        self.assertTrue(os.path.exists(out_file), "Scale and binding results file must exist")
+        with open(out_file, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        bw_data = data["scale_verification"]["blocksworld"]
+        # Monotonically increasing Delta H_P for Blocksworld detours
+        delta_hps = [r["delta_hp"] for r in bw_data]
+        self.assertTrue(delta_hps[0] < delta_hps[1] < delta_hps[2], f"Delta H_P must grow with scale: {delta_hps}")
+        # Monotonically decreasing Delta H_P for Hanoi shortcuts
+        han_data = data["scale_verification"]["hanoi"]
+        han_delta = [r["delta_hp"] for r in han_data]
+        self.assertTrue(han_delta[0] > han_delta[1], f"Hanoi shortcut must intensify with scale: {han_delta}")
+
+    def test_binding_preconditions_all_fail(self):
+        import json
+        out_file = "benchmark_outputs/scale_and_binding_results.json"
+        self.assertTrue(os.path.exists(out_file), "Scale and binding results file must exist")
+        with open(out_file, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        binding = data["binding_verification"]
+        self.assertEqual(len(binding), 8)
+        for int_id, rec in binding.items():
+            self.assertEqual(rec["pesr"], 0.0, f"Intervention {int_id} must fail on binding task")
+            self.assertEqual(rec["r_play"], "INFINITY")
+
 if __name__ == "__main__":
     unittest.main()
