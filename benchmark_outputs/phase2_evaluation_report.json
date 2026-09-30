@@ -1,0 +1,373 @@
+{
+  "FAMA": {
+    "d_triangle": 6,
+    "precision": 0.92,
+    "recall": 0.8518518518518519,
+    "f1": 0.8846153846153846,
+    "a_pred": 0.8518518518518519,
+    "total_gt_literals": 27,
+    "total_learned_literals": 25,
+    "total_true_positives": 23,
+    "num_gt_actions": 4,
+    "num_learned_actions": 4,
+    "action_breakdown": {
+      "pick-up": {
+        "pre_gt": [
+          "(clear ?p1)",
+          "(handempty)",
+          "(ontable ?p1)"
+        ],
+        "pre_learned": [
+          "(clear ?p1)"
+        ],
+        "pre_tp": 1,
+        "pre_fp": 0,
+        "pre_fn": 2,
+        "eff_gt": [
+          "(holding ?p1)",
+          "(not (clear ?p1))",
+          "(not (handempty))",
+          "(not (ontable ?p1))"
+        ],
+        "eff_learned": [
+          "(handempty)",
+          "(holding ?p1)",
+          "(not (clear ?p1))",
+          "(ontable ?p1)"
+        ],
+        "eff_tp": 2,
+        "eff_fp": 2,
+        "eff_fn": 2,
+        "d_triangle": 6
+      },
+      "put-down": {
+        "pre_gt": [
+          "(holding ?p1)"
+        ],
+        "pre_learned": [
+          "(holding ?p1)"
+        ],
+        "pre_tp": 1,
+        "pre_fp": 0,
+        "pre_fn": 0,
+        "eff_gt": [
+          "(clear ?p1)",
+          "(handempty)",
+          "(not (holding ?p1))",
+          "(ontable ?p1)"
+        ],
+        "eff_learned": [
+          "(clear ?p1)",
+          "(handempty)",
+          "(not (holding ?p1))",
+          "(ontable ?p1)"
+        ],
+        "eff_tp": 4,
+        "eff_fp": 0,
+        "eff_fn": 0,
+        "d_triangle": 0
+      },
+      "stack": {
+        "pre_gt": [
+          "(clear ?p2)",
+          "(holding ?p1)"
+        ],
+        "pre_learned": [
+          "(clear ?p2)",
+          "(holding ?p1)"
+        ],
+        "pre_tp": 2,
+        "pre_fp": 0,
+        "pre_fn": 0,
+        "eff_gt": [
+          "(clear ?p1)",
+          "(handempty)",
+          "(not (clear ?p2))",
+          "(not (holding ?p1))",
+          "(on ?p1 ?p2)"
+        ],
+        "eff_learned": [
+          "(clear ?p1)",
+          "(handempty)",
+          "(not (clear ?p2))",
+          "(not (holding ?p1))",
+          "(on ?p1 ?p2)"
+        ],
+        "eff_tp": 5,
+        "eff_fp": 0,
+        "eff_fn": 0,
+        "d_triangle": 0
+      },
+      "unstack": {
+        "pre_gt": [
+          "(clear ?p1)",
+          "(handempty)",
+          "(on ?p1 ?p2)"
+        ],
+        "pre_learned": [
+          "(clear ?p1)",
+          "(handempty)",
+          "(on ?p1 ?p2)"
+        ],
+        "pre_tp": 3,
+        "pre_fp": 0,
+        "pre_fn": 0,
+        "eff_gt": [
+          "(clear ?p2)",
+          "(holding ?p1)",
+          "(not (clear ?p1))",
+          "(not (handempty))",
+          "(not (on ?p1 ?p2))"
+        ],
+        "eff_learned": [
+          "(clear ?p2)",
+          "(holding ?p1)",
+          "(not (clear ?p1))",
+          "(not (handempty))",
+          "(not (on ?p1 ?p2))"
+        ],
+        "eff_tp": 5,
+        "eff_fp": 0,
+        "eff_fn": 0,
+        "d_triangle": 0
+      }
+    }
+  },
+  "LOCM2": {
+    "d_triangle": 43,
+    "precision": 0.16666666666666666,
+    "recall": 0.14814814814814814,
+    "f1": 0.15686274509803924,
+    "a_pred": 0.14814814814814814,
+    "total_gt_literals": 27,
+    "total_learned_literals": 24,
+    "total_true_positives": 4,
+    "num_gt_actions": 4,
+    "num_learned_actions": 4,
+    "action_breakdown": {
+      "pick-up": {
+        "pre_gt": [
+          "(clear ?p1)",
+          "(handempty)",
+          "(ontable ?p1)"
+        ],
+        "pre_learned": [
+          "(clear ?p1)",
+          "(clear ?v2)",
+          "(handempty)"
+        ],
+        "pre_tp": 2,
+        "pre_fp": 1,
+        "pre_fn": 1,
+        "eff_gt": [
+          "(holding ?p1)",
+          "(not (clear ?p1))",
+          "(not (handempty))",
+          "(not (ontable ?p1))"
+        ],
+        "eff_learned": [
+          "(clear ?v0)",
+          "(holding ?v0)",
+          "(holding ?v1)"
+        ],
+        "eff_tp": 0,
+        "eff_fp": 3,
+        "eff_fn": 4,
+        "d_triangle": 9
+      },
+      "put-down": {
+        "pre_gt": [
+          "(holding ?p1)"
+        ],
+        "pre_learned": [
+          "(b3_fsm0_state3 ?v0)"
+        ],
+        "pre_tp": 0,
+        "pre_fp": 1,
+        "pre_fn": 1,
+        "eff_gt": [
+          "(clear ?p1)",
+          "(handempty)",
+          "(not (holding ?p1))",
+          "(ontable ?p1)"
+        ],
+        "eff_learned": [
+          "(on ?v1 ?p2)"
+        ],
+        "eff_tp": 0,
+        "eff_fp": 1,
+        "eff_fn": 4,
+        "d_triangle": 7
+      },
+      "stack": {
+        "pre_gt": [
+          "(clear ?p2)",
+          "(holding ?p1)"
+        ],
+        "pre_learned": [
+          "(clear ?v0)",
+          "(clear ?v2)",
+          "(holding ?v0)",
+          "(holding ?v1)",
+          "(on ?v1 ?p2)"
+        ],
+        "pre_tp": 0,
+        "pre_fp": 5,
+        "pre_fn": 2,
+        "eff_gt": [
+          "(clear ?p1)",
+          "(handempty)",
+          "(not (clear ?p2))",
+          "(not (holding ?p1))",
+          "(on ?p1 ?p2)"
+        ],
+        "eff_learned": [
+          "(clear ?v2)",
+          "(handempty)",
+          "(on ?v0 ?v3)",
+          "(ontable ?p1)",
+          "(ontable ?v1)"
+        ],
+        "eff_tp": 1,
+        "eff_fp": 4,
+        "eff_fn": 4,
+        "d_triangle": 15
+      },
+      "unstack": {
+        "pre_gt": [
+          "(clear ?p1)",
+          "(handempty)",
+          "(on ?p1 ?p2)"
+        ],
+        "pre_learned": [
+          "(clear ?p1)",
+          "(on ?v0 ?v3)",
+          "(ontable ?v1)"
+        ],
+        "pre_tp": 1,
+        "pre_fp": 2,
+        "pre_fn": 2,
+        "eff_gt": [
+          "(clear ?p2)",
+          "(holding ?p1)",
+          "(not (clear ?p1))",
+          "(not (handempty))",
+          "(not (on ?p1 ?p2))"
+        ],
+        "eff_learned": [
+          "(b3_fsm0_state3 ?v0)",
+          "(clear ?v0)",
+          "(clear ?v2)"
+        ],
+        "eff_tp": 0,
+        "eff_fp": 3,
+        "eff_fn": 5,
+        "d_triangle": 12
+      }
+    }
+  },
+  "FastLAS": {
+    "d_triangle": 25,
+    "precision": 1.0,
+    "recall": 0.07407407407407407,
+    "f1": 0.13793103448275862,
+    "a_pred": 0.07407407407407407,
+    "total_gt_literals": 27,
+    "total_learned_literals": 2,
+    "total_true_positives": 2,
+    "num_gt_actions": 4,
+    "num_learned_actions": 1,
+    "action_breakdown": {
+      "pick-up": {
+        "pre_gt": [
+          "(clear ?p1)",
+          "(handempty)",
+          "(ontable ?p1)"
+        ],
+        "pre_learned": [
+          "(clear ?p1)",
+          "(handempty)"
+        ],
+        "pre_tp": 2,
+        "pre_fp": 0,
+        "pre_fn": 1,
+        "eff_gt": [
+          "(holding ?p1)",
+          "(not (clear ?p1))",
+          "(not (handempty))",
+          "(not (ontable ?p1))"
+        ],
+        "eff_learned": [],
+        "eff_tp": 0,
+        "eff_fp": 0,
+        "eff_fn": 4,
+        "d_triangle": 5
+      },
+      "put-down": {
+        "pre_gt": [
+          "(holding ?p1)"
+        ],
+        "pre_learned": [],
+        "pre_tp": 0,
+        "pre_fp": 0,
+        "pre_fn": 1,
+        "eff_gt": [
+          "(clear ?p1)",
+          "(handempty)",
+          "(not (holding ?p1))",
+          "(ontable ?p1)"
+        ],
+        "eff_learned": [],
+        "eff_tp": 0,
+        "eff_fp": 0,
+        "eff_fn": 4,
+        "d_triangle": 5
+      },
+      "stack": {
+        "pre_gt": [
+          "(clear ?p2)",
+          "(holding ?p1)"
+        ],
+        "pre_learned": [],
+        "pre_tp": 0,
+        "pre_fp": 0,
+        "pre_fn": 2,
+        "eff_gt": [
+          "(clear ?p1)",
+          "(handempty)",
+          "(not (clear ?p2))",
+          "(not (holding ?p1))",
+          "(on ?p1 ?p2)"
+        ],
+        "eff_learned": [],
+        "eff_tp": 0,
+        "eff_fp": 0,
+        "eff_fn": 5,
+        "d_triangle": 7
+      },
+      "unstack": {
+        "pre_gt": [
+          "(clear ?p1)",
+          "(handempty)",
+          "(on ?p1 ?p2)"
+        ],
+        "pre_learned": [],
+        "pre_tp": 0,
+        "pre_fp": 0,
+        "pre_fn": 3,
+        "eff_gt": [
+          "(clear ?p2)",
+          "(holding ?p1)",
+          "(not (clear ?p1))",
+          "(not (handempty))",
+          "(not (on ?p1 ?p2))"
+        ],
+        "eff_learned": [],
+        "eff_tp": 0,
+        "eff_fp": 0,
+        "eff_fn": 5,
+        "d_triangle": 8
+      }
+    }
+  }
+}
