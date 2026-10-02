@@ -1,5 +1,6 @@
 import sys
-from src.adapters.fama_cleaner import clean_fama_file, clean_fama_pddl
+
+from src.adapters.fama_cleaner import clean_fama_file
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:

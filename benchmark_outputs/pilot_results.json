@@ -1,24 +1,24 @@
 {
   "learner_benchmark_compute": {
     "LOCM2": {
-      "runtime_seconds": 2.855,
-      "exit_code": 0,
-      "output_summary": "{'e(stack.2)|s(unstack.2)': 0, 'e(unstack.2)|e(putdown.1)|e(stack.1)|s(stack.2)|s(unstack.1)|s(pick.1)': 1, 'e(pick.1)|e(unstack.1)|s(stack.1)|s(putdown.1)': 2}"
+      "runtime_seconds": 12.611,
+      "exit_code": 4294967295,
+      "output_summary": "\u0000"
     },
     "FastLAS": {
-      "runtime_seconds": 0.182,
+      "runtime_seconds": 0.474,
       "exit_code": 127,
       "output_summary": "No stdout"
     },
     "FAMA": {
-      "runtime_seconds": 0.568,
+      "runtime_seconds": 0.605,
       "exit_code": 0,
       "output_summary": "FAMA SAT compilation complete"
     },
     "summary": {
-      "avg_seconds_per_run": 1.2,
-      "total_864_runs_hours": 0.29,
-      "parallel_8cores_hours": 0.04
+      "avg_seconds_per_run": 4.56,
+      "total_864_runs_hours": 1.1,
+      "parallel_8cores_hours": 0.14
     }
   },
   "bottleneck_verification_8domains": {

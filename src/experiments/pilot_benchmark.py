@@ -10,20 +10,21 @@ Pilot Benchmark for Phase 4:
 Strictly adheres to RESEARCH_RULES.md: zero fake metrics, fully deterministic.
 """
 
+import json
 import os
+import subprocess
 import sys
 import time
-import subprocess
-import json
-from typing import Dict, Any, List, Set, Tuple
+from typing import Any
 
 # Ensure repository root is on sys.path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
-from src.metrics.transition_accuracy import parse_pddl_model, ActionSchema
+from src.metrics.transition_accuracy import ActionSchema, parse_pddl_model
 from src.verification.general_pddl_planner import GeneralForwardPlanner
 
-def benchmark_learners() -> Dict[str, Any]:
+
+def benchmark_learners() -> dict[str, Any]:
     print("==================================================================")
     print("1. PILOT COMPUTE BENCHMARK: MEASURING REAL LEARNER RUNTIMES IN WSL")
     print("==================================================================")
@@ -33,7 +34,7 @@ def benchmark_learners() -> Dict[str, Any]:
     print("Running LOCM2...")
     t0 = time.time()
     locm_cmd = ["wsl", "bash", "-c", "cd /mnt/f/Thesis/locm_repo && /mnt/f/Thesis/venv_linux/bin/python locm2.py"]
-    res_locm = subprocess.run(locm_cmd, capture_output=True, text=True)
+    res_locm = subprocess.run(locm_cmd, capture_output=True, text=True, check=False)
     t_locm = time.time() - t0
     learner_timings["LOCM2"] = {
         "runtime_seconds": round(t_locm, 3),
@@ -46,7 +47,7 @@ def benchmark_learners() -> Dict[str, Any]:
     print("\nRunning FastLAS...")
     t0 = time.time()
     fastlas_cmd = ["wsl", "bash", "-c", "/mnt/f/Thesis/FastLAS_repo/FastLAS2/FastLAS /mnt/f/Thesis/test_fastlas_task.las"]
-    res_fastlas = subprocess.run(fastlas_cmd, capture_output=True, text=True)
+    res_fastlas = subprocess.run(fastlas_cmd, capture_output=True, text=True, check=False)
     t_fastlas = time.time() - t0
     learner_timings["FastLAS"] = {
         "runtime_seconds": round(t_fastlas, 3),
@@ -59,7 +60,7 @@ def benchmark_learners() -> Dict[str, Any]:
     print("\nRunning FAMA (Madagascar SAT Planner)...")
     t0 = time.time()
     fama_cmd = ["wsl", "bash", "-c", "/mnt/f/Thesis/venv_linux/bin/python /mnt/f/Thesis/run_fama_test.py"]
-    res_fama = subprocess.run(fama_cmd, capture_output=True, text=True)
+    res_fama = subprocess.run(fama_cmd, capture_output=True, text=True, check=False)
     t_fama = time.time() - t0
     learner_timings["FAMA"] = {
         "runtime_seconds": round(t_fama, 3),
@@ -79,7 +80,7 @@ def benchmark_learners() -> Dict[str, Any]:
 
     return learner_timings
 
-def get_8domain_configs() -> Dict[str, Dict[str, Any]]:
+def get_8domain_configs() -> dict[str, dict[str, Any]]:
     """Defines ground truth paths, problem setups, and target bottleneck interventions for all 8 IPC domains."""
     base = "daineto-meta-planning/src/meta_planning/dataset"
 
@@ -191,7 +192,7 @@ def get_8domain_configs() -> Dict[str, Dict[str, Any]]:
         }
     }
 
-def pilot_verify_bottlenecks() -> Dict[str, Any]:
+def pilot_verify_bottlenecks() -> dict[str, Any]:
     print("\n==================================================================")
     print("2. PILOT BOTTLENECK PRECONDITION VERIFICATION ACROSS 8 IPC DOMAINS")
     print("==================================================================")
@@ -210,8 +211,8 @@ def pilot_verify_bottlenecks() -> Dict[str, Any]:
 
         # 1. Verify Ground Truth M*
         gt_planner = GeneralForwardPlanner(gt_models, objects)
-        gt_plan, gt_nodes = gt_planner.solve(init, goal)
-        gt_success, gt_steps, _ = gt_planner.execute_plan(init, gt_plan, gt_models, goal)
+        gt_plan, _gt_nodes = gt_planner.solve(init, goal)
+        gt_success, _gt_steps, _ = gt_planner.execute_plan(init, gt_plan, gt_models, goal)
         assert gt_success, f"Domain {domain_name} Ground Truth failed to solve or execute!"
 
         # 2. Apply Candidate Bottleneck Intervention
@@ -229,7 +230,7 @@ def pilot_verify_bottlenecks() -> Dict[str, Any]:
 
         # 3. Solve on Intervened Model M_hat
         lrn_planner = GeneralForwardPlanner(intervened_models, objects)
-        lrn_plan, lrn_nodes = lrn_planner.solve(init, goal)
+        lrn_plan, _lrn_nodes = lrn_planner.solve(init, goal)
 
         # 4. Check for Phantom Edges and Real Execution Failure on M*
         phantom_count = 0
@@ -244,13 +245,13 @@ def pilot_verify_bottlenecks() -> Dict[str, Any]:
                 lrn_pmap = {p: a for p, a in zip(lrn_schema.params, args)}
                 sim_state = lrn_schema.apply(sim_state, lrn_pmap)
 
-            exec_success, steps, fail_reason = lrn_planner.execute_plan(
+            exec_success, _steps, fail_reason = lrn_planner.execute_plan(
                 init, lrn_plan, gt_models, goal
             )
             pesr = 1.0 if exec_success else 0.0
             r_play = str(max(0, len(lrn_plan) - len(gt_plan))) if exec_success else "INFINITY"
         else:
-            exec_success, steps, fail_reason = False, 0, "No plan found"
+            exec_success, _steps, fail_reason = False, 0, "No plan found"
             pesr = 0.0
             r_play = "INFINITY"
 

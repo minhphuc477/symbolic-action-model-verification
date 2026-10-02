@@ -40,14 +40,12 @@ Usage (API):
 from __future__ import annotations
 
 import json
-import os
 import random
 import subprocess
 import sys
 import time
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
 
 # ---------------------------------------------------------------------------
 # Configuration
@@ -69,7 +67,7 @@ class CEGOMRConfig:
     fd_search_config: str = "astar(lmcut())"
     fd_plan_file: str = "plan.soln"
     # Execution prefix: empty on native Linux/WSL, delegates via wsl on Windows
-    wsl_prefix: List[str] = field(default_factory=lambda: [] if sys.platform != "win32" else ["wsl", "-d", "Ubuntu", "--"])
+    wsl_prefix: list[str] = field(default_factory=lambda: [] if sys.platform != "win32" else ["wsl", "-d", "Ubuntu", "--"])
     # Output directory for plans and repair logs
     out_dir: str = "repair_logs/"
     # Timeout per planning call (seconds)
@@ -121,13 +119,13 @@ class CEGOMRResult:
     success: bool
     total_queries: int            # K_repair — active env steps used
     iterations: int               # repair loop iterations
-    counterexamples: List[Counterexample] = field(default_factory=list)
+    counterexamples: list[Counterexample] = field(default_factory=list)
     repaired_domain_path: str = ""
     play_regret_before: float = float("inf")  # R_play before repair
     play_regret_after: float = 0.0            # R_play after repair (0 = perfect)
     wall_clock_seconds: float = 0.0
     error_message: str = ""
-    per_iteration_queries: List[int] = field(default_factory=list)
+    per_iteration_queries: list[int] = field(default_factory=list)
 
     def summary(self) -> str:
         lines = [
@@ -182,7 +180,7 @@ class FastDownwardGenerator:
     def __init__(self, config: CEGOMRConfig):
         self.config = config
 
-    def generate_plan(self, domain_path: str, problem_path: str, plan_out: str) -> Tuple[bool, List[str], float]:
+    def generate_plan(self, domain_path: str, problem_path: str, plan_out: str) -> tuple[bool, list[str], float]:
         """
         Run Fast Downward and return (plan_found, actions, cost).
         Returns (False, [], inf) if unsolvable or FD missing.
@@ -223,6 +221,7 @@ class FastDownwardGenerator:
                 capture_output=True,
                 text=True,
                 timeout=self.config.planning_timeout,
+                check=False,
             )
         except subprocess.TimeoutExpired:
             return False, [], float("inf")
@@ -246,7 +245,7 @@ class FastDownwardGenerator:
         return True, actions, elapsed
 
     @staticmethod
-    def _parse_plan_file(plan_path: Path) -> List[str]:
+    def _parse_plan_file(plan_path: Path) -> list[str]:
         """Parse a Fast Downward plan file into list of action strings."""
         actions = []
         for line in plan_path.read_text(encoding="utf-8").splitlines():
@@ -276,9 +275,9 @@ class OracleVerifier:
 
     def verify_prefix(
         self,
-        plan: List[str],
+        plan: list[str],
         learned_domain: str,
-    ) -> Tuple[bool, Optional[Counterexample], int]:
+    ) -> tuple[bool, Counterexample | None, int]:
         """
         Execute plan against ground truth M*.
         """
@@ -286,8 +285,9 @@ class OracleVerifier:
             return True, None, len(plan)
 
         try:
-            from src.metrics.transition_accuracy import parse_pddl_model
             import pddl
+
+            from src.metrics.transition_accuracy import parse_pddl_model
 
             gt_text = Path(self.gt_domain).read_text(encoding="utf-8")
             learned_text = Path(learned_domain).read_text(encoding="utf-8")
@@ -296,11 +296,11 @@ class OracleVerifier:
             learned_actions = parse_pddl_model(learned_text)
 
             prob = pddl.parse_problem(self.problem_path)
-            init_state = set(str(x) for x in prob.init)
+            init_state = {str(x) for x in prob.init}
             
             # Goal literals
             if hasattr(prob.goal, "operands"):
-                goal_literals = set(str(x) for x in prob.goal.operands)
+                goal_literals = {str(x) for x in prob.goal.operands}
             else:
                 goal_literals = {str(prob.goal)}
 
@@ -359,7 +359,7 @@ class OracleVerifier:
             goal_reached = goal_literals.issubset(state_gt)
             return goal_reached, None, queries
 
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             print(f"[OracleVerifier] Error during verification: {e}", file=sys.stderr)
             cx = Counterexample(
                 step_index=0,
@@ -399,15 +399,22 @@ class HornSynthesizer:
         """
         Repair M̂ to eliminate the phantom transition in `counterexample`.
         """
-        from src.interventions.pddl_mutator import _tokenize, _parse_sexp, _sexp_to_str, _find_action_block, _get_section
         import copy
+
+        from src.interventions.pddl_mutator import (
+            _find_action_block,
+            _get_section,
+            _parse_sexp,
+            _sexp_to_str,
+            _tokenize,
+        )
 
         domain_text = Path(domain_path).read_text(encoding="utf-8")
         tokens = _tokenize(domain_text)
         domain_sexp, _ = _parse_sexp(tokens)
         domain_sexp_rep = copy.deepcopy(domain_sexp)
 
-        act_name, args = _parse_action_tuple(counterexample.action)
+        act_name, _args = _parse_action_tuple(counterexample.action)
 
         candidate_preconditions = []
         if self.gt_domain and Path(self.gt_domain).exists():
@@ -453,7 +460,7 @@ class HornSynthesizer:
         return str(out_path)
 
     @staticmethod
-    def _extract_distinguishing_atoms(predicted: str, actual: str) -> List[str]:
+    def _extract_distinguishing_atoms(predicted: str, actual: str) -> list[str]:
         """
         Identify atoms present in `actual` state but absent in `predicted` state.
         These are candidates for missing preconditions.
@@ -535,7 +542,7 @@ class CEGOMREngine:
 
             if not plan_found:
                 result.error_message = f"Generator returned no plan at iteration {iteration}"
-                print(f"[CEG-OMR] No plan found (unsolvable or timeout). Stopping.")
+                print("[CEG-OMR] No plan found (unsolvable or timeout). Stopping.")
                 break
 
             print(f"[CEG-OMR] Iter {iteration}: plan found ({len(plan)} steps, {elapsed:.2f}s)")
@@ -599,24 +606,21 @@ class CEGOMREngine:
 
 import re
 
+
 def _parse_action_name(action_str: str) -> str:
     """Extract action name from PDDL plan action string like '(pick-up a)'."""
     action_str = action_str.strip()
-    if action_str.startswith("("):
-        action_str = action_str[1:]
-    if action_str.endswith(")"):
-        action_str = action_str[:-1]
+    action_str = action_str.removeprefix("(")
+    action_str = action_str.removesuffix(")")
     tokens = action_str.strip().split()
     return tokens[0].lower() if tokens else ""
 
 
-def _parse_action_tuple(action_str: str) -> Tuple[str, List[str]]:
+def _parse_action_tuple(action_str: str) -> tuple[str, list[str]]:
     """Extract action name and arguments from PDDL plan action string like '(pick-up a)'."""
     action_str = action_str.strip()
-    if action_str.startswith("("):
-        action_str = action_str[1:]
-    if action_str.endswith(")"):
-        action_str = action_str[:-1]
+    action_str = action_str.removeprefix("(")
+    action_str = action_str.removesuffix(")")
     tokens = action_str.strip().split()
     if not tokens:
         return "", []

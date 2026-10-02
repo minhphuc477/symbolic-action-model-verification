@@ -12,12 +12,12 @@ Fixes all variable grounding bugs by strictly stripping leading '?' and applying
 word-boundary regex substitutions (re.sub(rf'\\?{v}\\b', const, lit)).
 """
 
-import os
 import glob
+import os
 import re
-from typing import Dict, List, Set, Tuple, Optional
 
-def safe_ground(literal: str, param_map: Dict[str, str]) -> str:
+
+def safe_ground(literal: str, param_map: dict[str, str]) -> str:
     """
     Safely grounds a PDDL literal by mapping parameters to object constants.
     Prevents double question marks (??) by stripping leading '?' from parameter keys,
@@ -32,7 +32,7 @@ def safe_ground(literal: str, param_map: Dict[str, str]) -> str:
     res = res.replace('( ', '(').replace(' )', ')')
     return res
 
-def extract_sexpr(text: str, keyword: str) -> Optional[str]:
+def extract_sexpr(text: str, keyword: str) -> str | None:
     """Extracts a balanced S-expression following a keyword."""
     idx = text.lower().find(keyword.lower())
     if idx == -1:
@@ -50,7 +50,7 @@ def extract_sexpr(text: str, keyword: str) -> Optional[str]:
                 return text[start:i+1]
     return None
 
-def parse_atoms(sexpr: Optional[str]) -> List[str]:
+def parse_atoms(sexpr: str | None) -> list[str]:
     """Parses individual atoms/literals from an S-expression."""
     if not sexpr:
         return []
@@ -85,7 +85,7 @@ def parse_atoms(sexpr: Optional[str]) -> List[str]:
         return [atom] if atom and atom not in ["(0)", "0"] else []
 
 class ActionSchema:
-    def __init__(self, name: str, params: List[str], preconditions: List[str], effects: List[str]):
+    def __init__(self, name: str, params: list[str], preconditions: list[str], effects: list[str]):
         self.name = name.lower().replace("_", "-")
         self.params = [p.lower() for p in params]
         self.preconditions = preconditions
@@ -98,7 +98,7 @@ class ActionSchema:
             else:
                 self.add_effects.append(eff)
 
-    def is_applicable(self, state: Set[str], param_map: Dict[str, str]) -> bool:
+    def is_applicable(self, state: set[str], param_map: dict[str, str]) -> bool:
         for pre in self.preconditions:
             gp = safe_ground(pre, param_map)
             if gp.startswith('(not ') and gp.endswith(')'):
@@ -110,7 +110,7 @@ class ActionSchema:
                     return False
         return True
 
-    def apply(self, state: Set[str], param_map: Dict[str, str]) -> Optional[Set[str]]:
+    def apply(self, state: set[str], param_map: dict[str, str]) -> set[str] | None:
         if not self.is_applicable(state, param_map):
             return None
         
@@ -124,10 +124,10 @@ class ActionSchema:
             
         return next_state
 
-def parse_pddl_model(pddl_text: str) -> Dict[str, ActionSchema]:
+def parse_pddl_model(pddl_text: str) -> dict[str, ActionSchema]:
     """Parses a PDDL domain string into a dictionary of ActionSchema objects."""
     actions = {}
-    act_blocks = re.split(r'\(:action\s+', pddl_text, flags=re.I)[1:]
+    act_blocks = re.split(r'\(:action\s+', pddl_text, flags=re.IGNORECASE)[1:]
     
     for block in act_blocks:
         name = block.split()[0].strip().lower().replace("_", "-")
@@ -152,7 +152,7 @@ def parse_pddl_model(pddl_text: str) -> Dict[str, ActionSchema]:
         
     return actions
 
-def load_trajectories(dataset_dir: str) -> List[Tuple[Set[str], str, List[str], Set[str]]]:
+def load_trajectories(dataset_dir: str) -> list[tuple[set[str], str, list[str], set[str]]]:
     """
     Loads all transitions (s_t, action_name, action_args, s_{t+1}) from trajectory files.
     """
@@ -185,7 +185,7 @@ def load_trajectories(dataset_dir: str) -> List[Tuple[Set[str], str, List[str], 
 
     return transitions
 
-def evaluate_transition_accuracy(pddl_text: str, dataset_dir: str = "daineto-meta-planning/src/meta_planning/dataset/blocks") -> Dict:
+def evaluate_transition_accuracy(pddl_text: str, dataset_dir: str = "daineto-meta-planning/src/meta_planning/dataset/blocks") -> dict:
     """
     Calculates genuine transition prediction accuracy (A_pred) over all real transitions.
     """

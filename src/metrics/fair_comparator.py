@@ -17,17 +17,22 @@ Fair, multi-faceted comparison of action model learners:
 """
 
 import os
-import sys
 import re
-from typing import Dict, List, Set, Tuple, Optional
+import sys
 
 # Ensure repository root is on sys.path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
 import pddl
-from src.metrics.transition_accuracy import evaluate_transition_accuracy, safe_ground, extract_sexpr, parse_atoms
 
-def normalize_atom(atom_str: str, param_map: Dict[str, str]) -> str:
+from src.metrics.transition_accuracy import (
+    evaluate_transition_accuracy,
+    extract_sexpr,
+    parse_atoms,
+)
+
+
+def normalize_atom(atom_str: str, param_map: dict[str, str]) -> str:
     """Normalizes atom by mapping parameters to canonical ?p1, ?p2... without ? bugs."""
     norm = atom_str.lower()
     for old_p, new_p in param_map.items():
@@ -37,10 +42,10 @@ def normalize_atom(atom_str: str, param_map: Dict[str, str]) -> str:
     norm = norm.replace("( ", "(").replace(" )", ")")
     return norm
 
-def parse_pddl_schemas(pddl_text: str) -> Dict[str, Dict[str, Set[str]]]:
+def parse_pddl_schemas(pddl_text: str) -> dict[str, dict[str, set[str]]]:
     """Parses PDDL actions into canonical parameter-normalized preconditions and effects."""
     actions = {}
-    act_blocks = re.split(r'\(:action\s+', pddl_text, flags=re.I)[1:]
+    act_blocks = re.split(r'\(:action\s+', pddl_text, flags=re.IGNORECASE)[1:]
 
     for block in act_blocks:
         name = block.split()[0].strip().lower().replace("_", "-")
@@ -59,11 +64,11 @@ def parse_pddl_schemas(pddl_text: str) -> Dict[str, Dict[str, Set[str]]]:
 
         pre_sexpr = extract_sexpr(block, ':precondition')
         pre_atoms = parse_atoms(pre_sexpr)
-        preconditions = set(normalize_atom(a, param_map) for a in pre_atoms)
+        preconditions = {normalize_atom(a, param_map) for a in pre_atoms}
 
         eff_sexpr = extract_sexpr(block, ':effect')
         eff_atoms = parse_atoms(eff_sexpr)
-        effects = set(normalize_atom(a, param_map) for a in eff_atoms)
+        effects = {normalize_atom(a, param_map) for a in eff_atoms}
 
         actions[name] = {
             "parameters": [f"?p{i+1}" for i in range(len(unique_params))],
@@ -72,13 +77,13 @@ def parse_pddl_schemas(pddl_text: str) -> Dict[str, Dict[str, Set[str]]]:
         }
     return actions
 
-def compute_prf(tp: int, fp: int, fn: int) -> Tuple[float, float, float]:
+def compute_prf(tp: int, fp: int, fn: int) -> tuple[float, float, float]:
     p = tp / (tp + fp) if (tp + fp) > 0 else (1.0 if fn == 0 else 0.0)
     r = tp / (tp + fn) if (tp + fn) > 0 else (1.0 if fp == 0 else 0.0)
     f1 = 2 * p * r / (p + r) if (p + r) > 0 else 0.0
     return p, r, f1
 
-def compare_fairly(gt_pddl: str, learned_pddl: str, pddl_filepath: Optional[str] = None, learner_type: str = "full") -> Dict:
+def compare_fairly(gt_pddl: str, learned_pddl: str, pddl_filepath: str | None = None, learner_type: str = "full") -> dict:
     """
     Rigorously compares a learned PDDL model against ground truth across both structural
     and empirical behavioral dimensions.
@@ -90,7 +95,7 @@ def compare_fairly(gt_pddl: str, learned_pddl: str, pddl_filepath: Optional[str]
             dom = pddl.parse_domain(pddl_filepath)
             is_valid = True
             val_msg = f"Valid domain with {len(dom.actions)} actions"
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             is_valid = False
             val_msg = str(e)
 
@@ -141,16 +146,16 @@ def compare_fairly(gt_pddl: str, learned_pddl: str, pddl_filepath: Optional[str]
 
         per_action_breakdown[a] = {
             "preconditions": {
-                "gt": sorted(list(gt_a["preconditions"])),
-                "learned": sorted(list(lrn_a["preconditions"])),
+                "gt": sorted(gt_a["preconditions"]),
+                "learned": sorted(lrn_a["preconditions"]),
                 "precision": p_prec,
                 "recall": p_rec,
                 "f1": p_f1,
                 "tp": p_tp, "fp": p_fp, "fn": p_fn
             },
             "effects": {
-                "gt": sorted(list(gt_a["effects"])),
-                "learned": sorted(list(lrn_a["effects"])),
+                "gt": sorted(gt_a["effects"]),
+                "learned": sorted(lrn_a["effects"]),
                 "precision": e_prec if not is_pre_only else None,
                 "recall": e_rec if not is_pre_only else None,
                 "f1": e_f1 if not is_pre_only else None,

@@ -1,4 +1,5 @@
 import sys
+
 from src.adapters.fastlas_translator import translate_fastlas_rules_to_pddl
 
 if __name__ == "__main__":

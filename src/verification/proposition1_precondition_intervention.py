@@ -23,31 +23,31 @@ Exhaustive Phase 3 Suite:
 - Evaluates real learned models: FAMA and LOCM2.
 """
 
-import os
-import sys
 import collections
 import json
-import re
-from typing import Dict, List, Set, Tuple, Optional, Any
+import os
+import sys
+from typing import Any
 
 # Ensure repository root is on sys.path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
 from src.metrics.transition_accuracy import (
-    evaluate_transition_accuracy,
     ActionSchema,
+    evaluate_transition_accuracy,
     parse_pddl_model,
-    safe_ground
+    safe_ground,
 )
+
 
 class PDDLForwardPlanner:
     """Real forward state-space search planner and environment execution validator."""
 
-    def __init__(self, actions: Dict[str, ActionSchema], objects: List[str]):
+    def __init__(self, actions: dict[str, ActionSchema], objects: list[str]):
         self.actions = actions
         self.objects = objects
 
-    def get_ground_actions(self) -> List[Tuple[str, List[str]]]:
+    def get_ground_actions(self) -> list[tuple[str, list[str]]]:
         grounded = []
         for name, schema in self.actions.items():
             num_params = len(schema.params)
@@ -61,7 +61,7 @@ class PDDLForwardPlanner:
                             grounded.append((name, [o1, o2]))
         return grounded
 
-    def solve(self, init_state: Set[str], goal_literals: Set[str]) -> Tuple[Optional[List[Tuple[str, List[str]]]], int]:
+    def solve(self, init_state: set[str], goal_literals: set[str]) -> tuple[list[tuple[str, list[str]]] | None, int]:
         """Runs forward breadth-first search on M_hat to find the shortest plan."""
         queue = collections.deque([(frozenset(init_state), [])])
         visited = {frozenset(init_state)}
@@ -89,8 +89,8 @@ class PDDLForwardPlanner:
 
         return None, nodes_explored
 
-    def execute_plan(self, init_state: Set[str], plan: List[Tuple[str, List[str]]],
-                     gt_actions: Dict[str, ActionSchema], goal_literals: Set[str]) -> Tuple[bool, int, Optional[str]]:
+    def execute_plan(self, init_state: set[str], plan: list[tuple[str, list[str]]],
+                     gt_actions: dict[str, ActionSchema], goal_literals: set[str]) -> tuple[bool, int, str | None]:
         """
         Executes a plan step-by-step strictly against Ground Truth domain M*.
         Returns (success, steps_completed, failure_reason).
@@ -126,7 +126,7 @@ class PDDLForwardPlanner:
         else:
             return False, len(plan), "Plan executed but Goal conditions not satisfied in M*."
 
-def get_benchmark_tasks() -> Dict[str, Dict[str, Any]]:
+def get_benchmark_tasks() -> dict[str, dict[str, Any]]:
     """Defines 3 canonical planning tasks in Blocksworld."""
     objects = ["a", "b", "c"]
     return {
@@ -150,7 +150,7 @@ def get_benchmark_tasks() -> Dict[str, Dict[str, Any]]:
         }
     }
 
-def get_precondition_interventions(gt_pddl: str) -> Dict[str, Dict[str, str]]:
+def get_precondition_interventions(gt_pddl: str) -> dict[str, dict[str, str]]:
     """Defines all 9 single-precondition omissions plus learned models."""
     with open("benchmark_outputs/fama_normalized.pddl", "r", encoding="utf-8") as f:
         fama_pddl = f.read()
@@ -225,7 +225,7 @@ def get_precondition_interventions(gt_pddl: str) -> Dict[str, Dict[str, str]]:
         }
     }
 
-def run_full_proposition1_matrix() -> Dict[str, Any]:
+def run_full_proposition1_matrix() -> dict[str, Any]:
     """Runs all 12 model configurations across all 3 benchmark tasks."""
     gt_file = "benchmark_outputs/ground_truth.pddl"
     with open(gt_file, "r", encoding="utf-8") as f:
@@ -256,7 +256,7 @@ def run_full_proposition1_matrix() -> Dict[str, Any]:
         # 2. Evaluate planning and execution across all tasks
         for task_name, task_data in tasks.items():
             planner = PDDLForwardPlanner(model, task_data["objects"])
-            plan, nodes = planner.solve(task_data["init"], task_data["goal"])
+            plan, _nodes = planner.solve(task_data["init"], task_data["goal"])
 
             phantom_edges = 0
             if plan:
@@ -270,7 +270,7 @@ def run_full_proposition1_matrix() -> Dict[str, Any]:
                     lrn_pmap = {p: a for p, a in zip(lrn_schema.params, args)}
                     sim_state = lrn_schema.apply(sim_state, lrn_pmap)
 
-                success, steps, fail_reason = planner.execute_plan(
+                success, _steps, fail_reason = planner.execute_plan(
                     task_data["init"], plan, gt_models, task_data["goal"]
                 )
                 pesr = 1.0 if success else 0.0
@@ -278,7 +278,7 @@ def run_full_proposition1_matrix() -> Dict[str, Any]:
                 opt_cost = task_data["optimal_cost"]
                 r_play = str(max(0, plan_cost - opt_cost)) if success else "INFINITY"
             else:
-                success, steps, fail_reason = False, 0, "No plan found"
+                success, _steps, fail_reason = False, 0, "No plan found"
                 pesr = 0.0
                 r_play = "INFINITY"
 
@@ -296,7 +296,7 @@ def run_full_proposition1_matrix() -> Dict[str, Any]:
 
     return suite_results
 
-def print_full_matrix_report(results: Dict[str, Any]):
+def print_full_matrix_report(results: dict[str, Any]):
     print("\n" + "="*125)
     print("PHASE 3: EXHAUSTIVE PROPOSITION 1 EXPERIMENTAL MATRIX (ALL 9 PRECONDITION OMISSIONS + LEARNED MODELS)")
     print("="*125)

@@ -6,13 +6,16 @@ Strictly adheres to RESEARCH_RULES.md: deterministic, zero fake metrics.
 """
 
 import math
-from typing import Dict, Any, List, Set, Tuple, Optional, Callable
+from collections.abc import Callable
+from typing import Any
+
 import numpy as np
 
+
 def compute_play_regret(
-    learned_domain: Dict[str, Any],
-    gt_domain: Dict[str, Any],
-    problem: Dict[str, Any],
+    learned_domain: dict[str, Any],
+    gt_domain: dict[str, Any],
+    problem: dict[str, Any],
     planner_class
 ) -> float:
     """
@@ -33,7 +36,7 @@ def compute_play_regret(
         return float('inf')
 
     # 2. Execute learned plan step-by-step strictly on Ground Truth M*
-    success, steps, fail_reason = learned_planner.execute_plan(
+    success, _steps, _fail_reason = learned_planner.execute_plan(
         initial_state, plan_learned, gt_domain, goal_state
     )
 
@@ -51,14 +54,14 @@ def compute_play_regret(
 
 def compute_learning_burden(
     learner: Any,
-    domain: Dict[str, Any],
-    problem: Dict[str, Any],
+    domain: dict[str, Any],
+    problem: dict[str, Any],
     trace_generator: Callable[[int, int], Any],
     planner_class: Any,
     epsilon: float = 0.1,
-    n_values: Optional[List[int]] = None,
+    n_values: list[int] | None = None,
     n_seeds: int = 5
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     Compute B = min n such that E[Regret] <= epsilon.
 

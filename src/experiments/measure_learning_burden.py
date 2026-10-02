@@ -8,23 +8,23 @@ Computes Pearson r, Spearman rho, R^2 correlation between Delta H_P and B_bounde
 Strictly adheres to RESEARCH_RULES.md: 100% empirical, zero fake metrics, fully deterministic.
 """
 
-import os
-import sys
-import math
-import time
 import json
+import math
+import os
 import random
-import copy
-from typing import Dict, Any, List, Set, Tuple, Optional
+import sys
+import time
+from typing import Any
 
 # Ensure repository root is on sys.path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
-from src.metrics.transition_accuracy import parse_pddl_model, ActionSchema, safe_ground
+from src.metrics.transition_accuracy import ActionSchema, parse_pddl_model
 from src.verification.general_pddl_planner import GeneralForwardPlanner
 
+
 # Definition of the 8 IPC Domains with Ground Truth references, canonical tasks, and binding tasks
-def get_domain_configs() -> Dict[str, Dict[str, Any]]:
+def get_domain_configs() -> dict[str, dict[str, Any]]:
     base = "daineto-meta-planning/src/meta_planning/dataset"
     return {
         "Blocksworld": {
@@ -319,7 +319,7 @@ def get_domain_configs() -> Dict[str, Dict[str, Any]]:
         }
     }
 
-def generate_random_walk_traces(gt_actions: Dict[str, ActionSchema], objects: List[str], init_state: Set[str], n_traces: int, seed: int, max_steps: int = 15) -> List[List[Tuple[Set[str], Tuple[str, List[str]], Set[str]]]]:
+def generate_random_walk_traces(gt_actions: dict[str, ActionSchema], objects: list[str], init_state: set[str], n_traces: int, seed: int, max_steps: int = 15) -> list[list[tuple[set[str], tuple[str, list[str]], set[str]]]]:
     """
     Generates n valid execution traces from M* using deterministic random walks.
     Every step is guaranteed to be applicable and strictly valid under M*.
@@ -357,11 +357,11 @@ def evaluate_single_run(
     learner_name: str,
     n_traces: int,
     seed: int,
-    domain_cfg: Dict[str, Any],
-    intv_cfg: Dict[str, Any],
-    gt_actions: Dict[str, ActionSchema],
-    held_out_transitions: List[Tuple[Set[str], Tuple[str, List[str]], Set[str]]]
-) -> Dict[str, Any]:
+    domain_cfg: dict[str, Any],
+    intv_cfg: dict[str, Any],
+    gt_actions: dict[str, ActionSchema],
+    held_out_transitions: list[tuple[set[str], tuple[str, list[str]], set[str]]]
+) -> dict[str, Any]:
     """
     Evaluates a single run in the 1,080 matrix.
     Deterministic execution following the formal inductive properties of FAMA, LOCM2, and FastLAS.
@@ -445,7 +445,7 @@ def evaluate_single_run(
         r_play = "INFINITY"
         reason = "Planning failed on learned model"
     else:
-        success, steps, reason = gt_planner.execute_plan(init_state, plan_learned, gt_actions, goal_literals)
+        success, _steps, reason = gt_planner.execute_plan(init_state, plan_learned, gt_actions, goal_literals)
         if success:
             gt_key = (domain_name, intv_id)
             if gt_key in GT_COST_CACHE:
@@ -495,7 +495,7 @@ def main():
     if os.path.exists(pb_file):
         with open(pb_file, "r") as fp:
             pb_raw = json.load(fp)
-            for dom_name, dom_data in pb_raw.get("domains", {}).items():
+            for dom_data in pb_raw.get("domains", {}).values():
                 gt_hp = dom_data.get("ground_truth", {}).get("H_P", 0.0)
                 for intv_data in dom_data.get("interventions", []):
                     pb_lookup[intv_data["id"]] = {
@@ -506,7 +506,6 @@ def main():
     all_runs = []
     summary_matrix = {}
     
-    total_runs = 8 * 3 * 3 * 5 * 3 # 1,080
     run_idx = 0
     start_time = time.time()
     

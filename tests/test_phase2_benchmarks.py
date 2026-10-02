@@ -9,19 +9,20 @@ Unit and Integration tests for Phase 2 benchmarks:
 - fair_comparator
 """
 
-import unittest
 import os
 import sys
+import unittest
 
 # Ensure repository root is on sys.path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from src.metrics.transition_accuracy import safe_ground, evaluate_transition_accuracy
+
 from src.adapters.fama_cleaner import clean_fama_pddl
-from src.adapters.locm2_translator import translate_locm2_pddl
 from src.adapters.fastlas_translator import translate_fastlas_rules_to_pddl
+from src.adapters.locm2_translator import translate_locm2_pddl
 from src.metrics.fair_comparator import compare_fairly
-import pddl
+from src.metrics.transition_accuracy import evaluate_transition_accuracy, safe_ground
+
 
 class TestSafeGround(unittest.TestCase):
     def test_strip_question_mark_no_double_qmark(self):
@@ -98,7 +99,9 @@ class TestEmpiricalMetrics(unittest.TestCase):
             self.assertEqual(res["a_appl"], 1.0)
 
     def test_proposition1_phantom_divergence(self):
-        from src.verification.proposition1_precondition_intervention import run_precondition_intervention_suite
+        from src.verification.proposition1_precondition_intervention import (
+            run_precondition_intervention_suite,
+        )
         res = run_precondition_intervention_suite()
         # Verify Control achieves PESR = 1.0, R_play = 0 on Task 1
         ctrl_t1 = res["Control (Ground Truth M*)"]["tasks"]["Task 1: Tower Inversion"]

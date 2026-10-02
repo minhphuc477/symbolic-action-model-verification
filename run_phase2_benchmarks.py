@@ -18,18 +18,19 @@ End-to-End benchmark runner for Phase 2:
    - Evaluates FAMA & LOCM2 across full dynamics (preconditions, effects, and state transition prediction).
 """
 
-import os
-import sys
-import subprocess
 import json
+import os
+import subprocess
+import sys
 
 # Ensure repository root is on sys.path
 sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
 
 from src.adapters.fama_cleaner import clean_fama_pddl
-from src.adapters.locm2_translator import translate_locm2_file
 from src.adapters.fastlas_translator import translate_fastlas_rules_to_pddl
+from src.adapters.locm2_translator import translate_locm2_file
 from src.metrics.fair_comparator import compare_fairly
+
 
 def run_phase2():
     os.makedirs("benchmark_outputs", exist_ok=True)
@@ -43,7 +44,7 @@ def run_phase2():
 
     print("=== Step 1: Running & Cleaning FAMA ===")
     fama_cmd = 'wsl bash -c "/mnt/f/Thesis/venv_linux/bin/python /mnt/f/Thesis/run_fama_test.py"'
-    res_fama = subprocess.run(fama_cmd, shell=True, capture_output=True, text=True)
+    res_fama = subprocess.run(fama_cmd, shell=True, capture_output=True, text=True, check=False)
     fama_stdout = res_fama.stdout
     if "LEARNED PDDL DOMAIN MODEL:" in fama_stdout:
         fama_raw_pddl = fama_stdout.split("LEARNED PDDL DOMAIN MODEL:")[1].strip()
@@ -57,7 +58,7 @@ def run_phase2():
 
     print("\n=== Step 2: Running & Translating LOCM2 ===")
     locm_cmd = 'wsl bash -c "cd /mnt/f/Thesis/locm_repo && /mnt/f/Thesis/venv_linux/bin/python locm2.py"'
-    subprocess.run(locm_cmd, shell=True, capture_output=True, text=True)
+    subprocess.run(locm_cmd, shell=True, capture_output=True, text=True, check=False)
     locm_raw_path = "locm_repo/output/Blocksworld/Blocksworld.pddl"
     locm_out_path = "benchmark_outputs/locm2_normalized.pddl"
     locm_clean = translate_locm2_file(locm_raw_path, locm_out_path)
@@ -65,7 +66,7 @@ def run_phase2():
 
     print("\n=== Step 3: Running & Translating FastLAS ===")
     fastlas_cmd = 'wsl bash -c "FastLAS /mnt/f/Thesis/test_fastlas.las"'
-    res_fastlas = subprocess.run(fastlas_cmd, shell=True, capture_output=True, text=True)
+    res_fastlas = subprocess.run(fastlas_cmd, shell=True, capture_output=True, text=True, check=False)
     fastlas_rules = res_fastlas.stdout.strip()
     fastlas_clean = translate_fastlas_rules_to_pddl(fastlas_rules)
     fastlas_out_path = "benchmark_outputs/fastlas_normalized.pddl"
@@ -134,7 +135,7 @@ def run_phase2():
         if ev['is_precondition_only']:
             print(f"\n--- {name} ---")
             print(f"  Applicability Accuracy A_appl: {ev['a_appl']:.4f} (100/100 correct action admissibility checks)")
-            print(f"  Transition Accuracy A_pred: N/A (Precondition Induction learner)")
+            print("  Transition Accuracy A_pred: N/A (Precondition Induction learner)")
         else:
             t_eval = ev['transition_evaluation']
             print(f"\n--- {name} ---")

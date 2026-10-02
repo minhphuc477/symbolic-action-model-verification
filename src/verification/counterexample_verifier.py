@@ -4,10 +4,12 @@ Computes exact search-tree topology metrics, phantom path divergence (d_delta),
 passive prediction accuracy (A_pred), and play regret (R_play) for standard theoretical counterexamples.
 """
 
-from typing import Dict, Any, List, Tuple
+from typing import Any
+
 from src.metrics.topology_metrics import TopologyMetricsCalculator
 
-def run_counterexample_verification() -> Dict[str, Any]:
+
+def run_counterexample_verification() -> dict[str, Any]:
     """
     Evaluates Proposition 1 search-tree topology collapse metrics on 2 standardized counterexamples:
     1. Linear Chain (b=1, D=100)

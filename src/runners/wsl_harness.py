@@ -19,14 +19,11 @@ Exit Code Contracts Handled:
 
 from __future__ import annotations
 
-import os
-import re
 import subprocess
 import sys
 import time
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
 
 
 @dataclass
@@ -38,7 +35,7 @@ class SolverResult:
     stdout: str
     stderr: str
     wall_clock_seconds: float
-    output_files: List[str] = field(default_factory=list)
+    output_files: list[str] = field(default_factory=list)
     error_message: str = ""
 
 
@@ -68,8 +65,8 @@ class WSLHarness:
         cls,
         cmd_str: str,
         timeout: int = 60,
-        env_vars: Optional[Dict[str, str]] = None,
-    ) -> Tuple[int, str, str, float]:
+        env_vars: dict[str, str] | None = None,
+    ) -> tuple[int, str, str, float]:
         """
         Execute command with proper OS delegation.
         """
@@ -91,12 +88,13 @@ class WSLHarness:
                 capture_output=True,
                 text=True,
                 timeout=timeout,
+                check=False,
             )
             elapsed = time.perf_counter() - t0
             return proc.returncode, proc.stdout, proc.stderr, elapsed
         except subprocess.TimeoutExpired:
             return -1, "", f"Timeout ({timeout}s) expired", timeout
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             return -2, "", str(e), 0.0
 
 

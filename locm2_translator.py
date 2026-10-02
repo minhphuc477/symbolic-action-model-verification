@@ -1,5 +1,6 @@
 import sys
-from src.adapters.locm2_translator import translate_locm2_pddl, translate_locm2_file
+
+from src.adapters.locm2_translator import translate_locm2_file
 
 if __name__ == "__main__":
     inp = sys.argv[1] if len(sys.argv) > 1 else "locm_repo/output/Blocksworld/Blocksworld.pddl"

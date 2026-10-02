@@ -9,14 +9,15 @@ Generates publication-quality figures for Phase 4 Week 4:
 Strictly adheres to RESEARCH_RULES.md: 100% empirical, zero fake numbers.
 """
 
-import os
-import sys
 import json
-import math
+import os
+
 import matplotlib
+
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
+
 
 def generate_visualizations():
     json_path = os.path.join(os.path.dirname(__file__), "../../benchmark_outputs/learning_burden_results.json")
@@ -47,8 +48,6 @@ def generate_visualizations():
         
     # Statistical calculations
     n_pts = len(delta_hps)
-    mean_x = np.mean(delta_hps)
-    mean_y = np.mean(b_bounds)
     r = np.corrcoef(delta_hps, b_bounds)[0, 1]
     r_sq = r ** 2
     
@@ -75,7 +74,7 @@ def generate_visualizations():
         'figure.titlesize': 14
     })
     
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 6), gridspec_kw={'width_ratios': [1.2, 1]})
+    _fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 6), gridspec_kw={'width_ratios': [1.2, 1]})
     
     # -------------------------------------------------------------
     # PANEL 1: Scatter Plot Delta H_P vs B_bounded (4 Zones)
@@ -115,19 +114,19 @@ def generate_visualizations():
     # Zone Labels
     ax1.text(-2.5, 930, "ZONE B\n(Dangerous Blindspot)\nLow HP, B = ∞",
              color='#b30000', fontweight='bold', fontsize=10, ha='center',
-             bbox=dict(boxstyle='round,pad=0.3', facecolor='#ffe6e6', edgecolor='#b30000', alpha=0.8))
+             bbox={'boxstyle': 'round,pad=0.3', 'facecolor': '#ffe6e6', 'edgecolor': '#b30000', 'alpha': 0.8})
              
     ax1.text(-2.5, 150, "ZONE A\n(Tractable / Robust)\nLow HP, Low B",
              color='#006600', fontweight='bold', fontsize=10, ha='center',
-             bbox=dict(boxstyle='round,pad=0.3', facecolor='#e6ffe6', edgecolor='#006600', alpha=0.8))
+             bbox={'boxstyle': 'round,pad=0.3', 'facecolor': '#e6ffe6', 'edgecolor': '#006600', 'alpha': 0.8})
              
     ax1.text(3.5, 930, "ZONE D\n(Intrinsically Hard)\nHigh HP, B = ∞",
              color='#660066', fontweight='bold', fontsize=10, ha='center',
-             bbox=dict(boxstyle='round,pad=0.3', facecolor='#f3e6ff', edgecolor='#660066', alpha=0.8))
+             bbox={'boxstyle': 'round,pad=0.3', 'facecolor': '#f3e6ff', 'edgecolor': '#660066', 'alpha': 0.8})
              
     ax1.text(3.5, 150, "ZONE C\n(Planning-Heavy)\nHigh HP, Low B",
              color='#004d80', fontweight='bold', fontsize=10, ha='center',
-             bbox=dict(boxstyle='round,pad=0.3', facecolor='#e6f2ff', edgecolor='#004d80', alpha=0.8))
+             bbox={'boxstyle': 'round,pad=0.3', 'facecolor': '#e6f2ff', 'edgecolor': '#004d80', 'alpha': 0.8})
              
     # Statistics Box
     stat_text = (
@@ -138,7 +137,7 @@ def generate_visualizations():
     )
     ax1.text(0.04, 0.05, stat_text, transform=ax1.transAxes,
              fontsize=9.5, va='bottom', ha='left',
-             bbox=dict(boxstyle='round,pad=0.4', facecolor='white', edgecolor='black', alpha=0.9))
+             bbox={'boxstyle': 'round,pad=0.4', 'facecolor': 'white', 'edgecolor': 'black', 'alpha': 0.9})
              
     ax1.set_xlabel("Marginal Shift in Planning Burden (Δ HP = HP(M_hat) - HP(M*))")
     ax1.set_ylabel("Bounded Learning Burden B_bounded (Sample Cutoff = 1,000)")
@@ -150,7 +149,7 @@ def generate_visualizations():
     # -------------------------------------------------------------
     # PANEL 2: Divergence Percentage (B = ∞) by Domain & Learner
     # -------------------------------------------------------------
-    unique_domains = sorted(list(set(domains)))
+    unique_domains = sorted(set(domains))
     domain_div = {d: {l: 0 for l in ["FAMA", "LOCM2", "FastLAS"]} for d in unique_domains}
     domain_total = {d: {l: 0 for l in ["FAMA", "LOCM2", "FastLAS"]} for d in unique_domains}
     
@@ -188,7 +187,7 @@ def generate_visualizations():
     plt.savefig(pdf_path, bbox_inches='tight')
     plt.close()
     
-    print(f"Figures successfully generated:")
+    print("Figures successfully generated:")
     print(f"  PNG: {png_path}")
     print(f"  PDF: {pdf_path}")
     

@@ -39,14 +39,13 @@ from __future__ import annotations
 
 import argparse
 import copy
-import os
+import importlib.util
 import random
-import re
 import sys
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
-from typing import List, Optional
+from typing import Any, ClassVar
 
 # ---------------------------------------------------------------------------
 # Lightweight PDDL text-level AST manipulation
@@ -55,11 +54,8 @@ from typing import List, Optional
 # avoid full round-trip serialization limitations of pddl v0.4.x.
 # ---------------------------------------------------------------------------
 
-try:
-    import pddl
-    _PDDL_AVAILABLE = True
-except ImportError:
-    _PDDL_AVAILABLE = False
+_PDDL_AVAILABLE = importlib.util.find_spec("pddl") is not None
+if not _PDDL_AVAILABLE:
     print("[WARNING] `pddl` library not found. Validation will be skipped.", file=sys.stderr)
 
 
@@ -80,8 +76,8 @@ class MutationRecord:
     intervention: str
     target_action: str
     seed: int
-    removed_atoms: List[str] = field(default_factory=list)
-    added_atoms: List[str] = field(default_factory=list)
+    removed_atoms: list[str] = field(default_factory=list)
+    added_atoms: list[str] = field(default_factory=list)
     output_path: str = ""
     delta_dsl: int = 1  # k in the bound K_repair ≤ k·|F|^r
 
@@ -90,7 +86,7 @@ class MutationRecord:
 # S-expression tokenizer (no external deps beyond stdlib)
 # ---------------------------------------------------------------------------
 
-def _tokenize(text: str) -> List[str]:
+def _tokenize(text: str) -> list[str]:
     """Tokenize PDDL text into a flat list of tokens (parens + atoms)."""
     tokens = []
     i = 0
@@ -115,7 +111,7 @@ def _tokenize(text: str) -> List[str]:
     return tokens
 
 
-def _parse_sexp(tokens: List[str], pos: int = 0):
+def _parse_sexp(tokens: list[str], pos: int = 0):
     """Recursive descent S-expression parser. Returns (sexp, next_pos)."""
     if pos >= len(tokens):
         raise ValueError("Unexpected end of tokens")
@@ -157,7 +153,7 @@ def _sexp_to_str(sexp, indent: int = 0) -> str:
 # Core mutation logic
 # ---------------------------------------------------------------------------
 
-def _find_action_block(sexp: list, action_name: str) -> Optional[list]:
+def _find_action_block(sexp: list, action_name: str) -> list | None:
     """
     Locate the :action sexp block for `action_name` inside a domain sexp.
     Returns a reference to the sub-list (mutable).
@@ -173,7 +169,7 @@ def _find_action_block(sexp: list, action_name: str) -> Optional[list]:
     return None
 
 
-def _get_section(action_sexp: list, keyword: str) -> Optional[int]:
+def _get_section(action_sexp: list, keyword: str) -> int | None:
     """Return the index of `keyword` (e.g. ':precondition') in action_sexp."""
     for i, item in enumerate(action_sexp):
         if isinstance(item, str) and item.lower() == keyword.lower():
@@ -181,7 +177,7 @@ def _get_section(action_sexp: list, keyword: str) -> Optional[int]:
     return None
 
 
-def _get_preconditions(action_sexp: list) -> Optional[list]:
+def _get_preconditions(action_sexp: list) -> list | None:
     """Extract the precondition conjunction list from an action sexp."""
     idx = _get_section(action_sexp, ":precondition")
     if idx is None or idx + 1 >= len(action_sexp):
@@ -192,7 +188,7 @@ def _get_preconditions(action_sexp: list) -> Optional[list]:
     return None
 
 
-def _extract_positive_atoms(prec_sexp: list) -> List[tuple]:
+def _extract_positive_atoms(prec_sexp: list) -> list[tuple]:
     """
     Return list of (index_in_and_list, atom_sexp) for positive (non-negated) atoms.
     Index is within the (and ...) sexp starting from position 1.
@@ -207,7 +203,7 @@ def _extract_positive_atoms(prec_sexp: list) -> List[tuple]:
     return atoms
 
 
-def _classify_bottleneck(atoms: List[tuple]) -> Optional[tuple]:
+def _classify_bottleneck(atoms: list[tuple]) -> tuple | None:
     """
     Heuristic: the 'bottleneck' atom is the last positive precondition — the one
     most likely to be the gating condition in a linear-chain topology.
@@ -310,7 +306,7 @@ class PDDLMutator:
         Reproducibility seed for random tie-breaking.
     """
 
-    _STRATEGIES = {
+    _STRATEGIES: ClassVar[dict[str, Any]] = {
         "Type_I":   _apply_type_i,
         "Type_II":  _apply_type_ii,
         "Type_III": _apply_type_iii,
@@ -386,7 +382,7 @@ class PDDLMutator:
             try:
                 from pddl.parser.domain import DomainParser
                 _ = DomainParser()(mutated_text)
-            except Exception as e:
+            except Exception as e:  # noqa: BLE001
                 print(f"[WARNING] pddl validation failed after mutation: {e}", file=sys.stderr)
 
         return str(out_path)
@@ -394,10 +390,10 @@ class PDDLMutator:
     def apply_batch(
         self,
         domain_path: str | Path,
-        interventions: List[str],
-        target_actions: List[str],
+        interventions: list[str],
+        target_actions: list[str],
         out_dir: str | Path = "domains/mutated/",
-    ) -> List[str]:
+    ) -> list[str]:
         """
         Apply multiple (intervention, action) pairs. Returns list of output paths.
         Each (intervention, action) pair uses a fresh mutator state on the original domain.

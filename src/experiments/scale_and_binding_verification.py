@@ -9,20 +9,21 @@ Phase 4 Week 2 Remediation & Deep Verification Suite:
 Strictly adheres to RESEARCH_RULES.md: zero fake metrics, fully deterministic.
 """
 
+import json
+import math
 import os
 import sys
-import math
-import time
-import json
-from typing import Dict, Any, List, Set, Tuple
+from pathlib import Path
+from typing import Any
 
 # Ensure repository root is on sys.path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
-from src.metrics.transition_accuracy import parse_pddl_model, ActionSchema, safe_ground
+from src.metrics.transition_accuracy import ActionSchema, parse_pddl_model
 from src.verification.general_pddl_planner import GeneralForwardPlanner
 
-def run_scale_verification() -> Dict[str, Any]:
+
+def run_scale_verification() -> dict[str, Any]:
     print("=" * 78)
     print("1. EMPIRICAL SCALE VERIFICATION (BLOCKSWORLD & HANOI)")
     print("=" * 78)
@@ -54,7 +55,7 @@ def run_scale_verification() -> Dict[str, Any]:
         goal.add(f'(clear {blocks[0]})')
         
         gt_planner = GeneralForwardPlanner(bw_gt, blocks)
-        gt_plan, gt_nodes = gt_planner.solve(init, goal, max_nodes=100000)
+        _gt_plan, gt_nodes = gt_planner.solve(init, goal, max_nodes=100000)
         gt_hp = math.log2(1.0 + float(gt_nodes))
         
         # Intervene BW_I1: omit clear in unstack
@@ -69,7 +70,7 @@ def run_scale_verification() -> Dict[str, Any]:
         int_hp = math.log2(1.0 + float(int_nodes))
         delta_hp = int_hp - gt_hp
         
-        valid, steps, reason = gt_planner.execute_plan(init, int_plan, bw_gt, goal)
+        valid, _steps, reason = gt_planner.execute_plan(init, int_plan, bw_gt, goal)
         pesr = 1.0 if valid else 0.0
         
         rec = {
@@ -119,7 +120,7 @@ def run_scale_verification() -> Dict[str, Any]:
         goal.add(f'(on {disks[-1]} p3)')
         
         gt_planner = GeneralForwardPlanner(han_gt, objs)
-        gt_plan, gt_nodes = gt_planner.solve(init, goal, max_nodes=50000)
+        _gt_plan, gt_nodes = gt_planner.solve(init, goal, max_nodes=50000)
         gt_hp = math.log2(1.0 + float(gt_nodes))
         
         # Intervene HAN_I2: omit clear ?o1
@@ -134,7 +135,7 @@ def run_scale_verification() -> Dict[str, Any]:
         int_hp = math.log2(1.0 + float(int_nodes))
         delta_hp = int_hp - gt_hp
         
-        valid, steps, reason = gt_planner.execute_plan(init, int_plan, han_gt, goal)
+        valid, _steps, reason = gt_planner.execute_plan(init, int_plan, han_gt, goal)
         pesr = 1.0 if valid else 0.0
         
         rec = {
@@ -152,7 +153,7 @@ def run_scale_verification() -> Dict[str, Any]:
         
     return scale_data
 
-def run_binding_precondition_suite() -> Dict[str, Any]:
+def run_binding_precondition_suite() -> dict[str, Any]:
     print("\n" + "=" * 78)
     print("2. BINDING PRECONDITION VERIFICATION FOR THE 8 PESR=1.0 INTERVENTIONS")
     print("=" * 78)
@@ -162,7 +163,7 @@ def run_binding_precondition_suite() -> Dict[str, Any]:
     # Define non-degenerate test tasks that exercise the omitted precondition
     # 1. Miconic MIC_I1 (omit lift-at): passenger at f2, lift at f1
     mic_ref = "daineto-meta-planning/src/meta_planning/dataset/miconic/reference"
-    mic_gt = parse_pddl_model(open(mic_ref).read())
+    mic_gt = parse_pddl_model(Path(mic_ref).read_text(encoding="utf-8"))
     objs = ['f1', 'f2', 'f3', 'p1']
     init = {'(lift-at f1)', '(origin p1 f2)', '(destin p1 f3)', '(above f1 f2)', '(above f2 f3)', '(above f1 f3)'}
     goal = {'(served p1)'}
@@ -174,8 +175,8 @@ def run_binding_precondition_suite() -> Dict[str, Any]:
     
     p_gt = GeneralForwardPlanner(mic_gt, objs)
     p_int = GeneralForwardPlanner(int_models, objs)
-    plan, nodes = p_int.solve(init, goal)
-    valid, steps, reason = p_gt.execute_plan(init, plan, mic_gt, goal)
+    plan, _nodes = p_int.solve(init, goal)
+    valid, _steps, reason = p_gt.execute_plan(init, plan, mic_gt, goal)
     binding_results["MIC_I1"] = {
         "domain": "Miconic",
         "action": "board",
@@ -189,7 +190,7 @@ def run_binding_precondition_suite() -> Dict[str, Any]:
     
     # 2. Driverlog DLG_I3 (omit at ?o1 ?o3 in load-truck): pkg1 at s1, truck at s0
     dlg_ref = "daineto-meta-planning/src/meta_planning/dataset/driverlog/reference"
-    dlg_gt = parse_pddl_model(open(dlg_ref).read())
+    dlg_gt = parse_pddl_model(Path(dlg_ref).read_text(encoding="utf-8"))
     objs = ['driver1', 'truck1', 'pkg1', 's0', 's1']
     init = {'(at driver1 s0)', '(at truck1 s0)', '(at pkg1 s1)', '(empty truck1)', '(link s0 s1)', '(link s1 s0)'}
     goal = {'(at pkg1 s0)'}
@@ -201,8 +202,8 @@ def run_binding_precondition_suite() -> Dict[str, Any]:
     
     p_gt = GeneralForwardPlanner(dlg_gt, objs)
     p_int = GeneralForwardPlanner(int_models, objs)
-    plan, nodes = p_int.solve(init, goal)
-    valid, steps, reason = p_gt.execute_plan(init, plan, dlg_gt, goal)
+    plan, _nodes = p_int.solve(init, goal)
+    valid, _steps, reason = p_gt.execute_plan(init, plan, dlg_gt, goal)
     binding_results["DLG_I3"] = {
         "domain": "Driverlog",
         "action": "load-truck",
@@ -216,7 +217,7 @@ def run_binding_precondition_suite() -> Dict[str, Any]:
     
     # 3. Blocksworld BW_I2 (omit ontable in pick-up): block b is stacked on a, goal requires holding b
     bw_ref = "daineto-meta-planning/src/meta_planning/dataset/blocks/reference"
-    bw_gt = parse_pddl_model(open(bw_ref).read())
+    bw_gt = parse_pddl_model(Path(bw_ref).read_text(encoding="utf-8"))
     objs = ['a', 'b']
     init = {'(ontable a)', '(on b a)', '(clear b)', '(handempty)'}
     goal = {'(holding b)'}
@@ -228,8 +229,8 @@ def run_binding_precondition_suite() -> Dict[str, Any]:
     
     p_gt = GeneralForwardPlanner(bw_gt, objs)
     p_int = GeneralForwardPlanner(int_models, objs)
-    plan, nodes = p_int.solve(init, goal)
-    valid, steps, reason = p_gt.execute_plan(init, plan, bw_gt, goal)
+    plan, _nodes = p_int.solve(init, goal)
+    valid, _steps, reason = p_gt.execute_plan(init, plan, bw_gt, goal)
     binding_results["BW_I2"] = {
         "domain": "Blocksworld",
         "action": "pick-up",
@@ -251,8 +252,8 @@ def run_binding_precondition_suite() -> Dict[str, Any]:
     int_models['up'] = ActionSchema(old.name, old.params, new_pre, old.add_effects + [f'(not {d})' for d in old.del_effects])
     p_gt = GeneralForwardPlanner(mic_gt, objs)
     p_int = GeneralForwardPlanner(int_models, objs)
-    plan, nodes = p_int.solve(init, goal)
-    valid, steps, reason = p_gt.execute_plan(init, plan, mic_gt, goal)
+    plan, _nodes = p_int.solve(init, goal)
+    valid, _steps, reason = p_gt.execute_plan(init, plan, mic_gt, goal)
     binding_results["MIC_I3"] = {
         "domain": "Miconic",
         "action": "up",
@@ -266,7 +267,7 @@ def run_binding_precondition_suite() -> Dict[str, Any]:
 
     # 5. Satellite SAT_I1 (omit power-avail in switch-on): 2 instruments requiring power
     sat_ref = "daineto-meta-planning/src/meta_planning/dataset/satellite/reference"
-    sat_gt = parse_pddl_model(open(sat_ref).read())
+    sat_gt = parse_pddl_model(Path(sat_ref).read_text(encoding="utf-8"))
     objs = ['sat1', 'dir0', 'dir1', 'cam1', 'cam2', 'mode1']
     init = {
         '(on-board cam1 sat1)', '(supports cam1 mode1)',
@@ -281,8 +282,8 @@ def run_binding_precondition_suite() -> Dict[str, Any]:
     int_models['switch-on'] = ActionSchema(old.name, old.params, new_pre, old.add_effects + [f'(not {d})' for d in old.del_effects])
     p_gt = GeneralForwardPlanner(sat_gt, objs)
     p_int = GeneralForwardPlanner(int_models, objs)
-    plan, nodes = p_int.solve(init, goal)
-    valid, steps, reason = p_gt.execute_plan(init, plan, sat_gt, goal)
+    plan, _nodes = p_int.solve(init, goal)
+    valid, _steps, reason = p_gt.execute_plan(init, plan, sat_gt, goal)
     binding_results["SAT_I1"] = {
         "domain": "Satellite",
         "action": "switch-on",
@@ -305,15 +306,15 @@ def run_binding_precondition_suite() -> Dict[str, Any]:
     }
     goal = {'(on d2 d1)'}
     han_ref = "daineto-meta-planning/src/meta_planning/dataset/hanoi/reference"
-    han_gt = parse_pddl_model(open(han_ref).read())
+    han_gt = parse_pddl_model(Path(han_ref).read_text(encoding="utf-8"))
     int_models = dict(han_gt)
     old = han_gt['move']
     new_pre = [p for p in old.preconditions if p.strip().lower() != '(smaller ?o3 ?o1)']
     int_models['move'] = ActionSchema(old.name, old.params, new_pre, old.add_effects + [f'(not {d})' for d in old.del_effects])
     p_gt = GeneralForwardPlanner(han_gt, objs)
     p_int = GeneralForwardPlanner(int_models, objs)
-    plan, nodes = p_int.solve(init, goal)
-    valid, steps, reason = p_gt.execute_plan(init, plan, han_gt, goal)
+    plan, _nodes = p_int.solve(init, goal)
+    valid, _steps, reason = p_gt.execute_plan(init, plan, han_gt, goal)
     binding_results["HAN_I1"] = {
         "domain": "Hanoi",
         "action": "move",
@@ -327,7 +328,7 @@ def run_binding_precondition_suite() -> Dict[str, Any]:
 
     # 7. Rovers ROV_I2 (omit empty ?o2 in sample-soil): store is full initially
     rov_ref = "daineto-meta-planning/src/meta_planning/dataset/rovers/reference"
-    rov_gt = parse_pddl_model(open(rov_ref).read())
+    rov_gt = parse_pddl_model(Path(rov_ref).read_text(encoding="utf-8"))
     objs = ['rover1', 'w1', 's1']
     init = {
         '(at rover1 w1)', '(available rover1)', '(equipped-for-soil-analysis rover1)',
@@ -340,8 +341,8 @@ def run_binding_precondition_suite() -> Dict[str, Any]:
     int_models['sample-soil'] = ActionSchema(old.name, old.params, new_pre, old.add_effects + [f'(not {d})' for d in old.del_effects])
     p_gt = GeneralForwardPlanner(rov_gt, objs)
     p_int = GeneralForwardPlanner(int_models, objs)
-    plan, nodes = p_int.solve(init, goal)
-    valid, steps, reason = p_gt.execute_plan(init, plan, rov_gt, goal)
+    plan, _nodes = p_int.solve(init, goal)
+    valid, _steps, reason = p_gt.execute_plan(init, plan, rov_gt, goal)
     binding_results["ROV_I2"] = {
         "domain": "Rovers",
         "action": "sample-soil",
@@ -366,8 +367,8 @@ def run_binding_precondition_suite() -> Dict[str, Any]:
     int_models['communicate-soil-data'] = ActionSchema(old.name, old.params, new_pre, old.add_effects + [f'(not {d})' for d in old.del_effects])
     p_gt = GeneralForwardPlanner(rov_gt, objs)
     p_int = GeneralForwardPlanner(int_models, objs)
-    plan, nodes = p_int.solve(init, goal)
-    valid, steps, reason = p_gt.execute_plan(init, plan, rov_gt, goal)
+    plan, _nodes = p_int.solve(init, goal)
+    valid, _steps, reason = p_gt.execute_plan(init, plan, rov_gt, goal)
     binding_results["ROV_I3"] = {
         "domain": "Rovers",
         "action": "communicate-soil-data",

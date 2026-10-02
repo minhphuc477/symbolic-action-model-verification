@@ -15,23 +15,25 @@ Strictly adheres to RESEARCH_RULES.md: deterministic, zero mock data.
 
 import os
 import sys
+
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
 import copy
-import time
 import json
 import math
-from typing import Dict, Any, List, Set, Tuple
+import time
+from typing import Any
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
-from src.metrics.transition_accuracy import parse_pddl_model, ActionSchema
+from src.metrics.transition_accuracy import parse_pddl_model
 from src.verification.general_pddl_planner import GeneralForwardPlanner
+
 
 def calc_hp(nodes: int) -> float:
     return math.log2(1.0 + float(nodes))
 
-def run_scaling_benchmark() -> Dict[str, Any]:
+def run_scaling_benchmark() -> dict[str, Any]:
     print("=" * 78)
     print("PHASE 4: INSTANCE SCALING & TOPOLOGICAL DIVERGENCE BENCHMARK")
     print("=" * 78)

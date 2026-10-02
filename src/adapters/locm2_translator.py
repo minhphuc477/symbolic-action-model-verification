@@ -18,12 +18,12 @@ PRINCIPLED TRANSLATION PIPELINE (ZERO HARDCODING):
    - Faithfully reflects LOCM2's true learning capabilities and limitations.
 """
 
+import ast
 import os
 import re
-import ast
-from typing import Dict, List, Set, Optional, Tuple
 
-def parse_locm2_dict(dict_path: str) -> Tuple[List[Dict[str, int]], List[Dict[str, int]]]:
+
+def parse_locm2_dict(dict_path: str) -> tuple[list[dict[str, int]], list[dict[str, int]]]:
     """Parses dict.txt to extract FSM state transition dictionaries for hand and objects."""
     if not os.path.exists(dict_path):
         return [], []
@@ -37,13 +37,13 @@ def parse_locm2_dict(dict_path: str) -> Tuple[List[Dict[str, int]], List[Dict[st
         zero_fsms = raw_dict[0] if len(raw_dict) > 0 else []
         block_fsms = raw_dict[1] if len(raw_dict) > 1 else []
         return zero_fsms, block_fsms
-    except Exception:
+    except Exception:  # noqa: BLE001
         return [], []
 
 def map_fsm_signature_to_predicate(clss: str, fsm_idx: int, state_idx: int,
-                                  zero_fsms: List[Dict[str, int]],
-                                  block_fsms: List[Dict[str, int]],
-                                  action_name: str) -> Optional[str]:
+                                  zero_fsms: list[dict[str, int]],
+                                  block_fsms: list[dict[str, int]],
+                                  action_name: str) -> str | None:
     """
     Dynamically maps an FSM state to a domain predicate based on its action-transition signature.
     """
@@ -92,7 +92,7 @@ def translate_locm2_pddl(raw_pddl: str, dict_path: str = "locm_repo/output/Block
     (holding ?o1)
   )
 """
-    act_blocks = re.split(r'\(:action\s+', raw_pddl, flags=re.I)[1:]
+    act_blocks = re.split(r'\(:action\s+', raw_pddl, flags=re.IGNORECASE)[1:]
     translated_actions = []
 
     for block in act_blocks:
@@ -160,7 +160,7 @@ def translate_locm2_pddl(raw_pddl: str, dict_path: str = "locm_repo/output/Block
 
     return pddl_header + "\n" + "\n\n".join(translated_actions) + "\n)\n"
 
-def translate_locm2_file(input_path: str, output_path: str = None) -> str:
+def translate_locm2_file(input_path: str, output_path: str | None = None) -> str:
     dict_path = os.path.join(os.path.dirname(input_path), "dict.txt")
     with open(input_path, "r", encoding="utf-8") as f:
         raw = f.read()

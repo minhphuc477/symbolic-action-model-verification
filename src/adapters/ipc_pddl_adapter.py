@@ -10,7 +10,7 @@ from __future__ import annotations
 
 import os
 from pathlib import Path
-from typing import Dict, Any, List, Optional, Set, Tuple
+from typing import Any
 
 
 class IPCPDDLAdapter:
@@ -54,12 +54,13 @@ class IPCPDDLAdapter:
         self,
         problem_id: str = "problem_p01",
         max_steps: int = 100,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Executes genuine plan actions via Fast Downward / Forward Planner
         to collect verified (s_t, a_t, s_{t+1}) transition traces.
         """
         import pddl
+
         from src.metrics.transition_accuracy import parse_pddl_model
         from src.runners.wsl_harness import FastDownwardRunner
 
@@ -91,7 +92,7 @@ class IPCPDDLAdapter:
         # 3. Simulate step-by-step on true physics
         actions_map = parse_pddl_model(self.load_domain_text())
         prob = pddl.parse_problem(str(prob_path))
-        cur_state = set(str(x) for x in prob.init)
+        cur_state = {str(x) for x in prob.init}
 
         trace_steps = []
         for idx, act_str in enumerate(plan_actions[:max_steps]):
@@ -112,8 +113,8 @@ class IPCPDDLAdapter:
             trace_steps.append({
                 "step": idx + 1,
                 "action": act_str,
-                "state_before": sorted(list(cur_state)),
-                "state_after": sorted(list(next_state)),
+                "state_before": sorted(cur_state),
+                "state_after": sorted(next_state),
             })
             cur_state = next_state
 

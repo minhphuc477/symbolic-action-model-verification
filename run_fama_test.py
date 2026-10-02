@@ -1,4 +1,4 @@
-from meta_planning import dataset, LearningTask
+from meta_planning import LearningTask, dataset
 
 domain = 'blocks'
 m_ref = dataset.load_model(domain)

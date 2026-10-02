@@ -6,17 +6,18 @@ Outputs results to benchmark_outputs/fama_windowing_comparison.json.
 Strictly adheres to RESEARCH_RULES.md: 100% empirical, zero fake numbers.
 """
 
+import json
 import os
 import sys
 import time
-import json
-import re
 
 # Ensure modules can be imported
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", ".."))
 
-from meta_planning import dataset, LearningTask
-from src.learners.fama_windowing import window_trajectories, parse_madagascar_log
+from meta_planning import LearningTask, dataset
+
+from src.learners.fama_windowing import parse_madagascar_log, window_trajectories
+
 
 def run_fama_experiment(trajectories, domain='blocks', windowed=False, window_size=15, timeout=180):
     m_ref = dataset.load_model(domain)
@@ -43,7 +44,7 @@ def run_fama_experiment(trajectories, domain='blocks', windowed=False, window_si
         sol = task.learn(clean=False)
         elapsed = time.time() - t0
         solved = sol.solution_found
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         elapsed = time.time() - t0
         solved = False
         print(f"Exception during learning: {e}")
@@ -55,7 +56,7 @@ def run_fama_experiment(trajectories, domain='blocks', windowed=False, window_si
         if os.path.exists(f):
             try:
                 os.remove(f)
-            except Exception:
+            except OSError:
                 pass
                 
     return {
@@ -84,13 +85,13 @@ def main():
         T = dataset.load_trajectories(domain, select=range(n))
         
         # 1. Windowed run
-        print(f"  Running Windowed FAMA (W=15)...")
+        print("  Running Windowed FAMA (W=15)...")
         res_win = run_fama_experiment(T, domain=domain, windowed=True, window_size=15)
         print(f"    -> Horizon: {res_win['horizon']}, Vars: {res_win['vars_count']}, Clauses: {res_win['clauses_count']}, Time: {res_win['runtime_sec']:.3f}s, Solved: {res_win['solved']}")
         results["windowed"].append(res_win)
         
         # 2. Unwindowed run
-        print(f"  Running Unwindowed FAMA...")
+        print("  Running Unwindowed FAMA...")
         res_unwin = run_fama_experiment(T, domain=domain, windowed=False)
         print(f"    -> Horizon: {res_unwin['horizon']}, Vars: {res_unwin['vars_count']}, Clauses: {res_unwin['clauses_count']}, Time: {res_unwin['runtime_sec']:.3f}s, Solved: {res_unwin['solved']}")
         results["unwindowed"].append(res_unwin)

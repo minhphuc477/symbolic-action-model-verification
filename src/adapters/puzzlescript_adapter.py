@@ -4,21 +4,20 @@ Converts PuzzleScript 2D grid rules and engine execution traces into valid STRIP
 Supports 5 Benchmark Games via Structured Template Library: Sokoban, It Is Pitch Black, Graded Sir, Katamari, Braid Grid.
 """
 
-import json
-import os
-from typing import List, Dict, Any
+from typing import Any, ClassVar
+
 
 class PuzzleScriptAdapter:
     """Structured Game Adapter Template Library for PuzzleScript Games."""
     
-    SUPPORTED_GAMES = ["Sokoban", "It Is Pitch Black", "Graded Sir", "Katamari", "Braid Grid"]
+    SUPPORTED_GAMES: ClassVar[list[str]] = ["Sokoban", "It Is Pitch Black", "Graded Sir", "Katamari", "Braid Grid"]
 
     def __init__(self, game_name: str = "Sokoban", grid_width: int = 10, grid_height: int = 10):
         self.game_name = game_name
         self.width = grid_width
         self.height = grid_height
         
-    def parse_grid_state_to_fluents(self, grid_matrix: List[List[str]]) -> List[str]:
+    def parse_grid_state_to_fluents(self, grid_matrix: list[list[str]]) -> list[str]:
         """Converts 2D grid matrix into first-order Boolean fluents (predicates)."""
         fluents = []
         for y in range(len(grid_matrix)):
@@ -34,7 +33,7 @@ class PuzzleScriptAdapter:
                 elif cell == 'T':
                     fluents.append(f"(is-target {pos})")
                 elif cell == 'K':
-                    fluents.append(f"(has-key player)")
+                    fluents.append("(has-key player)")
                 elif cell == 'D':
                     fluents.append(f"(is-door-locked {pos})")
                 elif cell == 'M':
@@ -48,7 +47,7 @@ class PuzzleScriptAdapter:
         game_key = self.game_name.replace(" ", "_")
         
         if "Pitch_Black" in game_key:
-            return f"""(define (domain Pitch_Black)
+            return """(define (domain Pitch_Black)
   (:requirements :strips :typing)
   (:types position object)
   (:predicates
@@ -64,7 +63,7 @@ class PuzzleScriptAdapter:
   )
 )"""
         elif "Graded_Sir" in game_key:
-            return f"""(define (domain Graded_Sir)
+            return """(define (domain Graded_Sir)
   (:requirements :strips :typing)
   (:types position object)
   (:predicates
@@ -105,7 +104,7 @@ class PuzzleScriptAdapter:
   )
 )"""
 
-    def validate_puzzlescript_trajectory_match(self, pddl_plan_steps: List[str], raw_puzzlescript_steps: List[Dict[str, Any]]) -> Dict[str, Any]:
+    def validate_puzzlescript_trajectory_match(self, pddl_plan_steps: list[str], raw_puzzlescript_steps: list[dict[str, Any]]) -> dict[str, Any]:
         """
         Validation Layer: Verifies that PDDL plan action sequences match step-by-step state trajectories in PuzzleScript engine.
         Addresses reviewer bisimulation validation concerns.

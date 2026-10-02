@@ -6,19 +6,20 @@ Strictly adheres to RESEARCH_RULES.md: deterministic, zero fake metrics.
 
 import collections
 import itertools
-from typing import Dict, List, Set, Tuple, Optional, Any
+
 from src.metrics.transition_accuracy import ActionSchema, safe_ground
 
+
 class GeneralForwardPlanner:
-    def __init__(self, actions: Dict[str, ActionSchema], objects: List[str],
-                 type_map: Optional[Dict[str, str]] = None,
-                 param_types: Optional[Dict[str, List[str]]] = None):
+    def __init__(self, actions: dict[str, ActionSchema], objects: list[str],
+                 type_map: dict[str, str] | None = None,
+                 param_types: dict[str, list[str]] | None = None):
         self.actions = actions
         self.objects = objects
         self.type_map = type_map or {}
         self.param_types = param_types or {}
 
-    def get_ground_actions(self) -> List[Tuple[str, List[str]]]:
+    def get_ground_actions(self) -> list[tuple[str, list[str]]]:
         grounded = []
         for name, schema in self.actions.items():
             k = len(schema.params)
@@ -43,7 +44,7 @@ class GeneralForwardPlanner:
                         grounded.append((name, list(args)))
         return grounded
 
-    def solve(self, init_state: Set[str], goal_literals: Set[str], max_nodes: int = 50000) -> Tuple[Optional[List[Tuple[str, List[str]]]], int]:
+    def solve(self, init_state: set[str], goal_literals: set[str], max_nodes: int = 50000) -> tuple[list[tuple[str, list[str]]] | None, int]:
         """Runs forward breadth-first search on candidate model M to find the shortest plan."""
         queue = collections.deque([(frozenset(init_state), [])])
         visited = {frozenset(init_state)}
@@ -71,8 +72,8 @@ class GeneralForwardPlanner:
 
         return None, nodes_explored
 
-    def execute_plan(self, init_state: Set[str], plan: List[Tuple[str, List[str]]],
-                     gt_actions: Dict[str, ActionSchema], goal_literals: Set[str]) -> Tuple[bool, int, Optional[str]]:
+    def execute_plan(self, init_state: set[str], plan: list[tuple[str, list[str]]],
+                     gt_actions: dict[str, ActionSchema], goal_literals: set[str]) -> tuple[bool, int, str | None]:
         """
         Executes plan step-by-step strictly against Ground Truth domain M*.
         Returns (success, steps_completed, failure_reason).

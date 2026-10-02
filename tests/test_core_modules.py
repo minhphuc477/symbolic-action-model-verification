@@ -8,17 +8,20 @@ Tests:
 - StatisticalRigorEngine
 """
 
-import unittest
 import os
 import sys
+import unittest
 
 # Ensure project root is in path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from src.adapters import PuzzleScriptAdapter
 from src.metrics import TopologyMetricsCalculator
-from src.verification import run_counterexample_verification, RealAStarPlanner, PuzzleScriptGridState
 from src.stats import StatisticalRigorEngine
+from src.verification import (
+    RealAStarPlanner,
+    run_counterexample_verification,
+)
 
 
 class TestPuzzleScriptAdapter(unittest.TestCase):
@@ -60,7 +63,7 @@ class TestCounterexampleVerifier(unittest.TestCase):
 class TestRealAStarPlanner(unittest.TestCase):
     def test_astar_search_solve(self):
         planner = RealAStarPlanner()
-        start_state, walls = planner.create_level("Door_Lock_Bottleneck")
+        start_state, _walls = planner.create_level("Door_Lock_Bottleneck")
         res = planner.solve_astar(start_state, paradigm="LOCM2", is_bottleneck=True)
         self.assertIn("A_pred", res)
         self.assertIn("d_delta", res)

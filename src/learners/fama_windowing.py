@@ -5,12 +5,12 @@ Bounds Madagascar SAT horizon to T <= 50, preventing super-linear variable explo
 Strict adherence to RESEARCH_RULES.md: 100% empirical measurements, zero hallucination.
 """
 
-import os
 import copy
-import time
+import os
 import re
+
 from meta_planning.observations.trajectory import Trajectory
-from meta_planning import dataset, LearningTask
+
 
 def window_trajectory(traj, window_size=15, stride=10):
     """
@@ -66,7 +66,7 @@ def parse_madagascar_log(log_path):
     if m_vars:
         vars_count = int(m_vars.group(1))
     else:
-        m_v2 = re.search(r'variables:\s*(\d+)', content, re.I)
+        m_v2 = re.search(r'variables:\s*(\d+)', content, re.IGNORECASE)
         if m_v2:
             vars_count = int(m_v2.group(1))
             
@@ -74,7 +74,7 @@ def parse_madagascar_log(log_path):
     if m_cls:
         clauses_count = int(m_cls.group(1))
     else:
-        m_c2 = re.search(r'clauses:\s*(\d+)', content, re.I)
+        m_c2 = re.search(r'clauses:\s*(\d+)', content, re.IGNORECASE)
         if m_c2:
             clauses_count = int(m_c2.group(1))
             

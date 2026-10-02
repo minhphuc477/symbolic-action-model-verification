@@ -13,18 +13,22 @@ Rigorously computes:
 """
 
 import os
-import sys
 import re
-from typing import Dict, List, Set, Tuple
+import sys
 
 # Ensure repository root is on sys.path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
 import pddl
-from src.metrics.transition_accuracy import evaluate_transition_accuracy, extract_sexpr, parse_atoms
+
+from src.metrics.transition_accuracy import (
+    evaluate_transition_accuracy,
+    extract_sexpr,
+    parse_atoms,
+)
 
 
-def normalize_atom(atom_str: str, param_map: Dict[str, str]) -> str:
+def normalize_atom(atom_str: str, param_map: dict[str, str]) -> str:
     norm = atom_str.lower()
     for old_p, new_p in param_map.items():
         v = old_p.lstrip('?')
@@ -33,9 +37,9 @@ def normalize_atom(atom_str: str, param_map: Dict[str, str]) -> str:
     norm = norm.replace("( ", "(").replace(" )", ")")
     return norm
 
-def parse_pddl_actions(pddl_text: str) -> Dict[str, Dict[str, Set[str]]]:
+def parse_pddl_actions(pddl_text: str) -> dict[str, dict[str, set[str]]]:
     actions = {}
-    act_blocks = re.split(r'\(:action\s+', pddl_text, flags=re.I)[1:]
+    act_blocks = re.split(r'\(:action\s+', pddl_text, flags=re.IGNORECASE)[1:]
     
     for block in act_blocks:
         name = block.split()[0].strip().lower().replace("_", "-")
@@ -54,11 +58,11 @@ def parse_pddl_actions(pddl_text: str) -> Dict[str, Dict[str, Set[str]]]:
 
         pre_sexpr = extract_sexpr(block, ':precondition')
         pre_atoms = parse_atoms(pre_sexpr)
-        preconditions = set(normalize_atom(a, param_map) for a in pre_atoms)
+        preconditions = {normalize_atom(a, param_map) for a in pre_atoms}
 
         eff_sexpr = extract_sexpr(block, ':effect')
         eff_atoms = parse_atoms(eff_sexpr)
-        effects = set(normalize_atom(a, param_map) for a in eff_atoms)
+        effects = {normalize_atom(a, param_map) for a in eff_atoms}
 
         actions[name] = {
             "parameters": [f"?p{i+1}" for i in range(len(unique_params))],
@@ -67,15 +71,15 @@ def parse_pddl_actions(pddl_text: str) -> Dict[str, Dict[str, Set[str]]]:
         }
     return actions
 
-def validate_pddl_domain(pddl_file_path: str) -> Tuple[bool, str]:
+def validate_pddl_domain(pddl_file_path: str) -> tuple[bool, str]:
     """Validates domain using official pddl package parser."""
     try:
         dom = pddl.parse_domain(pddl_file_path)
         return True, f"Valid domain with {len(dom.actions)} actions"
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return False, str(e)
 
-def compare_action_models(ground_truth_pddl: str, learned_pddl: str, domain_file_path: str = None) -> Dict:
+def compare_action_models(ground_truth_pddl: str, learned_pddl: str, domain_file_path: str | None = None) -> dict:
     """
     Compares learned PDDL against ground truth.
     """
@@ -117,10 +121,10 @@ def compare_action_models(ground_truth_pddl: str, learned_pddl: str, domain_file
         action_breakdown[a] = {
             "gt_params": gt_a["parameters"],
             "pred_params": pred_a["parameters"],
-            "pre_gt": sorted(list(gt_a["preconditions"])),
-            "pre_learned": sorted(list(pred_a["preconditions"])),
-            "eff_gt": sorted(list(gt_a["effects"])),
-            "eff_learned": sorted(list(pred_a["effects"])),
+            "pre_gt": sorted(gt_a["preconditions"]),
+            "pre_learned": sorted(pred_a["preconditions"]),
+            "eff_gt": sorted(gt_a["effects"]),
+            "eff_learned": sorted(pred_a["effects"]),
             "d_triangle": d_tri,
             "tp": tp,
             "fp": fp,

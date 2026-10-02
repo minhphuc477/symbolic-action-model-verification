@@ -5,13 +5,13 @@ Strictly adheres to RESEARCH_RULES.md: ZERO FAKE METRICS / NO HARDCODED FORMULAS
 """
 
 import heapq
-import json
-from typing import Dict, Any, List, Set, Tuple, Optional
+from typing import Any
+
 
 class PuzzleScriptGridState:
     """Represents a concrete 2D grid state in PuzzleScript games."""
     
-    def __init__(self, player_pos: Tuple[int, int], boxes: Set[Tuple[int, int]], targets: Set[Tuple[int, int]], walls: Set[Tuple[int, int]], doors: Dict[Tuple[int, int], bool], keys: int = 0):
+    def __init__(self, player_pos: tuple[int, int], boxes: set[tuple[int, int]], targets: set[tuple[int, int]], walls: set[tuple[int, int]], doors: dict[tuple[int, int], bool], keys: int = 0):
         self.player = player_pos
         self.boxes = frozenset(boxes)
         self.targets = frozenset(targets)
@@ -19,7 +19,7 @@ class PuzzleScriptGridState:
         self.doors = doors # pos -> is_locked
         self.keys = keys
 
-    def key(self) -> Tuple:
+    def key(self) -> tuple:
         door_state = tuple(sorted(self.doors.items()))
         return (self.player, self.boxes, door_state, self.keys)
 
@@ -38,7 +38,7 @@ class RealAStarPlanner:
         self.width = width
         self.height = height
 
-    def create_level(self, level_type: str = "Sokoban_Standard") -> Tuple[PuzzleScriptGridState, Set[Tuple[int, int]]]:
+    def create_level(self, level_type: str = "Sokoban_Standard") -> tuple[PuzzleScriptGridState, set[tuple[int, int]]]:
         """Creates ground-truth initial grid state and wall layout."""
         walls = set()
         for x in range(self.width):
@@ -71,7 +71,7 @@ class RealAStarPlanner:
         state = PuzzleScriptGridState(player, boxes, targets, walls, doors, keys=0)
         return state, walls
 
-    def get_neighbors_gt(self, state: PuzzleScriptGridState) -> List[Tuple[PuzzleScriptGridState, str]]:
+    def get_neighbors_gt(self, state: PuzzleScriptGridState) -> list[tuple[PuzzleScriptGridState, str]]:
         """Ground-Truth environment transition logic M*."""
         neighbors = []
         moves = [("up", (0, -1)), ("down", (0, 1)), ("left", (-1, 0)), ("right", (1, 0))]
@@ -84,7 +84,7 @@ class RealAStarPlanner:
                 continue
 
             # Check door collision
-            if npos in state.doors and state.doors[npos]:
+            if state.doors.get(npos):
                 if state.keys > 0: # Unlock door
                     new_doors = dict(state.doors)
                     new_doors[npos] = False
@@ -96,7 +96,7 @@ class RealAStarPlanner:
             if npos in state.boxes:
                 bx, by = nx + dx, ny + dy
                 bpos = (bx, by)
-                if bpos in state.walls or bpos in state.boxes or (bpos in state.doors and state.doors[bpos]):
+                if bpos in state.walls or bpos in state.boxes or (state.doors.get(bpos)):
                     continue
                 new_boxes = set(state.boxes)
                 new_boxes.remove(npos)
@@ -109,7 +109,7 @@ class RealAStarPlanner:
 
         return neighbors
 
-    def get_neighbors_learned(self, state: PuzzleScriptGridState, paradigm: str, is_vulnerable: bool, intervention_type: str = "Type_I") -> List[Tuple[PuzzleScriptGridState, str]]:
+    def get_neighbors_learned(self, state: PuzzleScriptGridState, paradigm: str, is_vulnerable: bool, intervention_type: str = "Type_I") -> list[tuple[PuzzleScriptGridState, str]]:
         """
         Learned transition logic M_hat for each specific learner algorithm.
         Under rule interventions, flawed paradigms omit preconditions, generating phantom edges.
@@ -125,7 +125,7 @@ class RealAStarPlanner:
             npos = (nx, ny)
             
             # 1. Door lock bottleneck phantom
-            if npos in state.doors and state.doors[npos]:
+            if state.doors.get(npos):
                 new_doors = dict(state.doors)
                 new_doors[npos] = False
                 phantom_state = PuzzleScriptGridState(npos, set(state.boxes), set(state.targets), set(state.walls), new_doors, state.keys)
@@ -171,7 +171,7 @@ class RealAStarPlanner:
             total_dist += min_d
         return total_dist
 
-    def solve_astar(self, start_state: PuzzleScriptGridState, paradigm: str = "FastLAS", is_bottleneck: bool = False) -> Dict[str, Any]:
+    def solve_astar(self, start_state: PuzzleScriptGridState, paradigm: str = "FastLAS", is_bottleneck: bool = False) -> dict[str, Any]:
         """Runs real A* priority queue search on M_hat and tests execution on M*."""
         open_set = []
         start_key = start_state.key()
@@ -184,7 +184,7 @@ class RealAStarPlanner:
         learned_plan = None
 
         while open_set:
-            f, g, cur_key, cur_state, path = heapq.heappop(open_set)
+            _f, g, _cur_key, cur_state, path = heapq.heappop(open_set)
             explored_nodes += 1
 
             if cur_state.is_goal():
@@ -218,9 +218,8 @@ class RealAStarPlanner:
         # Validate step-by-step execution in real environment M*
         cur_gt = start_state
         execution_failed = False
-        steps_executed = 0
 
-        for act, expected_state in learned_plan:
+        for _act, expected_state in learned_plan:
             gt_neighbors = [n for n, a in self.get_neighbors_gt(cur_gt)]
             # Check if expected transition exists in M*
             matched = False
@@ -233,7 +232,6 @@ class RealAStarPlanner:
             if not matched:
                 execution_failed = True
                 break
-            steps_executed += 1
 
         pesr = 1.0 if (not execution_failed and cur_gt.is_goal()) else 0.0
         r_play = 0 if pesr == 1.0 else "INFINITY"

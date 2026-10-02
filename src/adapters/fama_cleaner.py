@@ -9,6 +9,7 @@ Cleans artifacts from FAMA / Madagascar SAT planner PDDL output:
 import re
 import sys
 
+
 def clean_fama_pddl(pddl_text: str) -> str:
     """
     Removes artifact '0' tokens from action effect blocks and normalizes types in FAMA learned PDDL.
@@ -25,7 +26,7 @@ def clean_fama_pddl(pddl_text: str) -> str:
     cleaned = re.sub(r'\n\s*\n\s*\n+', '\n\n', cleaned)
     return cleaned.strip() + "\n"
 
-def clean_fama_file(input_path: str, output_path: str = None) -> str:
+def clean_fama_file(input_path: str, output_path: str | None = None) -> str:
     with open(input_path, 'r', encoding='utf-8') as f:
         content = f.read()
     cleaned = clean_fama_pddl(content)

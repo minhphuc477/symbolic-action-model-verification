@@ -8,7 +8,8 @@ using verified topological metrics (TopologyMetricsCalculator).
 
 from __future__ import annotations
 
-from typing import Dict, Any, List, Optional
+from typing import Any
+
 from src.metrics.topology_metrics import TopologyMetricsCalculator
 
 
@@ -18,15 +19,15 @@ class CausalWorldModelVerifier:
     between Ground Truth G_T(M*) and Learned Model G_T(M_hat).
     """
 
-    def __init__(self, causal_graph_nodes: Optional[List[str]] = None):
+    def __init__(self, causal_graph_nodes: list[str] | None = None):
         self.nodes = causal_graph_nodes or []
 
     def verify_causal_abstraction_fidelity(
         self,
-        gt_edges: List[Any],
-        pred_edges: List[Any],
-        omitted_predicates: Optional[List[str]] = None,
-    ) -> Dict[str, Any]:
+        gt_edges: list[Any],
+        pred_edges: list[Any],
+        omitted_predicates: list[str] | None = None,
+    ) -> dict[str, Any]:
         """
         Computes exact Graph Edit Distance and Phantom Edge Rate from native edge lists.
         """

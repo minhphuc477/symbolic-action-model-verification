@@ -7,8 +7,9 @@ Replaces dead mock stubs with direct delegation to CEGOMREngine.
 
 from __future__ import annotations
 
-from typing import Dict, Any, List, Optional
-from src.repair.ceg_omr_engine import CEGOMREngine, CEGOMRConfig
+from typing import Any
+
+from src.repair.ceg_omr_engine import CEGOMRConfig, CEGOMREngine
 
 
 class ActiveTreeSearchRollout:
@@ -27,7 +28,7 @@ class ActiveTreeSearchRollout:
         problem_path: str,
         gt_domain_path: str = "",
         out_dir: str = "repair_logs/",
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Executes active model repair loop using native Fast Downward and Oracle verifier.
         """

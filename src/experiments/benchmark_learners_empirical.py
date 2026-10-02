@@ -4,17 +4,16 @@ Measures exact empirical execution runtimes of LOCM2, FastLAS, and FAMA with rea
 Strictly adheres to RESEARCH_RULES.md: zero fake metrics, fully deterministic.
 """
 
-import time
-import os
-import sys
 import subprocess
+import time
+
 
 def test_fastlas():
     print("--- 1. BENCHMARKING FASTLAS (ASP Abduction) ---")
     las_file = "/mnt/f/Thesis/test_fastlas.las"
     cmd = ["/usr/local/bin/FastLAS", las_file]
     t0 = time.time()
-    res = subprocess.run(cmd, capture_output=True, text=True)
+    res = subprocess.run(cmd, capture_output=True, text=True, check=False)
     elapsed = time.time() - t0
     print(f"FastLAS Command: {' '.join(cmd)}")
     print(f"FastLAS Return Code: {res.returncode}")
@@ -26,18 +25,18 @@ def test_locm2():
     print("\n--- 2. BENCHMARKING LOCM2 (FSM Induction) ---")
     cmd = ["/mnt/f/Thesis/venv_linux/bin/python", "/mnt/f/Thesis/locm_repo/locm2.py"]
     t0 = time.time()
-    res = subprocess.run(cmd, cwd="/mnt/f/Thesis/locm_repo", capture_output=True, text=True)
+    res = subprocess.run(cmd, cwd="/mnt/f/Thesis/locm_repo", capture_output=True, text=True, check=False)
     elapsed = time.time() - t0
     print(f"LOCM2 Command: {' '.join(cmd)}")
     print(f"LOCM2 Return Code: {res.returncode}")
     print(f"LOCM2 Runtime: {elapsed:.3f}s")
     lines = res.stdout.strip().split("\n")
-    print(f"LOCM2 Output Summary (last 3 lines):\n" + "\n".join(lines[-3:]))
+    print("LOCM2 Output Summary (last 3 lines):\n" + "\n".join(lines[-3:]))
     return elapsed, res.returncode, res.stdout
 
 def test_fama():
     print("\n--- 3. BENCHMARKING FAMA (SAT Compilation via Madagascar) ---")
-    from meta_planning import dataset, LearningTask
+    from meta_planning import LearningTask, dataset
     
     domain = 'blocks'
     m_ref = dataset.load_model(domain)

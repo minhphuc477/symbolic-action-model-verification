@@ -2,11 +2,10 @@
 Main Execution Entry Point for Thesis Benchmark Suite & Verification Harness
 """
 
-import sys
-import json
 from src.adapters import PuzzleScriptAdapter
 from src.metrics import TopologyMetricsCalculator
 from src.verification import run_counterexample_verification
+
 
 def main():
     print("================================================================")

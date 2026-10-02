@@ -6,12 +6,15 @@ Generates publication-quality figures for AIJ submission:
 3. Multi-Model Comparative Bar Charts (LOCM2, FAMA, FastLAS, SLAF, ARMS)
 """
 
-import os
 import json
+import os
+
 import matplotlib
+
 matplotlib.use('Agg') # Non-interactive backend
 import matplotlib.pyplot as plt
 import numpy as np
+
 
 class BenchmarkPlotter:
     def __init__(self, output_dir="f:/Thesis/literature/figures"):
@@ -19,7 +22,7 @@ class BenchmarkPlotter:
         os.makedirs(output_dir, exist_ok=True)
 
     def plot_scatter_apred_vs_rplay(self, results_data, filename="scatter_apred_rplay.png"):
-        fig, ax = plt.subplots(figsize=(8, 6))
+        _fig, ax = plt.subplots(figsize=(8, 6))
         
         sa_vals = [r.get("A_pred", r.get("SA", 0.95)) * 100 if r.get("A_pred", 0) <= 1.0 else r.get("A_pred", 95.0) for r in results_data]
         rplay_vals = [100.0 if r.get("R_play") == "INFINITY" or r.get("R_play") == "Infinity" else float(r.get("R_play", 0)) for r in results_data]
@@ -40,7 +43,7 @@ class BenchmarkPlotter:
         return save_path
 
     def plot_phase_transition_cpr_vs_per(self, results_data, filename="phase_transition_cpr_per.png"):
-        fig, ax = plt.subplots(figsize=(8, 6))
+        _fig, ax = plt.subplots(figsize=(8, 6))
         
         cpr_vals = [r.get("CPR", 50.0) for r in results_data]
         per_vals = [r.get("PER", 10.0) for r in results_data]
@@ -74,12 +77,12 @@ class BenchmarkPlotter:
         x = np.arange(len(models))
         width = 0.35
 
-        fig, ax1 = plt.subplots(figsize=(10, 6))
+        _fig, ax1 = plt.subplots(figsize=(10, 6))
 
-        rects1 = ax1.bar(x - width/2, apred_means, width, yerr=apred_stds, label='Passive Accuracy A_pred (%)', color='royalblue', capsize=5)
+        ax1.bar(x - width/2, apred_means, width, yerr=apred_stds, label='Passive Accuracy A_pred (%)', color='royalblue', capsize=5)
 
         ax2 = ax1.twinx()
-        rects2 = ax2.bar(x + width/2, collapse_rates, width, label='Search-Tree Collapse Rate (%)', color='firebrick')
+        ax2.bar(x + width/2, collapse_rates, width, label='Search-Tree Collapse Rate (%)', color='firebrick')
 
         ax1.set_xlabel('Symbolic Action Model Learner', fontsize=12, fontweight='bold')
         ax1.set_ylabel('Passive Accuracy A_pred (%)', fontsize=12, color='royalblue')

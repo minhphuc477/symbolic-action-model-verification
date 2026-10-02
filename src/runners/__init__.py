@@ -1,15 +1,15 @@
 from .wsl_harness import (
-    WSLHarness,
-    SolverResult,
+    ClingoRunner,
     FastDownwardRunner,
     FastLASRunner,
-    ClingoRunner,
+    SolverResult,
+    WSLHarness,
 )
 
 __all__ = [
-    "WSLHarness",
-    "SolverResult",
+    "ClingoRunner",
     "FastDownwardRunner",
     "FastLASRunner",
-    "ClingoRunner",
+    "SolverResult",
+    "WSLHarness",
 ]

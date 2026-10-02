@@ -7,13 +7,12 @@ Calculates:
 - Search-Tree Graph Edit Distance (GED)
 """
 
-import json
 
 class TopologyMetricsCalculator:
     def __init__(self, ground_truth_edges, predicted_edges, critical_predicates):
-        self.E_real = set((e[0], e[1], e[2]) for e in ground_truth_edges)
+        self.E_real = {(e[0], e[1], e[2]) for e in ground_truth_edges}
         self.E_pred_raw = predicted_edges
-        self.E_pred = set((e[0], e[1], e[2]) for e in predicted_edges)
+        self.E_pred = {(e[0], e[1], e[2]) for e in predicted_edges}
         self.critical_preds = set(critical_predicates)
 
     def calculate_ged(self):

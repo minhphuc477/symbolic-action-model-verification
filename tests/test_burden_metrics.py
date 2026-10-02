@@ -3,18 +3,20 @@ Unit Tests for Planning Burden (H_P) and Learning Burden (B)
 Strictly adheres to RESEARCH_RULES.md: deterministic execution, no fake tests.
 """
 
-import unittest
 import math
 import os
 import sys
+import unittest
+
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from src.metrics.transition_accuracy import parse_pddl_model, ActionSchema
+from src.metrics.learning_burden import compute_learning_burden, compute_play_regret
+from src.metrics.planning_burden import compute_planning_burden
+from src.metrics.transition_accuracy import ActionSchema, parse_pddl_model
 from src.verification.proposition1_precondition_intervention import (
     PDDLForwardPlanner,
-    get_benchmark_tasks
+    get_benchmark_tasks,
 )
-from src.metrics.planning_burden import compute_planning_burden
-from src.metrics.learning_burden import compute_play_regret, compute_learning_burden
+
 
 class DummyLearner:
     def __init__(self, model_dict):
@@ -112,7 +114,9 @@ class TestBurdenMetrics(unittest.TestCase):
         self.assertEqual(res["B"], float('inf'))
 
     def test_24intervention_matrix_integrity(self):
-        from src.experiments.measure_planning_burden import get_full_24intervention_matrix
+        from src.experiments.measure_planning_burden import (
+            get_full_24intervention_matrix,
+        )
         matrix = get_full_24intervention_matrix()
         self.assertEqual(len(matrix), 8)
         total_interventions = 0

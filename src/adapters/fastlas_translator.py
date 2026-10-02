@@ -13,9 +13,9 @@ unstack(V0,V1) :- clear(V0), handempty, on(V0,V1).
 """
 
 import re
-from typing import Dict, List, Tuple, Set
 
-def parse_prolog_atom(atom_str: str) -> Tuple[str, List[str], bool]:
+
+def parse_prolog_atom(atom_str: str) -> tuple[str, list[str], bool]:
     """
     Parses a Prolog literal into (predicate, args, is_negated).
     e.g. 'not clear(V0)' -> ('clear', ['V0'], True)
@@ -36,7 +36,7 @@ def parse_prolog_atom(atom_str: str) -> Tuple[str, List[str], bool]:
     args = [a.strip() for a in args_raw.split(",")] if args_raw else []
     return pred, args, is_neg
 
-def format_pddl_literal(pred: str, args: List[str], is_neg: bool = False) -> str:
+def format_pddl_literal(pred: str, args: list[str], is_neg: bool = False) -> str:
     arg_pddl = " ".join(f"?{a.lower()}" for a in args)
     core = f"({pred} {arg_pddl})".replace(" )", ")") if arg_pddl else f"({pred})"
     if is_neg:
@@ -48,7 +48,7 @@ def translate_fastlas_rules_to_pddl(rules_text: str, domain_name: str = "Blocksw
     Parses FastLAS rules and converts them into standard STRIPS PDDL action representations.
     """
     lines = [line.strip() for line in rules_text.strip().split("\n") if line.strip() and not line.strip().startswith("%")]
-    actions: Dict[str, Dict] = {}
+    actions: dict[str, dict] = {}
 
     for line in lines:
         if not line.endswith("."):

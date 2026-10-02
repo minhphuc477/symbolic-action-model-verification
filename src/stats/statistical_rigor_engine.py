@@ -7,10 +7,12 @@ Computes:
 - 95% Bootstrap Confidence Intervals
 """
 
-import os
 import json
 import math
+import os
+
 import numpy as np
+
 
 class StatisticalRigorEngine:
     @staticmethod

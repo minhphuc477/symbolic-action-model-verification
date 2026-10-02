@@ -5,16 +5,17 @@ Strictly adheres to RESEARCH_RULES.md: deterministic, zero fake metrics.
 """
 
 import math
-from typing import Dict, Any, List, Set, Tuple, Optional
+from typing import Any
+
 
 def compute_planning_burden(
-    domain_actions: Dict[str, Any],
-    initial_state: Set[str],
-    goal_state: Set[str],
+    domain_actions: dict[str, Any],
+    initial_state: set[str],
+    goal_state: set[str],
     planner_class,
-    objects: List[str],
+    objects: list[str],
     max_nodes: int = 100000
-) -> Tuple[float, Optional[List[Tuple[str, List[str]]]], int]:
+) -> tuple[float, list[tuple[str, list[str]]] | None, int]:
     """
     Compute H_P = log2(1 + N_exp) for a given domain and problem.
 

@@ -6,22 +6,22 @@
     "validation_message": "Valid domain with 4 actions",
     "num_gt_actions": 4,
     "num_learned_actions": 4,
-    "d_triangle": 6,
+    "d_triangle": 2,
     "preconditions": {
       "precision": 1.0,
-      "recall": 0.7777777777777778,
-      "f1": 0.8750000000000001,
-      "tp": 7,
+      "recall": 0.8888888888888888,
+      "f1": 0.9411764705882353,
+      "tp": 8,
       "fp": 0,
-      "fn": 2
+      "fn": 1
     },
     "effects": {
-      "precision": 0.8888888888888888,
-      "recall": 0.8888888888888888,
-      "f1": 0.8888888888888888,
-      "tp": 16,
-      "fp": 2,
-      "fn": 2
+      "precision": 1.0,
+      "recall": 0.9444444444444444,
+      "f1": 0.9714285714285714,
+      "tp": 17,
+      "fp": 0,
+      "fn": 1
     },
     "transition_evaluation": {
       "a_pred": 0.66,
@@ -63,14 +63,15 @@
             "(ontable ?p1)"
           ],
           "learned": [
-            "(clear ?p1)"
+            "(clear ?p1)",
+            "(ontable ?p1)"
           ],
           "precision": 1.0,
-          "recall": 0.3333333333333333,
-          "f1": 0.5,
-          "tp": 1,
+          "recall": 0.6666666666666666,
+          "f1": 0.8,
+          "tp": 2,
           "fp": 0,
-          "fn": 2
+          "fn": 1
         },
         "effects": {
           "gt": [
@@ -80,19 +81,18 @@
             "(not (ontable ?p1))"
           ],
           "learned": [
-            "(handempty)",
             "(holding ?p1)",
             "(not (clear ?p1))",
-            "(ontable ?p1)"
+            "(not (ontable ?p1))"
           ],
-          "precision": 0.5,
-          "recall": 0.5,
-          "f1": 0.5,
-          "tp": 2,
-          "fp": 2,
-          "fn": 2
+          "precision": 1.0,
+          "recall": 0.75,
+          "f1": 0.8571428571428571,
+          "tp": 3,
+          "fp": 0,
+          "fn": 1
         },
-        "d_triangle": 6
+        "d_triangle": 2
       },
       "put-down": {
         "preconditions": {
@@ -226,20 +226,20 @@
     "num_learned_actions": 4,
     "d_triangle": 23,
     "preconditions": {
-      "precision": 0.625,
-      "recall": 0.5555555555555556,
-      "f1": 0.5882352941176471,
-      "tp": 5,
+      "precision": 0.5714285714285714,
+      "recall": 0.4444444444444444,
+      "f1": 0.5,
+      "tp": 4,
       "fp": 3,
-      "fn": 4
+      "fn": 5
     },
     "effects": {
-      "precision": 0.6666666666666666,
-      "recall": 0.2222222222222222,
-      "f1": 0.3333333333333333,
-      "tp": 4,
+      "precision": 0.7142857142857143,
+      "recall": 0.2777777777777778,
+      "f1": 0.4,
+      "tp": 5,
       "fp": 2,
-      "fn": 14
+      "fn": 13
     },
     "transition_evaluation": {
       "a_pred": 0.0,
@@ -281,16 +281,14 @@
             "(ontable ?p1)"
           ],
           "learned": [
-            "(clear ?p1)",
-            "(handempty)",
             "(ontable ?p1)"
           ],
           "precision": 1.0,
-          "recall": 1.0,
-          "f1": 1.0,
-          "tp": 3,
+          "recall": 0.3333333333333333,
+          "f1": 0.5,
+          "tp": 1,
           "fp": 0,
-          "fn": 0
+          "fn": 2
         },
         "effects": {
           "gt": [
@@ -309,7 +307,7 @@
           "fp": 0,
           "fn": 3
         },
-        "d_triangle": 3
+        "d_triangle": 5
       },
       "put-down": {
         "preconditions": {
@@ -334,17 +332,16 @@
             "(ontable ?p1)"
           ],
           "learned": [
-            "(handempty)",
             "(ontable ?p1)"
           ],
           "precision": 1.0,
-          "recall": 0.5,
-          "f1": 0.6666666666666666,
-          "tp": 2,
+          "recall": 0.25,
+          "f1": 0.4,
+          "tp": 1,
           "fp": 0,
-          "fn": 2
+          "fn": 3
         },
-        "d_triangle": 2
+        "d_triangle": 3
       },
       "stack": {
         "preconditions": {
@@ -354,14 +351,13 @@
           ],
           "learned": [
             "(holding ?p1)",
-            "(on ?p1 ?p2)",
             "(ontable ?p1)"
           ],
-          "precision": 0.3333333333333333,
+          "precision": 0.5,
           "recall": 0.5,
-          "f1": 0.4,
+          "f1": 0.5,
           "tp": 1,
-          "fp": 2,
+          "fp": 1,
           "fn": 1
         },
         "effects": {
@@ -374,16 +370,17 @@
           ],
           "learned": [
             "(clear ?p2)",
+            "(handempty)",
             "(on ?p1 ?p2)"
           ],
-          "precision": 0.5,
-          "recall": 0.2,
-          "f1": 0.28571428571428575,
-          "tp": 1,
+          "precision": 0.6666666666666666,
+          "recall": 0.4,
+          "f1": 0.5,
+          "tp": 2,
           "fp": 1,
-          "fn": 4
+          "fn": 3
         },
-        "d_triangle": 8
+        "d_triangle": 6
       },
       "unstack": {
         "preconditions": {
@@ -393,14 +390,16 @@
             "(on ?p1 ?p2)"
           ],
           "learned": [
-            "(clear ?p2)"
+            "(clear ?p2)",
+            "(handempty)",
+            "(ontable ?p1)"
           ],
-          "precision": 0.0,
-          "recall": 0.0,
-          "f1": 0.0,
-          "tp": 0,
-          "fp": 1,
-          "fn": 3
+          "precision": 0.3333333333333333,
+          "recall": 0.3333333333333333,
+          "f1": 0.3333333333333333,
+          "tp": 1,
+          "fp": 2,
+          "fn": 2
         },
         "effects": {
           "gt": [
@@ -411,16 +410,17 @@
             "(not (on ?p1 ?p2))"
           ],
           "learned": [
+            "(holding ?p1)",
             "(ontable ?p1)"
           ],
-          "precision": 0.0,
-          "recall": 0.0,
-          "f1": 0.0,
-          "tp": 0,
+          "precision": 0.5,
+          "recall": 0.2,
+          "f1": 0.28571428571428575,
+          "tp": 1,
           "fp": 1,
-          "fn": 5
+          "fn": 4
         },
-        "d_triangle": 10
+        "d_triangle": 9
       }
     }
   },

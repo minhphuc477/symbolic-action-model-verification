@@ -27,12 +27,12 @@ import random
 import sys
 import time
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any
 
 # Ensure repo root on path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
-from src.repair.ceg_omr_engine import CEGOMREngine, CEGOMRConfig
+from src.repair.ceg_omr_engine import CEGOMRConfig, CEGOMREngine
 from src.runners.wsl_harness import FastDownwardRunner
 
 
@@ -42,18 +42,13 @@ def run_random_probing_baseline(
     gt_domain_path: str,
     max_steps: int = 100,
     seed: int = 42,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     Random Probing (Kearns & Singh 2002): executes random valid actions
     without goal direction in an attempt to trigger and diagnose precondition faults.
     """
-    rng = random.Random(seed)
+    _rng = random.Random(seed)
     t0 = time.perf_counter()
-    queries = 0
-    success = False
-
-    # In random probing without goal guidance, agent rarely discovers
-    # the specific bottleneck state on structured combinatorial tasks.
     queries = min(50, max_steps)
     elapsed = time.perf_counter() - t0
 
@@ -73,7 +68,7 @@ def run_naive_replanning_baseline(
     problem_path: str,
     gt_domain_path: str,
     max_replan_attempts: int = 5,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     Naive Replanning (Fox et al. ICAPS 2006): executes candidate plan,
     halts upon failure, but replans using the same flawed action model without schema repair.
@@ -82,7 +77,7 @@ def run_naive_replanning_baseline(
     runner = FastDownwardRunner()
     plan_out = "repair_logs/naive_replan.soln"
 
-    res = runner.plan(mutated_domain_path, problem_path, plan_out)
+    _res = runner.plan(mutated_domain_path, problem_path, plan_out)
     elapsed = time.perf_counter() - t0
 
     return {
@@ -96,7 +91,7 @@ def run_naive_replanning_baseline(
     }
 
 
-def run_ceg_omr_pilot_suite() -> Dict[str, Any]:
+def run_ceg_omr_pilot_suite() -> dict[str, Any]:
     out_dir = Path("benchmark_outputs")
     out_dir.mkdir(parents=True, exist_ok=True)
 

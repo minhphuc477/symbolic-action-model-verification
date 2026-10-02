@@ -7,21 +7,22 @@ Strictly adheres to RESEARCH_RULES.md: deterministic, zero fake metrics.
 
 import os
 import sys
+
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
-import time
 import json
 import math
-from typing import Dict, Any, List, Set, Tuple, Optional
+import time
+from typing import Any
 
 # Ensure repository root is on sys.path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
-from src.metrics.transition_accuracy import parse_pddl_model, ActionSchema, safe_ground
+from src.metrics.transition_accuracy import ActionSchema, parse_pddl_model, safe_ground
 from src.verification.general_pddl_planner import GeneralForwardPlanner
-from src.metrics.planning_burden import compute_planning_burden
 
-def get_full_24intervention_matrix() -> Dict[str, Dict[str, Any]]:
+
+def get_full_24intervention_matrix() -> dict[str, dict[str, Any]]:
     base = "daineto-meta-planning/src/meta_planning/dataset"
 
     return {
@@ -276,7 +277,7 @@ def get_full_24intervention_matrix() -> Dict[str, Dict[str, Any]]:
         }
     }
 
-def run_planning_burden_suite() -> Dict[str, Any]:
+def run_planning_burden_suite() -> dict[str, Any]:
     print("=" * 78)
     print("PHASE 4 WEEK 2: MEASURING PLANNING BURDEN H_P ACROSS 24 INTERVENTIONS")
     print("=" * 78)
@@ -306,11 +307,10 @@ def run_planning_burden_suite() -> Dict[str, Any]:
         gt_planner = GeneralForwardPlanner(gt_models, objects)
 
         # 1. Compute H_P on Ground Truth Model M*
-        t0 = time.time()
         gt_plan, gt_nodes = gt_planner.solve(init, goal)
         gt_hp = math.log2(1.0 + float(gt_nodes))
         gt_sol_len = len(gt_plan) if gt_plan else 0
-        gt_valid, gt_steps, gt_err = gt_planner.execute_plan(init, gt_plan, gt_models, goal)
+        gt_valid, _gt_steps, gt_err = gt_planner.execute_plan(init, gt_plan, gt_models, goal)
         assert gt_valid, f"Ground truth for {domain_name} failed execution: {gt_err}"
 
         domain_entry = {
@@ -336,7 +336,7 @@ def run_planning_burden_suite() -> Dict[str, Any]:
             # Construct intervened model M_hat
             intervened_models = dict(gt_models)
             found_act = False
-            for k_act, schema in gt_models.items():
+            for k_act in gt_models:
                 if k_act.lower() == act_name.lower():
                     act_name = k_act
                     found_act = True
@@ -377,7 +377,7 @@ def run_planning_burden_suite() -> Dict[str, Any]:
                         sim_state = next_s
 
             # Execute lrn_plan on Ground Truth M*
-            gt_exec_valid, exec_steps, failure_reason = gt_planner.execute_plan(init, lrn_plan, gt_models, goal)
+            gt_exec_valid, _exec_steps, failure_reason = gt_planner.execute_plan(init, lrn_plan, gt_models, goal)
             pesr = 1.0 if gt_exec_valid else 0.0
             r_play = 0.0 if gt_exec_valid else float("inf")
 
