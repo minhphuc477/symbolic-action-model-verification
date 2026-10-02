@@ -3,61 +3,48 @@ project:
   lead: "MSc Candidate & AI Research Agent"
   status: "active"
   current_phase: "theoretical_foundations_and_clean_codebase_locked"
-  selected_track: "Search-Tree Topology Collapse under AST Rule Interventions & Goal-Directed A* CEGIS"
+  selected_track: "Unified Flagship: Goal-Directed Counterexample Repair of Action Models (CEG-OMR) for ICAPS/AAAI & MSc Thesis"
 
 research_question:
-  primary: "How do AST rule interventions induce search-tree topology collapse in learned symbolic action models, and how can Goal-Directed A* CEGIS repair models with polynomial sample complexity?"
+  primary: "How can Counterexample-Guided Online Model Repair (CEG-OMR) achieve polynomial sample complexity O(k * diam(G_T) * |F|^r) to resolve search-tree topology collapse under sparse rule interventions in game and planning domains?"
   sub_questions:
-    - "RQ1.1: How does minimal AST edit distance Delta DSL degrade schema reconstruction accuracy across LOCM2, FAMA, and FastLAS?"
-    - "RQ1.2: Under what AST rule intervention types does high passive accuracy (A_pred >= 95%) induce 100% Play Regret (R_play = infinity) graph search collapse?"
-    - "RQ1.3: Which non-LLM symbolic learner exhibits superior topological resilience across the 5 canonical rule intervention types?"
-    - "RQ2.1: How can CEGIS be constrained to the A* search fringe to guarantee goal-directed active model repair?"
-    - "RQ2.2: What is the exact PAC sample complexity bound K_CEGIS for active model repair under k-sparse AST rule modifications?"
+    - "RQ1 (Diagnostic Baseline): Under what AST rule intervention types does high passive accuracy (A_pred >= 95%) induce 100% Play Regret (R_play = infinity) graph search collapse across symbolic learners?"
+    - "RQ2 (Algorithmic Formulation): How can CEGIS be formally adapted to online plan prefix verification (CEG-OMR) using Fast Downward as generator, the game engine as oracle, and MaxSAT/Horn-elimination as synthesizer?"
+    - "RQ3 (Theoretical Bound): What is the formal query complexity bound under reachability constraints, and does it reduce active interaction from O(b^D) to O(k * diam(G_T) * |F|^r)?"
+    - "RQ4 (Empirical Evaluation): Does CEG-OMR achieve 100% repair success with >= 5x fewer queries compared to random exploration and scratch re-learning (FAMA/LOCM2) across Sokoban and IPC benchmarks?"
 
 hypotheses:
-  - id: "H1.1"
-    statement: "Passive schema accuracy degrades linearly with Delta DSL, maintaining >90% match for Delta DSL <= 2."
+  - id: "H1"
+    statement: "Passive schema accuracy fails to guarantee planning success; omitting a single bottleneck precondition induces an exponential phantom subtree Omega(b^(D-d)), collapsing A* search to R_play = infinity."
     status: "untested"
     priority: "high"
 
-  - id: "H1.2"
-    statement: "Type II (Latent Counter) and Type IV (Non-Local Coupling) interventions cause step-function collapse to R_play = infinity even when A_pred > 98% due to state merging in FSMs."
+  - id: "H2"
+    statement: "Restricting counterexample generation to the optimal plan prefix of the current model eliminates uninformative state queries, bounding repair iterations to the number of violated fluents."
     status: "untested"
     priority: "high"
 
-  - id: "H1.3"
-    statement: "FastLAS (ASP ILP) exhibits superior topological resilience for Type III (Disjunctive) rules due to non-monotonic logic, but suffers combinatorial timeout on Type IV rules where FAMA converges faster."
-    status: "untested"
-    priority: "high"
-
-  - id: "H2.1"
-    statement: "Fringe-constrained A* CEGIS eliminates uninformative state probing, reducing active repair episodes by >= 75% compared to unconstrained exploration."
-    status: "untested"
-    priority: "high"
-
-  - id: "H2.2"
-    statement: "Goal-directed A* CEGIS bounds active repair sample complexity to polynomial K_CEGIS <= O(k * d * log n) under k-sparse AST edits."
+  - id: "H3"
+    statement: "CEG-OMR achieves zero play regret in polynomial queries O(k * diam(G_T) * |F|^r), provable via Angluin exact Horn-clause elimination under reachability constraints."
     status: "untested"
     priority: "high"
 
 metrics:
   primary_metrics:
-    - "Search-Tree Edge Symmetric Distance (d_delta)"
+    - "Active Repair Query Complexity (K_queries)"
     - "Play Regret (R_play)"
+    - "Search-Tree Edge Symmetric Distance (d_delta)"
   secondary_metrics:
-    - "Transition Accuracy (A_pred)"
-    - "Critical Precondition Recall (CPR)"
-    - "Phantom Edge Rate (PER)"
-    - "Active CEGIS Query Complexity (K_CEGIS)"
+    - "Precondition Precision, Recall, F1"
+    - "Plan Execution Success Rate (PESR)"
+    - "Wall-clock Repair Time (CPU seconds)"
 
-two_paper_target:
-  paper_1:
-    title: "Benchmarking Search-Tree Topology Collapse in Lightweight Symbolic Action Models under Rule Interventions"
-    target_venue: "Artificial Intelligence Journal (AIJ) / IEEE Transactions on Games"
-    target_month: "Month 7"
-    theory_foundation: "Lemma 1 + Proposition 1 (Search-Tree Phantom Path Divergence: d_delta = Omega(b^(D-d))) + Theorem 2 + Corollaries 1 & 1.1 + Min-Cut + DSO (Chechik 2008)"
-  paper_2:
-    title: "Goal-Directed Counterexample-Guided Active Synthesis for Repairing Symbolic World Models under Sparse Rule Modifications"
-    target_venue: "Artificial Intelligence Journal (AIJ) / AAAI / ICAPS / ICLR"
-    target_month: "Month 15"
-    theory_foundation: "Angluin L* & Horn Clause RTD Active Repair Sample Complexity K_CEGIS <= O(k * d * log n) + Coalgebraic Bisimulation + Galois Connections"
+unified_flagship_target:
+  paper_title: "Goal-Directed Counterexample Repair of Action Models under Sparse Rule Interventions"
+  subtitle_game_context: "with Applications to Autonomous Game Testing"
+  target_venue: "ICAPS 2027 / AAAI 2027 (Conference) -> Expanded to AIJ / IEEE Transactions on Games (Journal Track)"
+  thesis_role: "Core algorithmic contribution (Chapters 4 & 5) of the MSc Thesis Monograph"
+  expansion_trajectory:
+    msc_monograph: "Combines Topology Collapse Benchmark (Diagnostic) + CEG-OMR (Algorithmic Solution)"
+    journal_extension: "Extends to Lifted First-Order PDDL (FastLAS) and Probabilistic PPDDL with 14 IPC domains"
+    phd_proposal: "Self-Healing Causal World Models for Open-Ended Autonomous Game Agents"
