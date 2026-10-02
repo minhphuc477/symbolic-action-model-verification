@@ -134,3 +134,18 @@
      - Authored scripts/autoskill_thesis.py providing local zero-dependency preflight (doctor), trace scanning (scan), validation (validate), and skill drafting (draft).
   3. **Phase 1 Multi-Agent Teamwork Active**:
      - Sentinels, Orchestrators, and Explorer subagents running automated codebase audit and WSL environment hardening.
+
+## Entry 014 - Comprehensive Codebase Scan, 100% Fake Data Purge & Thesis Proposal Monograph Lock
+- **Date**: 2026-10-02
+- **Decision Owner**: MSc Candidate & AI Research Agent
+- **Key Actions & Accomplishments**:
+  1. **Comprehensive Fake Data & Mock Stub Scan (RESEARCH_RULES.md Audit)**:
+     - Scanned entire src/ and tests/ trees for synthetic data patterns, hardcoded metrics, and placeholder stubs.
+     - Refactored src/adapters/ipc_pddl_adapter.py: Completely purged synthetic move-object_{d} and (at obj1 loc_{d}) string generation. Rewrote adapter to read genuine domain/problem PDDL files from domains/ and extract verified state transitions from native Fast Downward execution.
+     - Purged Dead Mock Stubs in src/causal_world_models/: Refactored active_tree_search.py and causal_verifier.py to delegate to CEGOMREngine and TopologyMetricsCalculator instead of returning mock dictionaries.
+     - Confirmed zero residual synthetic data in core execution paths; only DummyLearner in tests/test_burden_metrics.py remains as a standard isolated unit test fixture.
+  2. **Authored Comprehensive Master's Thesis Proposal Monograph**:
+     - Created docs/thesis_proposal_and_system_architecture.md according to docs-architect, documentation-generation-doc-generate, and code-documentation-doc-generate standards.
+     - Structured with 10 comprehensive sections: Executive Summary, Topology Collapse Motivation, RQs & Hypotheses (RQ1-RQ4, H1-H3), Complete STRIPS / Delta-DSL / Theorem 1 & 2 / Lemma 1 & 2 Mathematical Framework, CEG-OMR Tripartite Algorithmic Loop, C4 Architectural Diagrams (Context, Container, Component), Solver Exit Code Contracts, 7,200-run Experimental Protocol with verified baseline citations (SAM, FAMA, Random Probing, Naive Replanning), Threats to Validity, and Milestone Roadmap.
+  3. **Verified Automated Test Suite Pass Rate**:
+     - Executed full test suite in WSL Ubuntu: 24/24 tests passed (100%) with zero warnings or errors.
