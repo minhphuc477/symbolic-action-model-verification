@@ -117,3 +117,20 @@
      - **Title**: *"Goal-Directed Counterexample Repair of Action Models under Sparse Rule Interventions (with Applications to Autonomous Game Testing)"*.
      - **Target Venues**: ICAPS 2027 / AAAI 2027 (Conference) $	o$ Expanded to AIJ / IEEE Transactions on Games (Journal Track).
      - **Thesis Lifecycle**: Acts as Chapters 4 & 5 of MSc Thesis monograph, directly expandable to PhD Research Proposal on Self-Healing Causal World Models.
+
+## Entry 013 - Resolution of 6 Advisor Holes, SAM Citations & AutoSkill Synthesis
+- **Date**: 2026-10-02
+- **Key Actions & Accomplishments**:
+  1. **Resolved & Proved All 6 Advisor Holes** in literature/deep_research_mathematical_foundations_and_proofs.md:
+     - Hole 1: Reconciled Regime A (passive traces, A_pred=1.000, R_play=inf) vs Regime B (search fringe, A_pred >= 1 - b^-d).
+     - Hole 2: Formalized polynomial-in-fluents K_repair <= k |F|^r and logarithmic-in-state-space O(k log |S|) duality.
+     - Hole 3: Added explicit Assumptions 2.1 (finite conjunctions), 2.2 (noise-free oracle), 2.3 (persistent/monotone counterexamples) for Lemma 2.
+     - Hole 4: Verified exact citations for Safe Action Model Learning (Stern & Juba IJCAI 2017; Juba et al. KR 2021).
+     - Hole 5: Established strict experimental protocol: 4 domains x 3 interventions x 4 baselines x 30 instances x 5 seeds = 7,200 runs; Wilcoxon power > 0.985 at alpha = 0.01.
+     - Hole 6: Defined empirical tightness ratio rho = K_repair / (k |F|^r) <= 1.0.
+  2. **Built AutoSkill Architecture for Antigravity & Thesis**:
+     - Created skills/ceg-omr-repair/SKILL.md specifying the CEG-OMR execution runbook.
+     - Updated skills/symbolic-action-model-verification/SKILL.md to align with the unified flagship track.
+     - Authored scripts/autoskill_thesis.py providing local zero-dependency preflight (doctor), trace scanning (scan), validation (validate), and skill drafting (draft).
+  3. **Phase 1 Multi-Agent Teamwork Active**:
+     - Sentinels, Orchestrators, and Explorer subagents running automated codebase audit and WSL environment hardening.
