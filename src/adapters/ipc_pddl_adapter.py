@@ -1,70 +1,133 @@
 """
 IPC PDDL Domain & Trace Adapter Module
-Supports 15 IPC Classical Planning Domains (Blocksworld, Logistics, Satellite, Rovers, Transport, Gripper, Ferry, Miconic, Driverlog, Zenotravel, Depots, Scheduling, Storage, Termes, Openstacks).
-Loads PDDL domains, generates ground-truth search trees G_T^*, and produces action trace datasets for LOCM2, FAMA, and FastLAS.
+======================================
+Loads genuine PDDL domains from the `domains/` directory and extracts real
+action traces from problem instances and valid execution plans.
+Strictly adheres to RESEARCH_RULES.md: ZERO synthetic/mock traces.
 """
 
+from __future__ import annotations
+
 import os
-import json
+from pathlib import Path
+from typing import Dict, Any, List, Optional, Set, Tuple
+
 
 class IPCPDDLAdapter:
-    def __init__(self, domain_name):
-        self.domain_name = domain_name
-        self.ipc_domains = [
-            "Blocksworld", "Logistics", "Satellite", "Rovers", "Transport",
-            "Gripper", "Ferry", "Miconic", "Driverlog", "Zenotravel",
-            "Depots", "Scheduling", "Storage", "Termes", "Openstacks",
-            "Sokoban", "It Is Pitch Black", "Graded Sir", "Katamari", "Braid Grid",
-            "Elevator", "Nomystery", "Floortile", "Barman", "Childsnack",
-            "Data-Network", "Tidybot", "Cave-Diving", "Visitall", "Grid-World"
-        ]
-        
-    def generate_ipc_domain_pddl(self):
-        """Generates ground-truth PDDL domain definition for the specified IPC domain."""
-        return f"""(define (domain {self.domain_name})
-  (:requirements :strips :typing)
-  (:types location physobj)
-  (:predicates
-     (at ?obj - physobj ?loc - location)
-     (connected ?l1 - location ?l2 - location)
-     (in-use ?obj - physobj)
-  )
+    """
+    Adapter for genuine IPC benchmarks and game domains.
+    Reads verified PDDL domain/problem files from disk and generates valid traces.
+    """
 
-  (:action move-object
-     :parameters (?obj - physobj ?from - location ?to - location)
-     :precondition (and (at ?obj ?from) (connected ?from ?to) (not (in-use ?obj)))
-     :effect (and (not (at ?obj ?from)) (at ?obj ?to))
-  )
-)"""
+    def __init__(self, domain_name: str, domains_root: str = "domains"):
+        self.domain_name = domain_name.lower()
+        self.domains_root = Path(domains_root)
 
-    def generate_ground_truth_tree_and_traces(self, num_traces=100, max_depth=20):
+    def get_domain_pddl_path(self) -> Path:
+        """Locates the genuine PDDL domain file on disk."""
+        path = self.domains_root / self.domain_name / "domain.pddl"
+        if not path.exists():
+            raise FileNotFoundError(
+                f"Ground-truth PDDL domain not found for '{self.domain_name}' at {path}. "
+                "Ensure domain files are placed in domains/<domain_name>/domain.pddl."
+            )
+        return path
+
+    def get_problem_pddl_path(self, problem_id: str = "problem_p01") -> Path:
+        """Locates the genuine PDDL problem file on disk."""
+        path = self.domains_root / self.domain_name / f"{problem_id}.pddl"
+        if not path.exists():
+            raise FileNotFoundError(
+                f"Ground-truth PDDL problem not found for '{self.domain_name}' at {path}."
+            )
+        return path
+
+    def load_domain_text(self) -> str:
+        """Reads and returns the ground-truth PDDL domain definition."""
+        return self.get_domain_pddl_path().read_text(encoding="utf-8")
+
+    def load_problem_text(self, problem_id: str = "problem_p01") -> str:
+        """Reads and returns the ground-truth PDDL problem definition."""
+        return self.get_problem_pddl_path(problem_id).read_text(encoding="utf-8")
+
+    def generate_ground_truth_traces(
+        self,
+        problem_id: str = "problem_p01",
+        max_steps: int = 100,
+    ) -> Dict[str, Any]:
         """
-        Simulates ground-truth search tree building G_T^* and action trace generation.
+        Executes genuine plan actions via Fast Downward / Forward Planner
+        to collect verified (s_t, a_t, s_{t+1}) transition traces.
         """
-        traces = []
-        for t_idx in range(num_traces):
-            trace_steps = []
-            for d in range(max_depth):
-                trace_steps.append({
-                    "step": d + 1,
-                    "action": f"move-object_{d}",
-                    "state_before": [f"(at obj1 loc_{d})", f"(connected loc_{d} loc_{d+1})"],
-                    "state_after": [f"(at obj1 loc_{d+1})", f"(connected loc_{d} loc_{d+1})"]
-                })
-            traces.append(trace_steps)
-            
+        import pddl
+        from src.metrics.transition_accuracy import parse_pddl_model
+        from src.runners.wsl_harness import FastDownwardRunner
+
+        dom_path = self.get_domain_pddl_path()
+        prob_path = self.get_problem_pddl_path(problem_id)
+
+        # 1. Solve with Fast Downward to get optimal execution plan
+        runner = FastDownwardRunner()
+        sol_file = str(self.domains_root / "trace_plan.soln")
+        res = runner.plan(str(dom_path), str(prob_path), sol_file)
+
+        if not res.success or not os.path.exists(sol_file):
+            return {
+                "domain": self.domain_name,
+                "problem": problem_id,
+                "num_traces": 0,
+                "traces": [],
+                "error": f"Planner failed: {res.error_message}",
+            }
+
+        # 2. Parse plan actions
+        plan_actions = []
+        with open(sol_file, "r", encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if line.startswith("(") and not line.startswith(";"):
+                    plan_actions.append(line)
+
+        # 3. Simulate step-by-step on true physics
+        actions_map = parse_pddl_model(self.load_domain_text())
+        prob = pddl.parse_problem(str(prob_path))
+        cur_state = set(str(x) for x in prob.init)
+
+        trace_steps = []
+        for idx, act_str in enumerate(plan_actions[:max_steps]):
+            clean = act_str.strip("()")
+            parts = clean.split()
+            act_name = parts[0].lower()
+            args = [p.lower() for p in parts[1:]]
+
+            schema = actions_map.get(act_name)
+            if not schema:
+                break
+
+            pmap = {p: a for p, a in zip(schema.params, args)}
+            next_state = schema.apply(cur_state, pmap)
+            if next_state is None:
+                break
+
+            trace_steps.append({
+                "step": idx + 1,
+                "action": act_str,
+                "state_before": sorted(list(cur_state)),
+                "state_after": sorted(list(next_state)),
+            })
+            cur_state = next_state
+
         return {
             "domain": self.domain_name,
-            "num_traces": len(traces),
-            "max_depth": max_depth,
-            "sample_trace": traces[0] if traces else []
+            "problem": problem_id,
+            "plan_length": len(plan_actions),
+            "num_steps": len(trace_steps),
+            "trace": trace_steps,
         }
 
+
 if __name__ == "__main__":
-    adapter = IPCPDDLAdapter("Blocksworld")
-    domain_pddl = adapter.generate_ipc_domain_pddl()
-    traces_data = adapter.generate_ground_truth_tree_and_traces(num_traces=10)
-    
-    print("=== IPC PDDL Adapter Engine Verified ===")
-    print(f"Domain: {adapter.domain_name}")
-    print(f"Generated {traces_data['num_traces']} ground-truth traces (max_depth={traces_data['max_depth']})")
+    adapter = IPCPDDLAdapter("blocksworld")
+    print(f"Domain text loaded ({len(adapter.load_domain_text())} chars)")
+    traces_data = adapter.generate_ground_truth_traces()
+    print(f"Extracted {traces_data.get('num_steps', 0)} verified trace steps from native Fast Downward execution.")

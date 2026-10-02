@@ -1,29 +1,54 @@
 """
-Active Search-Tree Rollout Engine for Paper 2
-Implements Test-Time Compute Rollouts to Prune Phantom Paths in Learned Dynamics.
+Active Search-Tree Rollout & Verification Engine
+================================================
+Integrated with the Unified Flagship CEG-OMR Architecture:
+Replaces dead mock stubs with direct delegation to CEGOMREngine.
 """
 
-from typing import Dict, Any, List
+from __future__ import annotations
+
+from typing import Dict, Any, List, Optional
+from src.repair.ceg_omr_engine import CEGOMREngine, CEGOMRConfig
+
 
 class ActiveTreeSearchRollout:
-    def __init__(self, search_depth: int = 20, max_rollouts: int = 1000):
-        self.search_depth = search_depth
-        self.max_rollouts = max_rollouts
+    """
+    Executes goal-directed model repair rollouts to eliminate phantom paths
+    under rule interventions.
+    """
 
-    def execute_active_verification_rollout(self, initial_state: List[str], learned_rules: Dict[str, Any]) -> Dict[str, Any]:
+    def __init__(self, max_iterations: int = 50, seed: int = 42):
+        self.max_iterations = max_iterations
+        self.seed = seed
+
+    def execute_active_verification_rollout(
+        self,
+        domain_path: str,
+        problem_path: str,
+        gt_domain_path: str = "",
+        out_dir: str = "repair_logs/",
+    ) -> Dict[str, Any]:
         """
-        Executes active tree search rollouts to discover phantom path anomalies and update world model preconditions.
+        Executes active model repair loop using native Fast Downward and Oracle verifier.
         """
+        config = CEGOMRConfig(
+            domain_path=domain_path,
+            problem_path=problem_path,
+            ground_truth_domain=gt_domain_path,
+            max_repair_iterations=self.max_iterations,
+            seed=self.seed,
+            out_dir=out_dir,
+        )
+        engine = CEGOMREngine(config)
+        result = engine.run()
+
         return {
-            "search_depth": self.search_depth,
-            "rollouts_performed": self.max_rollouts,
-            "phantom_paths_pruned": 0,
-            "play_regret_bound": 0.0,
-            "status": "ACTIVE_ROLLOUT_SUCCESS"
+            "success": result.success,
+            "total_queries": result.total_queries,
+            "iterations": result.iterations,
+            "play_regret_after": result.play_regret_after,
+            "wall_clock_seconds": result.wall_clock_seconds,
+            "repaired_domain_path": result.repaired_domain_path,
+            "num_counterexamples": len(result.counterexamples),
+            "status": "ACTIVE_REPAIR_SUCCESS" if result.success else "ACTIVE_REPAIR_FAILED",
         }
-
-if __name__ == "__main__":
-    rollout = ActiveTreeSearchRollout()
-    res = rollout.execute_active_verification_rollout(["at_s0"], {})
-    print("=== Paper 2 Active Tree Search Rollout Engine Initialized ===")
-    print(res)

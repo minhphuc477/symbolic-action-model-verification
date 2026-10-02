@@ -1,27 +1,44 @@
 """
-Causal World Model Verifier Module for Paper 2
-Computes Structural Causal Model (SCM) Do-Interventions and PAC Exploration Bounds.
+Causal World Model Verifier Module
+==================================
+Integrated with the Unified Flagship CEG-OMR Architecture:
+Computes empirical search-tree divergence and verifies intervention fidelity
+using verified topological metrics (TopologyMetricsCalculator).
 """
 
-from typing import Dict, Any, List
+from __future__ import annotations
+
+from typing import Dict, Any, List, Optional
+from src.metrics.topology_metrics import TopologyMetricsCalculator
+
 
 class CausalWorldModelVerifier:
-    def __init__(self, causal_graph_nodes: List[str]):
-        self.nodes = causal_graph_nodes
+    """
+    Evaluates causal intervention fidelity and graph edit distance d_delta
+    between Ground Truth G_T(M*) and Learned Model G_T(M_hat).
+    """
 
-    def verify_causal_abstraction_fidelity(self, ground_truth_scm: Dict[str, Any], learned_scm: Dict[str, Any]) -> Dict[str, Any]:
+    def __init__(self, causal_graph_nodes: Optional[List[str]] = None):
+        self.nodes = causal_graph_nodes or []
+
+    def verify_causal_abstraction_fidelity(
+        self,
+        gt_edges: List[Any],
+        pred_edges: List[Any],
+        omitted_predicates: Optional[List[str]] = None,
+    ) -> Dict[str, Any]:
         """
-        Computes Structural Causal Model (SCM) intervention fidelity score under do(X = x).
+        Computes exact Graph Edit Distance and Phantom Edge Rate from native edge lists.
         """
+        omitted = omitted_predicates or []
+        calc = TopologyMetricsCalculator(gt_edges, pred_edges, omitted)
+        metrics = calc.compute_all_metrics(omitted)
+
         return {
             "causal_node_count": len(self.nodes),
-            "do_intervention_fidelity": 1.0,
-            "pac_exploration_sample_complexity_bound": f"O(k * log(1/delta))",
-            "status": "CAUSAL_FIDELITY_VERIFIED"
+            "d_delta": metrics.get("GED", 0),
+            "phantom_edges": metrics.get("Added_Phantom_Edges", 0),
+            "phantom_edge_rate": metrics.get("PER", 0.0),
+            "accuracy": metrics.get("Accuracy", 1.0),
+            "status": "CAUSAL_METRICS_COMPUTED",
         }
-
-if __name__ == "__main__":
-    verifier = CausalWorldModelVerifier(["pos", "key", "door", "goal"])
-    res = verifier.verify_causal_abstraction_fidelity({}, {})
-    print("=== Paper 2 Causal World Model Verifier Initialized ===")
-    print(res)
