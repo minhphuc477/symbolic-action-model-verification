@@ -10,9 +10,13 @@ from typing import Dict, List, Set, Tuple, Optional, Any
 from src.metrics.transition_accuracy import ActionSchema, safe_ground
 
 class GeneralForwardPlanner:
-    def __init__(self, actions: Dict[str, ActionSchema], objects: List[str]):
+    def __init__(self, actions: Dict[str, ActionSchema], objects: List[str],
+                 type_map: Optional[Dict[str, str]] = None,
+                 param_types: Optional[Dict[str, List[str]]] = None):
         self.actions = actions
         self.objects = objects
+        self.type_map = type_map or {}
+        self.param_types = param_types or {}
 
     def get_ground_actions(self) -> List[Tuple[str, List[str]]]:
         grounded = []
@@ -20,12 +24,23 @@ class GeneralForwardPlanner:
             k = len(schema.params)
             if k == 0:
                 grounded.append((name, []))
-            elif k == 1:
-                for obj in self.objects:
-                    grounded.append((name, [obj]))
-            else:
-                for args in itertools.product(self.objects, repeat=k):
+                continue
+            
+            types = self.param_types.get(name)
+            if types and len(types) == k and self.type_map:
+                candidates = []
+                for t in types:
+                    matching = [o for o in self.objects if self.type_map.get(o) == t]
+                    candidates.append(matching)
+                for args in itertools.product(*candidates):
                     grounded.append((name, list(args)))
+            else:
+                if k == 1:
+                    for obj in self.objects:
+                        grounded.append((name, [obj]))
+                else:
+                    for args in itertools.product(self.objects, repeat=k):
+                        grounded.append((name, list(args)))
         return grounded
 
     def solve(self, init_state: Set[str], goal_literals: Set[str], max_nodes: int = 50000) -> Tuple[Optional[List[Tuple[str, List[str]]]], int]:
