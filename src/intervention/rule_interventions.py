@@ -33,7 +33,7 @@ class OmitLeafPreconditionStrategy(BaseInterventionStrategy):
         M = copy.deepcopy(model_dict)
         actions = M.get("actions", {})
         if actions:
-            target_act = rng.choice(list(actions.keys()))
+            target_act = rng.choice(sorted(actions.keys()))
             precs = actions[target_act].get("preconditions", [])
             if precs:
                 actions[target_act]["preconditions"].pop(0)
@@ -44,7 +44,7 @@ class OmitBottleneckPreconditionStrategy(BaseInterventionStrategy):
         M = copy.deepcopy(model_dict)
         actions = M.get("actions", {})
         if actions:
-            target_act = rng.choice(list(actions.keys()))
+            target_act = rng.choice(sorted(actions.keys()))
             actions[target_act]["preconditions"] = [
                 p for p in actions[target_act].get("preconditions", []) 
                 if "critical" not in p and "door" not in p
@@ -56,7 +56,7 @@ class RedundantEffectStrategy(BaseInterventionStrategy):
         M = copy.deepcopy(model_dict)
         actions = M.get("actions", {})
         if actions:
-            target_act = rng.choice(list(actions.keys()))
+            target_act = rng.choice(sorted(actions.keys()))
             actions[target_act].setdefault("add_effects", []).append("(redundant_flag_set)")
         return M
 
@@ -65,7 +65,7 @@ class InvertBufferConditionStrategy(BaseInterventionStrategy):
         M = copy.deepcopy(model_dict)
         actions = M.get("actions", {})
         if actions:
-            target_act = rng.choice(list(actions.keys()))
+            target_act = rng.choice(sorted(actions.keys()))
             actions[target_act].setdefault("preconditions", []).append("(not (is_buffer_full))")
         return M
 
@@ -81,7 +81,7 @@ class RenameVariableAttributeStrategy(BaseInterventionStrategy):
         M = copy.deepcopy(model_dict)
         actions = M.get("actions", {})
         if actions:
-            target_act = rng.choice(list(actions.keys()))
+            target_act = rng.choice(sorted(actions.keys()))
             actions[target_act].setdefault("preconditions", []).append("(renamed_attr ?x)")
         return M
 
@@ -90,7 +90,7 @@ class SwapLHSConditionOrderStrategy(BaseInterventionStrategy):
         M = copy.deepcopy(model_dict)
         actions = M.get("actions", {})
         if actions:
-            target_act = rng.choice(list(actions.keys()))
+            target_act = rng.choice(sorted(actions.keys()))
             actions[target_act].get("preconditions", []).reverse()
         return M
 
@@ -99,7 +99,7 @@ class MutateGridParamsStrategy(BaseInterventionStrategy):
         M = copy.deepcopy(model_dict)
         actions = M.get("actions", {})
         if actions:
-            target_act = rng.choice(list(actions.keys()))
+            target_act = rng.choice(sorted(actions.keys()))
             actions[target_act].setdefault("preconditions", []).append("(grid_step_offset_2)")
         return M
 
@@ -108,7 +108,7 @@ class OmitGoalCheckPredicateStrategy(BaseInterventionStrategy):
         M = copy.deepcopy(model_dict)
         actions = M.get("actions", {})
         if actions:
-            target_act = rng.choice(list(actions.keys()))
+            target_act = rng.choice(sorted(actions.keys()))
             actions[target_act]["preconditions"] = [
                 p for p in actions[target_act].get("preconditions", []) 
                 if "goal" not in p
