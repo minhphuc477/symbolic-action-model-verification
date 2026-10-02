@@ -1,0 +1,78 @@
+[
+  {
+    "domain": "Sokoban (IPC Game Domain)",
+    "method": "CEG-OMR (Proposed)",
+    "success": true,
+    "total_queries": 7,
+    "iterations": 2,
+    "rho_tightness": 0.0273,
+    "k_upper_bound": 256,
+    "pesr_before": 0.0,
+    "pesr_after": 1.0,
+    "r_play_before": "inf",
+    "r_play_after": 0.0,
+    "wall_clock_seconds": 0.776
+  },
+  {
+    "method": "Random Probing (Kearns & Singh 2002)",
+    "success": false,
+    "total_queries": 50,
+    "pesr_after": 0.0,
+    "play_regret_after": "inf",
+    "wall_clock_seconds": 0.0,
+    "notes": "Random exploration failed to navigate bottleneck state within budget",
+    "domain": "Sokoban (IPC Game Domain)",
+    "pesr_before": 0.0,
+    "r_play_before": "inf"
+  },
+  {
+    "method": "Naive Replanning (Fox et al. ICAPS 2006)",
+    "success": false,
+    "total_queries": 1,
+    "pesr_after": 0.0,
+    "play_regret_after": "inf",
+    "wall_clock_seconds": 0.266,
+    "notes": "Replans repeatedly into the same phantom edge (schema unamended)",
+    "domain": "Sokoban (IPC Game Domain)",
+    "pesr_before": 0.0,
+    "r_play_before": "inf"
+  },
+  {
+    "domain": "Blocksworld (IPC Classical Domain)",
+    "method": "CEG-OMR (Proposed)",
+    "success": true,
+    "total_queries": 6,
+    "iterations": 2,
+    "rho_tightness": 0.24,
+    "k_upper_bound": 25,
+    "pesr_before": 0.0,
+    "pesr_after": 1.0,
+    "r_play_before": "inf",
+    "r_play_after": 0.0,
+    "wall_clock_seconds": 0.619
+  },
+  {
+    "method": "Random Probing (Kearns & Singh 2002)",
+    "success": false,
+    "total_queries": 50,
+    "pesr_after": 0.0,
+    "play_regret_after": "inf",
+    "wall_clock_seconds": 0.0,
+    "notes": "Random exploration failed to navigate bottleneck state within budget",
+    "domain": "Blocksworld (IPC Classical Domain)",
+    "pesr_before": 0.0,
+    "r_play_before": "inf"
+  },
+  {
+    "method": "Naive Replanning (Fox et al. ICAPS 2006)",
+    "success": false,
+    "total_queries": 1,
+    "pesr_after": 0.0,
+    "play_regret_after": "inf",
+    "wall_clock_seconds": 0.335,
+    "notes": "Replans repeatedly into the same phantom edge (schema unamended)",
+    "domain": "Blocksworld (IPC Classical Domain)",
+    "pesr_before": 0.0,
+    "r_play_before": "inf"
+  }
+]

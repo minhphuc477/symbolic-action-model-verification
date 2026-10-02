@@ -1,96 +1,59 @@
 (define
-  (domain blocksworld)
-  (:requirements :strips)
+  (domain sokoban-sequential)
+  (:requirements :typing)
+  (:types location direction)
   (:predicates
-    (on ?x ?y)
-    (ontable ?x)
-    (clear ?x)
-    (handempty)
-    (holding ?x)
+    (at-player ?l - location)
+    (at-box ?b - location)
+    (adjacent ?from - location ?to - location ?d - direction)
+    (clear ?l - location)
   )
   (:action
-    pick-up
+    move
     :parameters
-    (?x)
+    (?from - location ?to - location ?d - direction)
     :precondition
     (and
-      (clear ?x)
-      (ontable ?x)
-      (handempty)
+      (at-player ?from)
+      (adjacent ?from ?to ?d)
+      (clear ?to)
     )
     :effect
     (and
+      (at-player ?to)
       (not
-        (ontable ?x)
+        (at-player ?from)
       )
+      (clear ?from)
       (not
-        (clear ?x)
+        (clear ?to)
       )
-      (not
-        (handempty)
-      )
-      (holding ?x)
     )
   )
   (:action
-    put-down
+    push
     :parameters
-    (?x)
-    :precondition
-    (holding ?x)
-    :effect
-    (and
-      (not
-        (holding ?x)
-      )
-      (clear ?x)
-      (handempty)
-      (ontable ?x)
-    )
-  )
-  (:action
-    stack
-    :parameters
-    (?x ?y)
+    (?p-pos - location ?b-pos - location ?b-target - location ?d - direction)
     :precondition
     (and
-      (holding ?x)
-      (clear ?y)
+      (at-player ?p-pos)
+      (at-box ?b-pos)
+      (adjacent ?p-pos ?b-pos ?d)
+      (adjacent ?b-pos ?b-target ?d)
     )
     :effect
     (and
+      (at-player ?b-pos)
       (not
-        (holding ?x)
+        (at-player ?p-pos)
       )
+      (at-box ?b-target)
       (not
-        (clear ?y)
+        (at-box ?b-pos)
       )
-      (clear ?x)
-      (handempty)
-      (on ?x ?y)
-    )
-  )
-  (:action
-    unstack
-    :parameters
-    (?x ?y)
-    :precondition
-    (and
-      (on ?x ?y)
-      (clear ?x)
-    )
-    :effect
-    (and
-      (holding ?x)
-      (clear ?y)
+      (clear ?p-pos)
       (not
-        (clear ?x)
-      )
-      (not
-        (handempty)
-      )
-      (not
-        (on ?x ?y)
+        (clear ?b-target)
       )
     )
   )

@@ -1,5 +1,4 @@
 ; Sokoban PDDL domain — IPC standard (strips version)
-; Source: International Planning Competition 2008 / Sokoban track
 (define (domain sokoban-sequential)
   (:requirements :typing)
   (:types location direction)
@@ -8,40 +7,41 @@
     (at-box ?b - location)
     (adjacent ?from - location ?to - location ?d - direction)
     (clear ?l - location)
-    (goal-at ?l - location)
   )
 
-  ;; Move player in empty cell
+  ;; Move player into an empty adjacent cell
   (:action move
-    :parameters (?player-from - location ?player-to - location ?d - direction)
+    :parameters (?from - location ?to - location ?d - direction)
     :precondition (and
-      (at-player ?player-from)
-      (adjacent ?player-from ?player-to ?d)
-      (clear ?player-to)
+      (at-player ?from)
+      (adjacent ?from ?to ?d)
+      (clear ?to)
     )
     :effect (and
-      (at-player ?player-to)
-      (not (at-player ?player-from))
+      (at-player ?to)
+      (not (at-player ?from))
+      (clear ?from)
+      (not (clear ?to))
     )
   )
 
-  ;; Push box: player steps from player-from to box-at, box moves to box-to
+  ;; Push box: player pushes box from ?b-pos into adjacent ?b-target
   (:action push
-    :parameters (?player-from - location ?box-at - location ?box-to - location ?d - direction)
+    :parameters (?p-pos - location ?b-pos - location ?b-target - location ?d - direction)
     :precondition (and
-      (at-player ?player-from)
-      (at-box ?box-at)
-      (adjacent ?player-from ?box-at ?d)
-      (adjacent ?box-at ?box-to ?d)
-      (clear ?box-to)
+      (at-player ?p-pos)
+      (at-box ?b-pos)
+      (adjacent ?p-pos ?b-pos ?d)
+      (adjacent ?b-pos ?b-target ?d)
+      (clear ?b-target)
     )
     :effect (and
-      (at-player ?box-at)
-      (not (at-player ?player-from))
-      (at-box ?box-to)
-      (not (at-box ?box-at))
-      (clear ?box-at)
-      (not (clear ?box-to))
+      (at-player ?b-pos)
+      (not (at-player ?p-pos))
+      (at-box ?b-target)
+      (not (at-box ?b-pos))
+      (clear ?p-pos)
+      (not (clear ?b-target))
     )
   )
 )
