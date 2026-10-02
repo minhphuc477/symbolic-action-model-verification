@@ -39,3 +39,9 @@ daineto-meta-planning/
 PuzzleScript/
 FastLAS/
 
+# Planner temporary execution files & logs
+sas_plan*
+*.soln
+repair_logs/
+.agents/
+

@@ -149,3 +149,37 @@
      - Structured with 10 comprehensive sections: Executive Summary, Topology Collapse Motivation, RQs & Hypotheses (RQ1-RQ4, H1-H3), Complete STRIPS / Delta-DSL / Theorem 1 & 2 / Lemma 1 & 2 Mathematical Framework, CEG-OMR Tripartite Algorithmic Loop, C4 Architectural Diagrams (Context, Container, Component), Solver Exit Code Contracts, 7,200-run Experimental Protocol with verified baseline citations (SAM, FAMA, Random Probing, Naive Replanning), Threats to Validity, and Milestone Roadmap.
   3. **Verified Automated Test Suite Pass Rate**:
      - Executed full test suite in WSL Ubuntu: 24/24 tests passed (100%) with zero warnings or errors.
+
+
+## Entry 015 - Full 4-Domain Benchmark Completion, External Ecosystem Mapping & Regression Lock
+- **Date**: 2026-10-02
+- **Decision Owner**: MSc Candidate & AI Research Agent
+- **Key Actions & Accomplishments**:
+  1. **Complete 4-Domain Benchmark Matrix Assets Grounded**:
+     - Built and verified standard IPC STRIPS domain & problem files for all 4 required benchmark domains:
+       - `domains/sokoban/` (Gridworld Game AI - spatial obstacle bottleneck)
+       - `domains/blocksworld/` (Classical Stacking - physical exclusivity bottleneck)
+       - `domains/gripper/` (Resource Bottleneck - multi-item gripper capacity `(free ?gripper)`)
+       - `domains/logistics/` (Transportation Bottleneck - vehicle city confinement `(in-city ?to ?c)`)
+     - Verified solvability with Fast Downward ($A^*$ with `lmcut()`) in WSL with 0 errors.
+     - Generated Type II bottleneck mutated domains in `domains/mutated/`.
+  2. **Empirical 4-Domain Pilot Benchmark Executed**:
+     - Upgraded `src/experiments/benchmark_ceg_omr_pilot.py` to evaluate all 4 domains against Random Probing and Naive Replanning.
+     - Results saved to `benchmark_outputs/pilot_ceg_omr_comparison.json`:
+       - **Sokoban**: $K_{\text{repair}} = 7$, $\rho = 0.0273 \le 1.0$, PESR: $0.0 \to 1.0$, $R_{\text{play}}: \infty \to 0.0$, Wall-clock: 0.733s.
+       - **Blocksworld**: $K_{\text{repair}} = 6$, $\rho = 0.2400 \le 1.0$, PESR: $0.0 \to 1.0$, $R_{\text{play}}: \infty \to 0.0$, Wall-clock: 0.572s.
+       - **Gripper**: $K_{\text{repair}} = 13$, $\rho = 0.2031 \le 1.0$, PESR: $0.0 \to 1.0$, $R_{\text{play}}: \infty \to 0.0$, Wall-clock: 0.620s.
+       - **Logistics**: $K_{\text{repair}} = 12$, $\rho = 0.1481 \le 1.0$, PESR: $0.0 \to 1.0$, $R_{\text{play}}: \infty \to 0.0$, Wall-clock: 0.583s.
+       - Baselines failed across all 4 domains (PESR = 0.0, $R_{\text{play}} = \infty$).
+  3. **Canonical External Open-Source Repositories Cataloged**:
+     - Authored `docs/external_repositories_and_benchmarks.md` cataloging authoritative repositories:
+       - FAMA: `sjimenezgithub/strips-learning` & `daineto/meta-planning` (ICAPS 2018 / AIJ 2019).
+       - SAM: `argaman-aloni/sam_learning` & `hsle/sam-learning` (KR 2021 / AAAI 2023 / ICAPS 2024).
+       - LOCM / LOCM2: `AI-Planning/macq` (`macq/extract/locm.py`).
+       - IPC Generators & Benchmarks: `AI-Planning/pddl-generators` (Zenodo DOI 10.5281/zenodo.6382173) & `aibasel/downward-benchmarks`.
+       - FastLAS: `spike-imperial/FastLAS` (KR 2020).
+       - Game AI Symbolic: `ptigas/puzzlescript-to-pddl`, `mafiaman/puzzlescript-pddl`.
+  4. **Regression Test Suite Expanded to 29/29 Passing (100%)**:
+     - Authored `tests/test_ceg_omr_repair.py` testing CEG-OMR repair on all 4 domains and verifying Theorem 2 tightness bound $\rho \le 1.0$.
+     - Fixed `pick` / `pick-up` alias support in `src/metrics/transition_accuracy.py`.
+     - Full test suite in WSL Ubuntu `venv_linux`: **29/29 tests passed (100%)**.

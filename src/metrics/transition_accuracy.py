@@ -131,9 +131,7 @@ def parse_pddl_model(pddl_text: str) -> Dict[str, ActionSchema]:
     
     for block in act_blocks:
         name = block.split()[0].strip().lower().replace("_", "-")
-        if name == "pick":
-            name = "pick-up"
-        elif name == "putdown":
+        if name == "putdown":
             name = "put-down"
 
         param_sexpr = extract_sexpr(block, ':parameters')
@@ -145,7 +143,12 @@ def parse_pddl_model(pddl_text: str) -> Dict[str, ActionSchema]:
         eff_sexpr = extract_sexpr(block, ':effect')
         eff = parse_atoms(eff_sexpr)
         
-        actions[name] = ActionSchema(name, params, pre, eff)
+        schema = ActionSchema(name, params, pre, eff)
+        actions[name] = schema
+        if name == "pick":
+            actions["pick-up"] = schema
+        elif name == "pick-up":
+            actions["pick"] = schema
         
     return actions
 

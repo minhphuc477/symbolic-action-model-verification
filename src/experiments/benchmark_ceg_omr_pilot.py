@@ -123,6 +123,28 @@ def run_ceg_omr_pilot_suite() -> Dict[str, Any]:
             "target_action": "pick-up",
             "omitted_condition": "(handempty)",
         },
+        {
+            "domain_name": "Gripper (IPC Classical Domain)",
+            "gt_domain": "domains/gripper/domain.pddl",
+            "mutated_domain": "domains/mutated/domain_gripper_Type_II.pddl",
+            "problem": "domains/gripper/problem_p01.pddl",
+            "k": 1,
+            "fluents_count": 4,
+            "max_arity": 3,
+            "target_action": "pick",
+            "omitted_condition": "(free ?gripper)",
+        },
+        {
+            "domain_name": "Logistics (IPC Transportation Domain)",
+            "gt_domain": "domains/logistics/domain.pddl",
+            "mutated_domain": "domains/mutated/domain_logistics_Type_II.pddl",
+            "problem": "domains/logistics/problem_p01.pddl",
+            "k": 1,
+            "fluents_count": 3,
+            "max_arity": 4,
+            "target_action": "drive-truck",
+            "omitted_condition": "(in-city ?to ?c)",
+        },
     ]
 
     results = []
