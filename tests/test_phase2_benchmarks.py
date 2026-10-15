@@ -116,6 +116,22 @@ class TestEmpiricalMetrics(unittest.TestCase):
         self.assertEqual(omit_t1["R_play"], "INFINITY")
         self.assertEqual(omit_t1["phantom_edges"], 1)
 
+    def test_proposition2_causal_decoupling(self):
+        from src.verification.proposition2_causal_decoupling import (
+            run_proposition2_empirical_validation,
+        )
+        res = run_proposition2_empirical_validation()
+        self.assertTrue(res["independence_demonstrated"])
+        self.assertLess(abs(res["spearman_rank_correlation_rho"]), 0.35)
+        
+        # Verify Direction 1: high A_pred, PESR = 0.0
+        d1 = [d for d in res["datapoints"] if d["category"] == "Direction 1 (High A_pred, Low PESR)"]
+        self.assertTrue(any(d["a_pred"] >= 0.95 and d["pesr"] == 0.0 for d in d1))
+        
+        # Verify Direction 2: low A_pred, PESR = 1.0
+        d2 = [d for d in res["datapoints"] if d["category"] == "Direction 2 (Low A_pred, High PESR)"]
+        self.assertTrue(any(d["a_pred"] <= 0.15 and d["pesr"] == 1.0 for d in d2))
+
 if __name__ == "__main__":
     unittest.main()
 

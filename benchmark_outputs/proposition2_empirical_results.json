@@ -1,0 +1,120 @@
+{
+  "benchmark_task": "Task 1: Tower Inversion",
+  "num_models_evaluated": 14,
+  "spearman_rank_correlation_rho": 0.0077,
+  "independence_demonstrated": true,
+  "datapoints": [
+    {
+      "model_name": "Control (Ground Truth M*)",
+      "category": "Baseline",
+      "a_pred": 1.0,
+      "pesr": 1.0,
+      "r_play": 0,
+      "details": "Ground-truth physics with full fidelity"
+    },
+    {
+      "model_name": "Omit (clear ?o1) in unstack",
+      "category": "Direction 1 (High A_pred, Low PESR)",
+      "a_pred": 1.0,
+      "pesr": 0.0,
+      "r_play": "INFINITY",
+      "details": "Permits unstacking covered blocks from inside a tower"
+    },
+    {
+      "model_name": "Omit (handempty) in pick-up",
+      "category": "Direction 1 (High A_pred, Low PESR)",
+      "a_pred": 1.0,
+      "pesr": 0.0,
+      "r_play": "INFINITY",
+      "details": "Permits picking up a block while already holding another"
+    },
+    {
+      "model_name": "Omit (clear ?o2) in stack",
+      "category": "Direction 1 (High A_pred, Low PESR)",
+      "a_pred": 1.0,
+      "pesr": 1.0,
+      "r_play": 0,
+      "details": "Permits stacking onto already covered blocks"
+    },
+    {
+      "model_name": "Omit (holding ?o1) in stack",
+      "category": "Direction 1 (High A_pred, Low PESR)",
+      "a_pred": 1.0,
+      "pesr": 0.0,
+      "r_play": "INFINITY",
+      "details": "Permits stacking a block without holding it"
+    },
+    {
+      "model_name": "Omit (on ?o1 ?o2) in unstack",
+      "category": "Direction 1 (High A_pred, Low PESR)",
+      "a_pred": 1.0,
+      "pesr": 1.0,
+      "r_play": 0,
+      "details": "Permits unstacking blocks that are on table"
+    },
+    {
+      "model_name": "Distractor Injection (K=5 actions)",
+      "category": "Direction 2 (Low A_pred, High PESR)",
+      "a_pred": 0.444,
+      "pesr": 1.0,
+      "r_play": 0,
+      "details": "Lemma 2 construction: 5 distractor actions with disjoint fluents"
+    },
+    {
+      "model_name": "Distractor Injection (K=10 actions)",
+      "category": "Direction 2 (Low A_pred, High PESR)",
+      "a_pred": 0.286,
+      "pesr": 1.0,
+      "r_play": 0,
+      "details": "Lemma 2 construction: 10 distractor actions with disjoint fluents"
+    },
+    {
+      "model_name": "Distractor Injection (K=20 actions)",
+      "category": "Direction 2 (Low A_pred, High PESR)",
+      "a_pred": 0.167,
+      "pesr": 1.0,
+      "r_play": 0,
+      "details": "Lemma 2 construction: 20 distractor actions with disjoint fluents"
+    },
+    {
+      "model_name": "Distractor Injection (K=30 actions)",
+      "category": "Direction 2 (Low A_pred, High PESR)",
+      "a_pred": 0.118,
+      "pesr": 1.0,
+      "r_play": 0,
+      "details": "Lemma 2 construction: 30 distractor actions with disjoint fluents"
+    },
+    {
+      "model_name": "Distractor Injection (K=40 actions)",
+      "category": "Direction 2 (Low A_pred, High PESR)",
+      "a_pred": 0.091,
+      "pesr": 1.0,
+      "r_play": 0,
+      "details": "Lemma 2 construction: 40 distractor actions with disjoint fluents"
+    },
+    {
+      "model_name": "Distractor Injection (K=50 actions)",
+      "category": "Direction 2 (Low A_pred, High PESR)",
+      "a_pred": 0.074,
+      "pesr": 1.0,
+      "r_play": 0,
+      "details": "Lemma 2 construction: 50 distractor actions with disjoint fluents"
+    },
+    {
+      "model_name": "FAMA Learned Model",
+      "category": "Learned AML Baseline",
+      "a_pred": 0.66,
+      "pesr": 0.0,
+      "r_play": "INFINITY",
+      "details": "Compiled SAT-based planning induction"
+    },
+    {
+      "model_name": "LOCM2 Learned Model",
+      "category": "Learned AML Baseline",
+      "a_pred": 0.0,
+      "pesr": 0.0,
+      "r_play": "INFINITY",
+      "details": "Inductive FSM state machine acquisition"
+    }
+  ]
+}

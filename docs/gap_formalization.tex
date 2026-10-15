@@ -37,7 +37,7 @@ Ho Chi Minh City, Vietnam}
 \maketitle
 
 \begin{abstract}
-Symbolic action models (STRIPS/PDDL) provide the foundation for model-based planning, heuristic search, and counterfactual simulation. A pervasive assumption in Action Model Learning (AML) and program-synthesized world models is that high passive transition prediction accuracy ($A_{\text{pred}}$) over observed traces guarantees reliable downstream plan execution. In this work, we prove that this assumption is fundamentally flawed in combinatorial search graphs. We formalize the \emph{Search-Tree Topology Collapse} phenomenon under sparse precondition omissions. We establish: (i) the \emph{No-Edges-Lost Lemma} (\Cref{lem:no_edges_lost}), proving that precondition omissions strictly introduce spurious phantom edges; (ii) the \emph{Search-Tree Phantom Path Divergence Proposition} (\Cref{prop:phantom_divergence}), proving an exponential divergence $d_\triangle = \Omega(b^{D-d})$ while passive accuracy satisfies $A_{\text{pred}} \ge 1 - b^{-d}$; and (iii) the \emph{Causal Decoupling Proposition} (\Cref{prop:independence}), proving that $A_{\text{pred}}$ and Plan Execution Success Rate ($\text{PESR}$) are statistically and functionally independent. These results demonstrate why passive trajectory evaluation is incapable of certifying world models for goal-directed autonomous agents.
+Symbolic action models (STRIPS/PDDL) provide the foundation for model-based planning, heuristic search, and counterfactual simulation. A pervasive assumption in Action Model Learning (AML) and program-synthesized world models is that high passive transition prediction accuracy ($A_{\text{pred}}$) over observed traces guarantees reliable downstream plan execution. In this work, we prove that this assumption is fundamentally flawed in combinatorial search graphs. We formalize the \emph{Search-Tree Topology Collapse} phenomenon under sparse precondition omissions. We establish: (i) the \emph{No-Edges-Lost Lemma} (\Cref{lem:no_edges_lost}), proving that precondition omissions strictly introduce spurious phantom edges; (ii) the \emph{Search-Tree Phantom Path Divergence Proposition} (\Cref{prop:phantom_divergence}), proving an exponential divergence $d_\triangle = \Omega(b^{D-d})$ while passive accuracy satisfies $A_{\text{pred}} \ge 1 - b^{-d}$; (iii) the \emph{Distractor Invariance Lemma} (\Cref{lem:distractor_invariance}), proving that cost-optimal planners prune unpromising distractor dynamics; and (iv) the \emph{Causal Decoupling Proposition} (\Cref{prop:independence}), proving that $A_{\text{pred}}$ and Plan Execution Success Rate ($\text{PESR}$) are statistically and functionally independent. These results demonstrate why passive trajectory evaluation is incapable of certifying world models for goal-directed autonomous agents.
 \end{abstract}
 
 \tableofcontents
@@ -227,16 +227,28 @@ Furthermore, for any precision threshold $\epsilon > 0$, whenever the bottleneck
 
 \begin{proof}
 We count the cardinality of the respective edge sets.
-In a regular $b$-ary search tree of uniform depth $D$, the total number of physical edges in $G_T$ is:
+In a regular $b$-ary search tree of uniform depth $D$, the root is at depth $0$, and level $i \in [0, D-1]$ contains $b^i$ nodes, each possessing $b$ outgoing edges. The total number of physical edges in $G_T$ is:
 \begin{equation}
     |E_T| = \sum_{i=0}^{D-1} b^{i+1} = b \cdot \frac{b^D - 1}{b - 1} = \Theta(b^D)
 \end{equation}
-At depth $d \in [0, D-1]$, omitting precondition $p^*$ unblocks action $a^*$ at a state $s_d$, creating an initial phantom edge $(s_d, a^*, s_{\text{phantom}})$.
-By the Fresh-Subtree Assumption, the node $s_{\text{phantom}}$ is expanded recursively to horizon $D$, forming a complete subtree of depth $D - (d + 1)$. The number of phantom edges generated in this unblocked subtree is:
-\begin{equation}
-    |E_{\text{phantom}}| = 1 + \sum_{j=1}^{D-d-1} b^j = 1 + b \cdot \frac{b^{D-d-1} - 1}{b - 1} = \frac{b^{D-d} - 1}{b - 1} = \Theta\left(b^{D-d}\right)
-\end{equation}
-By \Cref{lem:no_edges_lost}, $E_T \subseteq \widehat{E}_T$, so the topological gap is:
+At depth $d \in [0, D-1]$, omitting bottleneck precondition $p^*$ unblocks action $a^*$ at an existing state $s_d \in V_T$, generating an initial bridge edge $(s_d, a^*, s_{\text{phantom}})$.
+By the Fresh-Subtree Assumption, the newly spawned state $s_{\text{phantom}} \notin V_T$ is expanded recursively up to depth horizon $D$, forming a complete $b$-ary subtree of remaining depth $k = D - (d + 1) = D - d - 1$.
+
+\paragraph{Reconciliation of Node Count and Edge Difference.}
+One might query whether the term $\frac{b^{D-d}-1}{b-1}$ counts nodes or edges. We establish that in a directed search arborescence, the number of newly added edges $|E_{\text{phantom}}|$ is identically equal to the number of newly reachable states $|V_{\text{phantom}}| = |\widehat{V}_T \setminus V_T|$ via two distinct derivations:
+\begin{enumerate}
+    \item \textbf{Direct Edge Summation}: The phantom edge set consists of the $1$ initial bridge edge $(s_d, a^*, s_{\text{phantom}})$ entering depth $d+1$, plus the internal edges of the complete $b$-ary tree of depth $D - d - 1$ rooted at $s_{\text{phantom}}$. The internal edges span levels $j \in [1, D-d-1]$, yielding:
+    \begin{align}
+        |E_{\text{phantom}}| &= 1 + \sum_{j=1}^{D-d-1} b^j = 1 + b \cdot \frac{b^{D-d-1} - 1}{b - 1} \\
+        &= 1 + \frac{b^{D-d} - b}{b - 1} = \frac{(b - 1) + (b^{D-d} - b)}{b - 1} = \frac{b^{D-d} - 1}{b - 1}
+    \end{align}
+    \item \textbf{Bijective In-Degree Correspondence}: In any directed arborescence rooted at $s_0$, every vertex $v \ne s_0$ has an in-degree of exactly $1$. Because all edges in $E_T$ target vertices in $V_T$, every newly spawned vertex $v \in \widehat{V}_T \setminus V_T$ receives exactly one incoming edge that must belong to $\widehat{E}_T \setminus E_T$. The number of newly created vertices across levels $0$ to $D-d-1$ of the unblocked subtree is:
+    \begin{equation}
+        |\widehat{V}_T \setminus V_T| = \sum_{j=0}^{D-d-1} b^j = \frac{b^{D-d} - 1}{b - 1}
+    \end{equation}
+    Since every phantom vertex has exactly one incoming parent edge in the search tree, $|E_{\text{phantom}}| = |\widehat{V}_T \setminus V_T| = \frac{b^{D-d}-1}{b-1}$.
+\end{enumerate}
+By \Cref{lem:no_edges_lost}, $E_T \subseteq \widehat{E}_T$, so $|E_T \setminus \widehat{E}_T| = 0$. The topological gap is therefore:
 \begin{equation}
     d_\triangle(G_T, \widehat{G}_T) = |E_{\text{phantom}}| = \frac{b^{D-d} - 1}{b - 1} = \Omega\left(b^{D-d}\right)
 \end{equation}
@@ -271,6 +283,55 @@ Simultaneously, holding $d$ fixed and taking the horizon limit $D \to \infty$:
     \lim_{D \to \infty} d_\triangle(G_T, \widehat{G}_T) = \lim_{D \to \infty} \frac{b^{D-d} - 1}{b - 1} = \infty
 \end{equation}
 This concludes the proof.
+\end{proof}
+
+% ---------------------------------------------------------------------------
+\subsection{Lemma 2: Distractor Action Invariance and Cost Dominance}
+
+\begin{lemma}[Distractor Invariance Lemma]\label{lem:distractor_invariance}
+Let $\Pi = \langle \mathcal{F}, \mathcal{A}, s_0, g, c \rangle$ be a classical planning task where ground-truth optimal plan $\pi^* = \langle a_1^*, \dots, a_m^* \rangle$ has finite cost $C^* = \sum_{t=1}^m c(a_t^*)$ with $c(a) \ge 1$ for all $a \in \mathcal{A}_{\text{task}}$.
+Let the fluent set be partitioned into disjoint task and distractor subsets $\mathcal{F} = \mathcal{F}_{\text{task}} \uplus \mathcal{F}_{\text{distractor}}$ such that initial state $s_0 \subseteq \mathcal{F}_{\text{task}}$ and goal $g \subseteq \mathcal{F}_{\text{task}}$.
+Let $\mathcal{A}_{\text{distractor}}$ be a disjoint set of $K$ distractor actions satisfying:
+\begin{equation}
+    \forall a_d \in \mathcal{A}_{\text{distractor}}, \quad \left( \operatorname{Add}(a_d) \cup \operatorname{Del}(a_d) \right) \subseteq \mathcal{F}_{\text{distractor}}
+\end{equation}
+Suppose candidate model $\widehat{M}'$ satisfies:
+\begin{enumerate}
+    \item \textbf{Task Action Fidelity}: For all $a \in \mathcal{A}_{\text{task}}$, $\widehat{\delta}(s, a) = \delta^*(s, a)$.
+    \item \textbf{Distractor Decoupling}: For all $a_d \in \mathcal{A}_{\text{distractor}}$, either:
+    \begin{itemize}
+        \item \emph{(Condition A -- Model Inexecutability)}: $\widehat{M}'$ asserts an unsatisfied precondition $\exists p \in \widehat{\operatorname{Pre}}(a_d)$ such that $s \not\models p$ for all reachable states $s \in \widehat{V}_T$, so $\widehat{\delta}(s, a_d) = \bot$; or
+        \item \emph{(Condition B -- Cost Dominance)}: The action cost satisfies $c(a_d) > C^*$; or
+        \item \emph{(Condition C -- Goal Disconnect)}: $c(a_d) \ge 1$, and since $\operatorname{Add}(a_d) \cap \mathcal{F}_{\text{task}} = \emptyset$, distractor actions do not affect any goal-relevant fluent.
+    \end{itemize}
+\end{enumerate}
+Then any cost-optimal forward search planner $\operatorname{Planner}(\widehat{M}', s_0, g)$ (e.g., $A^*$ with admissible heuristic $h \le h^*$) will never return a plan containing any distractor action. The synthesized plan is identically $\pi^*_{\widehat{M}'} = \pi^*$, guaranteeing:
+\begin{equation}
+    \operatorname{PESR}(\widehat{M}') = 1 \quad \text{and} \quad R_{\text{play}}(\widehat{M}') = 0
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Let $\pi = \langle a_1, a_2, \dots, a_k \rangle$ be any candidate plan in $\widehat{M}'$ from $s_0$ that satisfies goal $g$.
+Under Condition A, any plan containing a distractor action $a_d$ fails applicability in $\widehat{M}'$, hence cannot be generated.
+Under Condition B, if $\pi$ contains at least one distractor action $a_d$, its cost satisfies:
+\begin{equation}
+    C(\pi) \ge c(a_d) > C^* = C(\pi^*)
+\end{equation}
+Because cost-optimal forward search evaluates $C(\pi^*) < C(\pi)$, the planner strictly prefers $\pi^*$.
+Under Condition C, because $\mathcal{F}_{\text{distractor}} \cap g = \emptyset$ and distractor effects are strictly confined to $\mathcal{F}_{\text{distractor}}$, projecting $\pi$ onto $\mathcal{A}_{\text{task}}$ preserves executability and goal satisfaction:
+\begin{equation}
+    \delta(s_0, \pi)|_{\mathcal{F}_{\text{task}}} = \delta(s_0, \pi|_{\mathcal{A}_{\text{task}}})
+\end{equation}
+Since every action has strictly positive cost $c(a) \ge 1$, removing any distractor action strictly decreases the total plan cost:
+\begin{equation}
+    C(\pi|_{\mathcal{A}_{\text{task}}}) \le C(\pi) - c(a_d) < C(\pi)
+\end{equation}
+Since $\pi^*$ is optimal over $\mathcal{A}_{\text{task}}$, $C(\pi) > C(\pi|_{\mathcal{A}_{\text{task}}}) \ge C^*$.
+Thus, any plan containing a distractor action has strictly higher cost than $\pi^*$.
+Because $\operatorname{Planner}(\widehat{M}', s_0, g)$ is cost-optimal, it deterministically outputs $\pi^*$.
+Executing $\pi^*$ in ground-truth environment $M^*$ succeeds since $\pi^*$ is the true optimal plan.
+Hence $\operatorname{PESR}(\widehat{M}') = 1$ and $R_{\text{play}}(\widehat{M}') = C^*(\pi^*) - C^*(\pi^*) = 0$.
 \end{proof}
 
 % ---------------------------------------------------------------------------
@@ -325,19 +386,22 @@ Now, let candidate model $\widehat{M}$ be constructed by omitting $p^*$ from $a_
 \end{itemize}
 
 \paragraph{Part 2: Constructing $A_{\text{pred}} \le \epsilon$ with $\text{PESR} = 1$.}
-Let $\pi^* = \langle a_1^*, a_2^*, \dots, a_m^* \rangle$ be the ground-truth optimal plan for task $\Pi$, traversing states $\langle s_0, s_1^*, \dots, s_m^* \rangle$ with $s_m^* \models g$.
-Augment the environment with a set of $K$ distractor actions $\mathcal{A}_{\text{distractor}}$ that govern task-irrelevant fluents $\mathcal{F}_{\text{distractor}}$, where $|\mathcal{A}_{\text{distractor}}| \ge \frac{m}{\epsilon}$.
-Construct model $\widehat{M}'$ such that:
-\begin{enumerate}
-    \item $\widehat{M}'$ specifies the actions along the optimal path $\{a_1^*, \dots, a_m^*\}$ with $100\%$ fidelity.
-    \item For all distractor actions $a \in \mathcal{A}_{\text{distractor}}$, $\widehat{M}'$ predicts completely incorrect transitions (e.g., predicting $\bot$ for valid transitions or invalid state updates).
-\end{enumerate}
-Evaluating local accuracy over the full transition distribution yields:
+Let $\pi^* = \langle a_1^*, a_2^*, \dots, a_m^* \rangle$ be the ground-truth optimal plan for task $\Pi$ traversing states $\langle s_0, s_1^*, \dots, s_m^* \rangle$ with $s_m^* \models g$.
+Augment the environment with a set of $K$ distractor actions $\mathcal{A}_{\text{distractor}}$ over task-irrelevant fluents $\mathcal{F}_{\text{distractor}}$, choosing cardinality:
 \begin{equation}
-    A_{\text{pred}}(\widehat{M}') \le \frac{m}{m + |\mathcal{A}_{\text{distractor}}|} \le \frac{m}{m + m/\epsilon} \le \epsilon
+    K = |\mathcal{A}_{\text{distractor}}| \ge \left\lceil \frac{m(1 - \epsilon)}{\epsilon} \right\rceil
 \end{equation}
-However, when the forward planner operates on $\widehat{M}'$, all distractor actions are either perceived as inexecutable or leading to unpromising states. The planner deterministically outputs the unique valid path $\pi^*$.
-Executing $\pi^*$ in $M^*$ succeeds with zero regret:
+Construct model $\widehat{M}'$ according to the construction in \Cref{lem:distractor_invariance}:
+\begin{enumerate}
+    \item For all task actions $a \in \mathcal{A}_{\text{task}}$, $\widehat{M}'$ specifies transitions with $100\%$ fidelity.
+    \item For all distractor actions $a_d \in \mathcal{A}_{\text{distractor}}$, $\widehat{M}'$ predicts completely erroneous transitions (e.g., predicting failure $\bot$ on valid environment transitions or invalid state updates).
+\end{enumerate}
+Evaluating local prediction accuracy over the full uniform transition distribution $\mathcal{D} = \mathcal{D}_{\text{task}} \cup \mathcal{D}_{\text{distractor}}$ yields:
+\begin{equation}
+    A_{\text{pred}}(\widehat{M}'; \mathcal{D}) = \frac{|\mathcal{D}_{\text{task}}|}{|\mathcal{D}_{\text{task}}| + |\mathcal{D}_{\text{distractor}}|} \le \frac{m}{m + K} \le \frac{m}{m + \frac{m(1-\epsilon)}{\epsilon}} = \epsilon
+\end{equation}
+By \Cref{lem:distractor_invariance}, because all task actions are preserved with exact fidelity and all distractor actions are either perceived as inexecutable or strictly cost-dominated, the optimal forward planner $\operatorname{Planner}(\widehat{M}', s_0, g)$ deterministically outputs plan $\pi^*_{\widehat{M}'} = \pi^*$.
+Executing $\pi^*$ in physical environment $M^*$ succeeds unconditionally:
 \begin{equation}
     \text{PESR}(\widehat{M}') = 1 \quad \text{and} \quad R_{\text{play}}(\widehat{M}') = C_{M^*}(\pi^*) - C_{M^*}(\pi^*) = 0
 \end{equation}
@@ -355,6 +419,6 @@ which is an immediate contradiction. Hence, no such lower bound exists, establis
 \section{Conclusion}
 % ===========================================================================
 
-The formal proofs established in \Cref{lem:no_edges_lost}, \Cref{prop:phantom_divergence}, and \Cref{prop:independence} provide the theoretical foundation for this thesis. They prove that the verified-vs-correct gap in symbolic world models is not an empirical artifact or a quirk of specific training runs, but a fundamental property of combinatorial search over state-space graphs. Evaluating world models via passive transition accuracy is mathematically incapable of certifying autonomous agents for goal-directed play. Resolving this challenge necessitates active, counterexample-guided repair mechanisms such as CEG-OMR.
+The formal proofs established in \Cref{lem:no_edges_lost}, \Cref{prop:phantom_divergence}, \Cref{lem:distractor_invariance}, and \Cref{prop:independence} provide the theoretical foundation for this thesis. They prove that the verified-vs-correct gap in symbolic world models is not an empirical artifact or a quirk of specific training runs, but a fundamental property of combinatorial search over state-space graphs. Evaluating world models via passive transition accuracy is mathematically incapable of certifying autonomous agents for goal-directed play. Resolving this challenge necessitates active, counterexample-guided repair mechanisms such as CEG-OMR.
 
 \end{document}
