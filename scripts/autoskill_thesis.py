@@ -12,7 +12,6 @@ Purpose:
 """
 
 import argparse
-import os
 import re
 import subprocess
 import sys
@@ -27,13 +26,13 @@ def check_command(cmd, shell=False):
         res = subprocess.run(
             cmd,
             shell=shell,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
+            capture_output=True,
             text=True,
             timeout=10,
+            check=False,
         )
         return res.returncode == 0, res.stdout.strip()
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return False, str(e)
 
 

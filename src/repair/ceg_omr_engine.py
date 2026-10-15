@@ -47,6 +47,8 @@ import time
 from dataclasses import dataclass, field
 from pathlib import Path
 
+from src.runners.wsl_harness import WSLHarness
+
 # ---------------------------------------------------------------------------
 # Configuration
 # ---------------------------------------------------------------------------
@@ -189,20 +191,10 @@ class FastDownwardGenerator:
         """
         fd_bin = self.config.fast_downward_bin
 
-        # Translate Windows paths to WSL /mnt/ paths
-        def to_wsl(p: str) -> str:
-            p = Path(p).resolve()
-            parts = p.parts
-            # "F:\\" → "/mnt/f/"
-            if len(parts) > 0 and len(parts[0]) == 3 and parts[0][1] == ":":
-                drive = parts[0][0].lower()
-                rest = "/".join(parts[1:])
-                return f"/mnt/{drive}/{rest}"
-            return str(p).replace("\\", "/")
-
-        wsl_domain  = to_wsl(domain_path)
-        wsl_problem = to_wsl(problem_path)
-        wsl_plan    = to_wsl(plan_out)
+        # Translate Windows paths to WSL /mnt/ paths via centralized WSLHarness
+        wsl_domain = WSLHarness.to_wsl_path(domain_path)
+        wsl_problem = WSLHarness.to_wsl_path(problem_path)
+        wsl_plan = WSLHarness.to_wsl_path(plan_out)
 
         cmd = (
             self.config.wsl_prefix
