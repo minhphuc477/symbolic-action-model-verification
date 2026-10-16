@@ -270,11 +270,8 @@ class OracleVerifier:
         plan: list[str],
         learned_domain: str,
     ) -> tuple[bool, Counterexample | None, int]:
-        """
-        Execute plan against ground truth M*.
-        """
-        if not self.gt_domain:
-            return True, None, len(plan)
+        if not self.gt_domain or not Path(self.gt_domain).exists():
+            raise ValueError(f"OracleVerifier requires valid ground truth domain: {self.gt_domain}")
 
         try:
             import pddl
@@ -369,18 +366,23 @@ class OracleVerifier:
 
 class HornSynthesizer:
     """
-    Synthesizer component: given a counterexample ξ_t, update M̂ to eliminate
-    the phantom transition. Uses a version-space / Horn-clause elimination approach
-    (Angluin 1992).
+    Synthesizer component: given a counterexample xi_t = <s_t, a_t, s_hat_{t+1}, s*_{t+1}>,
+    update candidate model M_hat using pure Active Version Space / Candidate Elimination (Mitchell 1982, Angluin 1992).
 
-    For Type II interventions: identifies the omitted precondition from the
-    counterexample state and adds it back to the action schema.
+    CRITICAL SCIENTIFIC INTEGRITY:
+    * ZERO access to ground truth domain file (M*).
+    * Candidate hypotheses are generated strictly from M_hat's own predicate declarations and action parameters.
+    * An applicability failure in state s_t implies that at least one necessary precondition
+      evaluates to FALSE in s_t.
+    * Candidates that evaluate to TRUE in s_t are eliminated from being the cause of failure.
+    * Surviving candidates consistent with action effects (e.g. fluents deleted or modified by action)
+      are prioritized to refine the schema.
     """
 
-    def __init__(self, out_dir: str = "domains/mutated/", gt_domain: str = ""):
+    def __init__(self, out_dir: str = "domains/mutated/"):
         self.out_dir = Path(out_dir)
-        self.gt_domain = gt_domain
         self.out_dir.mkdir(parents=True, exist_ok=True)
+        self.version_spaces: dict[str, set[str]] = {}
 
     def repair(
         self,
@@ -389,9 +391,11 @@ class HornSynthesizer:
         iteration: int,
     ) -> str:
         """
-        Repair M̂ to eliminate the phantom transition in `counterexample`.
+        Repair M_hat by eliminating phantom preconditions using active counterexample feedback.
         """
         import copy
+        import itertools
+        import re
 
         from src.interventions.pddl_mutator import (
             _find_action_block,
@@ -406,70 +410,132 @@ class HornSynthesizer:
         domain_sexp, _ = _parse_sexp(tokens)
         domain_sexp_rep = copy.deepcopy(domain_sexp)
 
-        act_name, _args = _parse_action_tuple(counterexample.action)
+        act_name, args = _parse_action_tuple(counterexample.action)
 
-        candidate_preconditions = []
-        if self.gt_domain and Path(self.gt_domain).exists():
-            gt_text = Path(self.gt_domain).read_text(encoding="utf-8")
-            gt_tokens = _tokenize(gt_text)
-            gt_sexp, _ = _parse_sexp(gt_tokens)
-            gt_act = _find_action_block(gt_sexp, act_name)
-            curr_act = _find_action_block(domain_sexp_rep, act_name)
-            if gt_act and curr_act:
-                gt_prec_idx = _get_section(gt_act, ":precondition")
-                curr_prec_idx = _get_section(curr_act, ":precondition")
-                if gt_prec_idx is not None and curr_prec_idx is not None:
-                    gt_prec = gt_act[gt_prec_idx + 1]
-                    curr_prec = curr_act[curr_prec_idx + 1]
-                    if isinstance(gt_prec, list) and isinstance(curr_prec, list):
-                        curr_atoms = {_sexp_to_str(a) for a in curr_prec[1:]}
-                        for a in gt_prec[1:]:
-                            if _sexp_to_str(a) not in curr_atoms:
-                                candidate_preconditions.append(_sexp_to_str(a))
+        # 1. Parse domain using pddl library for type signatures and declarations
+        import pddl
+        dom = pddl.parse_domain(domain_path)
+        matching_actions = [a for a in dom.actions if a.name.lower() == act_name.lower()]
+        if not matching_actions:
+            return domain_path
+        pddl_act = matching_actions[0]
 
-        if not candidate_preconditions:
-            candidate_preconditions = self._extract_distinguishing_atoms(
-                counterexample.predicted_next,
-                counterexample.actual_next,
-            )
-
+        # Action block in S-exp
         action = _find_action_block(domain_sexp_rep, act_name)
-        if action is not None and candidate_preconditions:
+        if action is None:
+            return domain_path
+
+        # 2. Extract existing preconditions
+        existing_preconditions: set[str] = set()
+        if hasattr(pddl_act.precondition, "operands"):
+            for op in pddl_act.precondition.operands:
+                existing_preconditions.add(str(op).strip().lower())
+        elif pddl_act.precondition is not None:
+            existing_preconditions.add(str(pddl_act.precondition).strip().lower())
+
+        # Extract added and deleted literals from effects
+        deleted_literals: set[str] = set()
+        added_literals: set[str] = set()
+        if hasattr(pddl_act.effect, "operands"):
+            for op in pddl_act.effect.operands:
+                s = str(op).strip().lower()
+                if s.startswith("(not ") and s.endswith(")"):
+                    deleted_literals.add(s[5:-1].strip())
+                else:
+                    added_literals.add(s)
+        elif pddl_act.effect is not None:
+            s = str(pddl_act.effect).strip().lower()
+            if s.startswith("(not ") and s.endswith(")"):
+                deleted_literals.add(s[5:-1].strip())
+            else:
+                added_literals.add(s)
+
+        # Parse failure state literals from counterexample
+        failure_state_literals = {
+            tok.strip().lower()
+            for tok in re.findall(r"\([^()]+\)", counterexample.current_state)
+        }
+
+        # Parameter binding map: ?param_var -> arg_obj
+        act_params = list(pddl_act.parameters)
+        pmap = {p.name.lower(): arg_val.lower() for p, arg_val in zip(act_params, args)}
+
+        # 3. Generate candidate atomic preconditions (respecting types & distinct variables)
+        candidate_atoms: list[tuple[str, str]] = []  # (schema_atom, grounded_atom)
+        for pred in dom.predicates:
+            pred_terms = list(pred.terms)
+            arity = len(pred_terms)
+            if arity == 0:
+                atom_schema = f"({pred.name})"
+                if atom_schema.lower() not in existing_preconditions:
+                    candidate_atoms.append((atom_schema, atom_schema.lower()))
+            else:
+                matching_param_lists = []
+                for t in pred_terms:
+                    t_types = set(t.type_tags) if t.type_tags else set()
+                    matches = []
+                    for p in act_params:
+                        p_types = set(p.type_tags) if p.type_tags else set()
+                        # Type compatibility check
+                        if not t_types or not p_types or (t_types & p_types) or ("thing" in t_types and "truck" in p_types):
+                            matches.append(p.name)
+                    matching_param_lists.append(matches)
+
+                for p_tuple in itertools.product(*matching_param_lists):
+                    # Distinct parameters for distinct relational terms
+                    if len(p_tuple) > 1 and len(set(p_tuple)) < len(p_tuple):
+                        continue
+                    atom_schema = f"({pred.name} {' '.join('?' + p for p in p_tuple)})"
+                    if atom_schema.lower() in existing_preconditions:
+                        continue
+                    # An action cannot require what it explicitly adds
+                    if atom_schema.lower() in added_literals:
+                        continue
+                    grounded = [pmap.get(pt.lower(), pt.lower()) for pt in p_tuple]
+                    atom_grounded = f"({pred.name} {' '.join(grounded)})".lower()
+                    candidate_atoms.append((atom_schema, atom_grounded))
+
+        # 4. Version Space Candidate Elimination:
+        # Action execution failed in state s_t => the true precondition MUST BE FALSE in s_t.
+        # Any candidate whose grounded literal IS present in s_t is eliminated!
+        violated_candidates = [
+            atom_schema
+            for atom_schema, atom_grounded in candidate_atoms
+            if atom_grounded not in failure_state_literals
+        ]
+
+        if act_name in self.version_spaces:
+            self.version_spaces[act_name] &= set(violated_candidates)
+        else:
+            self.version_spaces[act_name] = set(violated_candidates)
+
+        surviving = list(self.version_spaces[act_name])
+
+        # 5. Rank surviving candidates:
+        # Highest priority: Candidates that are explicitly deleted by the action (precondition-before-delete idiom)
+        def candidate_score(c: str) -> int:
+            c_lower = c.strip().lower()
+            return 1 if c_lower in deleted_literals else 0
+
+        sorted_candidates = sorted(surviving, key=candidate_score, reverse=True)
+        chosen_candidate = sorted_candidates[0] if sorted_candidates else None
+
+        if action is not None and chosen_candidate:
             prec_idx = _get_section(action, ":precondition")
             if prec_idx is not None and prec_idx + 1 < len(action):
                 prec = action[prec_idx + 1]
                 if isinstance(prec, list) and prec[0].lower() == "and":
-                    for atom in candidate_preconditions:
-                        atom_tokens = _tokenize(atom)
-                        if atom_tokens:
-                            atom_sexp, _ = _parse_sexp(atom_tokens)
-                            prec.append(atom_sexp)
+                    cand_tokens = _tokenize(chosen_candidate)
+                    if cand_tokens:
+                        cand_sexp, _ = _parse_sexp(cand_tokens)
+                        prec.append(cand_sexp)
+                        print(f"[HornSynthesizer] Refined action {act_name} with: {chosen_candidate}")
 
         repaired_text = _sexp_to_str(domain_sexp_rep) + "\n"
         out_name = f"repaired_iter{iteration:03d}.pddl"
         out_path = self.out_dir / out_name
         out_path.write_text(repaired_text, encoding="utf-8")
         return str(out_path)
-
-    @staticmethod
-    def _extract_distinguishing_atoms(predicted: str, actual: str) -> list[str]:
-        """
-        Identify atoms present in `actual` state but absent in `predicted` state.
-        These are candidates for missing preconditions.
-        """
-        if actual in ("FAILURE", "ERROR", ""):
-            return []
-
-        def parse_atoms_from_state_str(s: str) -> set:
-            atoms = set()
-            for token in re.findall(r'\([^()]+\)', s):
-                atoms.add(token.strip())
-            return atoms
-
-        pred_atoms = parse_atoms_from_state_str(predicted)
-        act_atoms  = parse_atoms_from_state_str(actual)
-        # Atoms in reality but missing from prediction → candidate preconditions
-        return sorted(act_atoms - pred_atoms)
 
 
 # ---------------------------------------------------------------------------
@@ -506,7 +572,6 @@ class CEGOMREngine:
         )
         self.synthesizer = HornSynthesizer(
             out_dir=config.out_dir,
-            gt_domain=config.ground_truth_domain or config.domain_path,
         )
         self._rng = random.Random(config.seed)
 

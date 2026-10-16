@@ -11,7 +11,7 @@
     "pesr_after": 1.0,
     "r_play_before": "inf",
     "r_play_after": 0.0,
-    "wall_clock_seconds": 0.733
+    "wall_clock_seconds": 1.425
   },
   {
     "method": "Random Probing (Kearns & Singh 2002)",
@@ -19,7 +19,7 @@
     "total_queries": 50,
     "pesr_after": 0.0,
     "play_regret_after": "inf",
-    "wall_clock_seconds": 0.0,
+    "wall_clock_seconds": 31.114,
     "notes": "Random exploration failed to navigate bottleneck state within budget",
     "domain": "Sokoban (IPC Game Domain)",
     "pesr_before": 0.0,
@@ -28,10 +28,10 @@
   {
     "method": "Naive Replanning (Fox et al. ICAPS 2006)",
     "success": false,
-    "total_queries": 1,
+    "total_queries": 2,
     "pesr_after": 0.0,
     "play_regret_after": "inf",
-    "wall_clock_seconds": 0.278,
+    "wall_clock_seconds": 0.909,
     "notes": "Replans repeatedly into the same phantom edge (schema unamended)",
     "domain": "Sokoban (IPC Game Domain)",
     "pesr_before": 0.0,
@@ -49,7 +49,7 @@
     "pesr_after": 1.0,
     "r_play_before": "inf",
     "r_play_after": 0.0,
-    "wall_clock_seconds": 0.572
+    "wall_clock_seconds": 0.702
   },
   {
     "method": "Random Probing (Kearns & Singh 2002)",
@@ -57,7 +57,7 @@
     "total_queries": 50,
     "pesr_after": 0.0,
     "play_regret_after": "inf",
-    "wall_clock_seconds": 0.0,
+    "wall_clock_seconds": 0.039,
     "notes": "Random exploration failed to navigate bottleneck state within budget",
     "domain": "Blocksworld (IPC Classical Domain)",
     "pesr_before": 0.0,
@@ -66,10 +66,10 @@
   {
     "method": "Naive Replanning (Fox et al. ICAPS 2006)",
     "success": false,
-    "total_queries": 1,
+    "total_queries": 4,
     "pesr_after": 0.0,
     "play_regret_after": "inf",
-    "wall_clock_seconds": 0.263,
+    "wall_clock_seconds": 0.737,
     "notes": "Replans repeatedly into the same phantom edge (schema unamended)",
     "domain": "Blocksworld (IPC Classical Domain)",
     "pesr_before": 0.0,
@@ -87,7 +87,7 @@
     "pesr_after": 1.0,
     "r_play_before": "inf",
     "r_play_after": 0.0,
-    "wall_clock_seconds": 0.62
+    "wall_clock_seconds": 0.777
   },
   {
     "method": "Random Probing (Kearns & Singh 2002)",
@@ -95,7 +95,7 @@
     "total_queries": 50,
     "pesr_after": 0.0,
     "play_regret_after": "inf",
-    "wall_clock_seconds": 0.0,
+    "wall_clock_seconds": 0.309,
     "notes": "Random exploration failed to navigate bottleneck state within budget",
     "domain": "Gripper (IPC Classical Domain)",
     "pesr_before": 0.0,
@@ -104,10 +104,10 @@
   {
     "method": "Naive Replanning (Fox et al. ICAPS 2006)",
     "success": false,
-    "total_queries": 1,
+    "total_queries": 4,
     "pesr_after": 0.0,
     "play_regret_after": "inf",
-    "wall_clock_seconds": 0.284,
+    "wall_clock_seconds": 0.653,
     "notes": "Replans repeatedly into the same phantom edge (schema unamended)",
     "domain": "Gripper (IPC Classical Domain)",
     "pesr_before": 0.0,
@@ -125,16 +125,16 @@
     "pesr_after": 1.0,
     "r_play_before": "inf",
     "r_play_after": 0.0,
-    "wall_clock_seconds": 0.583
+    "wall_clock_seconds": 0.79
   },
   {
     "method": "Random Probing (Kearns & Singh 2002)",
-    "success": false,
-    "total_queries": 50,
-    "pesr_after": 0.0,
-    "play_regret_after": "inf",
-    "wall_clock_seconds": 0.0,
-    "notes": "Random exploration failed to navigate bottleneck state within budget",
+    "success": true,
+    "total_queries": 14,
+    "pesr_after": 1.0,
+    "play_regret_after": 0.0,
+    "wall_clock_seconds": 0.609,
+    "notes": "Real random exploration terminated (goal reached)",
     "domain": "Logistics (IPC Transportation Domain)",
     "pesr_before": 0.0,
     "r_play_before": "inf"
@@ -142,10 +142,10 @@
   {
     "method": "Naive Replanning (Fox et al. ICAPS 2006)",
     "success": false,
-    "total_queries": 1,
+    "total_queries": 4,
     "pesr_after": 0.0,
     "play_regret_after": "inf",
-    "wall_clock_seconds": 0.266,
+    "wall_clock_seconds": 0.63,
     "notes": "Replans repeatedly into the same phantom edge (schema unamended)",
     "domain": "Logistics (IPC Transportation Domain)",
     "pesr_before": 0.0,
