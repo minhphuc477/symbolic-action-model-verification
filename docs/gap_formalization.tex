@@ -289,49 +289,52 @@ This concludes the proof.
 \subsection{Lemma 2: Distractor Action Invariance and Cost Dominance}
 
 \begin{lemma}[Distractor Invariance Lemma]\label{lem:distractor_invariance}
-Let $\Pi = \langle \mathcal{F}, \mathcal{A}, s_0, g, c \rangle$ be a classical planning task where ground-truth optimal plan $\pi^* = \langle a_1^*, \dots, a_m^* \rangle$ has finite cost $C^* = \sum_{t=1}^m c(a_t^*)$ with $c(a) \ge 1$ for all $a \in \mathcal{A}_{\text{task}}$.
+Let $\Pi = \langle \mathcal{F}, \mathcal{A}, s_0, g, c \rangle$ be a classical planning task where ground-truth optimal plan $\pi^* = \langle a_1^*, \dots, a_m^* \rangle$ has finite cost $C^* = \sum_{t=1}^m c(a_t^*)$ under uniform action costs $c(a) = 1$ for all $a \in \mathcal{A}$.
 Let the fluent set be partitioned into disjoint task and distractor subsets $\mathcal{F} = \mathcal{F}_{\text{task}} \uplus \mathcal{F}_{\text{distractor}}$ such that initial state $s_0 \subseteq \mathcal{F}_{\text{task}}$ and goal $g \subseteq \mathcal{F}_{\text{task}}$.
-Let $\mathcal{A}_{\text{distractor}}$ be a disjoint set of $K$ distractor actions satisfying:
+Let $\mathcal{A}_{\text{distractor}}$ be a disjoint set of $K$ distractor actions satisfying the \textbf{Strong Fluent Disjointness}:
 \begin{equation}
-    \forall a_d \in \mathcal{A}_{\text{distractor}}, \quad \left( \operatorname{Add}(a_d) \cup \operatorname{Del}(a_d) \right) \subseteq \mathcal{F}_{\text{distractor}}
+    \forall a_d \in \mathcal{A}_{\text{distractor}}, \quad \left( \operatorname{Pre}(a_d) \cup \operatorname{Add}(a_d) \cup \operatorname{Del}(a_d) \right) \subseteq \mathcal{F}_{\text{distractor}}
 \end{equation}
 Suppose candidate model $\widehat{M}'$ satisfies:
 \begin{enumerate}
     \item \textbf{Task Action Fidelity}: For all $a \in \mathcal{A}_{\text{task}}$, $\widehat{\delta}(s, a) = \delta^*(s, a)$.
-    \item \textbf{Distractor Decoupling}: For all $a_d \in \mathcal{A}_{\text{distractor}}$, either:
-    \begin{itemize}
-        \item \emph{(Condition A -- Model Inexecutability)}: $\widehat{M}'$ asserts an unsatisfied precondition $\exists p \in \widehat{\operatorname{Pre}}(a_d)$ such that $s \not\models p$ for all reachable states $s \in \widehat{V}_T$, so $\widehat{\delta}(s, a_d) = \bot$; or
-        \item \emph{(Condition B -- Cost Dominance)}: The action cost satisfies $c(a_d) > C^*$; or
-        \item \emph{(Condition C -- Goal Disconnect)}: $c(a_d) \ge 1$, and since $\operatorname{Add}(a_d) \cap \mathcal{F}_{\text{task}} = \emptyset$, distractor actions do not affect any goal-relevant fluent.
-    \end{itemize}
+    \item \textbf{Distractor Action Errors}: For all $a_d \in \mathcal{A}_{\text{distractor}}$, $\widehat{M}'$ predicts completely incorrect transitions (e.g., predicting failure $\bot$ on valid transitions or invalid state updates).
+    \item \textbf{Uniform Unit Action Costs}: All actions share identical cost $c(a) = 1$, preventing any artificial cost-suppression or cost-inflation bias.
 \end{enumerate}
-Then any cost-optimal forward search planner $\operatorname{Planner}(\widehat{M}', s_0, g)$ (e.g., $A^*$ with admissible heuristic $h \le h^*$) will never return a plan containing any distractor action. The synthesized plan is identically $\pi^*_{\widehat{M}'} = \pi^*$, guaranteeing:
+Then any cost-optimal forward search planner $\operatorname{Planner}(\widehat{M}', s_0, g)$ (e.g., $A^*$ with admissible heuristic $h \le h^*$, or breadth-first search) will never return a plan containing any distractor action. The synthesized plan is identically $\pi^*_{\widehat{M}'} = \pi^*$, guaranteeing:
 \begin{equation}
     \operatorname{PESR}(\widehat{M}') = 1 \quad \text{and} \quad R_{\text{play}}(\widehat{M}') = 0
 \end{equation}
 \end{lemma}
 
 \begin{proof}
-Let $\pi = \langle a_1, a_2, \dots, a_k \rangle$ be any candidate plan in $\widehat{M}'$ from $s_0$ that satisfies goal $g$.
-Under Condition A, any plan containing a distractor action $a_d$ fails applicability in $\widehat{M}'$, hence cannot be generated.
-Under Condition B, if $\pi$ contains at least one distractor action $a_d$, its cost satisfies:
+Let $\pi = \langle a_1, a_2, \dots, a_k \rangle$ be any candidate plan in $\widehat{M}'$ starting from $s_0$ that reaches a goal state satisfying $g$.
+Because $\operatorname{Pre}(a_d) \cap \mathcal{F}_{\text{task}} = \emptyset$ and $(\operatorname{Add}(a_d) \cup \operatorname{Del}(a_d)) \cap \mathcal{F}_{\text{task}} = \emptyset$ for all $a_d \in \mathcal{A}_{\text{distractor}}$, distractor actions neither read from nor write to any task fluents. In particular:
+\begin{enumerate}
+    \item No distractor action can satisfy or unblock any precondition of any task action $a \in \mathcal{A}_{\text{task}}$.
+    \item No distractor action can produce or delete any goal fluent in $g \subseteq \mathcal{F}_{\text{task}}$.
+\end{enumerate}
+Consequently, for any candidate plan $\pi$ containing a subsequence of task actions $\pi|_{\mathcal{A}_{\text{task}}}$ and $k_{\text{dist}} \ge 0$ distractor actions, the projection of the execution state trajectory onto $\mathcal{F}_{\text{task}}$ depends strictly on $\pi|_{\mathcal{A}_{\text{task}}}$:
 \begin{equation}
-    C(\pi) \ge c(a_d) > C^* = C(\pi^*)
+    \widehat{\delta}(s_0, \pi)|_{\mathcal{F}_{\text{task}}} = \widehat{\delta}(s_0, \pi|_{\mathcal{A}_{\text{task}}}) = \delta^*(s_0, \pi|_{\mathcal{A}_{\text{task}}})
 \end{equation}
-Because cost-optimal forward search evaluates $C(\pi^*) < C(\pi)$, the planner strictly prefers $\pi^*$.
-Under Condition C, because $\mathcal{F}_{\text{distractor}} \cap g = \emptyset$ and distractor effects are strictly confined to $\mathcal{F}_{\text{distractor}}$, projecting $\pi$ onto $\mathcal{A}_{\text{task}}$ preserves executability and goal satisfaction:
+Thus, $\pi$ satisfies goal $g$ if and only if its task projection $\pi|_{\mathcal{A}_{\text{task}}}$ satisfies $g$.
+Since each action incurs uniform cost $c(a) = 1$, the total cost of plan $\pi$ is:
 \begin{equation}
-    \delta(s_0, \pi)|_{\mathcal{F}_{\text{task}}} = \delta(s_0, \pi|_{\mathcal{A}_{\text{task}}})
+    C(\pi) = |\pi| = |\pi|_{\mathcal{A}_{\text{task}}}| + k_{\text{dist}} = C(\pi|_{\mathcal{A}_{\text{task}}}) + k_{\text{dist}}
 \end{equation}
-Since every action has strictly positive cost $c(a) \ge 1$, removing any distractor action strictly decreases the total plan cost:
+Because $\pi^*$ is the optimal (minimal-length) plan over task actions for reaching $g$, we have $C(\pi|_{\mathcal{A}_{\text{task}}}) \ge C(\pi^*) = C^*$.
+If $\pi$ contains at least one distractor action ($k_{\text{dist}} \ge 1$), its cost satisfies:
 \begin{equation}
-    C(\pi|_{\mathcal{A}_{\text{task}}}) \le C(\pi) - c(a_d) < C(\pi)
+    C(\pi) \ge C^* + k_{\text{dist}} > C^*
 \end{equation}
-Since $\pi^*$ is optimal over $\mathcal{A}_{\text{task}}$, $C(\pi) > C(\pi|_{\mathcal{A}_{\text{task}}}) \ge C^*$.
-Thus, any plan containing a distractor action has strictly higher cost than $\pi^*$.
-Because $\operatorname{Planner}(\widehat{M}', s_0, g)$ is cost-optimal, it deterministically outputs $\pi^*$.
-Executing $\pi^*$ in ground-truth environment $M^*$ succeeds since $\pi^*$ is the true optimal plan.
-Hence $\operatorname{PESR}(\widehat{M}') = 1$ and $R_{\text{play}}(\widehat{M}') = C^*(\pi^*) - C^*(\pi^*) = 0$.
+Since an optimal forward planner (such as $A^*$ with admissible heuristic $h \le h^*$) evaluates $C(\pi^*) < C(\pi)$, it strictly prefers the pure task plan $\pi^*$ over any trajectory contaminated with distractor actions.
+Therefore, $\operatorname{Planner}(\widehat{M}', s_0, g)$ deterministically returns $\pi^*_{\widehat{M}'} = \pi^*$.
+Executing $\pi^*$ in ground-truth environment $M^*$ succeeds with zero regret:
+\begin{equation}
+    \operatorname{PESR}(\widehat{M}') = 1 \quad \text{and} \quad R_{\text{play}}(\widehat{M}') = C^*(\pi^*) - C^*(\pi^*) = 0
+\end{equation}
+This completes the proof.
 \end{proof}
 
 % ---------------------------------------------------------------------------

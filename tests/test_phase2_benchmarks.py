@@ -123,6 +123,8 @@ class TestEmpiricalMetrics(unittest.TestCase):
         res = run_proposition2_empirical_validation()
         self.assertTrue(res["independence_demonstrated"])
         self.assertLess(abs(res["spearman_rank_correlation_rho"]), 0.35)
+        self.assertTrue(res["bootstrap_analysis"]["zero_in_95_ci"])
+        self.assertEqual(res["bootstrap_analysis"]["bootstrap_resamples"], 1000)
         
         # Verify Direction 1: high A_pred, PESR = 0.0
         d1 = [d for d in res["datapoints"] if d["category"] == "Direction 1 (High A_pred, Low PESR)"]

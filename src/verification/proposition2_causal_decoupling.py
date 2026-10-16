@@ -141,15 +141,21 @@ def run_proposition2_empirical_validation() -> dict[str, Any]:
         plan, _ = cand_planner.solve(task["init"], task["goal"])
 
         assert plan is not None, "Planner should find valid plan using task actions"
+        assert len(plan) == task["optimal_cost"], (
+            f"Under unit costs, planner must find optimal plan of length {task['optimal_cost']}, got {len(plan)}"
+        )
+        assert all(a[0] in gt_actions for a in plan), (
+            "Planner must ignore all distractor actions due to Strong Fluent Disjointness"
+        )
         succ, _, _ = cand_planner.execute_plan(task["init"], plan, gt_actions, task["goal"])
 
         datapoints.append({
-            "model_name": f"Distractor Injection (K={K} actions)",
+            "model_name": f"Distractor Injection (K={K} actions, cost=1)",
             "category": "Direction 2 (Low A_pred, High PESR)",
             "a_pred": corrupted_a_pred,
             "pesr": 1.0 if succ else 0.0,
             "r_play": 0 if succ else "INFINITY",
-            "details": f"Lemma 2 construction: {K} distractor actions with disjoint fluents"
+            "details": f"Lemma 2 construction: {K} distractor actions with disjoint fluents, unit cost c=1"
         })
 
     # -------------------------------------------------------------------------
@@ -197,37 +203,74 @@ def run_proposition2_empirical_validation() -> dict[str, Any]:
     })
 
     # -------------------------------------------------------------------------
-    # Statistical Correlation Analysis (Spearman Rank Correlation)
+    # Statistical Correlation Analysis (Spearman Rank Correlation & Bootstrap CI)
     # -------------------------------------------------------------------------
     a_preds = [d["a_pred"] for d in datapoints]
     pesrs = [d["pesr"] for d in datapoints]
 
-    # Compute ranking
-    def compute_ranks(values: list[float]) -> list[float]:
-        sorted_indices = sorted(range(len(values)), key=lambda i: values[i])
-        ranks = [0.0] * len(values)
-        i = 0
-        while i < len(values):
-            j = i
-            while j + 1 < len(values) and values[sorted_indices[j + 1]] == values[sorted_indices[i]]:
-                j += 1
-            avg_rank = (i + j) / 2.0 + 1.0
-            for k in range(i, j + 1):
-                ranks[sorted_indices[k]] = avg_rank
-            i = j + 1
-        return ranks
+    def compute_tied_spearman(x: list[float], y: list[float]) -> float:
+        """Computes exact Spearman rank correlation with standard tie adjustment."""
+        def rank(vals: list[float]) -> list[float]:
+            n_vals = len(vals)
+            order = sorted(range(n_vals), key=lambda i: vals[i])
+            ranks = [0.0] * n_vals
+            idx = 0
+            while idx < n_vals:
+                j = idx
+                while j + 1 < n_vals and vals[order[j + 1]] == vals[order[idx]]:
+                    j += 1
+                r = (idx + j + 2) / 2.0
+                for k in range(idx, j + 1):
+                    ranks[order[k]] = r
+                idx = j + 1
+            return ranks
 
-    rx = compute_ranks(a_preds)
-    ry = compute_ranks(pesrs)
-    n = len(datapoints)
-    d_sq_sum = sum((rx[k] - ry[k]) ** 2 for k in range(n))
-    spearman_rho = round(1.0 - (6.0 * d_sq_sum) / (n * (n**2 - 1)), 4)
+        rx = rank(x)
+        ry = rank(y)
+        mean_rx = sum(rx) / len(rx)
+        mean_ry = sum(ry) / len(ry)
+
+        cov = sum((rx[i] - mean_rx) * (ry[i] - mean_ry) for i in range(len(rx)))
+        std_x = (sum((rx[i] - mean_rx) ** 2 for i in range(len(rx)))) ** 0.5
+        std_y = (sum((ry[i] - mean_ry) ** 2 for i in range(len(ry)))) ** 0.5
+
+        if std_x == 0 or std_y == 0:
+            return 0.0
+        return round(cov / (std_x * std_y), 4)
+
+    spearman_rho = compute_tied_spearman(a_preds, pesrs)
+
+    # 1000-resample bootstrap for 95% Confidence Interval
+    import random
+    rng = random.Random(42)
+    n_pts = len(datapoints)
+    bootstrap_rhos = []
+    for _ in range(1000):
+        sample = [datapoints[rng.randint(0, n_pts - 1)] for _ in range(n_pts)]
+        xs = [d["a_pred"] for d in sample]
+        ys = [d["pesr"] for d in sample]
+        bootstrap_rhos.append(compute_tied_spearman(xs, ys))
+
+    bootstrap_rhos.sort()
+    ci_low = round(bootstrap_rhos[int(0.025 * 1000)], 4)
+    ci_high = round(bootstrap_rhos[int(0.975 * 1000)], 4)
+    mean_boot_rho = round(sum(bootstrap_rhos) / len(bootstrap_rhos), 4)
+
+    bootstrap_stats = {
+        "bootstrap_resamples": 1000,
+        "spearman_rho_point_estimate": spearman_rho,
+        "spearman_rho_bootstrap_mean": mean_boot_rho,
+        "ci_95_low": ci_low,
+        "ci_95_high": ci_high,
+        "zero_in_95_ci": ci_low <= 0.0 <= ci_high
+    }
 
     results = {
         "benchmark_task": task_name,
         "num_models_evaluated": len(datapoints),
         "spearman_rank_correlation_rho": spearman_rho,
-        "independence_demonstrated": abs(spearman_rho) < 0.35 or spearman_rho < 0,
+        "bootstrap_analysis": bootstrap_stats,
+        "independence_demonstrated": ci_low <= 0.0 <= ci_high,
         "datapoints": datapoints
     }
 
@@ -290,7 +333,10 @@ def plot_proposition2_scatter(results: dict[str, Any], output_path: str = "bench
              fontsize=9, color="#8a3c00", weight="bold")
 
     # Annotations
-    plt.title(f"Empirical Proof of Causal Decoupling (Proposition 2)\nSpearman's $\\rho = {rho}$ (Non-Monotonic / Decoupled)", fontsize=13, weight="bold", pad=12)
+    boot = results.get("bootstrap_analysis", {})
+    ci_low = boot.get("ci_95_low", -0.3)
+    ci_high = boot.get("ci_95_high", 0.3)
+    plt.title(f"Empirical Proof of Causal Decoupling (Proposition 2)\nSpearman's $\\rho = {rho}$ (95% Bootstrap CI: $[{ci_low}, {ci_high}]$)", fontsize=13, weight="bold", pad=12)
     plt.xlabel(r"Local Transition Prediction Accuracy ($A_{\mathrm{pred}}$)", fontsize=11, labelpad=8)
     plt.ylabel(r"Plan Execution Success Rate ($\mathrm{PESR}$)", fontsize=11, labelpad=8)
     plt.xlim(-0.05, 1.05)
