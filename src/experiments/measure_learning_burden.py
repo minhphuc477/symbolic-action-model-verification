@@ -327,7 +327,7 @@ def generate_random_walk_traces(gt_actions: dict[str, ActionSchema], objects: li
     rng = random.Random(seed)
     planner = GeneralForwardPlanner(gt_actions, objects)
     ground_actions = planner.get_ground_actions()
-    
+
     traces = []
     for _ in range(n_traces):
         cur_state = set(init_state)
@@ -367,7 +367,7 @@ def evaluate_single_run(
     Deterministic execution following the formal inductive properties of FAMA, LOCM2, and FastLAS.
     """
     t0 = time.time()
-    
+
     # 1. Setup problem instance (base or binding)
     if intv_cfg["task_type"] == "binding":
         objs = intv_cfg["bind_objs"]
@@ -377,7 +377,7 @@ def evaluate_single_run(
         objs = domain_cfg["objects"]
         init_state = domain_cfg["base_init"]
         goal_literals = domain_cfg["base_goal"]
-        
+
     # 2. Learner inductive convergence model:
     # Based on Propositions 1 & 2:
     # - FastLAS under MDL drops non-discriminating preconditions on positive traces -> never learns the precondition.
@@ -385,10 +385,10 @@ def evaluate_single_run(
     #   For dynamic single-object constraints, LOCM2 converges when n >= 100 with diverse traces.
     # - FAMA (SAT compilation) cannot learn static relational constraints from positive traces.
     #   For dynamic constraints, FAMA converges when n >= 100.
-    
+
     pre_type = intv_cfg["type"]
     learned_precondition = False
-    
+
     if learner_name == "FastLAS":
         # Under MDL on positive traces, body literal without negative examples is strictly penalized -> never learned
         learned_precondition = False
@@ -402,19 +402,19 @@ def evaluate_single_run(
             learned_precondition = False
         else:
             learned_precondition = (n_traces >= 100)
-            
+
     # Construct learned action schemas
     learned_actions = dict(gt_actions)
     target_action = intv_cfg["action"]
     omit_lit = intv_cfg["omit_literal"].strip().lower()
-    
+
     if not learned_precondition:
         # Action schema omits the precondition
         old = gt_actions[target_action]
         new_pre = [p for p in old.preconditions if p.strip().lower() != omit_lit]
         raw_eff = old.add_effects + [f'(not {d})' for d in old.del_effects]
         learned_actions[target_action] = ActionSchema(old.name, old.params, new_pre, raw_eff)
-        
+
     # 3. Compute Passive Accuracy A_pred on held-out ground truth transitions
     # In positive transitions, since Pre(learned) <= Pre*(true), every true transition is predicted applicable!
     correct_preds = 0
@@ -427,7 +427,7 @@ def evaluate_single_run(
             if pred_next == s_next:
                 correct_preds += 1
     a_pred = round(correct_preds / max(total_preds, 1), 4)
-    
+
     # Global caches passed or module-level
     plan_cache_key = (domain_name, intv_id, learned_precondition)
     if plan_cache_key in PLAN_CACHE:
@@ -436,10 +436,10 @@ def evaluate_single_run(
         planner_learned = GeneralForwardPlanner(learned_actions, objs)
         plan_learned, nodes_explored = planner_learned.solve(init_state, goal_literals, max_nodes=5000)
         PLAN_CACHE[plan_cache_key] = (plan_learned, nodes_explored)
-    
+
     # 5. Execute Plan on Ground Truth Physics M*
     gt_planner = GeneralForwardPlanner(gt_actions, objs)
-    
+
     if plan_learned is None:
         success = False
         r_play = "INFINITY"
@@ -454,14 +454,14 @@ def evaluate_single_run(
                 gt_optimal_plan, _ = gt_planner.solve(init_state, goal_literals, max_nodes=5000)
                 cost_star = len(gt_optimal_plan) if gt_optimal_plan is not None else 0
                 GT_COST_CACHE[gt_key] = cost_star
-                
+
             cost_learned = len(plan_learned)
             r_play = float(max(0, cost_learned - cost_star))
         else:
             r_play = "INFINITY"
-            
+
     elapsed = time.time() - t0
-    
+
     return {
         "domain": domain_name,
         "intervention": intv_id,
@@ -483,17 +483,17 @@ def main():
     print("=" * 80)
     print("PHASE 4 WEEK 3 & 4: MEASURING LEARNING BURDEN B_bounded (1,080-RUN MATRIX)")
     print("=" * 80)
-    
+
     domain_configs = get_domain_configs()
     learners = ["FAMA", "LOCM2", "FastLAS"]
     budgets = [10, 50, 100, 500, 1000]
     seeds = [42, 101, 202]
-    
+
     # Load Week 2 planning burden results for Delta H_P and H_P(M*)
     pb_file = os.path.join(os.path.dirname(__file__), "../../benchmark_outputs/planning_burden_results.json")
     pb_lookup = {}
     if os.path.exists(pb_file):
-        with open(pb_file, "r") as fp:
+        with open(pb_file) as fp:
             pb_raw = json.load(fp)
             for dom_data in pb_raw.get("domains", {}).values():
                 gt_hp = dom_data.get("ground_truth", {}).get("H_P", 0.0)
@@ -502,36 +502,36 @@ def main():
                         "h_p_gt": gt_hp,
                         "delta_h_p": intv_data.get("delta_H_P", 0.0)
                     }
-        
+
     all_runs = []
     summary_matrix = {}
-    
+
     run_idx = 0
     start_time = time.time()
-    
+
     for domain_name, dom_cfg in domain_configs.items():
         print(f"Processing Domain: {domain_name} ({len(summary_matrix)}/72 configs)...", flush=True)
-        with open(dom_cfg["ref_file"], "r", encoding="utf-8") as f:
+        with open(dom_cfg["ref_file"], encoding="utf-8") as f:
             gt_actions = parse_pddl_model(f.read())
-            
+
         # Generate 100 held-out transitions from M* for passive accuracy testing
         held_out_traces = generate_random_walk_traces(
             gt_actions, dom_cfg["objects"], dom_cfg["base_init"], n_traces=20, seed=999, max_steps=10
         )
         held_out_transitions = [t for trace in held_out_traces for t in trace][:100]
-        
+
         for intv_id, intv_cfg in dom_cfg["interventions"].items():
             # Get Delta H_P from Week 2
             pb_entry = pb_lookup.get(intv_id, {})
             delta_hp = pb_entry.get("delta_h_p", 0.0)
             hp_gt = pb_entry.get("h_p_gt", 0.0)
-            
+
             for learner in learners:
                 regret_curves = {}
                 diverged = False
                 converged_budget = 1000
                 found_convergence = False
-                
+
                 for n in budgets:
                     seed_regrets = []
                     for seed in seeds:
@@ -542,19 +542,19 @@ def main():
                         )
                         all_runs.append(res)
                         seed_regrets.append(res["r_play"])
-                        
+
                     # Calculate mean regret for budget n
                     if any(r == "INFINITY" for r in seed_regrets):
                         mean_regret = "INFINITY"
                     else:
                         mean_regret = sum(seed_regrets) / len(seed_regrets)
-                        
+
                     regret_curves[n] = mean_regret
-                    
+
                     if not found_convergence and mean_regret != "INFINITY" and mean_regret <= 0.1:
                         converged_budget = n
                         found_convergence = True
-                        
+
                 if not found_convergence:
                     diverged = True
                     b_bounded = 1000
@@ -563,7 +563,7 @@ def main():
                     diverged = False
                     b_bounded = converged_budget
                     b_val = converged_budget
-                    
+
                 # Zone Assignment
                 # Delta H_P cutoff = 0.0 (or median Delta H_P)
                 # Divergence cutoff = diverged (B = INFINITY)
@@ -571,7 +571,7 @@ def main():
                     zone = "Zone B" if diverged else "Zone A"
                 else: # Phantom Detour / Heavy Planning
                     zone = "Zone D" if diverged else "Zone C"
-                    
+
                 summary_key = f"{intv_id}_{learner}"
                 summary_matrix[summary_key] = {
                     "domain": domain_name,
@@ -587,14 +587,14 @@ def main():
                     "zone": zone,
                     "regret_curve": regret_curves
                 }
-                
+
     total_elapsed = time.time() - start_time
     print(f"\nExecution of all {run_idx} runs completed in {total_elapsed:.2f} seconds.")
-    
+
     # Save results to benchmark_outputs
     out_dir = os.path.join(os.path.dirname(__file__), "../../benchmark_outputs")
     os.makedirs(out_dir, exist_ok=True)
-    
+
     results_payload = {
         "metadata": {
             "total_runs": run_idx,
@@ -608,18 +608,18 @@ def main():
         "summary_table_72rows": summary_matrix,
         "all_individual_runs": all_runs
     }
-    
+
     out_file = os.path.join(out_dir, "learning_burden_results.json")
     with open(out_file, "w", encoding="utf-8") as fp:
         json.dump(results_payload, fp, indent=2)
-        
+
     print(f"Results successfully saved to: {out_file}")
-    
+
     # Compute Statistical Correlations (Pearson r, Spearman rho, R^2)
     # Filter rows: compare Delta H_P with B_bounded
     delta_hps = [row["delta_hp"] for row in summary_matrix.values()]
     b_bounds = [row["b_bounded"] for row in summary_matrix.values()]
-    
+
     # Calculate Pearson r
     mean_x = sum(delta_hps) / len(delta_hps)
     mean_y = sum(b_bounds) / len(b_bounds)
@@ -628,7 +628,7 @@ def main():
     var_y = sum((y - mean_y) ** 2 for y in b_bounds)
     pearson_r = cov / (math.sqrt(var_x * var_y) + 1e-12)
     r_squared = pearson_r ** 2
-    
+
     # Calculate Spearman rho
     def rank_list(vals):
         sorted_vals = sorted(enumerate(vals), key=lambda x: x[1])
@@ -636,7 +636,7 @@ def main():
         for rank, (orig_idx, _) in enumerate(sorted_vals, 1):
             ranks[orig_idx] = rank
         return ranks
-        
+
     rank_x = rank_list(delta_hps)
     rank_y = rank_list(b_bounds)
     mean_rx = sum(rank_x) / len(rank_x)
@@ -645,12 +645,12 @@ def main():
     var_rx = sum((x - mean_rx) ** 2 for x in rank_x)
     var_ry = sum((y - mean_ry) ** 2 for y in rank_y)
     spearman_rho = cov_r / (math.sqrt(var_rx * var_ry) + 1e-12)
-    
+
     # Zone Breakdown
     zone_counts = {"Zone A": 0, "Zone B": 0, "Zone C": 0, "Zone D": 0}
     for row in summary_matrix.values():
         zone_counts[row["zone"]] += 1
-        
+
     print("\n" + "=" * 80)
     print("PHASE 4 WEEK 4: STATISTICAL CORRELATION & ZONE BREAKDOWN")
     print("=" * 80)

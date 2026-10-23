@@ -91,7 +91,7 @@ class ActionSchema:
         self.preconditions = preconditions
         self.add_effects = []
         self.del_effects = []
-        
+
         for eff in effects:
             if eff.startswith('(not ') and eff.endswith(')'):
                 self.del_effects.append(eff[5:-1].strip())
@@ -113,7 +113,7 @@ class ActionSchema:
     def apply(self, state: set[str], param_map: dict[str, str]) -> set[str] | None:
         if not self.is_applicable(state, param_map):
             return None
-        
+
         next_state = set(state)
         for de in self.del_effects:
             g_del = safe_ground(de, param_map)
@@ -121,14 +121,14 @@ class ActionSchema:
         for ae in self.add_effects:
             g_add = safe_ground(ae, param_map)
             next_state.add(g_add)
-            
+
         return next_state
 
 def parse_pddl_model(pddl_text: str) -> dict[str, ActionSchema]:
     """Parses a PDDL domain string into a dictionary of ActionSchema objects."""
     actions = {}
     act_blocks = re.split(r'\(:action\s+', pddl_text, flags=re.IGNORECASE)[1:]
-    
+
     for block in act_blocks:
         name = block.split()[0].strip().lower().replace("_", "-")
         if name == "putdown":
@@ -136,20 +136,20 @@ def parse_pddl_model(pddl_text: str) -> dict[str, ActionSchema]:
 
         param_sexpr = extract_sexpr(block, ':parameters')
         params = re.findall(r'\?[a-zA-Z0-9_\-]+', param_sexpr or '')
-        
+
         pre_sexpr = extract_sexpr(block, ':precondition')
         pre = parse_atoms(pre_sexpr)
-        
+
         eff_sexpr = extract_sexpr(block, ':effect')
         eff = parse_atoms(eff_sexpr)
-        
+
         schema = ActionSchema(name, params, pre, eff)
         actions[name] = schema
         if name == "pick":
             actions["pick-up"] = schema
         elif name == "pick-up":
             actions["pick"] = schema
-        
+
     return actions
 
 def load_trajectories(dataset_dir: str) -> list[tuple[set[str], str, list[str], set[str]]]:
@@ -161,7 +161,7 @@ def load_trajectories(dataset_dir: str) -> list[tuple[set[str], str, list[str], 
     transitions = []
 
     for fpath in traj_files:
-        with open(fpath, "r", encoding="utf-8") as f:
+        with open(fpath, encoding="utf-8") as f:
             text = f.read()
 
         init_match = re.search(r'\(:init\s+(.*?)\)\s*\(:action', text, re.DOTALL)
@@ -179,7 +179,7 @@ def load_trajectories(dataset_dir: str) -> list[tuple[set[str], str, list[str], 
                 act_name = "put-down"
             act_args = [a.lower() for a in act_tokens[1:]]
             obs_next = set(parse_atoms(f'(and {state_str})'))
-            
+
             transitions.append((cur_state, act_name, act_args, obs_next))
             cur_state = obs_next
 
@@ -192,7 +192,7 @@ def evaluate_transition_accuracy(pddl_text: str, dataset_dir: str = "daineto-met
     model = parse_pddl_model(pddl_text)
     transitions = load_trajectories(dataset_dir)
     total = len(transitions)
-    
+
     if total == 0:
         return {"a_pred": 0.0, "total_transitions": 0, "correct_transitions": 0}
 
@@ -211,12 +211,12 @@ def evaluate_transition_accuracy(pddl_text: str, dataset_dir: str = "daineto-met
 
         schema = model[act_name]
         param_map = {p: a for p, a in zip(schema.params, act_args)}
-        
+
         is_appl = schema.is_applicable(cur_state, param_map)
         if is_appl:
             applicable_count += 1
             per_action_stats[act_name]["applicable"] += 1
-            
+
         pred_next = schema.apply(cur_state, param_map)
         if pred_next is not None and pred_next == obs_next:
             correct += 1
@@ -237,7 +237,7 @@ def evaluate_transition_accuracy(pddl_text: str, dataset_dir: str = "daineto-met
 if __name__ == "__main__":
     import sys
     pddl_file = sys.argv[1] if len(sys.argv) > 1 else "benchmark_outputs/ground_truth.pddl"
-    with open(pddl_file, "r", encoding="utf-8") as f:
+    with open(pddl_file, encoding="utf-8") as f:
         text = f.read()
     res = evaluate_transition_accuracy(text)
     print(f"Results for {pddl_file}:")

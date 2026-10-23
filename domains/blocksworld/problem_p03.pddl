@@ -1,0 +1,22 @@
+; Blocksworld problem p03 — 5 blocks, two towers into one tower
+(define (problem bw-p03)
+  (:domain blocksworld)
+  (:objects a b c d e)
+  (:init
+    (on a b)
+    (on b c)
+    (ontable c)
+    (clear a)
+    (on d e)
+    (ontable e)
+    (clear d)
+    (handempty)
+  )
+  (:goal (and
+    (on a b)
+    (on b c)
+    (on c d)
+    (on d e)
+    (ontable e)
+  ))
+)

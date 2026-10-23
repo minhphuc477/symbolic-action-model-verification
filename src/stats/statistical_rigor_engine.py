@@ -28,13 +28,13 @@ class StatisticalRigorEngine:
     @staticmethod
     def benjamini_hochberg_fdr(p_values, alpha=0.01):
         """
-        Applies Benjamini-Hochberg False Discovery Rate (FDR) correction 
+        Applies Benjamini-Hochberg False Discovery Rate (FDR) correction
         to control Type I error under multiple comparisons.
         """
         sorted_indices = np.argsort(p_values)
         sorted_p = np.array(p_values)[sorted_indices]
         m = len(p_values)
-        
+
         significant_mask = np.zeros(m, dtype=bool)
         max_k = -1
         for k in range(m - 1, -1, -1):
@@ -42,10 +42,10 @@ class StatisticalRigorEngine:
             if sorted_p[k] <= threshold:
                 max_k = k
                 break
-                
+
         if max_k != -1:
             significant_mask[sorted_indices[:max_k + 1]] = True
-            
+
         return significant_mask
 
     @staticmethod
@@ -74,7 +74,7 @@ class StatisticalRigorEngine:
         q75 = float(np.percentile(data_arr, 75))
         iqr_val = q75 - q25
         ci_low, ci_high = StatisticalRigorEngine.bootstrap_ci(data_arr)
-        
+
         return {
             "mean": round(mean_val, 4),
             "std": round(std_val, 4),
@@ -93,11 +93,11 @@ class StatisticalRigorEngine:
         Computes summary statistics across benchmark runs and outputs JSON.
         """
         from collections import defaultdict
-        
+
         if not os.path.exists(json_path):
             return {}
-            
-        with open(json_path, "r", encoding="utf-8") as f:
+
+        with open(json_path, encoding="utf-8") as f:
             data = json.load(f)
 
         results = data.get("all_results", data.get("sample_results", []))
@@ -124,7 +124,7 @@ class StatisticalRigorEngine:
             d_std = float(np.std(vals["d_delta"]))
             p_mean = float(np.mean(vals["PESR"]))
             p_std = float(np.std(vals["PESR"]))
-            
+
             summary[m] = {
                 "evaluated_runs": vals["total"],
                 "A_pred_mean": round(a_mean, 4),
@@ -148,10 +148,10 @@ class StatisticalRigorEngine:
 if __name__ == "__main__":
     fastlas_ged = [0, 0, 1, 0, 0, 1, 0, 1, 0, 0]
     locm2_ged = [2, 4, 1, 3, 2, 4, 1, 3, 2, 4]
-    
+
     d = StatisticalRigorEngine.calculate_cohens_d(locm2_ged, fastlas_ged)
     ci_low, ci_high = StatisticalRigorEngine.bootstrap_ci(fastlas_ged)
-    
+
     print("=== Statistical Rigor Engine Verification ===")
     print(f"1. Real Cohen's d Effect Size: {d:.4f}")
     print(f"2. FastLAS GED Mean 95% Bootstrap CI: [{ci_low:.2f}, {ci_high:.2f}]")

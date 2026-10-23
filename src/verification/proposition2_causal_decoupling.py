@@ -38,7 +38,7 @@ def run_proposition2_empirical_validation() -> dict[str, Any]:
     Executes empirical experiments verifying both directions of Proposition 2.
     Returns dictionary with all datapoints, summary statistics, and Spearman correlation.
     """
-    with open("benchmark_outputs/ground_truth.pddl", "r", encoding="utf-8") as f:
+    with open("benchmark_outputs/ground_truth.pddl", encoding="utf-8") as f:
         gt_pddl = f.read()
 
     gt_actions = parse_pddl_model(gt_pddl)
@@ -161,9 +161,9 @@ def run_proposition2_empirical_validation() -> dict[str, Any]:
     # -------------------------------------------------------------------------
     # 3. Real Learned Models (FAMA and LOCM2)
     # -------------------------------------------------------------------------
-    with open("benchmark_outputs/fama_normalized.pddl", "r", encoding="utf-8") as f:
+    with open("benchmark_outputs/fama_normalized.pddl", encoding="utf-8") as f:
         fama_pddl = f.read()
-    with open("benchmark_outputs/locm2_normalized.pddl", "r", encoding="utf-8") as f:
+    with open("benchmark_outputs/locm2_normalized.pddl", encoding="utf-8") as f:
         locm2_pddl = f.read()
 
     fama_acc = evaluate_transition_accuracy(fama_pddl)["a_pred"]

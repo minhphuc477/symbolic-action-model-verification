@@ -1,0 +1,14 @@
+# Experiment Configuration: Result-to-Claim Audit
+# Deterministic verification of empirical claims against raw benchmark JSON outputs
+
+experiment_name: "claim_audit"
+description: "Audit engine to verify paper claims directly against benchmark output files"
+
+source_files:
+  main_benchmark: "benchmark_outputs/bidirectional_and_compound_repair_benchmark.json"
+  statistical_report: "benchmark_outputs/statistical_analysis_report.json"
+  ablation_benchmark: "benchmark_outputs/ablation_study_results.json"
+  planning_burden: "benchmark_outputs/planning_burden_results.json"
+  scale_verification: "benchmark_outputs/scale_and_binding_results.json"
+
+output_audit_file: "benchmark_outputs/RESULT_TO_CLAIM_AUDIT.md"

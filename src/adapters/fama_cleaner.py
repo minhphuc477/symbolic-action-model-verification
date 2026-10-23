@@ -27,7 +27,7 @@ def clean_fama_pddl(pddl_text: str) -> str:
     return cleaned.strip() + "\n"
 
 def clean_fama_file(input_path: str, output_path: str | None = None) -> str:
-    with open(input_path, 'r', encoding='utf-8') as f:
+    with open(input_path, encoding='utf-8') as f:
         content = f.read()
     cleaned = clean_fama_pddl(content)
     if output_path:

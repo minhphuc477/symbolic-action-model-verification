@@ -21,3 +21,46 @@ addopts = "-v --tb=short"
 python_version = "3.13"
 strict = false
 ignore_missing_imports = true
+
+[tool.ruff]
+line-length = 120
+target-version = "py313"
+exclude = [
+    ".git",
+    ".pytest_cache",
+    ".ruff_cache",
+    "venv",
+    "venv_linux",
+    ".venv",
+    "FastLAS_repo",
+    "locm_repo",
+    "daineto-meta-planning",
+    "literature",
+    "scratch",
+]
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "UP",  # pyupgrade
+    "SIM", # flake8-simplify
+]
+ignore = [
+    "E501",  # line length handled by ruff format
+    "B008",  # function call in argument default (dataclass field)
+    "B905",  # zip without strict=
+    "E741",  # single-letter mathematical variables (e.g., O for observations, l for literal)
+    "SIM108", # ternary operator over if/else
+    "C416",  # dict comprehension vs dict(zip(...))
+    "C401",  # set comprehension
+    "C414",  # list within sorted
+    "SIM105", # suppress(OSError)
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["src"]

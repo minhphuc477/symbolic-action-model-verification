@@ -24,12 +24,12 @@ def generate_visualizations():
     if not os.path.exists(json_path):
         print(f"Error: {json_path} does not exist yet.")
         return
-        
-    with open(json_path, "r", encoding="utf-8") as f:
+
+    with open(json_path, encoding="utf-8") as f:
         data = json.load(f)
-        
+
     summary_72 = data["summary_table_72rows"]
-    
+
     # Extract data points
     delta_hps = []
     b_bounds = []
@@ -37,31 +37,31 @@ def generate_visualizations():
     learners = []
     domains = []
     zones = []
-    
-    for k, v in summary_72.items():
+
+    for _k, v in summary_72.items():
         delta_hps.append(v["delta_hp"])
         b_bounds.append(v["b_bounded"])
         diverged_flags.append(v["diverged"])
         learners.append(v["learner"])
         domains.append(v["domain"])
         zones.append(v["zone"])
-        
+
     # Statistical calculations
     n_pts = len(delta_hps)
     r = np.corrcoef(delta_hps, b_bounds)[0, 1]
     r_sq = r ** 2
-    
+
     # Spearman rho via pure NumPy ranks
     def rank_array(arr):
         temp = np.argsort(arr)
         ranks = np.empty_like(temp, dtype=float)
         ranks[temp] = np.arange(len(arr))
         return ranks
-        
+
     rx = rank_array(delta_hps)
     ry = rank_array(b_bounds)
     rho = np.corrcoef(rx, ry)[0, 1]
-    
+
     # Set style
     plt.rcParams.update({
         'font.family': 'serif',
@@ -73,9 +73,9 @@ def generate_visualizations():
         'legend.fontsize': 10,
         'figure.titlesize': 14
     })
-    
+
     _fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 6), gridspec_kw={'width_ratios': [1.2, 1]})
-    
+
     # -------------------------------------------------------------
     # PANEL 1: Scatter Plot Delta H_P vs B_bounded (4 Zones)
     # -------------------------------------------------------------
@@ -83,7 +83,7 @@ def generate_visualizations():
     np.random.seed(42)
     jitter_y = np.random.uniform(-35, 35, size=n_pts)
     jitter_x = np.random.uniform(-0.08, 0.08, size=n_pts)
-    
+
     learner_colors = {
         "FAMA": "#1f77b4",    # Blue
         "LOCM2": "#2ca02c",   # Green
@@ -94,7 +94,7 @@ def generate_visualizations():
         "LOCM2": "s",
         "FastLAS": "^"
     }
-    
+
     for l_name in ["FAMA", "LOCM2", "FastLAS"]:
         idx = [i for i, l in enumerate(learners) if l == l_name]
         x_sub = [delta_hps[i] + jitter_x[i] for i in idx]
@@ -106,28 +106,28 @@ def generate_visualizations():
             s=65, alpha=0.85, edgecolors='k', linewidth=0.6,
             label=f"{l_name} (n={len(idx)})"
         )
-        
+
     # Divider lines
     ax1.axvline(x=0.0, color='gray', linestyle='--', linewidth=1.2, alpha=0.7)
     ax1.axhline(y=1000, color='red', linestyle=':', linewidth=1.5, alpha=0.8, label="Divergence Cutoff (B = ∞)")
-    
+
     # Zone Labels
     ax1.text(-2.5, 930, "ZONE B\n(Dangerous Blindspot)\nLow HP, B = ∞",
              color='#b30000', fontweight='bold', fontsize=10, ha='center',
              bbox={'boxstyle': 'round,pad=0.3', 'facecolor': '#ffe6e6', 'edgecolor': '#b30000', 'alpha': 0.8})
-             
+
     ax1.text(-2.5, 150, "ZONE A\n(Tractable / Robust)\nLow HP, Low B",
              color='#006600', fontweight='bold', fontsize=10, ha='center',
              bbox={'boxstyle': 'round,pad=0.3', 'facecolor': '#e6ffe6', 'edgecolor': '#006600', 'alpha': 0.8})
-             
+
     ax1.text(3.5, 930, "ZONE D\n(Intrinsically Hard)\nHigh HP, B = ∞",
              color='#660066', fontweight='bold', fontsize=10, ha='center',
              bbox={'boxstyle': 'round,pad=0.3', 'facecolor': '#f3e6ff', 'edgecolor': '#660066', 'alpha': 0.8})
-             
+
     ax1.text(3.5, 150, "ZONE C\n(Planning-Heavy)\nHigh HP, Low B",
              color='#004d80', fontweight='bold', fontsize=10, ha='center',
              bbox={'boxstyle': 'round,pad=0.3', 'facecolor': '#e6f2ff', 'edgecolor': '#004d80', 'alpha': 0.8})
-             
+
     # Statistics Box
     stat_text = (
         f"Burden Decoupling Statistics:\n"
@@ -138,34 +138,34 @@ def generate_visualizations():
     ax1.text(0.04, 0.05, stat_text, transform=ax1.transAxes,
              fontsize=9.5, va='bottom', ha='left',
              bbox={'boxstyle': 'round,pad=0.4', 'facecolor': 'white', 'edgecolor': 'black', 'alpha': 0.9})
-             
+
     ax1.set_xlabel("Marginal Shift in Planning Burden (Δ HP = HP(M_hat) - HP(M*))")
     ax1.set_ylabel("Bounded Learning Burden B_bounded (Sample Cutoff = 1,000)")
     ax1.set_title("(a) Planning Burden vs. Learning Burden (72 Evaluated Points)", fontweight='bold')
     ax1.set_ylim(-50, 1100)
     ax1.grid(True, linestyle=':', alpha=0.5)
     ax1.legend(loc='upper right', framealpha=0.9)
-    
+
     # -------------------------------------------------------------
     # PANEL 2: Divergence Percentage (B = ∞) by Domain & Learner
     # -------------------------------------------------------------
     unique_domains = sorted(set(domains))
-    domain_div = {d: {l: 0 for l in ["FAMA", "LOCM2", "FastLAS"]} for d in unique_domains}
-    domain_total = {d: {l: 0 for l in ["FAMA", "LOCM2", "FastLAS"]} for d in unique_domains}
-    
+    domain_div = {d: dict.fromkeys(["FAMA", "LOCM2", "FastLAS"], 0) for d in unique_domains}
+    domain_total = {d: dict.fromkeys(["FAMA", "LOCM2", "FastLAS"], 0) for d in unique_domains}
+
     for d, l, div in zip(domains, learners, diverged_flags):
         domain_total[d][l] += 1
         if div:
             domain_div[d][l] += 1
-            
+
     y_pos = np.arange(len(unique_domains))
     bar_height = 0.25
-    
+
     for i, l_name in enumerate(["FAMA", "LOCM2", "FastLAS"]):
         pcts = [domain_div[d][l_name] / domain_total[d][l_name] * 100 for d in unique_domains]
         ax2.barh(y_pos + (i - 1) * bar_height, pcts, height=bar_height,
                  color=learner_colors[l_name], alpha=0.85, edgecolor='k', label=l_name)
-                 
+
     ax2.set_yticks(y_pos)
     ax2.set_yticklabels(unique_domains)
     ax2.set_xlabel("Percentage of Divergent Runs B = ∞ (%)")
@@ -174,23 +174,23 @@ def generate_visualizations():
     ax2.axvline(x=100, color='gray', linestyle='--', alpha=0.5)
     ax2.grid(True, axis='x', linestyle=':', alpha=0.5)
     ax2.legend(loc='lower right', framealpha=0.9)
-    
+
     plt.tight_layout()
-    
+
     # Save figure
     fig_dir = os.path.join(os.path.dirname(__file__), "../../figures")
     os.makedirs(fig_dir, exist_ok=True)
     png_path = os.path.join(fig_dir, "burden_scatter_zones.png")
     pdf_path = os.path.join(fig_dir, "burden_scatter_zones.pdf")
-    
+
     plt.savefig(png_path, dpi=300, bbox_inches='tight')
     plt.savefig(pdf_path, bbox_inches='tight')
     plt.close()
-    
+
     print("Figures successfully generated:")
     print(f"  PNG: {png_path}")
     print(f"  PDF: {pdf_path}")
-    
+
     # -------------------------------------------------------------
     # 3. Generate LaTeX Summary Table
     # -------------------------------------------------------------
@@ -203,7 +203,7 @@ def generate_visualizations():
         tf.write("\\toprule\n")
         tf.write("\\textbf{Domain} & \\textbf{Intervention} & \\textbf{Precondition Type} & $\\Delta H_P$ & \\textbf{FAMA $B$} & \\textbf{LOCM2 $B$} & \\textbf{FastLAS $B$} \\\\\n")
         tf.write("\\midrule\n")
-        
+
         current_dom = None
         for k in sorted(summary_72.keys()):
             if not k.endswith("_FAMA"):
@@ -212,30 +212,30 @@ def generate_visualizations():
             fama_row = summary_72.get(f"{intv_id}_FAMA", {})
             locm_row = summary_72.get(f"{intv_id}_LOCM2", {})
             las_row = summary_72.get(f"{intv_id}_FastLAS", {})
-            
+
             dom = fama_row["domain"]
             if dom != current_dom:
                 if current_dom is not None:
                     tf.write("\\midrule\n")
                 current_dom = dom
-                
+
             def fmt_b(row):
                 if row.get("diverged", True):
                     return "$\\infty$ (Zone B)" if row.get("delta_hp", 0) <= 0 else "$\\infty$ (Zone D)"
                 else:
                     b = row.get("b_bounded", 1000)
                     return f"{b} (Zone A)" if row.get("delta_hp", 0) <= 0 else f"{b} (Zone C)"
-                    
+
             intv_id_esc = intv_id.replace("_", "\\_")
             ptype_esc = fama_row['precondition_type'].replace("_", "\\_")
             tf.write(f"{dom} & {intv_id_esc} & \\texttt{{{ptype_esc}}} & {fama_row['delta_hp']:+.2f} & {fmt_b(fama_row)} & {fmt_b(locm_row)} & {fmt_b(las_row)} \\\\\n")
-            
+
         tf.write("\\bottomrule\n")
         tf.write("\\end{tabular}\n")
         tf.write("\\caption{Phase 4 Empirical Matrix: Planning Burden Shift ($\\Delta H_P$), Sample Complexity ($B_{\\text{bounded}}$), and Hardness Zone Classification across 24 Interventions and 3 Symbolic Learners.}\n")
         tf.write("\\label{tab:burden_matrix_72}\n")
         tf.write("\\end{table*}\n")
-        
+
     print(f"LaTeX summary table saved to: {tex_path}")
 
 if __name__ == "__main__":

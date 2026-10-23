@@ -42,10 +42,19 @@ Thumbs.db
 daineto-meta-planning/
 PuzzleScript/
 FastLAS/
+FastLAS_repo/
+locm_repo/
 
 # Planner temporary execution files & logs
 sas_plan*
 *.soln
 repair_logs/
 .agents/
+.aris/
+.licenses/
+.ruff_cache/
+
+# Binary data ledgers
+*.xlsx
+
 

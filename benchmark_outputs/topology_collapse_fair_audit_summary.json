@@ -1,0 +1,142 @@
+{
+  "Blocksworld|optimal_astar_lmcut": {
+    "n_plans": 324,
+    "n_unsolvable_under_Mhat": 0,
+    "collapse_rate_invalid_given_plan": 0.642,
+    "collapse_rate_95CI": [
+      0.5884,
+      0.6922
+    ],
+    "omissions_that_never_collapse": "1/9",
+    "mean_A_pos_positive_only": 1.0,
+    "mean_A_bal_applicability_agreement": 0.9528,
+    "mean_applicability_precision": 0.66,
+    "mean_false_applicable_rate": 0.0472,
+    "planner_failure_rate": 0.642,
+    "random_policy_failure_len_matched": 0.7496,
+    "shorter_than_gt_rate": 0.3519,
+    "regime_I_shortcut_dc_gt_0": {
+      "n": 114,
+      "planner_collapse_rate": 1.0,
+      "planner_collapse_95CI": [
+        0.9674,
+        1
+      ],
+      "random_policy_failure_len_matched": 0.8934
+    },
+    "regime_II_cost_preserving_dc_eq_0": {
+      "n": 210,
+      "planner_collapse_rate": 0.4476,
+      "planner_collapse_95CI": [
+        0.3819,
+        0.5152
+      ],
+      "random_policy_failure_len_matched": 0.6715
+    }
+  },
+  "Blocksworld|satisficing_lama_first": {
+    "n_plans": 324,
+    "n_unsolvable_under_Mhat": 0,
+    "collapse_rate_invalid_given_plan": 0.6975,
+    "collapse_rate_95CI": [
+      0.6454,
+      0.745
+    ],
+    "omissions_that_never_collapse": "0/9",
+    "mean_A_pos_positive_only": 1.0,
+    "mean_A_bal_applicability_agreement": 0.9528,
+    "mean_applicability_precision": 0.66,
+    "mean_false_applicable_rate": 0.0472,
+    "planner_failure_rate": 0.6975,
+    "random_policy_failure_len_matched": 0.7648,
+    "shorter_than_gt_rate": 0.3364,
+    "regime_I_shortcut_dc_gt_0": {
+      "n": 109,
+      "planner_collapse_rate": 0.9817,
+      "planner_collapse_95CI": [
+        0.9356,
+        0.995
+      ],
+      "random_policy_failure_len_matched": 0.8803
+    },
+    "regime_II_cost_preserving_dc_eq_0": {
+      "n": 215,
+      "planner_collapse_rate": 0.5535,
+      "planner_collapse_95CI": [
+        0.4867,
+        0.6184
+      ],
+      "random_policy_failure_len_matched": 0.7063
+    }
+  },
+  "Gripper|optimal_astar_lmcut": {
+    "n_plans": 216,
+    "n_unsolvable_under_Mhat": 0,
+    "collapse_rate_invalid_given_plan": 0.9722,
+    "collapse_rate_95CI": [
+      0.9407,
+      0.9872
+    ],
+    "omissions_that_never_collapse": "0/6",
+    "mean_A_pos_positive_only": 1.0,
+    "mean_A_bal_applicability_agreement": 0.9339,
+    "mean_applicability_precision": 0.6867,
+    "mean_false_applicable_rate": 0.0661,
+    "planner_failure_rate": 0.9722,
+    "random_policy_failure_len_matched": 0.8481,
+    "shorter_than_gt_rate": 0.8704,
+    "regime_I_shortcut_dc_gt_0": {
+      "n": 188,
+      "planner_collapse_rate": 1.0,
+      "planner_collapse_95CI": [
+        0.98,
+        1
+      ],
+      "random_policy_failure_len_matched": 0.8722
+    },
+    "regime_II_cost_preserving_dc_eq_0": {
+      "n": 28,
+      "planner_collapse_rate": 0.7857,
+      "planner_collapse_95CI": [
+        0.6046,
+        0.8979
+      ],
+      "random_policy_failure_len_matched": 0.6868
+    }
+  },
+  "Gripper|satisficing_lama_first": {
+    "n_plans": 216,
+    "n_unsolvable_under_Mhat": 0,
+    "collapse_rate_invalid_given_plan": 0.9583,
+    "collapse_rate_95CI": [
+      0.9227,
+      0.9779
+    ],
+    "omissions_that_never_collapse": "0/6",
+    "mean_A_pos_positive_only": 1.0,
+    "mean_A_bal_applicability_agreement": 0.9339,
+    "mean_applicability_precision": 0.6867,
+    "mean_false_applicable_rate": 0.0661,
+    "planner_failure_rate": 0.9583,
+    "random_policy_failure_len_matched": 0.8594,
+    "shorter_than_gt_rate": 0.8704,
+    "regime_I_shortcut_dc_gt_0": {
+      "n": 188,
+      "planner_collapse_rate": 0.9894,
+      "planner_collapse_95CI": [
+        0.962,
+        0.9971
+      ],
+      "random_policy_failure_len_matched": 0.8837
+    },
+    "regime_II_cost_preserving_dc_eq_0": {
+      "n": 28,
+      "planner_collapse_rate": 0.75,
+      "planner_collapse_95CI": [
+        0.5664,
+        0.8732
+      ],
+      "random_policy_failure_len_matched": 0.6961
+    }
+  }
+}

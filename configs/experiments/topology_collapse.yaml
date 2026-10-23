@@ -1,0 +1,20 @@
+# Experiment Configuration: Search-Tree Topology Collapse & Planning Burden
+# Measures H_P(M*, x) and H_P(M_hat, x) across 24 interventions and scale verification tasks
+
+experiment_name: "topology_collapse"
+description: "Measures search-tree topology collapse and planning burden across 24 interventions in 8 IPC domains"
+
+matrix_config: "configs/interventions/matrix_24.yaml"
+output_dir: "benchmark_outputs"
+planning_burden_output: "benchmark_outputs/planning_burden_results.json"
+scale_verification_output: "benchmark_outputs/scale_and_binding_results.json"
+
+max_nodes_per_search: 100000
+
+scale_verification:
+  blocksworld:
+    sizes: [3, 4, 5]
+    intervention: "BW_I1"
+  hanoi:
+    sizes: [2, 3]
+    intervention: "HAN_I1"

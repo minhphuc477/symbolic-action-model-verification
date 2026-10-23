@@ -44,7 +44,7 @@ class TestTopologyMetricsCalculator(unittest.TestCase):
         pred_edges = [("s0", "act_move", "s1", []), ("s1", "act_door", "s2", ["p_key"]), ("s1", "act_shortcut", "s3", ["p_key"])]
         calculator = TopologyMetricsCalculator(real_edges, pred_edges, ["p_key"])
         metrics = calculator.compute_all_metrics(["p_normal"])
-        
+
         self.assertEqual(metrics["PER_Phantom_Edge_Rate"], "33.33%")
         self.assertAlmostEqual(calculator.calculate_per(), 0.3333, places=2)
 
@@ -54,7 +54,7 @@ class TestCounterexampleVerifier(unittest.TestCase):
         res = run_counterexample_verification()
         self.assertIn('Linear_Chain_b1_D100', res)
         self.assertIn('Binary_Tree_b2_D3', res)
-        
+
         chain = res['Linear_Chain_b1_D100']
         self.assertEqual(chain['d_delta'], 50)
         self.assertEqual(chain['Play_Regret_R_play'], 'INFINITY')

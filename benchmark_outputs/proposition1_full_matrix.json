@@ -366,12 +366,12 @@
       },
       "Task 2: Disassembly to Table": {
         "plan_found": true,
-        "plan_length": 3,
-        "phantom_edges": 1,
-        "PESR": 0.0,
-        "R_play": "INFINITY",
-        "fail_reason": "Precondition violation at step 2 (pick-up b): missing ['(ontable b)', '(handempty)']",
-        "plan_str": "unstack(c,b) -> pick-up(b) -> put-down(c)"
+        "plan_length": 4,
+        "phantom_edges": 0,
+        "PESR": 1.0,
+        "R_play": "0",
+        "fail_reason": null,
+        "plan_str": "unstack(c,b) -> put-down(c) -> unstack(b,a) -> put-down(b)"
       },
       "Task 3: Reassembly from Table": {
         "plan_found": true,
@@ -409,13 +409,13 @@
         "plan_str": "None"
       },
       "Task 3: Reassembly from Table": {
-        "plan_found": false,
-        "plan_length": 0,
-        "phantom_edges": 0,
+        "plan_found": true,
+        "plan_length": 4,
+        "phantom_edges": 2,
         "PESR": 0.0,
         "R_play": "INFINITY",
-        "fail_reason": "No plan found",
-        "plan_str": "None"
+        "fail_reason": "Precondition violation at step 1 (unstack a b): missing ['(on a b)']",
+        "plan_str": "unstack(a,b) -> unstack(b,a) -> stack(a,b) -> stack(b,c)"
       }
     }
   }

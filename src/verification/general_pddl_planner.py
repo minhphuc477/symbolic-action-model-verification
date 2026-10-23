@@ -26,7 +26,7 @@ class GeneralForwardPlanner:
             if k == 0:
                 grounded.append((name, []))
                 continue
-            
+
             types = self.param_types.get(name)
             if types and len(types) == k and self.type_map:
                 candidates = []

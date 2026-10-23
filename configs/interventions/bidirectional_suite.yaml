@@ -1,0 +1,303 @@
+# Bidirectional, Non-Monotonic, and Compound Fault Benchmark Suite
+# Evaluates CEG-OMR vs. Monotonic-OLAM, Active SAM, and Passive SAM across 6 domains (3 IPC + 3 Game AI)
+# 4 Distinct Fault Families:
+#   Family A: Missing Precondition (Delta_Pre^-) - under-constrained shortcuts
+#   Family B: Spurious Precondition (Delta_Pre^+) - over-constrained unsolvable initial models
+#   Family C: 4-Way Effect Corruptions (Delta_Eff^+-) - missing add/del, spurious add/del
+#   Family D: Compound Bidirectional / LLM-Drifted Faults - simultaneous Pre^-, Pre^+, Eff^+-
+
+families:
+  Family_A_Missing_Precondition:
+    - scenario_id: "famA_blocksworld"
+      domain: "blocksworld"
+      gt_domain: "domains/blocksworld/domain.pddl"
+      problem: "domains/blocksworld/problem_p01.pddl"
+      target_action: "unstack"
+      mutations:
+        - type: "remove_precondition"
+          action: "unstack"
+          atom: "(clear ?x)"
+      description: "Omit (clear ?x) from unstack"
+
+    - scenario_id: "famA_gripper"
+      domain: "gripper"
+      gt_domain: "domains/gripper/domain.pddl"
+      problem: "domains/gripper/problem_p01.pddl"
+      target_action: "pick"
+      mutations:
+        - type: "remove_precondition"
+          action: "pick"
+          atom: "(at-robby ?room)"
+      description: "Omit (at-robby ?room) from pick"
+
+    - scenario_id: "famA_logistics"
+      domain: "logistics"
+      gt_domain: "domains/logistics/domain.pddl"
+      problem: "domains/logistics/problem_p01.pddl"
+      target_action: "load-truck"
+      mutations:
+        - type: "remove_precondition"
+          action: "load-truck"
+          atom: "(at ?t ?l)"
+      description: "Omit (at ?t ?l) from load-truck"
+
+    - scenario_id: "famA_sokoban"
+      domain: "sokoban"
+      gt_domain: "domains/sokoban/domain.pddl"
+      problem: "domains/sokoban/problem_p01.pddl"
+      target_action: "push"
+      mutations:
+        - type: "remove_precondition"
+          action: "push"
+          atom: "(clear ?b-target)"
+      description: "Omit (clear ?b-target) from push"
+
+    - scenario_id: "famA_pitch_black"
+      domain: "pitch_black"
+      gt_domain: "domains/pitch_black/domain.pddl"
+      problem: "domains/pitch_black/problem_p01.pddl"
+      target_action: "move"
+      mutations:
+        - type: "remove_precondition"
+          action: "move"
+          atom: "(is-light-on ?to)"
+      description: "Omit (is-light-on ?to) from move"
+
+    - scenario_id: "famA_dungeon_escape"
+      domain: "dungeon_escape"
+      gt_domain: "domains/dungeon_escape/domain.pddl"
+      problem: "domains/dungeon_escape/problem_p01.pddl"
+      target_action: "unlock-door"
+      mutations:
+        - type: "remove_precondition"
+          action: "unlock-door"
+          atom: "(has-key ?p ?k)"
+      description: "Omit (has-key ?p ?k) from unlock-door"
+
+  Family_B_Spurious_Precondition:
+    - scenario_id: "famB_blocksworld"
+      domain: "blocksworld"
+      gt_domain: "domains/blocksworld/domain.pddl"
+      problem: "domains/blocksworld/problem_p01.pddl"
+      target_action: "pick-up"
+      mutations:
+        - type: "add_precondition"
+          action: "pick-up"
+          atom: "(holding ?x)"
+      description: "Add spurious precondition (holding ?x) to pick-up"
+
+    - scenario_id: "famB_gripper"
+      domain: "gripper"
+      gt_domain: "domains/gripper/domain.pddl"
+      problem: "domains/gripper/problem_p01.pddl"
+      target_action: "pick"
+      mutations:
+        - type: "add_precondition"
+          action: "pick"
+          atom: "(carry ?obj ?gripper)"
+      description: "Add spurious precondition (carry ?obj ?gripper) to pick"
+
+    - scenario_id: "famB_logistics"
+      domain: "logistics"
+      gt_domain: "domains/logistics/domain.pddl"
+      problem: "domains/logistics/problem_p01.pddl"
+      target_action: "load-truck"
+      mutations:
+        - type: "add_precondition"
+          action: "load-truck"
+          atom: "(in ?p ?t)"
+      description: "Add spurious precondition (in ?p ?t) to load-truck"
+
+    - scenario_id: "famB_sokoban"
+      domain: "sokoban"
+      gt_domain: "domains/sokoban/domain.pddl"
+      problem: "domains/sokoban/problem_p01.pddl"
+      target_action: "push"
+      mutations:
+        - type: "add_precondition"
+          action: "push"
+          atom: "(at-box ?b-target)"
+      description: "Add spurious precondition (at-box ?b-target) to push"
+
+    - scenario_id: "famB_pitch_black"
+      domain: "pitch_black"
+      gt_domain: "domains/pitch_black/domain.pddl"
+      problem: "domains/pitch_black/problem_p01.pddl"
+      target_action: "move"
+      mutations:
+        - type: "add_precondition"
+          action: "move"
+          atom: "(at-player ?to)"
+      description: "Add spurious precondition (at-player ?to) to move"
+
+    - scenario_id: "famB_dungeon_escape"
+      domain: "dungeon_escape"
+      gt_domain: "domains/dungeon_escape/domain.pddl"
+      problem: "domains/dungeon_escape/problem_p01.pddl"
+      target_action: "unlock-door"
+      mutations:
+        - type: "add_precondition"
+          action: "unlock-door"
+          atom: "(door-open ?door)"
+      description: "Add spurious precondition (door-open ?door) to unlock-door"
+
+  Family_C_Bidirectional_Effect_Corruption:
+    - scenario_id: "famC_bw_missing_del"
+      domain: "blocksworld"
+      gt_domain: "domains/blocksworld/domain.pddl"
+      problem: "domains/blocksworld/problem_p01.pddl"
+      target_action: "stack"
+      mutations:
+        - type: "remove_effect"
+          action: "stack"
+          atom: "(not (clear ?y))"
+      description: "Missing delete effect (not (clear ?y)) on stack"
+
+    - scenario_id: "famC_bw_missing_add"
+      domain: "blocksworld"
+      gt_domain: "domains/blocksworld/domain.pddl"
+      problem: "domains/blocksworld/problem_p01.pddl"
+      target_action: "unstack"
+      mutations:
+        - type: "remove_effect"
+          action: "unstack"
+          atom: "(clear ?y)"
+      description: "Missing add effect (clear ?y) on unstack"
+
+    - scenario_id: "famC_bw_spurious_add"
+      domain: "blocksworld"
+      gt_domain: "domains/blocksworld/domain.pddl"
+      problem: "domains/blocksworld/problem_p01.pddl"
+      target_action: "pick-up"
+      mutations:
+        - type: "add_effect"
+          action: "pick-up"
+          atom: "(clear ?x)"
+      description: "Spurious add effect (clear ?x) on pick-up"
+
+    - scenario_id: "famC_gripper_spurious_del"
+      domain: "gripper"
+      gt_domain: "domains/gripper/domain.pddl"
+      problem: "domains/gripper/problem_p01.pddl"
+      target_action: "drop"
+      mutations:
+        - type: "add_effect"
+          action: "drop"
+          atom: "(not (at-robby ?room))"
+      description: "Spurious delete effect (not (at-robby ?room)) on drop"
+
+    - scenario_id: "famC_dungeon_missing_del"
+      domain: "dungeon_escape"
+      gt_domain: "domains/dungeon_escape/domain.pddl"
+      problem: "domains/dungeon_escape/problem_p01.pddl"
+      target_action: "pickup-key"
+      mutations:
+        - type: "remove_effect"
+          action: "pickup-key"
+          atom: "(not (at ?k ?loc))"
+      description: "Missing delete effect (not (at ?k ?loc)) on pickup-key"
+
+    - scenario_id: "famC_pitch_spurious_del"
+      domain: "pitch_black"
+      gt_domain: "domains/pitch_black/domain.pddl"
+      problem: "domains/pitch_black/problem_p01.pddl"
+      target_action: "move"
+      mutations:
+        - type: "add_effect"
+          action: "move"
+          atom: "(not (is-light-on ?to))"
+      description: "Spurious delete effect (not (is-light-on ?to)) on move"
+
+  Family_D_Compound_Bidirectional_LLM_Drifted:
+    - scenario_id: "famD_compound_blocksworld"
+      domain: "blocksworld"
+      gt_domain: "domains/blocksworld/domain.pddl"
+      problem: "domains/blocksworld/problem_p01.pddl"
+      target_action: "unstack"
+      mutations:
+        - type: "remove_precondition"
+          action: "unstack"
+          atom: "(clear ?x)"
+        - type: "add_precondition"
+          action: "pick-up"
+          atom: "(holding ?x)"
+        - type: "remove_effect"
+          action: "stack"
+          atom: "(not (clear ?y))"
+      description: "Compound Pre^- + Pre^+ + Eff^- on Blocksworld"
+
+    - scenario_id: "famD_compound_gripper"
+      domain: "gripper"
+      gt_domain: "domains/gripper/domain.pddl"
+      problem: "domains/gripper/problem_p01.pddl"
+      target_action: "pick"
+      mutations:
+        - type: "remove_precondition"
+          action: "pick"
+          atom: "(at-robby ?room)"
+        - type: "add_precondition"
+          action: "drop"
+          atom: "(free ?gripper)"
+        - type: "add_effect"
+          action: "drop"
+          atom: "(not (at-robby ?room))"
+      description: "Compound Pre^- + Pre^+ + Eff^+ on Gripper"
+
+    - scenario_id: "famD_compound_logistics"
+      domain: "logistics"
+      gt_domain: "domains/logistics/domain.pddl"
+      problem: "domains/logistics/problem_p01.pddl"
+      target_action: "load-truck"
+      mutations:
+        - type: "remove_precondition"
+          action: "load-truck"
+          atom: "(at ?t ?l)"
+        - type: "add_precondition"
+          action: "unload-truck"
+          atom: "(at ?p ?l)"
+      description: "Compound Pre^- + Pre^+ on Logistics"
+
+    - scenario_id: "famD_compound_sokoban"
+      domain: "sokoban"
+      gt_domain: "domains/sokoban/domain.pddl"
+      problem: "domains/sokoban/problem_p01.pddl"
+      target_action: "push"
+      mutations:
+        - type: "remove_precondition"
+          action: "push"
+          atom: "(clear ?b-target)"
+        - type: "add_precondition"
+          action: "move"
+          atom: "(at-player ?to)"
+      description: "Compound Pre^- + Pre^+ on Sokoban"
+
+    - scenario_id: "famD_compound_pitch_black"
+      domain: "pitch_black"
+      gt_domain: "domains/pitch_black/domain.pddl"
+      problem: "domains/pitch_black/problem_p01.pddl"
+      target_action: "move"
+      mutations:
+        - type: "remove_precondition"
+          action: "move"
+          atom: "(is-light-on ?to)"
+        - type: "add_effect"
+          action: "move"
+          atom: "(not (is-light-on ?to))"
+      description: "Compound Pre^- + Eff^+ on Pitch Black"
+
+    - scenario_id: "famD_compound_dungeon_escape"
+      domain: "dungeon_escape"
+      gt_domain: "domains/dungeon_escape/domain.pddl"
+      problem: "domains/dungeon_escape/problem_p01.pddl"
+      target_action: "unlock-door"
+      mutations:
+        - type: "remove_precondition"
+          action: "unlock-door"
+          atom: "(has-key ?p ?k)"
+        - type: "add_precondition"
+          action: "pickup-key"
+          atom: "(has-key ?p ?k)"
+        - type: "remove_effect"
+          action: "pickup-key"
+          atom: "(not (at ?k ?loc))"
+      description: "Compound Pre^- + Pre^+ + Eff^- on Dungeon Escape"

@@ -77,7 +77,7 @@ class TestEmpiricalMetrics(unittest.TestCase):
     def test_ground_truth_transition_accuracy(self):
         gt_path = "benchmark_outputs/ground_truth.pddl"
         if os.path.exists(gt_path):
-            with open(gt_path, "r", encoding="utf-8") as f:
+            with open(gt_path, encoding="utf-8") as f:
                 gt_text = f.read()
             res = evaluate_transition_accuracy(gt_text)
             self.assertEqual(res["total_transitions"], 100)
@@ -88,9 +88,9 @@ class TestEmpiricalMetrics(unittest.TestCase):
         gt_path = "benchmark_outputs/ground_truth.pddl"
         fama_path = "benchmark_outputs/fama_normalized.pddl"
         if os.path.exists(gt_path) and os.path.exists(fama_path):
-            with open(gt_path, "r", encoding="utf-8") as f:
+            with open(gt_path, encoding="utf-8") as f:
                 gt_text = f.read()
-            with open(fama_path, "r", encoding="utf-8") as f:
+            with open(fama_path, encoding="utf-8") as f:
                 fama_text = f.read()
             res = compare_fairly(gt_text, fama_text, fama_path, "Full Model (SAT-based)")
             self.assertTrue(res["pddl_valid"])
@@ -107,7 +107,7 @@ class TestEmpiricalMetrics(unittest.TestCase):
         ctrl_t1 = res["Control (Ground Truth M*)"]["tasks"]["Task 1: Tower Inversion"]
         self.assertEqual(ctrl_t1["PESR"], 1.0)
         self.assertEqual(ctrl_t1["R_play"], "0")
-        
+
         # Verify Omit (clear ?o1) in unstack achieves A_pred = 1.0 but collapses PESR = 0.0, R_play = INFINITY
         omit_clear = res["Omit (clear ?o1) in unstack"]
         self.assertEqual(omit_clear["A_pred"], 1.0)
@@ -125,11 +125,11 @@ class TestEmpiricalMetrics(unittest.TestCase):
         self.assertLess(abs(res["spearman_rank_correlation_rho"]), 0.35)
         self.assertTrue(res["bootstrap_analysis"]["zero_in_95_ci"])
         self.assertEqual(res["bootstrap_analysis"]["bootstrap_resamples"], 1000)
-        
+
         # Verify Direction 1: high A_pred, PESR = 0.0
         d1 = [d for d in res["datapoints"] if d["category"] == "Direction 1 (High A_pred, Low PESR)"]
         self.assertTrue(any(d["a_pred"] >= 0.95 and d["pesr"] == 0.0 for d in d1))
-        
+
         # Verify Direction 2: low A_pred, PESR = 1.0
         d2 = [d for d in res["datapoints"] if d["category"] == "Direction 2 (Low A_pred, High PESR)"]
         self.assertTrue(any(d["a_pred"] <= 0.15 and d["pesr"] == 1.0 for d in d2))

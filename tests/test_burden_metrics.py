@@ -29,7 +29,7 @@ class TestBurdenMetrics(unittest.TestCase):
 
     def setUp(self):
         gt_file = "benchmark_outputs/ground_truth.pddl"
-        with open(gt_file, "r", encoding="utf-8") as f:
+        with open(gt_file, encoding="utf-8") as f:
             gt_pddl = f.read()
         self.gt_models = parse_pddl_model(gt_pddl)
         self.tasks = get_benchmark_tasks()
@@ -123,7 +123,7 @@ class TestBurdenMetrics(unittest.TestCase):
         for domain_name, dom_cfg in matrix.items():
             self.assertEqual(len(dom_cfg["interventions"]), 3)
             total_interventions += len(dom_cfg["interventions"])
-            with open(dom_cfg["ref_file"], "r", encoding="utf-8") as f:
+            with open(dom_cfg["ref_file"], encoding="utf-8") as f:
                 schemas = parse_pddl_model(f.read())
             for int_spec in dom_cfg["interventions"]:
                 act = int_spec["action"]
@@ -138,7 +138,7 @@ class TestBurdenMetrics(unittest.TestCase):
         import json
         out_file = "benchmark_outputs/planning_burden_results.json"
         self.assertTrue(os.path.exists(out_file), "Results file must exist")
-        with open(out_file, "r", encoding="utf-8") as f:
+        with open(out_file, encoding="utf-8") as f:
             data = json.load(f)
         summary = data["summary"]
         self.assertEqual(summary["total_interventions"], 24)
@@ -151,7 +151,7 @@ class TestBurdenMetrics(unittest.TestCase):
         import json
         out_file = "benchmark_outputs/scale_and_binding_results.json"
         self.assertTrue(os.path.exists(out_file), "Scale and binding results file must exist")
-        with open(out_file, "r", encoding="utf-8") as f:
+        with open(out_file, encoding="utf-8") as f:
             data = json.load(f)
         bw_data = data["scale_verification"]["blocksworld"]
         # Monotonically increasing Delta H_P for Blocksworld detours
@@ -166,7 +166,7 @@ class TestBurdenMetrics(unittest.TestCase):
         import json
         out_file = "benchmark_outputs/scale_and_binding_results.json"
         self.assertTrue(os.path.exists(out_file), "Scale and binding results file must exist")
-        with open(out_file, "r", encoding="utf-8") as f:
+        with open(out_file, encoding="utf-8") as f:
             data = json.load(f)
         binding = data["binding_verification"]
         self.assertEqual(len(binding), 8)

@@ -27,7 +27,7 @@ def parse_locm2_dict(dict_path: str) -> tuple[list[dict[str, int]], list[dict[st
     """Parses dict.txt to extract FSM state transition dictionaries for hand and objects."""
     if not os.path.exists(dict_path):
         return [], []
-    with open(dict_path, "r", encoding="utf-8") as f:
+    with open(dict_path, encoding="utf-8") as f:
         content = f.read().strip()
     lines = content.split("\n")
     if not lines:
@@ -162,7 +162,7 @@ def translate_locm2_pddl(raw_pddl: str, dict_path: str = "locm_repo/output/Block
 
 def translate_locm2_file(input_path: str, output_path: str | None = None) -> str:
     dict_path = os.path.join(os.path.dirname(input_path), "dict.txt")
-    with open(input_path, "r", encoding="utf-8") as f:
+    with open(input_path, encoding="utf-8") as f:
         raw = f.read()
     translated = translate_locm2_pddl(raw, dict_path=dict_path)
     if output_path:

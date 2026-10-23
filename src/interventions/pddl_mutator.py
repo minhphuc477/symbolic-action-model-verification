@@ -406,6 +406,76 @@ class PDDLMutator:
             results.append(out_path)
         return results
 
+    def apply_k_precondition_omissions(
+        self,
+        domain_path: str | Path,
+        k: int,
+        target_actions_and_atoms: list[tuple[str, str]] | None = None,
+        out_dir: str | Path = "domains/mutated/",
+    ) -> tuple[str, list[tuple[str, str]]]:
+        """
+        Apply k simultaneous precondition omissions to domain.
+        Returns (mutated_domain_path, list_of_(action, removed_atom)).
+        """
+        domain_path = Path(domain_path)
+        out_dir = Path(out_dir)
+        out_dir.mkdir(parents=True, exist_ok=True)
+
+        domain_text = domain_path.read_text(encoding="utf-8")
+        tokens = _tokenize(domain_text)
+        domain_sexp, _ = _parse_sexp(tokens)
+
+        removed: list[tuple[str, str]] = []
+
+        if target_actions_and_atoms:
+            for act_name, atom_str in target_actions_and_atoms[:k]:
+                action = _find_action_block(domain_sexp, act_name)
+                if action is None:
+                    continue
+                prec = _get_preconditions(action)
+                if prec is None:
+                    continue
+                positive = _extract_positive_atoms(prec)
+                norm_target = atom_str.strip().lower()
+                matched_idx = None
+                for idx, atom in positive:
+                    if _sexp_to_str(atom).strip().lower() == norm_target:
+                        matched_idx = idx
+                        break
+                if matched_idx is None and positive:
+                    matched_idx, atom = positive[-1]
+                    norm_target = _sexp_to_str(atom).strip().lower()
+
+                if matched_idx is not None:
+                    del prec[matched_idx]
+                    removed.append((act_name, norm_target))
+        else:
+            # Systematically remove k preconditions from available actions
+            actions_found = []
+            for item in domain_sexp:
+                if isinstance(item, list) and item and item[0] == ":action":
+                    actions_found.append(item[1])
+
+            for act_name in actions_found:
+                if len(removed) >= k:
+                    break
+                action = _find_action_block(domain_sexp, act_name)
+                prec = _get_preconditions(action)
+                if prec is None:
+                    continue
+                positive = _extract_positive_atoms(prec)
+                if positive:
+                    idx, atom = positive[-1]
+                    norm_target = _sexp_to_str(atom).strip().lower()
+                    del prec[idx]
+                    removed.append((act_name, norm_target))
+
+        mutated_text = _sexp_to_str(domain_sexp) + "\n"
+        out_name = f"{domain_path.stem}_k{len(removed)}_seed{self.seed}.pddl"
+        out_path = out_dir / out_name
+        out_path.write_text(mutated_text, encoding="utf-8")
+        return str(out_path), removed
+
 
 # ---------------------------------------------------------------------------
 # CLI entry point

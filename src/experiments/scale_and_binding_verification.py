@@ -27,18 +27,18 @@ def run_scale_verification() -> dict[str, Any]:
     print("=" * 78)
     print("1. EMPIRICAL SCALE VERIFICATION (BLOCKSWORLD & HANOI)")
     print("=" * 78)
-    
+
     scale_data = {"blocksworld": [], "hanoi": []}
-    
+
     # 1. Blocksworld Scaling (Tower Inversion)
     bw_ref = "daineto-meta-planning/src/meta_planning/dataset/blocks/reference"
-    with open(bw_ref, "r", encoding="utf-8") as f:
+    with open(bw_ref, encoding="utf-8") as f:
         bw_gt = parse_pddl_model(f.read())
-        
+
     print("\n--- Blocksworld Scaling (Phantom Detour BW_I1: omit clear ?o1) ---")
     print(f"{'Blocks':<8} | {'GT Nodes':<10} | {'GT H_P':<8} | {'Intv Nodes':<12} | {'Intv H_P':<8} | {'Delta H_P':<10} | {'PESR':<6}")
     print("-" * 72)
-    
+
     for n in [3, 4, 5]:
         blocks = [chr(ord('a') + i) for i in range(n)]
         init = set()
@@ -47,32 +47,32 @@ def run_scale_verification() -> dict[str, Any]:
         for i in range(1, n):
             init.add(f'(on {blocks[i]} {blocks[i-1]})')
         init.add(f'(clear {blocks[-1]})')
-        
+
         goal = set()
         goal.add(f'(ontable {blocks[-1]})')
         for i in range(n - 1):
             goal.add(f'(on {blocks[i]} {blocks[i+1]})')
         goal.add(f'(clear {blocks[0]})')
-        
+
         gt_planner = GeneralForwardPlanner(bw_gt, blocks)
         _gt_plan, gt_nodes = gt_planner.solve(init, goal, max_nodes=100000)
         gt_hp = math.log2(1.0 + float(gt_nodes))
-        
+
         # Intervene BW_I1: omit clear in unstack
         int_models = dict(bw_gt)
         old = bw_gt['unstack']
         new_pre = [p for p in old.preconditions if p.strip().lower() != '(clear ?o1)']
         raw_eff = old.add_effects + [f'(not {d})' for d in old.del_effects]
         int_models['unstack'] = ActionSchema(old.name, old.params, new_pre, raw_eff)
-        
+
         int_planner = GeneralForwardPlanner(int_models, blocks)
         int_plan, int_nodes = int_planner.solve(init, goal, max_nodes=100000)
         int_hp = math.log2(1.0 + float(int_nodes))
         delta_hp = int_hp - gt_hp
-        
+
         valid, _steps, reason = gt_planner.execute_plan(init, int_plan, bw_gt, goal)
         pesr = 1.0 if valid else 0.0
-        
+
         rec = {
             "n_blocks": n,
             "gt_nodes": gt_nodes,
@@ -85,16 +85,16 @@ def run_scale_verification() -> dict[str, Any]:
         }
         scale_data["blocksworld"].append(rec)
         print(f"{n:<8} | {gt_nodes:<10} | {gt_hp:<8.3f} | {int_nodes:<12} | {int_hp:<8.3f} | {delta_hp:<+10.3f} | {pesr:<6.1f}")
-        
+
     # 2. Hanoi Scaling (Tower Transfer)
     han_ref = "daineto-meta-planning/src/meta_planning/dataset/hanoi/reference"
-    with open(han_ref, "r", encoding="utf-8") as f:
+    with open(han_ref, encoding="utf-8") as f:
         han_gt = parse_pddl_model(f.read())
-        
+
     print("\n--- Hanoi Scaling (Phantom Shortcut HAN_I2: omit clear ?o1) ---")
     print(f"{'Disks':<8} | {'GT Nodes':<10} | {'GT H_P':<8} | {'Intv Nodes':<12} | {'Intv H_P':<8} | {'Delta H_P':<10} | {'PESR':<6}")
     print("-" * 72)
-    
+
     for n in [2, 3]:
         disks = [f'd{i}' for i in range(1, n + 1)]
         pegs = ['p1', 'p2', 'p3']
@@ -106,38 +106,38 @@ def run_scale_verification() -> dict[str, Any]:
         for i in range(len(disks)):
             for j in range(i + 1, len(disks)):
                 init.add(f'(smaller {disks[j]} {disks[i]})')
-        
+
         init.add('(clear d1)')
         init.add('(clear p2)')
         init.add('(clear p3)')
         for i in range(len(disks) - 1):
             init.add(f'(on {disks[i]} {disks[i+1]})')
         init.add(f'(on {disks[-1]} p1)')
-        
+
         goal = set()
         for i in range(len(disks) - 1):
             goal.add(f'(on {disks[i]} {disks[i+1]})')
         goal.add(f'(on {disks[-1]} p3)')
-        
+
         gt_planner = GeneralForwardPlanner(han_gt, objs)
         _gt_plan, gt_nodes = gt_planner.solve(init, goal, max_nodes=50000)
         gt_hp = math.log2(1.0 + float(gt_nodes))
-        
+
         # Intervene HAN_I2: omit clear ?o1
         int_models = dict(han_gt)
         old = han_gt['move']
         new_pre = [p for p in old.preconditions if p.strip().lower() != '(clear ?o1)']
         raw_eff = old.add_effects + [f'(not {d})' for d in old.del_effects]
         int_models['move'] = ActionSchema(old.name, old.params, new_pre, raw_eff)
-        
+
         int_planner = GeneralForwardPlanner(int_models, objs)
         int_plan, int_nodes = int_planner.solve(init, goal, max_nodes=50000)
         int_hp = math.log2(1.0 + float(int_nodes))
         delta_hp = int_hp - gt_hp
-        
+
         valid, _steps, reason = gt_planner.execute_plan(init, int_plan, han_gt, goal)
         pesr = 1.0 if valid else 0.0
-        
+
         rec = {
             "n_disks": n,
             "gt_nodes": gt_nodes,
@@ -150,16 +150,16 @@ def run_scale_verification() -> dict[str, Any]:
         }
         scale_data["hanoi"].append(rec)
         print(f"{n:<8} | {gt_nodes:<10} | {gt_hp:<8.3f} | {int_nodes:<12} | {int_hp:<8.3f} | {delta_hp:<+10.3f} | {pesr:<6.1f}")
-        
+
     return scale_data
 
 def run_binding_precondition_suite() -> dict[str, Any]:
     print("\n" + "=" * 78)
     print("2. BINDING PRECONDITION VERIFICATION FOR THE 8 PESR=1.0 INTERVENTIONS")
     print("=" * 78)
-    
+
     binding_results = {}
-    
+
     # Define non-degenerate test tasks that exercise the omitted precondition
     # 1. Miconic MIC_I1 (omit lift-at): passenger at f2, lift at f1
     mic_ref = "daineto-meta-planning/src/meta_planning/dataset/miconic/reference"
@@ -167,12 +167,12 @@ def run_binding_precondition_suite() -> dict[str, Any]:
     objs = ['f1', 'f2', 'f3', 'p1']
     init = {'(lift-at f1)', '(origin p1 f2)', '(destin p1 f3)', '(above f1 f2)', '(above f2 f3)', '(above f1 f3)'}
     goal = {'(served p1)'}
-    
+
     int_models = dict(mic_gt)
     old = mic_gt['board']
     new_pre = [p for p in old.preconditions if p.strip().lower() != '(lift-at ?o1)']
     int_models['board'] = ActionSchema(old.name, old.params, new_pre, old.add_effects + [f'(not {d})' for d in old.del_effects])
-    
+
     p_gt = GeneralForwardPlanner(mic_gt, objs)
     p_int = GeneralForwardPlanner(int_models, objs)
     plan, _nodes = p_int.solve(init, goal)
@@ -187,19 +187,19 @@ def run_binding_precondition_suite() -> dict[str, Any]:
         "failure_reason": reason
     }
     print(f"MIC_I1 (Non-colocated origin) -> PESR: {1.0 if valid else 0.0} | Reason: {reason}")
-    
+
     # 2. Driverlog DLG_I3 (omit at ?o1 ?o3 in load-truck): pkg1 at s1, truck at s0
     dlg_ref = "daineto-meta-planning/src/meta_planning/dataset/driverlog/reference"
     dlg_gt = parse_pddl_model(Path(dlg_ref).read_text(encoding="utf-8"))
     objs = ['driver1', 'truck1', 'pkg1', 's0', 's1']
     init = {'(at driver1 s0)', '(at truck1 s0)', '(at pkg1 s1)', '(empty truck1)', '(link s0 s1)', '(link s1 s0)'}
     goal = {'(at pkg1 s0)'}
-    
+
     int_models = dict(dlg_gt)
     old = dlg_gt['load-truck']
     new_pre = [p for p in old.preconditions if p.strip().lower() != '(at ?o1 ?o3)']
     int_models['load-truck'] = ActionSchema(old.name, old.params, new_pre, old.add_effects + [f'(not {d})' for d in old.del_effects])
-    
+
     p_gt = GeneralForwardPlanner(dlg_gt, objs)
     p_int = GeneralForwardPlanner(int_models, objs)
     plan, _nodes = p_int.solve(init, goal)
@@ -214,19 +214,19 @@ def run_binding_precondition_suite() -> dict[str, Any]:
         "failure_reason": reason
     }
     print(f"DLG_I3 (Remote package)      -> PESR: {1.0 if valid else 0.0} | Reason: {reason}")
-    
+
     # 3. Blocksworld BW_I2 (omit ontable in pick-up): block b is stacked on a, goal requires holding b
     bw_ref = "daineto-meta-planning/src/meta_planning/dataset/blocks/reference"
     bw_gt = parse_pddl_model(Path(bw_ref).read_text(encoding="utf-8"))
     objs = ['a', 'b']
     init = {'(ontable a)', '(on b a)', '(clear b)', '(handempty)'}
     goal = {'(holding b)'}
-    
+
     int_models = dict(bw_gt)
     old = bw_gt['pick-up']
     new_pre = [p for p in old.preconditions if p.strip().lower() != '(ontable ?o1)']
     int_models['pick-up'] = ActionSchema(old.name, old.params, new_pre, old.add_effects + [f'(not {d})' for d in old.del_effects])
-    
+
     p_gt = GeneralForwardPlanner(bw_gt, objs)
     p_int = GeneralForwardPlanner(int_models, objs)
     plan, _nodes = p_int.solve(init, goal)

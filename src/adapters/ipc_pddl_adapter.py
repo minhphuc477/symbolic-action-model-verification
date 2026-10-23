@@ -12,6 +12,11 @@ import os
 from pathlib import Path
 from typing import Any
 
+import pddl
+
+from src.metrics.transition_accuracy import parse_pddl_model
+from src.runners.wsl_harness import FastDownwardRunner
+
 
 class IPCPDDLAdapter:
     """
@@ -59,11 +64,6 @@ class IPCPDDLAdapter:
         Executes genuine plan actions via Fast Downward / Forward Planner
         to collect verified (s_t, a_t, s_{t+1}) transition traces.
         """
-        import pddl
-
-        from src.metrics.transition_accuracy import parse_pddl_model
-        from src.runners.wsl_harness import FastDownwardRunner
-
         dom_path = self.get_domain_pddl_path()
         prob_path = self.get_problem_pddl_path(problem_id)
 
@@ -83,7 +83,7 @@ class IPCPDDLAdapter:
 
         # 2. Parse plan actions
         plan_actions = []
-        with open(sol_file, "r", encoding="utf-8") as f:
+        with open(sol_file, encoding="utf-8") as f:
             for line in f:
                 line = line.strip()
                 if line.startswith("(") and not line.startswith(";"):

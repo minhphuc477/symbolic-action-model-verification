@@ -9,14 +9,14 @@ from typing import Any, ClassVar
 
 class PuzzleScriptAdapter:
     """Structured Game Adapter Template Library for PuzzleScript Games."""
-    
+
     SUPPORTED_GAMES: ClassVar[list[str]] = ["Sokoban", "It Is Pitch Black", "Graded Sir", "Katamari", "Braid Grid"]
 
     def __init__(self, game_name: str = "Sokoban", grid_width: int = 10, grid_height: int = 10):
         self.game_name = game_name
         self.width = grid_width
         self.height = grid_height
-        
+
     def parse_grid_state_to_fluents(self, grid_matrix: list[list[str]]) -> list[str]:
         """Converts 2D grid matrix into first-order Boolean fluents (predicates)."""
         fluents = []
@@ -45,7 +45,7 @@ class PuzzleScriptAdapter:
     def generate_pddl_domain_header(self) -> str:
         """Generates ground-truth PDDL domain definition for the specified benchmark game."""
         game_key = self.game_name.replace(" ", "_")
-        
+
         if "Pitch_Black" in game_key:
             return """(define (domain Pitch_Black)
   (:requirements :strips :typing)
@@ -113,11 +113,11 @@ class PuzzleScriptAdapter:
         total_steps = len(raw_puzzlescript_steps)
         if total_steps == 0:
             return {"match_rate": 1.0, "status": "VACUOUS_MATCH"}
-            
-        for idx, step in enumerate(raw_puzzlescript_steps):
+
+        for idx, _step in enumerate(raw_puzzlescript_steps):
             if idx < len(pddl_plan_steps):
                 matched_steps += 1
-                
+
         match_rate = matched_steps / total_steps
         return {
             "total_steps": total_steps,

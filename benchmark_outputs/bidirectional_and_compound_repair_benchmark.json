@@ -1,0 +1,2232 @@
+{
+  "n_scenarios": 24,
+  "n_seeds": 3,
+  "total_runs_per_method": 72,
+  "overall": {
+    "n_runs": 72,
+    "ceg_omr_bidirectional": {
+      "solve_rate_pct": 91.67,
+      "mean_queries_all": 7.54,
+      "std_queries_all": 7.83,
+      "mean_queries_when_solved": 6.18
+    },
+    "monotonic_olam_style": {
+      "solve_rate_pct": 50.0,
+      "mean_queries_all": 4.21,
+      "std_queries_all": 5.2,
+      "mean_queries_when_solved": 5.83
+    },
+    "active_sam": {
+      "solve_rate_pct": 33.33,
+      "mean_queries_all": 1.97,
+      "std_queries_all": 2.88,
+      "mean_queries_when_solved": 4.67
+    },
+    "passive_sam_250": {
+      "solve_rate_pct": 41.67,
+      "mean_queries_all": 250.0,
+      "std_queries_all": 0.0,
+      "mean_queries_when_solved": 250.0
+    }
+  },
+  "by_family": {
+    "Family_A_Missing_Precondition": {
+      "n_runs": 18,
+      "ceg_omr_bidirectional": {
+        "solve_rate_pct": 100.0,
+        "mean_queries_all": 7.33,
+        "std_queries_all": 4.78,
+        "mean_queries_when_solved": 7.33
+      },
+      "monotonic_olam_style": {
+        "solve_rate_pct": 100.0,
+        "mean_queries_all": 7.33,
+        "std_queries_all": 4.78,
+        "mean_queries_when_solved": 7.33
+      },
+      "active_sam": {
+        "solve_rate_pct": 66.67,
+        "mean_queries_all": 4.39,
+        "std_queries_all": 3.83,
+        "mean_queries_when_solved": 5.33
+      },
+      "passive_sam_250": {
+        "solve_rate_pct": 100.0,
+        "mean_queries_all": 250.0,
+        "std_queries_all": 0.0,
+        "mean_queries_when_solved": 250.0
+      }
+    },
+    "Family_B_Spurious_Precondition": {
+      "n_runs": 18,
+      "ceg_omr_bidirectional": {
+        "solve_rate_pct": 100.0,
+        "mean_queries_all": 6.17,
+        "std_queries_all": 3.53,
+        "mean_queries_when_solved": 6.17
+      },
+      "monotonic_olam_style": {
+        "solve_rate_pct": 0.0,
+        "mean_queries_all": 0.0,
+        "std_queries_all": 0.0,
+        "mean_queries_when_solved": null
+      },
+      "active_sam": {
+        "solve_rate_pct": 0.0,
+        "mean_queries_all": 0.0,
+        "std_queries_all": 0.0,
+        "mean_queries_when_solved": null
+      },
+      "passive_sam_250": {
+        "solve_rate_pct": 0.0,
+        "mean_queries_all": 250.0,
+        "std_queries_all": 0.0,
+        "mean_queries_when_solved": null
+      }
+    },
+    "Family_C_Bidirectional_Effect_Corruption": {
+      "n_runs": 18,
+      "ceg_omr_bidirectional": {
+        "solve_rate_pct": 83.33,
+        "mean_queries_all": 4.83,
+        "std_queries_all": 1.07,
+        "mean_queries_when_solved": 5.0
+      },
+      "monotonic_olam_style": {
+        "solve_rate_pct": 66.67,
+        "mean_queries_all": 5.83,
+        "std_queries_all": 4.6,
+        "mean_queries_when_solved": 5.0
+      },
+      "active_sam": {
+        "solve_rate_pct": 50.0,
+        "mean_queries_all": 2.83,
+        "std_queries_all": 2.41,
+        "mean_queries_when_solved": 5.0
+      },
+      "passive_sam_250": {
+        "solve_rate_pct": 50.0,
+        "mean_queries_all": 250.0,
+        "std_queries_all": 0.0,
+        "mean_queries_when_solved": 250.0
+      }
+    },
+    "Family_D_Compound_Bidirectional_LLM_Drifted": {
+      "n_runs": 18,
+      "ceg_omr_bidirectional": {
+        "solve_rate_pct": 83.33,
+        "mean_queries_all": 11.83,
+        "std_queries_all": 13.45,
+        "mean_queries_when_solved": 6.0
+      },
+      "monotonic_olam_style": {
+        "solve_rate_pct": 33.33,
+        "mean_queries_all": 3.67,
+        "std_queries_all": 5.79,
+        "mean_queries_when_solved": 3.0
+      },
+      "active_sam": {
+        "solve_rate_pct": 16.67,
+        "mean_queries_all": 0.67,
+        "std_queries_all": 0.75,
+        "mean_queries_when_solved": 1.0
+      },
+      "passive_sam_250": {
+        "solve_rate_pct": 16.67,
+        "mean_queries_all": 250.0,
+        "std_queries_all": 0.0,
+        "mean_queries_when_solved": 250.0
+      }
+    }
+  },
+  "rows": [
+    {
+      "family": "Family_A_Missing_Precondition",
+      "scenario_id": "famA_blocksworld",
+      "domain": "blocksworld",
+      "seed": 42,
+      "description": "Omit (clear ?x) from unstack",
+      "ceg_omr_bidirectional": {
+        "success": true,
+        "queries": 4,
+        "iterations": 1,
+        "time_s": 0.332
+      },
+      "monotonic_olam_style": {
+        "success": true,
+        "queries": 4,
+        "iterations": 1,
+        "time_s": 0.356
+      },
+      "active_sam": {
+        "success": true,
+        "queries": 4,
+        "time_s": 0.337
+      },
+      "passive_sam_250": {
+        "success": true,
+        "queries": 250,
+        "time_s": 0.333
+      }
+    },
+    {
+      "family": "Family_A_Missing_Precondition",
+      "scenario_id": "famA_blocksworld",
+      "domain": "blocksworld",
+      "seed": 43,
+      "description": "Omit (clear ?x) from unstack",
+      "ceg_omr_bidirectional": {
+        "success": true,
+        "queries": 4,
+        "iterations": 1,
+        "time_s": 0.346
+      },
+      "monotonic_olam_style": {
+        "success": true,
+        "queries": 4,
+        "iterations": 1,
+        "time_s": 0.484
+      },
+      "active_sam": {
+        "success": true,
+        "queries": 4,
+        "time_s": 0.368
+      },
+      "passive_sam_250": {
+        "success": true,
+        "queries": 250,
+        "time_s": 0.404
+      }
+    },
+    {
+      "family": "Family_A_Missing_Precondition",
+      "scenario_id": "famA_blocksworld",
+      "domain": "blocksworld",
+      "seed": 44,
+      "description": "Omit (clear ?x) from unstack",
+      "ceg_omr_bidirectional": {
+        "success": true,
+        "queries": 4,
+        "iterations": 1,
+        "time_s": 0.385
+      },
+      "monotonic_olam_style": {
+        "success": true,
+        "queries": 4,
+        "iterations": 1,
+        "time_s": 0.544
+      },
+      "active_sam": {
+        "success": true,
+        "queries": 4,
+        "time_s": 0.418
+      },
+      "passive_sam_250": {
+        "success": true,
+        "queries": 250,
+        "time_s": 0.365
+      }
+    },
+    {
+      "family": "Family_A_Missing_Precondition",
+      "scenario_id": "famA_gripper",
+      "domain": "gripper",
+      "seed": 42,
+      "description": "Omit (at-robby ?room) from pick",
+      "ceg_omr_bidirectional": {
+        "success": true,
+        "queries": 15,
+        "iterations": 2,
+        "time_s": 0.715
+      },
+      "monotonic_olam_style": {
+        "success": true,
+        "queries": 15,
+        "iterations": 2,
+        "time_s": 0.837
+      },
+      "active_sam": {
+        "success": false,
+        "queries": 4,
+        "time_s": 0.689
+      },
+      "passive_sam_250": {
+        "success": true,
+        "queries": 250,
+        "time_s": 0.361
+      }
+    },
+    {
+      "family": "Family_A_Missing_Precondition",
+      "scenario_id": "famA_gripper",
+      "domain": "gripper",
+      "seed": 43,
+      "description": "Omit (at-robby ?room) from pick",
+      "ceg_omr_bidirectional": {
+        "success": true,
+        "queries": 15,
+        "iterations": 2,
+        "time_s": 0.672
+      },
+      "monotonic_olam_style": {
+        "success": true,
+        "queries": 15,
+        "iterations": 2,
+        "time_s": 0.794
+      },
+      "active_sam": {
+        "success": false,
+        "queries": 4,
+        "time_s": 0.629
+      },
+      "passive_sam_250": {
+        "success": true,
+        "queries": 250,
+        "time_s": 0.439
+      }
+    },
+    {
+      "family": "Family_A_Missing_Precondition",
+      "scenario_id": "famA_gripper",
+      "domain": "gripper",
+      "seed": 44,
+      "description": "Omit (at-robby ?room) from pick",
+      "ceg_omr_bidirectional": {
+        "success": true,
+        "queries": 15,
+        "iterations": 2,
+        "time_s": 0.779
+      },
+      "monotonic_olam_style": {
+        "success": true,
+        "queries": 15,
+        "iterations": 2,
+        "time_s": 0.893
+      },
+      "active_sam": {
+        "success": true,
+        "queries": 15,
+        "time_s": 0.66
+      },
+      "passive_sam_250": {
+        "success": true,
+        "queries": 250,
+        "time_s": 0.383
+      }
+    },
+    {
+      "family": "Family_A_Missing_Precondition",
+      "scenario_id": "famA_logistics",
+      "domain": "logistics",
+      "seed": 42,
+      "description": "Omit (at ?t ?l) from load-truck",
+      "ceg_omr_bidirectional": {
+        "success": true,
+        "queries": 11,
+        "iterations": 2,
+        "time_s": 0.66
+      },
+      "monotonic_olam_style": {
+        "success": true,
+        "queries": 11,
+        "iterations": 2,
+        "time_s": 0.718
+      },
+      "active_sam": {
+        "success": true,
+        "queries": 11,
+        "time_s": 0.608
+      },
+      "passive_sam_250": {
+        "success": true,
+        "queries": 250,
+        "time_s": 0.448
+      }
+    },
+    {
+      "family": "Family_A_Missing_Precondition",
+      "scenario_id": "famA_logistics",
+      "domain": "logistics",
+      "seed": 43,
+      "description": "Omit (at ?t ?l) from load-truck",
+      "ceg_omr_bidirectional": {
+        "success": true,
+        "queries": 11,
+        "iterations": 2,
+        "time_s": 0.769
+      },
+      "monotonic_olam_style": {
+        "success": true,
+        "queries": 11,
+        "iterations": 2,
+        "time_s": 0.95
+      },
+      "active_sam": {
+        "success": true,
+        "queries": 11,
+        "time_s": 0.664
+      },
+      "passive_sam_250": {
+        "success": true,
+        "queries": 250,
+        "time_s": 0.496
+      }
+    },
+    {
+      "family": "Family_A_Missing_Precondition",
+      "scenario_id": "famA_logistics",
+      "domain": "logistics",
+      "seed": 44,
+      "description": "Omit (at ?t ?l) from load-truck",
+      "ceg_omr_bidirectional": {
+        "success": true,
+        "queries": 11,
+        "iterations": 2,
+        "time_s": 0.69
+      },
+      "monotonic_olam_style": {
+        "success": true,
+        "queries": 11,
+        "iterations": 2,
+        "time_s": 0.756
+      },
+      "active_sam": {
+        "success": false,
+        "queries": 1,
+        "time_s": 0.561
+      },
+      "passive_sam_250": {
+        "success": true,
+        "queries": 250,
+        "time_s": 0.507
+      }
+    },
+    {
+      "family": "Family_A_Missing_Precondition",
+      "scenario_id": "famA_sokoban",
+      "domain": "sokoban",
+      "seed": 42,
+      "description": "Omit (clear ?b-target) from push",
+      "ceg_omr_bidirectional": {
+        "success": true,
+        "queries": 1,
+        "iterations": 1,
+        "time_s": 0.296
+      },
+      "monotonic_olam_style": {
+        "success": true,
+        "queries": 1,
+        "iterations": 1,
+        "time_s": 0.396
+      },
+      "active_sam": {
+        "success": true,
+        "queries": 1,
+        "time_s": 0.289
+      },
+      "passive_sam_250": {
+        "success": true,
+        "queries": 250,
+        "time_s": 3.318
+      }
+    },
+    {
+      "family": "Family_A_Missing_Precondition",
+      "scenario_id": "famA_sokoban",
+      "domain": "sokoban",
+      "seed": 43,
+      "description": "Omit (clear ?b-target) from push",
+      "ceg_omr_bidirectional": {
+        "success": true,
+        "queries": 1,
+        "iterations": 1,
+        "time_s": 0.383
+      },
+      "monotonic_olam_style": {
+        "success": true,
+        "queries": 1,
+        "iterations": 1,
+        "time_s": 0.351
+      },
+      "active_sam": {
+        "success": true,
+        "queries": 1,
+        "time_s": 0.303
+      },
+      "passive_sam_250": {
+        "success": true,
+        "queries": 250,
+        "time_s": 3.551
+      }
+    },
+    {
+      "family": "Family_A_Missing_Precondition",
+      "scenario_id": "famA_sokoban",
+      "domain": "sokoban",
+      "seed": 44,
+      "description": "Omit (clear ?b-target) from push",
+      "ceg_omr_bidirectional": {
+        "success": true,
+        "queries": 1,
+        "iterations": 1,
+        "time_s": 0.344
+      },
+      "monotonic_olam_style": {
+        "success": true,
+        "queries": 1,
+        "iterations": 1,
+        "time_s": 0.353
+      },
+      "active_sam": {
+        "success": true,
+        "queries": 1,
+        "time_s": 0.3
+      },
+      "passive_sam_250": {
+        "success": true,
+        "queries": 250,
+        "time_s": 3.594
+      }
+    },
+    {
+      "family": "Family_A_Missing_Precondition",
+      "scenario_id": "famA_pitch_black",
+      "domain": "pitch_black",
+      "seed": 42,
+      "description": "Omit (is-light-on ?to) from move",
+      "ceg_omr_bidirectional": {
+        "success": true,
+        "queries": 4,
+        "iterations": 1,
+        "time_s": 0.304
+      },
+      "monotonic_olam_style": {
+        "success": true,
+        "queries": 4,
+        "iterations": 1,
+        "time_s": 0.371
+      },
+      "active_sam": {
+        "success": true,
+        "queries": 4,
+        "time_s": 0.305
+      },
+      "passive_sam_250": {
+        "success": true,
+        "queries": 250,
+        "time_s": 0.397
+      }
+    },
+    {
+      "family": "Family_A_Missing_Precondition",
+      "scenario_id": "famA_pitch_black",
+      "domain": "pitch_black",
+      "seed": 43,
+      "description": "Omit (is-light-on ?to) from move",
+      "ceg_omr_bidirectional": {
+        "success": true,
+        "queries": 4,
+        "iterations": 1,
+        "time_s": 0.367
+      },
+      "monotonic_olam_style": {
+        "success": true,
+        "queries": 4,
+        "iterations": 1,
+        "time_s": 0.375
+      },
+      "active_sam": {
+        "success": true,
+        "queries": 4,
+        "time_s": 0.306
+      },
+      "passive_sam_250": {
+        "success": true,
+        "queries": 250,
+        "time_s": 0.402
+      }
+    },
+    {
+      "family": "Family_A_Missing_Precondition",
+      "scenario_id": "famA_pitch_black",
+      "domain": "pitch_black",
+      "seed": 44,
+      "description": "Omit (is-light-on ?to) from move",
+      "ceg_omr_bidirectional": {
+        "success": true,
+        "queries": 4,
+        "iterations": 1,
+        "time_s": 0.32
+      },
+      "monotonic_olam_style": {
+        "success": true,
+        "queries": 4,
+        "iterations": 1,
+        "time_s": 0.392
+      },
+      "active_sam": {
+        "success": true,
+        "queries": 4,
+        "time_s": 0.312
+      },
+      "passive_sam_250": {
+        "success": true,
+        "queries": 250,
+        "time_s": 0.442
+      }
+    },
+    {
+      "family": "Family_A_Missing_Precondition",
+      "scenario_id": "famA_dungeon_escape",
+      "domain": "dungeon_escape",
+      "seed": 42,
+      "description": "Omit (has-key ?p ?k) from unlock-door",
+      "ceg_omr_bidirectional": {
+        "success": true,
+        "queries": 9,
+        "iterations": 3,
+        "time_s": 1.224
+      },
+      "monotonic_olam_style": {
+        "success": true,
+        "queries": 9,
+        "iterations": 3,
+        "time_s": 1.235
+      },
+      "active_sam": {
+        "success": false,
+        "queries": 2,
+        "time_s": 0.644
+      },
+      "passive_sam_250": {
+        "success": true,
+        "queries": 250,
+        "time_s": 0.44
+      }
+    },
+    {
+      "family": "Family_A_Missing_Precondition",
+      "scenario_id": "famA_dungeon_escape",
+      "domain": "dungeon_escape",
+      "seed": 43,
+      "description": "Omit (has-key ?p ?k) from unlock-door",
+      "ceg_omr_bidirectional": {
+        "success": true,
+        "queries": 9,
+        "iterations": 3,
+        "time_s": 1.196
+      },
+      "monotonic_olam_style": {
+        "success": true,
+        "queries": 9,
+        "iterations": 3,
+        "time_s": 1.139
+      },
+      "active_sam": {
+        "success": false,
+        "queries": 2,
+        "time_s": 0.655
+      },
+      "passive_sam_250": {
+        "success": true,
+        "queries": 250,
+        "time_s": 0.47
+      }
+    },
+    {
+      "family": "Family_A_Missing_Precondition",
+      "scenario_id": "famA_dungeon_escape",
+      "domain": "dungeon_escape",
+      "seed": 44,
+      "description": "Omit (has-key ?p ?k) from unlock-door",
+      "ceg_omr_bidirectional": {
+        "success": true,
+        "queries": 9,
+        "iterations": 3,
+        "time_s": 1.038
+      },
+      "monotonic_olam_style": {
+        "success": true,
+        "queries": 9,
+        "iterations": 3,
+        "time_s": 1.236
+      },
+      "active_sam": {
+        "success": false,
+        "queries": 2,
+        "time_s": 0.663
+      },
+      "passive_sam_250": {
+        "success": true,
+        "queries": 250,
+        "time_s": 0.462
+      }
+    },
+    {
+      "family": "Family_B_Spurious_Precondition",
+      "scenario_id": "famB_blocksworld",
+      "domain": "blocksworld",
+      "seed": 42,
+      "description": "Add spurious precondition (holding ?x) to pick-up",
+      "ceg_omr_bidirectional": {
+        "success": true,
+        "queries": 4,
+        "iterations": 1,
+        "time_s": 0.722
+      },
+      "monotonic_olam_style": {
+        "success": false,
+        "queries": 0,
+        "iterations": 1,
+        "time_s": 0.342
+      },
+      "active_sam": {
+        "success": false,
+        "queries": 0,
+        "time_s": 0.255
+      },
+      "passive_sam_250": {
+        "success": false,
+        "queries": 250,
+        "time_s": 0.329
+      }
+    },
+    {
+      "family": "Family_B_Spurious_Precondition",
+      "scenario_id": "famB_blocksworld",
+      "domain": "blocksworld",
+      "seed": 43,
+      "description": "Add spurious precondition (holding ?x) to pick-up",
+      "ceg_omr_bidirectional": {
+        "success": true,
+        "queries": 4,
+        "iterations": 1,
+        "time_s": 0.657
+      },
+      "monotonic_olam_style": {
+        "success": false,
+        "queries": 0,
+        "iterations": 1,
+        "time_s": 0.359
+      },
+      "active_sam": {
+        "success": false,
+        "queries": 0,
+        "time_s": 0.39
+      },
+      "passive_sam_250": {
+        "success": false,
+        "queries": 250,
+        "time_s": 0.331
+      }
+    },
+    {
+      "family": "Family_B_Spurious_Precondition",
+      "scenario_id": "famB_blocksworld",
+      "domain": "blocksworld",
+      "seed": 44,
+      "description": "Add spurious precondition (holding ?x) to pick-up",
+      "ceg_omr_bidirectional": {
+        "success": true,
+        "queries": 4,
+        "iterations": 1,
+        "time_s": 0.658
+      },
+      "monotonic_olam_style": {
+        "success": false,
+        "queries": 0,
+        "iterations": 1,
+        "time_s": 0.327
+      },
+      "active_sam": {
+        "success": false,
+        "queries": 0,
+        "time_s": 0.283
+      },
+      "passive_sam_250": {
+        "success": false,
+        "queries": 250,
+        "time_s": 0.336
+      }
+    },
+    {
+      "family": "Family_B_Spurious_Precondition",
+      "scenario_id": "famB_gripper",
+      "domain": "gripper",
+      "seed": 42,
+      "description": "Add spurious precondition (carry ?obj ?gripper) to pick",
+      "ceg_omr_bidirectional": {
+        "success": true,
+        "queries": 11,
+        "iterations": 1,
+        "time_s": 0.661
+      },
+      "monotonic_olam_style": {
+        "success": false,
+        "queries": 0,
+        "iterations": 1,
+        "time_s": 0.382
+      },
+      "active_sam": {
+        "success": false,
+        "queries": 0,
+        "time_s": 0.251
+      },
+      "passive_sam_250": {
+        "success": false,
+        "queries": 250,
+        "time_s": 0.346
+      }
+    },
+    {
+      "family": "Family_B_Spurious_Precondition",
+      "scenario_id": "famB_gripper",
+      "domain": "gripper",
+      "seed": 43,
+      "description": "Add spurious precondition (carry ?obj ?gripper) to pick",
+      "ceg_omr_bidirectional": {
+        "success": true,
+        "queries": 11,
+        "iterations": 1,
+        "time_s": 0.675
+      },
+      "monotonic_olam_style": {
+        "success": false,
+        "queries": 0,
+        "iterations": 1,
+        "time_s": 0.328
+      },
+      "active_sam": {
+        "success": false,
+        "queries": 0,
+        "time_s": 0.313
+      },
+      "passive_sam_250": {
+        "success": false,
+        "queries": 250,
+        "time_s": 0.419
+      }
+    },
+    {
+      "family": "Family_B_Spurious_Precondition",
+      "scenario_id": "famB_gripper",
+      "domain": "gripper",
+      "seed": 44,
+      "description": "Add spurious precondition (carry ?obj ?gripper) to pick",
+      "ceg_omr_bidirectional": {
+        "success": true,
+        "queries": 11,
+        "iterations": 1,
+        "time_s": 0.736
+      },
+      "monotonic_olam_style": {
+        "success": false,
+        "queries": 0,
+        "iterations": 1,
+        "time_s": 0.353
+      },
+      "active_sam": {
+        "success": false,
+        "queries": 0,
+        "time_s": 0.335
+      },
+      "passive_sam_250": {
+        "success": false,
+        "queries": 250,
+        "time_s": 0.415
+      }
+    },
+    {
+      "family": "Family_B_Spurious_Precondition",
+      "scenario_id": "famB_logistics",
+      "domain": "logistics",
+      "seed": 42,
+      "description": "Add spurious precondition (in ?p ?t) to load-truck",
+      "ceg_omr_bidirectional": {
+        "success": true,
+        "queries": 10,
+        "iterations": 1,
+        "time_s": 0.755
+      },
+      "monotonic_olam_style": {
+        "success": false,
+        "queries": 0,
+        "iterations": 1,
+        "time_s": 0.388
+      },
+      "active_sam": {
+        "success": false,
+        "queries": 0,
+        "time_s": 0.285
+      },
+      "passive_sam_250": {
+        "success": false,
+        "queries": 250,
+        "time_s": 0.451
+      }
+    },
+    {
+      "family": "Family_B_Spurious_Precondition",
+      "scenario_id": "famB_logistics",
+      "domain": "logistics",
+      "seed": 43,
+      "description": "Add spurious precondition (in ?p ?t) to load-truck",
+      "ceg_omr_bidirectional": {
+        "success": true,
+        "queries": 10,
+        "iterations": 1,
+        "time_s": 0.701
+      },
+      "monotonic_olam_style": {
+        "success": false,
+        "queries": 0,
+        "iterations": 1,
+        "time_s": 0.36
+      },
+      "active_sam": {
+        "success": false,
+        "queries": 0,
+        "time_s": 0.31
+      },
+      "passive_sam_250": {
+        "success": false,
+        "queries": 250,
+        "time_s": 0.559
+      }
+    },
+    {
+      "family": "Family_B_Spurious_Precondition",
+      "scenario_id": "famB_logistics",
+      "domain": "logistics",
+      "seed": 44,
+      "description": "Add spurious precondition (in ?p ?t) to load-truck",
+      "ceg_omr_bidirectional": {
+        "success": true,
+        "queries": 10,
+        "iterations": 1,
+        "time_s": 0.694
+      },
+      "monotonic_olam_style": {
+        "success": false,
+        "queries": 0,
+        "iterations": 1,
+        "time_s": 0.336
+      },
+      "active_sam": {
+        "success": false,
+        "queries": 0,
+        "time_s": 0.284
+      },
+      "passive_sam_250": {
+        "success": false,
+        "queries": 250,
+        "time_s": 0.457
+      }
+    },
+    {
+      "family": "Family_B_Spurious_Precondition",
+      "scenario_id": "famB_sokoban",
+      "domain": "sokoban",
+      "seed": 42,
+      "description": "Add spurious precondition (at-box ?b-target) to push",
+      "ceg_omr_bidirectional": {
+        "success": true,
+        "queries": 1,
+        "iterations": 1,
+        "time_s": 0.716
+      },
+      "monotonic_olam_style": {
+        "success": false,
+        "queries": 0,
+        "iterations": 1,
+        "time_s": 0.383
+      },
+      "active_sam": {
+        "success": false,
+        "queries": 0,
+        "time_s": 0.299
+      },
+      "passive_sam_250": {
+        "success": false,
+        "queries": 250,
+        "time_s": 3.546
+      }
+    },
+    {
+      "family": "Family_B_Spurious_Precondition",
+      "scenario_id": "famB_sokoban",
+      "domain": "sokoban",
+      "seed": 43,
+      "description": "Add spurious precondition (at-box ?b-target) to push",
+      "ceg_omr_bidirectional": {
+        "success": true,
+        "queries": 1,
+        "iterations": 1,
+        "time_s": 0.692
+      },
+      "monotonic_olam_style": {
+        "success": false,
+        "queries": 0,
+        "iterations": 1,
+        "time_s": 0.366
+      },
+      "active_sam": {
+        "success": false,
+        "queries": 0,
+        "time_s": 0.277
+      },
+      "passive_sam_250": {
+        "success": false,
+        "queries": 250,
+        "time_s": 3.648
+      }
+    },
+    {
+      "family": "Family_B_Spurious_Precondition",
+      "scenario_id": "famB_sokoban",
+      "domain": "sokoban",
+      "seed": 44,
+      "description": "Add spurious precondition (at-box ?b-target) to push",
+      "ceg_omr_bidirectional": {
+        "success": true,
+        "queries": 1,
+        "iterations": 1,
+        "time_s": 0.67
+      },
+      "monotonic_olam_style": {
+        "success": false,
+        "queries": 0,
+        "iterations": 1,
+        "time_s": 0.371
+      },
+      "active_sam": {
+        "success": false,
+        "queries": 0,
+        "time_s": 0.26
+      },
+      "passive_sam_250": {
+        "success": false,
+        "queries": 250,
+        "time_s": 3.625
+      }
+    },
+    {
+      "family": "Family_B_Spurious_Precondition",
+      "scenario_id": "famB_pitch_black",
+      "domain": "pitch_black",
+      "seed": 42,
+      "description": "Add spurious precondition (at-player ?to) to move",
+      "ceg_omr_bidirectional": {
+        "success": true,
+        "queries": 4,
+        "iterations": 1,
+        "time_s": 0.722
+      },
+      "monotonic_olam_style": {
+        "success": false,
+        "queries": 0,
+        "iterations": 1,
+        "time_s": 0.365
+      },
+      "active_sam": {
+        "success": false,
+        "queries": 0,
+        "time_s": 0.273
+      },
+      "passive_sam_250": {
+        "success": false,
+        "queries": 250,
+        "time_s": 0.405
+      }
+    },
+    {
+      "family": "Family_B_Spurious_Precondition",
+      "scenario_id": "famB_pitch_black",
+      "domain": "pitch_black",
+      "seed": 43,
+      "description": "Add spurious precondition (at-player ?to) to move",
+      "ceg_omr_bidirectional": {
+        "success": true,
+        "queries": 4,
+        "iterations": 1,
+        "time_s": 0.714
+      },
+      "monotonic_olam_style": {
+        "success": false,
+        "queries": 0,
+        "iterations": 1,
+        "time_s": 0.327
+      },
+      "active_sam": {
+        "success": false,
+        "queries": 0,
+        "time_s": 0.265
+      },
+      "passive_sam_250": {
+        "success": false,
+        "queries": 250,
+        "time_s": 0.51
+      }
+    },
+    {
+      "family": "Family_B_Spurious_Precondition",
+      "scenario_id": "famB_pitch_black",
+      "domain": "pitch_black",
+      "seed": 44,
+      "description": "Add spurious precondition (at-player ?to) to move",
+      "ceg_omr_bidirectional": {
+        "success": true,
+        "queries": 4,
+        "iterations": 1,
+        "time_s": 0.676
+      },
+      "monotonic_olam_style": {
+        "success": false,
+        "queries": 0,
+        "iterations": 1,
+        "time_s": 0.327
+      },
+      "active_sam": {
+        "success": false,
+        "queries": 0,
+        "time_s": 0.278
+      },
+      "passive_sam_250": {
+        "success": false,
+        "queries": 250,
+        "time_s": 0.359
+      }
+    },
+    {
+      "family": "Family_B_Spurious_Precondition",
+      "scenario_id": "famB_dungeon_escape",
+      "domain": "dungeon_escape",
+      "seed": 42,
+      "description": "Add spurious precondition (door-open ?door) to unlock-door",
+      "ceg_omr_bidirectional": {
+        "success": true,
+        "queries": 7,
+        "iterations": 1,
+        "time_s": 0.677
+      },
+      "monotonic_olam_style": {
+        "success": false,
+        "queries": 0,
+        "iterations": 1,
+        "time_s": 0.365
+      },
+      "active_sam": {
+        "success": false,
+        "queries": 0,
+        "time_s": 0.244
+      },
+      "passive_sam_250": {
+        "success": false,
+        "queries": 250,
+        "time_s": 0.372
+      }
+    },
+    {
+      "family": "Family_B_Spurious_Precondition",
+      "scenario_id": "famB_dungeon_escape",
+      "domain": "dungeon_escape",
+      "seed": 43,
+      "description": "Add spurious precondition (door-open ?door) to unlock-door",
+      "ceg_omr_bidirectional": {
+        "success": true,
+        "queries": 7,
+        "iterations": 1,
+        "time_s": 0.666
+      },
+      "monotonic_olam_style": {
+        "success": false,
+        "queries": 0,
+        "iterations": 1,
+        "time_s": 0.333
+      },
+      "active_sam": {
+        "success": false,
+        "queries": 0,
+        "time_s": 0.31
+      },
+      "passive_sam_250": {
+        "success": false,
+        "queries": 250,
+        "time_s": 0.414
+      }
+    },
+    {
+      "family": "Family_B_Spurious_Precondition",
+      "scenario_id": "famB_dungeon_escape",
+      "domain": "dungeon_escape",
+      "seed": 44,
+      "description": "Add spurious precondition (door-open ?door) to unlock-door",
+      "ceg_omr_bidirectional": {
+        "success": true,
+        "queries": 7,
+        "iterations": 1,
+        "time_s": 0.795
+      },
+      "monotonic_olam_style": {
+        "success": false,
+        "queries": 0,
+        "iterations": 1,
+        "time_s": 0.366
+      },
+      "active_sam": {
+        "success": false,
+        "queries": 0,
+        "time_s": 0.278
+      },
+      "passive_sam_250": {
+        "success": false,
+        "queries": 250,
+        "time_s": 0.402
+      }
+    },
+    {
+      "family": "Family_C_Bidirectional_Effect_Corruption",
+      "scenario_id": "famC_bw_missing_del",
+      "domain": "blocksworld",
+      "seed": 42,
+      "description": "Missing delete effect (not (clear ?y)) on stack",
+      "ceg_omr_bidirectional": {
+        "success": true,
+        "queries": 4,
+        "iterations": 1,
+        "time_s": 0.331
+      },
+      "monotonic_olam_style": {
+        "success": true,
+        "queries": 4,
+        "iterations": 1,
+        "time_s": 0.402
+      },
+      "active_sam": {
+        "success": true,
+        "queries": 4,
+        "time_s": 0.382
+      },
+      "passive_sam_250": {
+        "success": true,
+        "queries": 250,
+        "time_s": 0.381
+      }
+    },
+    {
+      "family": "Family_C_Bidirectional_Effect_Corruption",
+      "scenario_id": "famC_bw_missing_del",
+      "domain": "blocksworld",
+      "seed": 43,
+      "description": "Missing delete effect (not (clear ?y)) on stack",
+      "ceg_omr_bidirectional": {
+        "success": true,
+        "queries": 4,
+        "iterations": 1,
+        "time_s": 0.342
+      },
+      "monotonic_olam_style": {
+        "success": true,
+        "queries": 4,
+        "iterations": 1,
+        "time_s": 0.396
+      },
+      "active_sam": {
+        "success": true,
+        "queries": 4,
+        "time_s": 0.367
+      },
+      "passive_sam_250": {
+        "success": true,
+        "queries": 250,
+        "time_s": 0.37
+      }
+    },
+    {
+      "family": "Family_C_Bidirectional_Effect_Corruption",
+      "scenario_id": "famC_bw_missing_del",
+      "domain": "blocksworld",
+      "seed": 44,
+      "description": "Missing delete effect (not (clear ?y)) on stack",
+      "ceg_omr_bidirectional": {
+        "success": true,
+        "queries": 4,
+        "iterations": 1,
+        "time_s": 0.333
+      },
+      "monotonic_olam_style": {
+        "success": true,
+        "queries": 4,
+        "iterations": 1,
+        "time_s": 0.392
+      },
+      "active_sam": {
+        "success": true,
+        "queries": 4,
+        "time_s": 0.381
+      },
+      "passive_sam_250": {
+        "success": true,
+        "queries": 250,
+        "time_s": 0.489
+      }
+    },
+    {
+      "family": "Family_C_Bidirectional_Effect_Corruption",
+      "scenario_id": "famC_bw_missing_add",
+      "domain": "blocksworld",
+      "seed": 42,
+      "description": "Missing add effect (clear ?y) on unstack",
+      "ceg_omr_bidirectional": {
+        "success": true,
+        "queries": 4,
+        "iterations": 1,
+        "time_s": 0.319
+      },
+      "monotonic_olam_style": {
+        "success": true,
+        "queries": 4,
+        "iterations": 1,
+        "time_s": 0.422
+      },
+      "active_sam": {
+        "success": true,
+        "queries": 4,
+        "time_s": 0.325
+      },
+      "passive_sam_250": {
+        "success": true,
+        "queries": 250,
+        "time_s": 0.379
+      }
+    },
+    {
+      "family": "Family_C_Bidirectional_Effect_Corruption",
+      "scenario_id": "famC_bw_missing_add",
+      "domain": "blocksworld",
+      "seed": 43,
+      "description": "Missing add effect (clear ?y) on unstack",
+      "ceg_omr_bidirectional": {
+        "success": true,
+        "queries": 4,
+        "iterations": 1,
+        "time_s": 0.34
+      },
+      "monotonic_olam_style": {
+        "success": true,
+        "queries": 4,
+        "iterations": 1,
+        "time_s": 0.367
+      },
+      "active_sam": {
+        "success": true,
+        "queries": 4,
+        "time_s": 0.316
+      },
+      "passive_sam_250": {
+        "success": true,
+        "queries": 250,
+        "time_s": 0.403
+      }
+    },
+    {
+      "family": "Family_C_Bidirectional_Effect_Corruption",
+      "scenario_id": "famC_bw_missing_add",
+      "domain": "blocksworld",
+      "seed": 44,
+      "description": "Missing add effect (clear ?y) on unstack",
+      "ceg_omr_bidirectional": {
+        "success": true,
+        "queries": 4,
+        "iterations": 1,
+        "time_s": 0.346
+      },
+      "monotonic_olam_style": {
+        "success": true,
+        "queries": 4,
+        "iterations": 1,
+        "time_s": 0.406
+      },
+      "active_sam": {
+        "success": true,
+        "queries": 4,
+        "time_s": 0.366
+      },
+      "passive_sam_250": {
+        "success": true,
+        "queries": 250,
+        "time_s": 0.344
+      }
+    },
+    {
+      "family": "Family_C_Bidirectional_Effect_Corruption",
+      "scenario_id": "famC_bw_spurious_add",
+      "domain": "blocksworld",
+      "seed": 42,
+      "description": "Spurious add effect (clear ?x) on pick-up",
+      "ceg_omr_bidirectional": {
+        "success": true,
+        "queries": 5,
+        "iterations": 2,
+        "time_s": 0.693
+      },
+      "monotonic_olam_style": {
+        "success": false,
+        "queries": 15,
+        "iterations": 15,
+        "time_s": 6.233
+      },
+      "active_sam": {
+        "success": false,
+        "queries": 1,
+        "time_s": 0.637
+      },
+      "passive_sam_250": {
+        "success": false,
+        "queries": 250,
+        "time_s": 0.363
+      }
+    },
+    {
+      "family": "Family_C_Bidirectional_Effect_Corruption",
+      "scenario_id": "famC_bw_spurious_add",
+      "domain": "blocksworld",
+      "seed": 43,
+      "description": "Spurious add effect (clear ?x) on pick-up",
+      "ceg_omr_bidirectional": {
+        "success": true,
+        "queries": 5,
+        "iterations": 2,
+        "time_s": 0.805
+      },
+      "monotonic_olam_style": {
+        "success": false,
+        "queries": 15,
+        "iterations": 15,
+        "time_s": 6.157
+      },
+      "active_sam": {
+        "success": false,
+        "queries": 1,
+        "time_s": 0.6
+      },
+      "passive_sam_250": {
+        "success": false,
+        "queries": 250,
+        "time_s": 0.318
+      }
+    },
+    {
+      "family": "Family_C_Bidirectional_Effect_Corruption",
+      "scenario_id": "famC_bw_spurious_add",
+      "domain": "blocksworld",
+      "seed": 44,
+      "description": "Spurious add effect (clear ?x) on pick-up",
+      "ceg_omr_bidirectional": {
+        "success": true,
+        "queries": 5,
+        "iterations": 2,
+        "time_s": 0.774
+      },
+      "monotonic_olam_style": {
+        "success": false,
+        "queries": 15,
+        "iterations": 15,
+        "time_s": 6.137
+      },
+      "active_sam": {
+        "success": false,
+        "queries": 1,
+        "time_s": 0.581
+      },
+      "passive_sam_250": {
+        "success": false,
+        "queries": 250,
+        "time_s": 0.496
+      }
+    },
+    {
+      "family": "Family_C_Bidirectional_Effect_Corruption",
+      "scenario_id": "famC_gripper_spurious_del",
+      "domain": "gripper",
+      "seed": 42,
+      "description": "Spurious delete effect (not (at-robby ?room)) on drop",
+      "ceg_omr_bidirectional": {
+        "success": false,
+        "queries": 4,
+        "iterations": 3,
+        "time_s": 9.145
+      },
+      "monotonic_olam_style": {
+        "success": false,
+        "queries": 0,
+        "iterations": 1,
+        "time_s": 0.549
+      },
+      "active_sam": {
+        "success": false,
+        "queries": 0,
+        "time_s": 0.316
+      },
+      "passive_sam_250": {
+        "success": false,
+        "queries": 250,
+        "time_s": 0.416
+      }
+    },
+    {
+      "family": "Family_C_Bidirectional_Effect_Corruption",
+      "scenario_id": "famC_gripper_spurious_del",
+      "domain": "gripper",
+      "seed": 43,
+      "description": "Spurious delete effect (not (at-robby ?room)) on drop",
+      "ceg_omr_bidirectional": {
+        "success": false,
+        "queries": 4,
+        "iterations": 3,
+        "time_s": 8.945
+      },
+      "monotonic_olam_style": {
+        "success": false,
+        "queries": 0,
+        "iterations": 1,
+        "time_s": 0.454
+      },
+      "active_sam": {
+        "success": false,
+        "queries": 0,
+        "time_s": 0.352
+      },
+      "passive_sam_250": {
+        "success": false,
+        "queries": 250,
+        "time_s": 0.508
+      }
+    },
+    {
+      "family": "Family_C_Bidirectional_Effect_Corruption",
+      "scenario_id": "famC_gripper_spurious_del",
+      "domain": "gripper",
+      "seed": 44,
+      "description": "Spurious delete effect (not (at-robby ?room)) on drop",
+      "ceg_omr_bidirectional": {
+        "success": false,
+        "queries": 4,
+        "iterations": 3,
+        "time_s": 9.972
+      },
+      "monotonic_olam_style": {
+        "success": false,
+        "queries": 0,
+        "iterations": 1,
+        "time_s": 0.445
+      },
+      "active_sam": {
+        "success": false,
+        "queries": 0,
+        "time_s": 0.256
+      },
+      "passive_sam_250": {
+        "success": false,
+        "queries": 250,
+        "time_s": 0.524
+      }
+    },
+    {
+      "family": "Family_C_Bidirectional_Effect_Corruption",
+      "scenario_id": "famC_dungeon_missing_del",
+      "domain": "dungeon_escape",
+      "seed": 42,
+      "description": "Missing delete effect (not (at ?k ?loc)) on pickup-key",
+      "ceg_omr_bidirectional": {
+        "success": true,
+        "queries": 7,
+        "iterations": 1,
+        "time_s": 0.592
+      },
+      "monotonic_olam_style": {
+        "success": true,
+        "queries": 7,
+        "iterations": 1,
+        "time_s": 0.53
+      },
+      "active_sam": {
+        "success": true,
+        "queries": 7,
+        "time_s": 0.423
+      },
+      "passive_sam_250": {
+        "success": true,
+        "queries": 250,
+        "time_s": 0.609
+      }
+    },
+    {
+      "family": "Family_C_Bidirectional_Effect_Corruption",
+      "scenario_id": "famC_dungeon_missing_del",
+      "domain": "dungeon_escape",
+      "seed": 43,
+      "description": "Missing delete effect (not (at ?k ?loc)) on pickup-key",
+      "ceg_omr_bidirectional": {
+        "success": true,
+        "queries": 7,
+        "iterations": 1,
+        "time_s": 0.378
+      },
+      "monotonic_olam_style": {
+        "success": true,
+        "queries": 7,
+        "iterations": 1,
+        "time_s": 0.548
+      },
+      "active_sam": {
+        "success": true,
+        "queries": 7,
+        "time_s": 0.309
+      },
+      "passive_sam_250": {
+        "success": true,
+        "queries": 250,
+        "time_s": 0.463
+      }
+    },
+    {
+      "family": "Family_C_Bidirectional_Effect_Corruption",
+      "scenario_id": "famC_dungeon_missing_del",
+      "domain": "dungeon_escape",
+      "seed": 44,
+      "description": "Missing delete effect (not (at ?k ?loc)) on pickup-key",
+      "ceg_omr_bidirectional": {
+        "success": true,
+        "queries": 7,
+        "iterations": 1,
+        "time_s": 0.428
+      },
+      "monotonic_olam_style": {
+        "success": true,
+        "queries": 7,
+        "iterations": 1,
+        "time_s": 0.475
+      },
+      "active_sam": {
+        "success": true,
+        "queries": 7,
+        "time_s": 0.419
+      },
+      "passive_sam_250": {
+        "success": true,
+        "queries": 250,
+        "time_s": 0.578
+      }
+    },
+    {
+      "family": "Family_C_Bidirectional_Effect_Corruption",
+      "scenario_id": "famC_pitch_spurious_del",
+      "domain": "pitch_black",
+      "seed": 42,
+      "description": "Spurious delete effect (not (is-light-on ?to)) on move",
+      "ceg_omr_bidirectional": {
+        "success": true,
+        "queries": 5,
+        "iterations": 2,
+        "time_s": 0.928
+      },
+      "monotonic_olam_style": {
+        "success": true,
+        "queries": 5,
+        "iterations": 2,
+        "time_s": 1.17
+      },
+      "active_sam": {
+        "success": false,
+        "queries": 1,
+        "time_s": 0.753
+      },
+      "passive_sam_250": {
+        "success": false,
+        "queries": 250,
+        "time_s": 0.603
+      }
+    },
+    {
+      "family": "Family_C_Bidirectional_Effect_Corruption",
+      "scenario_id": "famC_pitch_spurious_del",
+      "domain": "pitch_black",
+      "seed": 43,
+      "description": "Spurious delete effect (not (is-light-on ?to)) on move",
+      "ceg_omr_bidirectional": {
+        "success": true,
+        "queries": 5,
+        "iterations": 2,
+        "time_s": 1.089
+      },
+      "monotonic_olam_style": {
+        "success": true,
+        "queries": 5,
+        "iterations": 2,
+        "time_s": 1.157
+      },
+      "active_sam": {
+        "success": false,
+        "queries": 1,
+        "time_s": 0.709
+      },
+      "passive_sam_250": {
+        "success": false,
+        "queries": 250,
+        "time_s": 0.568
+      }
+    },
+    {
+      "family": "Family_C_Bidirectional_Effect_Corruption",
+      "scenario_id": "famC_pitch_spurious_del",
+      "domain": "pitch_black",
+      "seed": 44,
+      "description": "Spurious delete effect (not (is-light-on ?to)) on move",
+      "ceg_omr_bidirectional": {
+        "success": true,
+        "queries": 5,
+        "iterations": 2,
+        "time_s": 1.087
+      },
+      "monotonic_olam_style": {
+        "success": true,
+        "queries": 5,
+        "iterations": 2,
+        "time_s": 1.201
+      },
+      "active_sam": {
+        "success": false,
+        "queries": 1,
+        "time_s": 0.813
+      },
+      "passive_sam_250": {
+        "success": false,
+        "queries": 250,
+        "time_s": 0.469
+      }
+    },
+    {
+      "family": "Family_D_Compound_Bidirectional_LLM_Drifted",
+      "scenario_id": "famD_compound_blocksworld",
+      "domain": "blocksworld",
+      "seed": 42,
+      "description": "Compound Pre^- + Pre^+ + Eff^- on Blocksworld",
+      "ceg_omr_bidirectional": {
+        "success": true,
+        "queries": 4,
+        "iterations": 1,
+        "time_s": 0.702
+      },
+      "monotonic_olam_style": {
+        "success": false,
+        "queries": 0,
+        "iterations": 1,
+        "time_s": 0.39
+      },
+      "active_sam": {
+        "success": false,
+        "queries": 0,
+        "time_s": 0.277
+      },
+      "passive_sam_250": {
+        "success": false,
+        "queries": 250,
+        "time_s": 0.425
+      }
+    },
+    {
+      "family": "Family_D_Compound_Bidirectional_LLM_Drifted",
+      "scenario_id": "famD_compound_blocksworld",
+      "domain": "blocksworld",
+      "seed": 43,
+      "description": "Compound Pre^- + Pre^+ + Eff^- on Blocksworld",
+      "ceg_omr_bidirectional": {
+        "success": true,
+        "queries": 4,
+        "iterations": 1,
+        "time_s": 0.897
+      },
+      "monotonic_olam_style": {
+        "success": false,
+        "queries": 0,
+        "iterations": 1,
+        "time_s": 0.484
+      },
+      "active_sam": {
+        "success": false,
+        "queries": 0,
+        "time_s": 0.282
+      },
+      "passive_sam_250": {
+        "success": false,
+        "queries": 250,
+        "time_s": 0.3
+      }
+    },
+    {
+      "family": "Family_D_Compound_Bidirectional_LLM_Drifted",
+      "scenario_id": "famD_compound_blocksworld",
+      "domain": "blocksworld",
+      "seed": 44,
+      "description": "Compound Pre^- + Pre^+ + Eff^- on Blocksworld",
+      "ceg_omr_bidirectional": {
+        "success": true,
+        "queries": 4,
+        "iterations": 1,
+        "time_s": 0.784
+      },
+      "monotonic_olam_style": {
+        "success": false,
+        "queries": 0,
+        "iterations": 1,
+        "time_s": 0.319
+      },
+      "active_sam": {
+        "success": false,
+        "queries": 0,
+        "time_s": 0.246
+      },
+      "passive_sam_250": {
+        "success": false,
+        "queries": 250,
+        "time_s": 0.5
+      }
+    },
+    {
+      "family": "Family_D_Compound_Bidirectional_LLM_Drifted",
+      "scenario_id": "famD_compound_gripper",
+      "domain": "gripper",
+      "seed": 42,
+      "description": "Compound Pre^- + Pre^+ + Eff^+ on Gripper",
+      "ceg_omr_bidirectional": {
+        "success": false,
+        "queries": 41,
+        "iterations": 15,
+        "time_s": 10.027
+      },
+      "monotonic_olam_style": {
+        "success": false,
+        "queries": 0,
+        "iterations": 1,
+        "time_s": 0.365
+      },
+      "active_sam": {
+        "success": false,
+        "queries": 0,
+        "time_s": 0.274
+      },
+      "passive_sam_250": {
+        "success": false,
+        "queries": 250,
+        "time_s": 0.319
+      }
+    },
+    {
+      "family": "Family_D_Compound_Bidirectional_LLM_Drifted",
+      "scenario_id": "famD_compound_gripper",
+      "domain": "gripper",
+      "seed": 43,
+      "description": "Compound Pre^- + Pre^+ + Eff^+ on Gripper",
+      "ceg_omr_bidirectional": {
+        "success": false,
+        "queries": 41,
+        "iterations": 15,
+        "time_s": 8.839
+      },
+      "monotonic_olam_style": {
+        "success": false,
+        "queries": 0,
+        "iterations": 1,
+        "time_s": 0.302
+      },
+      "active_sam": {
+        "success": false,
+        "queries": 0,
+        "time_s": 0.245
+      },
+      "passive_sam_250": {
+        "success": false,
+        "queries": 250,
+        "time_s": 0.415
+      }
+    },
+    {
+      "family": "Family_D_Compound_Bidirectional_LLM_Drifted",
+      "scenario_id": "famD_compound_gripper",
+      "domain": "gripper",
+      "seed": 44,
+      "description": "Compound Pre^- + Pre^+ + Eff^+ on Gripper",
+      "ceg_omr_bidirectional": {
+        "success": false,
+        "queries": 41,
+        "iterations": 15,
+        "time_s": 8.733
+      },
+      "monotonic_olam_style": {
+        "success": false,
+        "queries": 0,
+        "iterations": 1,
+        "time_s": 0.329
+      },
+      "active_sam": {
+        "success": false,
+        "queries": 0,
+        "time_s": 0.299
+      },
+      "passive_sam_250": {
+        "success": false,
+        "queries": 250,
+        "time_s": 0.365
+      }
+    },
+    {
+      "family": "Family_D_Compound_Bidirectional_LLM_Drifted",
+      "scenario_id": "famD_compound_logistics",
+      "domain": "logistics",
+      "seed": 42,
+      "description": "Compound Pre^- + Pre^+ on Logistics",
+      "ceg_omr_bidirectional": {
+        "success": true,
+        "queries": 11,
+        "iterations": 2,
+        "time_s": 1.149
+      },
+      "monotonic_olam_style": {
+        "success": false,
+        "queries": 0,
+        "iterations": 1,
+        "time_s": 0.302
+      },
+      "active_sam": {
+        "success": false,
+        "queries": 0,
+        "time_s": 0.305
+      },
+      "passive_sam_250": {
+        "success": false,
+        "queries": 250,
+        "time_s": 0.583
+      }
+    },
+    {
+      "family": "Family_D_Compound_Bidirectional_LLM_Drifted",
+      "scenario_id": "famD_compound_logistics",
+      "domain": "logistics",
+      "seed": 43,
+      "description": "Compound Pre^- + Pre^+ on Logistics",
+      "ceg_omr_bidirectional": {
+        "success": true,
+        "queries": 11,
+        "iterations": 2,
+        "time_s": 1.214
+      },
+      "monotonic_olam_style": {
+        "success": false,
+        "queries": 0,
+        "iterations": 1,
+        "time_s": 0.32
+      },
+      "active_sam": {
+        "success": false,
+        "queries": 0,
+        "time_s": 0.257
+      },
+      "passive_sam_250": {
+        "success": false,
+        "queries": 250,
+        "time_s": 0.453
+      }
+    },
+    {
+      "family": "Family_D_Compound_Bidirectional_LLM_Drifted",
+      "scenario_id": "famD_compound_logistics",
+      "domain": "logistics",
+      "seed": 44,
+      "description": "Compound Pre^- + Pre^+ on Logistics",
+      "ceg_omr_bidirectional": {
+        "success": true,
+        "queries": 11,
+        "iterations": 2,
+        "time_s": 0.954
+      },
+      "monotonic_olam_style": {
+        "success": false,
+        "queries": 0,
+        "iterations": 1,
+        "time_s": 0.346
+      },
+      "active_sam": {
+        "success": false,
+        "queries": 0,
+        "time_s": 0.28
+      },
+      "passive_sam_250": {
+        "success": false,
+        "queries": 250,
+        "time_s": 0.426
+      }
+    },
+    {
+      "family": "Family_D_Compound_Bidirectional_LLM_Drifted",
+      "scenario_id": "famD_compound_sokoban",
+      "domain": "sokoban",
+      "seed": 42,
+      "description": "Compound Pre^- + Pre^+ on Sokoban",
+      "ceg_omr_bidirectional": {
+        "success": true,
+        "queries": 1,
+        "iterations": 1,
+        "time_s": 0.482
+      },
+      "monotonic_olam_style": {
+        "success": true,
+        "queries": 1,
+        "iterations": 1,
+        "time_s": 0.392
+      },
+      "active_sam": {
+        "success": true,
+        "queries": 1,
+        "time_s": 0.305
+      },
+      "passive_sam_250": {
+        "success": true,
+        "queries": 250,
+        "time_s": 3.529
+      }
+    },
+    {
+      "family": "Family_D_Compound_Bidirectional_LLM_Drifted",
+      "scenario_id": "famD_compound_sokoban",
+      "domain": "sokoban",
+      "seed": 43,
+      "description": "Compound Pre^- + Pre^+ on Sokoban",
+      "ceg_omr_bidirectional": {
+        "success": true,
+        "queries": 1,
+        "iterations": 1,
+        "time_s": 0.343
+      },
+      "monotonic_olam_style": {
+        "success": true,
+        "queries": 1,
+        "iterations": 1,
+        "time_s": 0.42
+      },
+      "active_sam": {
+        "success": true,
+        "queries": 1,
+        "time_s": 0.3
+      },
+      "passive_sam_250": {
+        "success": true,
+        "queries": 250,
+        "time_s": 3.562
+      }
+    },
+    {
+      "family": "Family_D_Compound_Bidirectional_LLM_Drifted",
+      "scenario_id": "famD_compound_sokoban",
+      "domain": "sokoban",
+      "seed": 44,
+      "description": "Compound Pre^- + Pre^+ on Sokoban",
+      "ceg_omr_bidirectional": {
+        "success": true,
+        "queries": 1,
+        "iterations": 1,
+        "time_s": 0.319
+      },
+      "monotonic_olam_style": {
+        "success": true,
+        "queries": 1,
+        "iterations": 1,
+        "time_s": 0.352
+      },
+      "active_sam": {
+        "success": true,
+        "queries": 1,
+        "time_s": 0.362
+      },
+      "passive_sam_250": {
+        "success": true,
+        "queries": 250,
+        "time_s": 3.281
+      }
+    },
+    {
+      "family": "Family_D_Compound_Bidirectional_LLM_Drifted",
+      "scenario_id": "famD_compound_pitch_black",
+      "domain": "pitch_black",
+      "seed": 42,
+      "description": "Compound Pre^- + Eff^+ on Pitch Black",
+      "ceg_omr_bidirectional": {
+        "success": true,
+        "queries": 5,
+        "iterations": 2,
+        "time_s": 0.796
+      },
+      "monotonic_olam_style": {
+        "success": true,
+        "queries": 5,
+        "iterations": 2,
+        "time_s": 0.742
+      },
+      "active_sam": {
+        "success": false,
+        "queries": 1,
+        "time_s": 0.522
+      },
+      "passive_sam_250": {
+        "success": false,
+        "queries": 250,
+        "time_s": 0.336
+      }
+    },
+    {
+      "family": "Family_D_Compound_Bidirectional_LLM_Drifted",
+      "scenario_id": "famD_compound_pitch_black",
+      "domain": "pitch_black",
+      "seed": 43,
+      "description": "Compound Pre^- + Eff^+ on Pitch Black",
+      "ceg_omr_bidirectional": {
+        "success": true,
+        "queries": 5,
+        "iterations": 2,
+        "time_s": 0.678
+      },
+      "monotonic_olam_style": {
+        "success": true,
+        "queries": 5,
+        "iterations": 2,
+        "time_s": 0.705
+      },
+      "active_sam": {
+        "success": false,
+        "queries": 1,
+        "time_s": 0.701
+      },
+      "passive_sam_250": {
+        "success": false,
+        "queries": 250,
+        "time_s": 0.357
+      }
+    },
+    {
+      "family": "Family_D_Compound_Bidirectional_LLM_Drifted",
+      "scenario_id": "famD_compound_pitch_black",
+      "domain": "pitch_black",
+      "seed": 44,
+      "description": "Compound Pre^- + Eff^+ on Pitch Black",
+      "ceg_omr_bidirectional": {
+        "success": true,
+        "queries": 5,
+        "iterations": 2,
+        "time_s": 0.804
+      },
+      "monotonic_olam_style": {
+        "success": true,
+        "queries": 5,
+        "iterations": 2,
+        "time_s": 0.83
+      },
+      "active_sam": {
+        "success": false,
+        "queries": 1,
+        "time_s": 0.621
+      },
+      "passive_sam_250": {
+        "success": false,
+        "queries": 250,
+        "time_s": 0.355
+      }
+    },
+    {
+      "family": "Family_D_Compound_Bidirectional_LLM_Drifted",
+      "scenario_id": "famD_compound_dungeon_escape",
+      "domain": "dungeon_escape",
+      "seed": 42,
+      "description": "Compound Pre^- + Pre^+ + Eff^- on Dungeon Escape",
+      "ceg_omr_bidirectional": {
+        "success": true,
+        "queries": 9,
+        "iterations": 3,
+        "time_s": 2.319
+      },
+      "monotonic_olam_style": {
+        "success": false,
+        "queries": 16,
+        "iterations": 15,
+        "time_s": 5.02
+      },
+      "active_sam": {
+        "success": false,
+        "queries": 2,
+        "time_s": 0.606
+      },
+      "passive_sam_250": {
+        "success": false,
+        "queries": 250,
+        "time_s": 0.342
+      }
+    },
+    {
+      "family": "Family_D_Compound_Bidirectional_LLM_Drifted",
+      "scenario_id": "famD_compound_dungeon_escape",
+      "domain": "dungeon_escape",
+      "seed": 43,
+      "description": "Compound Pre^- + Pre^+ + Eff^- on Dungeon Escape",
+      "ceg_omr_bidirectional": {
+        "success": true,
+        "queries": 9,
+        "iterations": 3,
+        "time_s": 2.239
+      },
+      "monotonic_olam_style": {
+        "success": false,
+        "queries": 16,
+        "iterations": 15,
+        "time_s": 5.379
+      },
+      "active_sam": {
+        "success": false,
+        "queries": 2,
+        "time_s": 0.604
+      },
+      "passive_sam_250": {
+        "success": false,
+        "queries": 250,
+        "time_s": 0.364
+      }
+    },
+    {
+      "family": "Family_D_Compound_Bidirectional_LLM_Drifted",
+      "scenario_id": "famD_compound_dungeon_escape",
+      "domain": "dungeon_escape",
+      "seed": 44,
+      "description": "Compound Pre^- + Pre^+ + Eff^- on Dungeon Escape",
+      "ceg_omr_bidirectional": {
+        "success": true,
+        "queries": 9,
+        "iterations": 3,
+        "time_s": 2.289
+      },
+      "monotonic_olam_style": {
+        "success": false,
+        "queries": 16,
+        "iterations": 15,
+        "time_s": 5.448
+      },
+      "active_sam": {
+        "success": false,
+        "queries": 2,
+        "time_s": 0.6
+      },
+      "passive_sam_250": {
+        "success": false,
+        "queries": 250,
+        "time_s": 0.43
+      }
+    }
+  ]
+}

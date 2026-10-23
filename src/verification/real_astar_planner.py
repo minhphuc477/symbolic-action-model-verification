@@ -10,7 +10,7 @@ from typing import Any
 
 class PuzzleScriptGridState:
     """Represents a concrete 2D grid state in PuzzleScript games."""
-    
+
     def __init__(self, player_pos: tuple[int, int], boxes: set[tuple[int, int]], targets: set[tuple[int, int]], walls: set[tuple[int, int]], doors: dict[tuple[int, int], bool], keys: int = 0):
         self.player = player_pos
         self.boxes = frozenset(boxes)
@@ -115,7 +115,7 @@ class RealAStarPlanner:
         Under rule interventions, flawed paradigms omit preconditions, generating phantom edges.
         """
         neighbors = self.get_neighbors_gt(state)
-        
+
         if not is_vulnerable:
             return neighbors
 
@@ -123,7 +123,7 @@ class RealAStarPlanner:
         for act_name, (dx, dy) in [("up", (0, -1)), ("down", (0, 1)), ("left", (-1, 0)), ("right", (1, 0))]:
             nx, ny = state.player[0] + dx, state.player[1] + dy
             npos = (nx, ny)
-            
+
             # 1. Door lock bottleneck phantom
             if state.doors.get(npos):
                 new_doors = dict(state.doors)
@@ -176,7 +176,7 @@ class RealAStarPlanner:
         open_set = []
         start_key = start_state.key()
         heapq.heappush(open_set, (self.heuristic(start_state), 0, start_key, start_state, []))
-        
+
         visited = {start_key: 0}
         explored_nodes = 0
         phantom_edges_explored = 0
@@ -228,7 +228,7 @@ class RealAStarPlanner:
                     cur_gt = nxt_gt
                     matched = True
                     break
-            
+
             if not matched:
                 execution_failed = True
                 break

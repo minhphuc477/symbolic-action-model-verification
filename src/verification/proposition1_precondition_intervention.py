@@ -152,9 +152,9 @@ def get_benchmark_tasks() -> dict[str, dict[str, Any]]:
 
 def get_precondition_interventions(gt_pddl: str) -> dict[str, dict[str, str]]:
     """Defines all 9 single-precondition omissions plus learned models."""
-    with open("benchmark_outputs/fama_normalized.pddl", "r", encoding="utf-8") as f:
+    with open("benchmark_outputs/fama_normalized.pddl", encoding="utf-8") as f:
         fama_pddl = f.read()
-    with open("benchmark_outputs/locm2_normalized.pddl", "r", encoding="utf-8") as f:
+    with open("benchmark_outputs/locm2_normalized.pddl", encoding="utf-8") as f:
         locm2_pddl = f.read()
 
     return {
@@ -228,7 +228,7 @@ def get_precondition_interventions(gt_pddl: str) -> dict[str, dict[str, str]]:
 def run_full_proposition1_matrix() -> dict[str, Any]:
     """Runs all 12 model configurations across all 3 benchmark tasks."""
     gt_file = "benchmark_outputs/ground_truth.pddl"
-    with open(gt_file, "r", encoding="utf-8") as f:
+    with open(gt_file, encoding="utf-8") as f:
         gt_pddl = f.read()
     gt_models = parse_pddl_model(gt_pddl)
 

@@ -39,15 +39,27 @@ Usage (API):
 
 from __future__ import annotations
 
+import copy
+import itertools
 import json
 import random
-import subprocess
+import re
 import sys
 import time
 from dataclasses import dataclass, field
 from pathlib import Path
+from typing import Any
 
-from src.runners.wsl_harness import WSLHarness
+import pddl
+
+from src.interventions.pddl_mutator import (
+    _find_action_block,
+    _get_section,
+    _parse_sexp,
+    _sexp_to_str,
+    _tokenize,
+)
+from src.runners.wsl_harness import FastDownwardRunner
 
 # ---------------------------------------------------------------------------
 # Configuration
@@ -74,6 +86,11 @@ class CEGOMRConfig:
     out_dir: str = "repair_logs/"
     # Timeout per planning call (seconds)
     planning_timeout: int = 30
+    # Ablation knobs
+    enable_backtracking: bool = True
+    use_effect_coherence: bool = True
+    allow_relaxation: bool = True
+    allow_effect_deletion: bool = True
 
 
 # ---------------------------------------------------------------------------
@@ -189,52 +206,28 @@ class FastDownwardGenerator:
 
         Exit codes: 0 = plan found, 11 = unsolvable, 12 = out of resources.
         """
-        fd_bin = self.config.fast_downward_bin
-
-        # Translate Windows paths to WSL /mnt/ paths via centralized WSLHarness
-        wsl_domain = WSLHarness.to_wsl_path(domain_path)
-        wsl_problem = WSLHarness.to_wsl_path(problem_path)
-        wsl_plan = WSLHarness.to_wsl_path(plan_out)
-
-        cmd = (
-            self.config.wsl_prefix
-            + [
-                "python3", fd_bin,
-                "--plan-file", wsl_plan,
-                wsl_domain, wsl_problem,
-                "--search", self.config.fd_search_config,
-            ]
+        runner = FastDownwardRunner(fd_path=self.config.fast_downward_bin)
+        res = runner.plan(
+            domain_file=domain_path,
+            problem_file=problem_path,
+            plan_out=plan_out,
+            search_config=self.config.fd_search_config,
+            timeout=self.config.planning_timeout,
         )
 
-        t0 = time.perf_counter()
-        try:
-            res = subprocess.run(
-                cmd,
-                capture_output=True,
-                text=True,
-                timeout=self.config.planning_timeout,
-                check=False,
-            )
-        except subprocess.TimeoutExpired:
-            return False, [], float("inf")
-        except FileNotFoundError:
-            return False, [], float("inf")
-
-        elapsed = time.perf_counter() - t0
-
-        if not _fd_plan_found(res.returncode):
+        if not res.success:
             return False, [], float("inf")
 
         # Read plan file
         plan_path = Path(plan_out)
         if not plan_path.exists():
-            # Try .soln suffix
+            # Try .soln suffix or .1 suffix
             plan_path = Path(plan_out + ".1")
         if not plan_path.exists():
             return False, [], float("inf")
 
         actions = self._parse_plan_file(plan_path)
-        return True, actions, elapsed
+        return True, actions, res.wall_clock_seconds
 
     @staticmethod
     def _parse_plan_file(plan_path: Path) -> list[str]:
@@ -286,7 +279,7 @@ class OracleVerifier:
 
             prob = pddl.parse_problem(self.problem_path)
             init_state = {str(x) for x in prob.init}
-            
+
             # Goal literals
             if hasattr(prob.goal, "operands"):
                 goal_literals = {str(x) for x in prob.goal.operands}
@@ -335,9 +328,9 @@ class OracleVerifier:
                     cx = Counterexample(
                         step_index=i,
                         action=action_str,
-                        predicted_next=_state_str(state_learned),
+                        predicted_next=_state_str(next_learned),
                         actual_next=_state_str(next_gt),
-                        failure_type="phantom_precondition" if next_learned is not None else "wrong_effect",
+                        failure_type="wrong_effect",
                         current_state=_state_str(state_gt),
                     )
                     return False, cx, queries
@@ -379,23 +372,31 @@ class HornSynthesizer:
       are prioritized to refine the schema.
     """
 
-    def __init__(self, out_dir: str = "domains/mutated/"):
+    def __init__(
+        self,
+        out_dir: str = "domains/mutated/",
+        seed: int = 42,
+        use_effect_coherence: bool = True,
+        allow_effect_deletion: bool = True,
+    ):
         self.out_dir = Path(out_dir)
         self.out_dir.mkdir(parents=True, exist_ok=True)
+        self.seed = seed
+        self._rng = random.Random(seed)
+        self.use_effect_coherence = use_effect_coherence
+        self.allow_effect_deletion = allow_effect_deletion
         self.version_spaces: dict[str, set[str]] = {}
+        self.refuted_candidates: dict[str, set[str]] = {}
+        self.repair_history: list[dict] = []
+        self.relaxed_candidates: dict[str, set[str]] = {}
+        self.verified_necessary_preconditions: dict[str, set[str]] = {}
+        self.tried_relaxations: set[tuple[tuple[str, str], ...]] = set()
+        self.initial_preconditions: dict[str, set[str]] | None = None
 
-    def repair(
-        self,
-        domain_path: str,
-        counterexample: Counterexample,
-        iteration: int,
-    ) -> str:
-        """
-        Repair M_hat by eliminating phantom preconditions using active counterexample feedback.
-        """
-        import copy
-        import itertools
-        import re
+    def _ensure_initial_preconditions(self, domain_path: str) -> None:
+        if self.initial_preconditions is not None:
+            return
+        import pddl
 
         from src.interventions.pddl_mutator import (
             _find_action_block,
@@ -404,7 +405,325 @@ class HornSynthesizer:
             _sexp_to_str,
             _tokenize,
         )
+        dom = pddl.parse_domain(domain_path)
+        domain_text = Path(domain_path).read_text(encoding="utf-8")
+        tokens = _tokenize(domain_text)
+        domain_sexp, _ = _parse_sexp(tokens)
+        self.initial_preconditions = {}
+        for pddl_act in dom.actions:
+            act_name = pddl_act.name.lower()
+            action_block = _find_action_block(domain_sexp, act_name)
+            if action_block is None:
+                continue
+            prec_idx = _get_section(action_block, ":precondition")
+            if prec_idx is None or prec_idx + 1 >= len(action_block):
+                continue
+            prec_sexp = action_block[prec_idx + 1]
+            if isinstance(prec_sexp, list) and prec_sexp and isinstance(prec_sexp[0], str) and prec_sexp[0].lower() == "and":
+                conjuncts = prec_sexp[1:]
+            elif isinstance(prec_sexp, list) and prec_sexp:
+                conjuncts = [prec_sexp]
+            else:
+                conjuncts = []
+            self.initial_preconditions[act_name] = {
+                " ".join(_sexp_to_str(c).split()).strip().lower() for c in conjuncts
+            }
 
+    def relax_overconstrained_domain(
+        self,
+        domain_path: str,
+        problem_path: str,
+        generator: FastDownwardGenerator,
+        iteration: int,
+        min_suspect_score: int = 0,
+    ) -> tuple[bool, str, list[str], float]:
+        """
+        Minimal-Relaxation Abduction for over-constrained domains (where Pi(M_hat, s_0, g) is empty
+        due to spurious preconditions or SAS+ sink-violation delete effects in M_hat_0).
+        Ranks existing non-locked initial preconditions and delete effects by Inverse STRIPS
+        Effect Coherence (suspect score) and finds a minimal removal that restores solvability
+        in Fast Downward (0 oracle queries).
+        """
+        def _norm_sexp(x: Any) -> str:
+            return " ".join(_sexp_to_str(x).split()).strip().lower()
+
+        self._ensure_initial_preconditions(domain_path)
+        dom = pddl.parse_domain(domain_path)
+        domain_text = Path(domain_path).read_text(encoding="utf-8")
+        tokens = _tokenize(domain_text)
+        domain_sexp, _ = _parse_sexp(tokens)
+
+        # Collect predicate effect statistics across the domain
+        dynamic_predicates: set[str] = set()
+        ever_added_predicates: set[str] = set()
+        conserved_predicates: set[str] = set()  # Predicates both added and deleted by the same action (e.g. at-robby)
+        for pddl_act in dom.actions:
+            eff_ops = (
+                list(pddl_act.effect.operands)
+                if hasattr(pddl_act.effect, "operands")
+                else ([pddl_act.effect] if pddl_act.effect is not None else [])
+            )
+            act_add_preds: set[str] = set()
+            act_del_preds: set[str] = set()
+            for op in eff_ops:
+                s = " ".join(str(op).split()).strip().lower()
+                is_del = False
+                if s.startswith("(not ") and s.endswith(")"):
+                    s = s[5:-1].strip()
+                    is_del = True
+                toks = s.strip("()").split()
+                if toks:
+                    dynamic_predicates.add(toks[0])
+                    if is_del:
+                        act_del_preds.add(toks[0])
+                    else:
+                        ever_added_predicates.add(toks[0])
+                        act_add_preds.add(toks[0])
+            conserved_predicates |= (act_add_preds & act_del_preds)
+
+        suspect_candidates: list[tuple[int, str, str, str]] = []  # (score, kind, act_name, norm_str)
+        for pddl_act in dom.actions:
+            act_name = pddl_act.name.lower()
+            locked = self.verified_necessary_preconditions.get(act_name, set())
+            init_precs = (
+                self.initial_preconditions.get(act_name, set())
+                if self.initial_preconditions is not None
+                else None
+            )
+
+            deleted_literals: set[str] = set()
+            added_literals: set[str] = set()
+            eff_ops = (
+                list(pddl_act.effect.operands)
+                if hasattr(pddl_act.effect, "operands")
+                else ([pddl_act.effect] if pddl_act.effect is not None else [])
+            )
+            for op in eff_ops:
+                s = " ".join(str(op).split()).strip().lower()
+                if s.startswith("(not ") and s.endswith(")"):
+                    deleted_literals.add(s[5:-1].strip())
+                else:
+                    added_literals.add(s)
+
+            action_block = _find_action_block(domain_sexp, act_name)
+            if action_block is None:
+                continue
+            prec_idx = _get_section(action_block, ":precondition")
+            if prec_idx is not None and prec_idx + 1 < len(action_block):
+                prec_sexp = action_block[prec_idx + 1]
+                if isinstance(prec_sexp, list) and prec_sexp and isinstance(prec_sexp[0], str) and prec_sexp[0].lower() == "and":
+                    conjuncts = prec_sexp[1:]
+                elif isinstance(prec_sexp, list) and prec_sexp:
+                    conjuncts = [prec_sexp]
+                else:
+                    conjuncts = []
+
+                for c_sexp in conjuncts:
+                    c_norm = _norm_sexp(c_sexp)
+                    if c_norm in locked:
+                        continue
+                    if init_precs is not None and c_norm not in init_precs:
+                        continue
+                    # Inverse STRIPS Effect Coherence suspect scoring
+                    score = 5
+                    if self.use_effect_coherence:
+                        if c_norm in added_literals:
+                            # Positive precondition that is ALSO added by the action is a classic spurious constraint
+                            score = 20
+                        elif c_norm.startswith("(not ") and c_norm.endswith(")") and c_norm[5:-1].strip() in deleted_literals:
+                            score = 20
+                        elif c_norm in deleted_literals:
+                            # Consumed/deleted fluent is coherent with genuine STRIPS precondition
+                            score = 1
+                        elif c_norm.startswith("(not ") and c_norm.endswith(")") and c_norm[5:-1].strip() in added_literals:
+                            score = 2
+                        else:
+                            raw_pred = c_norm.strip("()").split()[0] if c_norm.strip("()") else ""
+                            if raw_pred == "not":
+                                inner_toks = c_norm[5:-1].strip().strip("()").split()
+                                raw_pred = inner_toks[0] if inner_toks else ""
+                            if raw_pred in dynamic_predicates:
+                                score = 12
+                            else:
+                                score = 4
+                    if score >= min_suspect_score:
+                        suspect_candidates.append((score, "prec", act_name, c_norm))
+
+            # Check for SAS+ Sink-Violation Spurious Delete Effects when effect deletion is enabled
+            if self.allow_effect_deletion:
+                act_add_preds_here = {
+                    lit.strip("()").split()[0]
+                    for lit in added_literals
+                    if lit.strip("()").split()
+                }
+                for d_inner in sorted(deleted_literals):
+                    toks = d_inner.strip("()").split()
+                    if not toks:
+                        continue
+                    d_pred = toks[0]
+                    del_norm = f"(not {d_inner})"
+                    if del_norm in locked:
+                        continue
+                    # A delete effect on a predicate that is NEVER added anywhere in the domain,
+                    # or on a 1-to-1 conserved predicate (like at-robby) when this action does not re-add it,
+                    # is a SAS+ sink-violation suspect.
+                    if d_pred not in ever_added_predicates or (
+                        d_pred in conserved_predicates and d_pred not in act_add_preds_here
+                    ):
+                        eff_score = 18
+                        if eff_score >= min_suspect_score:
+                            suspect_candidates.append((eff_score, "eff_del", act_name, del_norm))
+
+        if not suspect_candidates:
+            return False, domain_path, [], 0.0
+
+        suspect_candidates.sort(key=lambda x: x[0], reverse=True)
+
+        # Search minimal relaxations of size k = 1, then k = 2 (bounded to top 8 suspects for k=2)
+        candidate_items = [(kind, act_name, c_norm) for _, kind, act_name, c_norm in suspect_candidates]
+        relaxation_sets: list[tuple[tuple[str, str, str], ...]] = [
+            (item,) for item in candidate_items
+        ]
+        top_k2 = candidate_items[: min(8, len(candidate_items))]
+        relaxation_sets.extend(itertools.combinations(top_k2, 2))
+
+        for relax_tuple in relaxation_sets:
+            canon_key = tuple(sorted((f"{k}:{a}", c) for k, a, c in relax_tuple))
+            if canon_key in self.tried_relaxations:
+                continue
+
+            domain_sexp_cand = copy.deepcopy(domain_sexp)
+            modified = False
+            for kind, act_name, target_norm in relax_tuple:
+                action_block = _find_action_block(domain_sexp_cand, act_name)
+                if action_block is None:
+                    continue
+                if kind == "prec":
+                    prec_idx = _get_section(action_block, ":precondition")
+                    if prec_idx is None or prec_idx + 1 >= len(action_block):
+                        continue
+                    prec_sexp = action_block[prec_idx + 1]
+                    if isinstance(prec_sexp, list) and prec_sexp and isinstance(prec_sexp[0], str) and prec_sexp[0].lower() == "and":
+                        new_conjuncts = [
+                            c for c in prec_sexp[1:]
+                            if _norm_sexp(c) != target_norm
+                        ]
+                        if len(new_conjuncts) < len(prec_sexp) - 1:
+                            action_block[prec_idx + 1] = ["and"] + new_conjuncts if new_conjuncts else ["and"]
+                            modified = True
+                    elif isinstance(prec_sexp, list) and _norm_sexp(prec_sexp) == target_norm:
+                        action_block[prec_idx + 1] = ["and"]
+                        modified = True
+                elif kind == "eff_del":
+                    eff_idx = _get_section(action_block, ":effect")
+                    if eff_idx is None or eff_idx + 1 >= len(action_block):
+                        continue
+                    eff_sexp = action_block[eff_idx + 1]
+                    if isinstance(eff_sexp, list) and eff_sexp and isinstance(eff_sexp[0], str) and eff_sexp[0].lower() == "and":
+                        new_effs = [
+                            c for c in eff_sexp[1:]
+                            if _norm_sexp(c) != target_norm
+                        ]
+                        if len(new_effs) < len(eff_sexp) - 1:
+                            action_block[eff_idx + 1] = ["and"] + new_effs if new_effs else ["and"]
+                            modified = True
+
+            if not modified:
+                continue
+
+            cand_text = _sexp_to_str(domain_sexp_cand) + "\n"
+            cand_path = self.out_dir / f"relaxed_iter{iteration:03d}.pddl"
+            cand_path.write_text(cand_text, encoding="utf-8")
+            plan_file = str(self.out_dir / f"plan_relax_iter{iteration:03d}.soln")
+
+            plan_found, plan, elapsed = generator.generate_plan(
+                str(cand_path), problem_path, plan_file
+            )
+            if plan_found:
+                self.tried_relaxations.add(canon_key)
+                for kind, act_name, target_norm in relax_tuple:
+                    self.relaxed_candidates.setdefault(act_name, set()).add(target_norm)
+                    print(
+                        f"[HornSynthesizer] Minimal-Relaxation Abduction removed suspect {kind} "
+                        f"{target_norm} from {act_name}"
+                    )
+                return True, str(cand_path), plan, elapsed
+
+        return False, domain_path, [], 0.0
+
+    def rollback(self, iteration: int) -> tuple[bool, str]:
+        """
+        Backtrack if planner failed: pop the last added hypothesis,
+        mark it as refuted, and try the next surviving candidate if available.
+        """
+        while self.repair_history:
+            last = self.repair_history.pop()
+            act_name = last["action"]
+            chosen = last["chosen"]
+            prev_domain_path = last["domain_before_path"]
+            remaining = last["remaining"]
+
+            self.refuted_candidates.setdefault(act_name, set()).add(chosen)
+            if act_name in self.version_spaces:
+                self.version_spaces[act_name].discard(chosen)
+
+            print(f"[HornSynthesizer] Backtracking: refuted over-constraining hypothesis {chosen} on {act_name}")
+
+            while remaining:
+                next_cand = remaining.pop(0)
+                if next_cand in self.refuted_candidates.get(act_name, set()):
+                    continue
+
+                domain_text = Path(prev_domain_path).read_text(encoding="utf-8")
+                tokens = _tokenize(domain_text)
+                domain_sexp, _ = _parse_sexp(tokens)
+                domain_sexp_rep = copy.deepcopy(domain_sexp)
+                action = _find_action_block(domain_sexp_rep, act_name)
+                if action is not None:
+                    prec_idx = _get_section(action, ":precondition")
+                    if prec_idx is not None and prec_idx + 1 < len(action):
+                        prec = action[prec_idx + 1]
+                        cand_tokens = _tokenize(next_cand)
+                        cand_sexp, _ = _parse_sexp(cand_tokens) if cand_tokens else (None, 0)
+                        if cand_sexp is not None:
+                            if isinstance(prec, list) and prec and prec[0].lower() == "and":
+                                prec.append(cand_sexp)
+                            else:
+                                action[prec_idx + 1] = ["and", prec, cand_sexp]
+
+                repaired_text = _sexp_to_str(domain_sexp_rep) + "\n"
+                out_name = f"repaired_backtrack_iter{iteration:03d}.pddl"
+                out_path = self.out_dir / out_name
+                out_path.write_text(repaired_text, encoding="utf-8")
+
+                self.repair_history.append({
+                    "action": act_name,
+                    "chosen": next_cand,
+                    "domain_before_path": prev_domain_path,
+                    "remaining": remaining,
+                    "iteration": iteration,
+                    "chosen_score": last.get("chosen_score", 0),
+                })
+                print(f"[HornSynthesizer] Retrying with alternative candidate: {next_cand}")
+                return True, str(out_path)
+
+            return True, prev_domain_path
+
+        return False, ""
+
+    def repair(
+        self,
+        domain_path: str,
+        counterexample: Counterexample,
+        iteration: int,
+    ) -> str:
+        """
+        Repair M_hat by eliminating phantom preconditions or repairing 4-way effect deltas
+        using active counterexample feedback.
+        Supports both positive and negative precondition candidates, version space candidate
+        elimination, STRIPS effect coherence scoring, and bidirectional effect repair.
+        """
+        self._ensure_initial_preconditions(domain_path)
         domain_text = Path(domain_path).read_text(encoding="utf-8")
         tokens = _tokenize(domain_text)
         domain_sexp, _ = _parse_sexp(tokens)
@@ -413,7 +732,6 @@ class HornSynthesizer:
         act_name, args = _parse_action_tuple(counterexample.action)
 
         # 1. Parse domain using pddl library for type signatures and declarations
-        import pddl
         dom = pddl.parse_domain(domain_path)
         matching_actions = [a for a in dom.actions if a.name.lower() == act_name.lower()]
         if not matching_actions:
@@ -429,22 +747,22 @@ class HornSynthesizer:
         existing_preconditions: set[str] = set()
         if hasattr(pddl_act.precondition, "operands"):
             for op in pddl_act.precondition.operands:
-                existing_preconditions.add(str(op).strip().lower())
+                existing_preconditions.add(" ".join(str(op).split()).strip().lower())
         elif pddl_act.precondition is not None:
-            existing_preconditions.add(str(pddl_act.precondition).strip().lower())
+            existing_preconditions.add(" ".join(str(pddl_act.precondition).split()).strip().lower())
 
         # Extract added and deleted literals from effects
         deleted_literals: set[str] = set()
         added_literals: set[str] = set()
         if hasattr(pddl_act.effect, "operands"):
             for op in pddl_act.effect.operands:
-                s = str(op).strip().lower()
+                s = " ".join(str(op).split()).strip().lower()
                 if s.startswith("(not ") and s.endswith(")"):
                     deleted_literals.add(s[5:-1].strip())
                 else:
                     added_literals.add(s)
         elif pddl_act.effect is not None:
-            s = str(pddl_act.effect).strip().lower()
+            s = " ".join(str(pddl_act.effect).split()).strip().lower()
             if s.startswith("(not ") and s.endswith(")"):
                 deleted_literals.add(s[5:-1].strip())
             else:
@@ -459,16 +777,109 @@ class HornSynthesizer:
         # Parameter binding map: ?param_var -> arg_obj
         act_params = list(pddl_act.parameters)
         pmap = {p.name.lower(): arg_val.lower() for p, arg_val in zip(act_params, args)}
+        inv_pmap = {arg_val.lower(): "?" + p.name.lstrip("?").lower() for p, arg_val in zip(act_params, args)}
 
-        # 3. Generate candidate atomic preconditions (respecting types & distinct variables)
-        candidate_atoms: list[tuple[str, str]] = []  # (schema_atom, grounded_atom)
+        # -------------------------------------------------------------------
+        # TYPE III/IV BIDIRECTIONAL EFFECT REPAIR: 4-Way Effect Delta Induction
+        # -------------------------------------------------------------------
+        if counterexample.failure_type == "wrong_effect":
+            pred_lits = {tok.strip().lower() for tok in re.findall(r"\([^()]+\)", counterexample.predicted_next)}
+            actual_lits = {tok.strip().lower() for tok in re.findall(r"\([^()]+\)", counterexample.actual_next)}
+            actual_minus_pred = actual_lits - pred_lits
+            pred_minus_actual = pred_lits - actual_lits
+
+            eff_idx = _get_section(action, ":effect")
+            if eff_idx is not None and eff_idx + 1 < len(action):
+                eff = action[eff_idx + 1]
+                if not (isinstance(eff, list) and eff and isinstance(eff[0], str) and eff[0].lower() == "and"):
+                    action[eff_idx + 1] = ["and", eff]
+                    eff = action[eff_idx + 1]
+
+                def _has_eff_item(target_sexp: list) -> bool:
+                    target_norm = " ".join(_sexp_to_str(target_sexp).split()).strip().lower()
+                    return any(" ".join(_sexp_to_str(x).split()).strip().lower() == target_norm for x in eff[1:])
+
+                def _remove_eff_item(target_sexp: list) -> bool:
+                    target_norm = " ".join(_sexp_to_str(target_sexp).split()).strip().lower()
+                    before_len = len(eff)
+                    eff[1:] = [x for x in eff[1:] if " ".join(_sexp_to_str(x).split()).strip().lower() != target_norm]
+                    return len(eff) < before_len
+
+                # 1. Fluent is TRUE in M* next state (s*_{t+1}), FALSE in M_hat predicted next state:
+                #    - Since f in s*_{t+1}, (not f) cannot be in Del*(a): remove (not f) if present.
+                #    - If f not in s_t (or (not f) was not in Eff), f must be in Add*(a): add f if absent.
+                for lit in sorted(actual_minus_pred):
+                    raw_tokens = lit.strip("()").split()
+                    p_name = raw_tokens[0]
+                    p_args = raw_tokens[1:]
+                    if all(a in inv_pmap for a in p_args):
+                        lifted = [p_name] + [inv_pmap[a] for a in p_args]
+                        lifted_del = ["not", lifted]
+                        removed_spurious_del = False
+                        if self.allow_effect_deletion and _has_eff_item(lifted_del):
+                            _remove_eff_item(lifted_del)
+                            removed_spurious_del = True
+                            print(f"[HornSynthesizer] Removed spurious del effect on {act_name}: {lifted_del}")
+                        if (lit not in failure_state_literals or not removed_spurious_del) and not _has_eff_item(lifted):
+                            eff.append(lifted)
+                            print(f"[HornSynthesizer] Repaired missing add effect on {act_name}: {lifted}")
+
+                # 2. Fluent is FALSE in M* next state (s*_{t+1}), TRUE in M_hat predicted next state:
+                #    - Since f not in s*_{t+1}, f cannot be in Add*(a): remove f if present.
+                #    - If f in s_t (or f was not in Eff), (not f) must be in Del*(a): add (not f) if absent.
+                for lit in sorted(pred_minus_actual):
+                    raw_tokens = lit.strip("()").split()
+                    p_name = raw_tokens[0]
+                    p_args = raw_tokens[1:]
+                    if all(a in inv_pmap for a in p_args):
+                        lifted = [p_name] + [inv_pmap[a] for a in p_args]
+                        lifted_del = ["not", lifted]
+                        removed_spurious_add = False
+                        if self.allow_effect_deletion and _has_eff_item(lifted):
+                            _remove_eff_item(lifted)
+                            removed_spurious_add = True
+                            print(f"[HornSynthesizer] Removed spurious add effect on {act_name}: {lifted}")
+                        if (lit in failure_state_literals or not removed_spurious_add) and not _has_eff_item(lifted_del):
+                            eff.append(lifted_del)
+                            print(f"[HornSynthesizer] Repaired missing del effect on {act_name}: {lifted_del}")
+
+            repaired_text = _sexp_to_str(domain_sexp_rep) + "\n"
+            out_name = f"repaired_eff_iter{iteration:03d}.pddl"
+            out_path = self.out_dir / out_name
+            out_path.write_text(repaired_text, encoding="utf-8")
+            return str(out_path)
+
+        # Helper for transitive type hierarchy compatibility
+        dom_types = getattr(dom, "types", {})
+        def _is_type_compatible(p_type_tags: set[str], t_type_tags: set[str]) -> bool:
+            if not t_type_tags or not p_type_tags or "object" in t_type_tags:
+                return True
+            if t_type_tags & p_type_tags:
+                return True
+            for pt in p_type_tags:
+                curr = pt
+                while curr:
+                    if curr in t_type_tags:
+                        return True
+                    curr = dom_types.get(curr)
+            return False
+
+        # 3. Generate candidate atomic preconditions (both positive and negated)
+        candidate_atoms: list[tuple[str, str, bool]] = []  # (schema, grounded, is_negated)
         for pred in dom.predicates:
             pred_terms = list(pred.terms)
             arity = len(pred_terms)
             if arity == 0:
-                atom_schema = f"({pred.name})"
-                if atom_schema.lower() not in existing_preconditions:
-                    candidate_atoms.append((atom_schema, atom_schema.lower()))
+                pos_schema = f"({pred.name})"
+                if pos_schema.lower() not in existing_preconditions and pos_schema.lower() not in added_literals:
+                    candidate_atoms.append((pos_schema, pos_schema.lower(), False))
+                neg_schema = f"(not ({pred.name}))"
+                if (
+                    neg_schema.lower() not in existing_preconditions
+                    and pos_schema.lower() not in existing_preconditions
+                    and pos_schema.lower() not in deleted_literals
+                ):
+                    candidate_atoms.append((neg_schema, pos_schema.lower(), True))
             else:
                 matching_param_lists = []
                 for t in pred_terms:
@@ -476,8 +887,7 @@ class HornSynthesizer:
                     matches = []
                     for p in act_params:
                         p_types = set(p.type_tags) if p.type_tags else set()
-                        # Type compatibility check
-                        if not t_types or not p_types or (t_types & p_types) or ("thing" in t_types and "truck" in p_types):
+                        if _is_type_compatible(p_types, t_types):
                             matches.append(p.name)
                     matching_param_lists.append(matches)
 
@@ -485,51 +895,108 @@ class HornSynthesizer:
                     # Distinct parameters for distinct relational terms
                     if len(p_tuple) > 1 and len(set(p_tuple)) < len(p_tuple):
                         continue
-                    atom_schema = f"({pred.name} {' '.join('?' + p for p in p_tuple)})"
-                    if atom_schema.lower() in existing_preconditions:
-                        continue
-                    # An action cannot require what it explicitly adds
-                    if atom_schema.lower() in added_literals:
-                        continue
                     grounded = [pmap.get(pt.lower(), pt.lower()) for pt in p_tuple]
                     atom_grounded = f"({pred.name} {' '.join(grounded)})".lower()
-                    candidate_atoms.append((atom_schema, atom_grounded))
+
+                    # Positive candidate
+                    pos_schema = f"({pred.name} {' '.join('?' + p.lstrip('?') for p in p_tuple)})"
+                    if pos_schema.lower() not in existing_preconditions and pos_schema.lower() not in added_literals:
+                        candidate_atoms.append((pos_schema, atom_grounded, False))
+
+                    # Negated candidate: (not (pred ?args))
+                    neg_schema = f"(not ({pred.name} {' '.join('?' + p.lstrip('?') for p in p_tuple)}))"
+                    if (
+                        neg_schema.lower() not in existing_preconditions
+                        and pos_schema.lower() not in existing_preconditions
+                        and pos_schema.lower() not in deleted_literals
+                    ):
+                        candidate_atoms.append((neg_schema, atom_grounded, True))
 
         # 4. Version Space Candidate Elimination:
-        # Action execution failed in state s_t => the true precondition MUST BE FALSE in s_t.
-        # Any candidate whose grounded literal IS present in s_t is eliminated!
-        violated_candidates = [
-            atom_schema
-            for atom_schema, atom_grounded in candidate_atoms
-            if atom_grounded not in failure_state_literals
-        ]
+        # Action execution failed in state s_t => the true precondition MUST EVALUATE TO FALSE in s_t.
+        # - Positive literal (P x) evaluates to FALSE iff (P x) not in s_t.
+        # - Negated literal (not (P x)) evaluates to FALSE iff (P x) in s_t.
+        refuted = self.refuted_candidates.get(act_name, set())
+        violated_candidates = []
+        for schema, grounded, is_neg in candidate_atoms:
+            if schema in refuted:
+                continue
+            if (not is_neg and grounded not in failure_state_literals) or (is_neg and grounded in failure_state_literals):
+                violated_candidates.append(schema)
 
-        if act_name in self.version_spaces:
-            self.version_spaces[act_name] &= set(violated_candidates)
-        else:
-            self.version_spaces[act_name] = set(violated_candidates)
+        # Note: When an action has k >= 2 missing preconditions (p_1 ^ p_2), a failure state s_t
+        # falsifies AT LEAST ONE missing conjunct (~p_1 v ~p_2), not necessarily all of them.
+        # Candidates already committed to the action are filtered via existing_preconditions,
+        # and candidates refuted by planner backtracking are filtered via refuted_candidates.
+        self.version_spaces[act_name] = set(violated_candidates)
 
-        surviving = list(self.version_spaces[act_name])
+        surviving = [c for c in self.version_spaces[act_name] if c not in refuted]
 
-        # 5. Rank surviving candidates:
-        # Highest priority: Candidates that are explicitly deleted by the action (precondition-before-delete idiom)
+        # Compute unreferenced action parameters (parameters declared in :parameters but absent from
+        # existing preconditions and effects due to precondition omission)
+        referenced_params: set[str] = set()
+        for lit_str in existing_preconditions | deleted_literals | added_literals:
+            for tok in re.findall(r"\?[a-zA-Z0-9_-]+", lit_str):
+                referenced_params.add(tok.lower())
+        all_param_vars = {"?" + p.name.lstrip("?").lower() for p in act_params}
+        unbound_params = all_param_vars - referenced_params
+
+        # 5. Rank surviving candidates using STRIPS Effect & Parameter-Binding Coherence:
+        # Resource consumption: fluents deleted by action strongly imply precondition-before-delete (+10)
+        # Parameter-binding prevail: positive fluent binding an otherwise unreferenced action parameter (+9)
+        # Resource precondition: fluents added by action often require negation before add (+8)
         def candidate_score(c: str) -> int:
-            c_lower = c.strip().lower()
-            return 1 if c_lower in deleted_literals else 0
+            c_lower = " ".join(c.split()).strip().lower()
+            if c_lower in self.relaxed_candidates.get(act_name, set()):
+                return 15
+            if c_lower in deleted_literals:
+                return 10
+            if not c_lower.startswith("(not ") and unbound_params:
+                c_vars = {tok.lower() for tok in re.findall(r"\?[a-zA-Z0-9_-]+", c_lower)}
+                if c_vars & unbound_params:
+                    return 9
+            if c_lower.startswith("(not ") and c_lower.endswith(")"):
+                inner = c_lower[5:-1].strip()
+                if inner in added_literals:
+                    return 8
+            return 0
 
-        sorted_candidates = sorted(surviving, key=candidate_score, reverse=True)
+        if self.use_effect_coherence:
+            sorted_candidates = sorted(surviving, key=candidate_score, reverse=True)
+        else:
+            sorted_candidates = list(surviving)
+            self._rng.shuffle(sorted_candidates)
         chosen_candidate = sorted_candidates[0] if sorted_candidates else None
+        remaining_candidates = sorted_candidates[1:] if len(sorted_candidates) > 1 else []
 
         if action is not None and chosen_candidate:
             prec_idx = _get_section(action, ":precondition")
             if prec_idx is not None and prec_idx + 1 < len(action):
                 prec = action[prec_idx + 1]
-                if isinstance(prec, list) and prec[0].lower() == "and":
-                    cand_tokens = _tokenize(chosen_candidate)
-                    if cand_tokens:
-                        cand_sexp, _ = _parse_sexp(cand_tokens)
+                cand_tokens = _tokenize(chosen_candidate)
+                cand_sexp, _ = _parse_sexp(cand_tokens) if cand_tokens else (None, 0)
+                if cand_sexp is not None:
+                    if isinstance(prec, list) and prec and prec[0].lower() == "and":
                         prec.append(cand_sexp)
-                        print(f"[HornSynthesizer] Refined action {act_name} with: {chosen_candidate}")
+                    else:
+                        action[prec_idx + 1] = ["and", prec, cand_sexp]
+                    print(f"[HornSynthesizer] Refined action {act_name} with: {chosen_candidate}")
+
+            chosen_norm = " ".join(chosen_candidate.split()).strip().lower()
+            if chosen_norm in self.relaxed_candidates.get(act_name, set()):
+                # Precondition was previously relaxed and now proven necessary by oracle failure!
+                self.verified_necessary_preconditions.setdefault(act_name, set()).add(chosen_norm)
+                print(f"[HornSynthesizer] Locked verified necessary precondition {chosen_norm} on {act_name}")
+            else:
+                # Track in history stack for possible backtracking
+                self.repair_history.append({
+                    "action": act_name,
+                    "chosen": chosen_candidate,
+                    "domain_before_path": domain_path,
+                    "remaining": remaining_candidates,
+                    "iteration": iteration,
+                    "chosen_score": candidate_score(chosen_candidate) if self.use_effect_coherence else 0,
+                })
 
         repaired_text = _sexp_to_str(domain_sexp_rep) + "\n"
         out_name = f"repaired_iter{iteration:03d}.pddl"
@@ -554,10 +1021,12 @@ class CEGOMREngine:
       K ← 0; M̂ ← M̂_0
       WHILE K < max_iterations:
         π* ← Generator(M̂, s_0, S_g)          # Fast Downward
-        IF π* = NULL: RETURN (UNSOLVABLE, K)
+        IF π* = NULL:
+          TRY Backtrack(M̂) OR MinimalRelaxationAbduction(M̂)
+          IF still NULL: RETURN (UNSOLVABLE, K)
         (success, ξ) ← Verifier(π*, M*)        # Oracle execution
         IF success: RETURN (M̂, K)             # R_play = 0
-        M̂ ← Synthesizer(M̂, ξ)               # Horn-clause repair
+        M̂ ← Synthesizer(M̂, ξ)               # Bidirectional Horn-clause repair
         K ← K + |ξ.step_index|
       RETURN (FAILED, K)
     ──────────────────────────────────────────────────────
@@ -572,8 +1041,15 @@ class CEGOMREngine:
         )
         self.synthesizer = HornSynthesizer(
             out_dir=config.out_dir,
+            seed=config.seed,
+            use_effect_coherence=config.use_effect_coherence,
+            allow_effect_deletion=config.allow_effect_deletion,
         )
         self._rng = random.Random(config.seed)
+
+    def repair(self) -> CEGOMRResult:
+        """Alias for run() to provide clean semantic interface."""
+        return self.run()
 
     def run(self) -> CEGOMRResult:
         """Execute the full CEG-OMR repair loop and return a CEGOMRResult."""
@@ -582,6 +1058,7 @@ class CEGOMREngine:
 
         result = CEGOMRResult(success=False, total_queries=0, iterations=0)
         current_domain = self.config.domain_path
+        self.synthesizer._ensure_initial_preconditions(current_domain)
         t_start = time.perf_counter()
 
         print(f"[CEG-OMR] Starting repair: {Path(current_domain).name}")
@@ -598,9 +1075,92 @@ class CEGOMREngine:
             )
 
             if not plan_found:
-                result.error_message = f"Generator returned no plan at iteration {iteration}"
-                print("[CEG-OMR] No plan found (unsolvable or timeout). Stopping.")
-                break
+                if self.config.enable_backtracking:
+                    # 1. Always check first for structural self-contradictions (score 20) or SAS+ sink-violation delete effects (score 18)
+                    if self.config.allow_relaxation and bool(self.synthesizer.repair_history):
+                        relaxed_ok, relaxed_path, relaxed_plan, relaxed_elapsed = (
+                            self.synthesizer.relax_overconstrained_domain(
+                                current_domain,
+                                self.config.problem_path,
+                                self.generator,
+                                iteration,
+                                min_suspect_score=18,
+                            )
+                        )
+                        if relaxed_ok and relaxed_plan:
+                            current_domain = relaxed_path
+                            plan_found = True
+                            plan = relaxed_plan
+                            elapsed = relaxed_elapsed
+                            print(
+                                f"[CEG-OMR] Iter {iteration}: Minimal-Relaxation Abduction resolved structural "
+                                f"over-constraint → {Path(relaxed_path).name} ({len(plan)} steps)"
+                            )
+
+                    # 2. If the last added candidate was a low-confidence / speculative guess (score < 10)
+                    # and has alternatives, backtrack first before touching initial preconditions of M_hat_0.
+                    last_score = (
+                        self.synthesizer.repair_history[-1].get("chosen_score", 0)
+                        if self.synthesizer.repair_history else 0
+                    )
+                    if not plan_found and last_score >= 10 and self.config.allow_relaxation:
+                        relaxed_ok, relaxed_path, relaxed_plan, relaxed_elapsed = (
+                            self.synthesizer.relax_overconstrained_domain(
+                                current_domain,
+                                self.config.problem_path,
+                                self.generator,
+                                iteration,
+                                min_suspect_score=12,
+                            )
+                        )
+                        if relaxed_ok and relaxed_plan:
+                            current_domain = relaxed_path
+                            plan_found = True
+                            plan = relaxed_plan
+                            elapsed = relaxed_elapsed
+                            print(
+                                f"[CEG-OMR] Iter {iteration}: Minimal-Relaxation Abduction resolved compound "
+                                f"over-constraint → {Path(relaxed_path).name} ({len(plan)} steps)"
+                            )
+
+                    if not plan_found:
+                        rolled_back, rolled_path = self.synthesizer.rollback(iteration)
+                        if rolled_back and rolled_path:
+                            print(f"[CEG-OMR] Planner unsolvable. Backtracking to alternative hypothesis → {Path(rolled_path).name}")
+                            current_domain = rolled_path
+                            continue
+
+                        if self.config.allow_relaxation:
+                            relaxed_ok, relaxed_path, relaxed_plan, relaxed_elapsed = (
+                                self.synthesizer.relax_overconstrained_domain(
+                                    current_domain,
+                                    self.config.problem_path,
+                                    self.generator,
+                                    iteration,
+                                    min_suspect_score=0,
+                                )
+                            )
+                            if relaxed_ok and relaxed_plan:
+                                current_domain = relaxed_path
+                                plan_found = True
+                                plan = relaxed_plan
+                                elapsed = relaxed_elapsed
+                                print(
+                                    f"[CEG-OMR] Iter {iteration}: Minimal-Relaxation Abduction restored solvability "
+                                    f"→ {Path(relaxed_path).name} ({len(plan)} steps)"
+                                )
+                            else:
+                                result.error_message = f"Generator returned no plan at iteration {iteration} and no backtrack/relaxation hypothesis remaining"
+                                print("[CEG-OMR] No plan found and no backtrack/relaxation candidate remaining. Stopping.")
+                                break
+                        else:
+                            result.error_message = f"Generator returned no plan at iteration {iteration} and relaxation is disabled"
+                            print("[CEG-OMR] No plan found and relaxation is disabled. Stopping.")
+                            break
+                else:
+                    result.error_message = f"Generator returned no plan at iteration {iteration} and backtracking is disabled"
+                    print("[CEG-OMR] No plan found and no backtrack candidate remaining. Stopping.")
+                    break
 
             print(f"[CEG-OMR] Iter {iteration}: plan found ({len(plan)} steps, {elapsed:.2f}s)")
 
@@ -660,8 +1220,6 @@ class CEGOMREngine:
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
-
-import re
 
 
 def _parse_action_name(action_str: str) -> str:

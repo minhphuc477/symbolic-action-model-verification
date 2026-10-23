@@ -1,0 +1,17 @@
+\begin{table*}[t]
+\centering
+\caption{Fair Multi-Dimensional Benchmark: CEG-OMR vs. Active SAM, Passive SAM (with sample scaling $M \in \{50, 250\}$), and Naive Replanning Control across 4 canonical benchmark domains. All methods evaluated on identical problem definitions and verified on real Fast Downward plan executions in ground truth environments.}
+\label{tab:fair_comparison}
+\small
+\begin{tabular}{lcccccc}
+\toprule
+\textbf{Method} & \textbf{Learning Paradigm} & \textbf{Information Access} & \textbf{Success} & \textbf{PESR (\%)} & \textbf{Queries ($K_{\text{env}}$)} & \textbf{Precondition $F_1$} \\
+\midrule
+\textbf{CEG-OMR (Proposed)} & Active Closed-Loop & Counterexamples ($s_{\text{fail}}, a_t$) & \textbf{4/4 (100\%)} & \textbf{100.0\%} & \textbf{8.0 $\pm$ 4.5} & \textbf{0.983} \\
+\textbf{Active SAM} (Juba \& Stern 2021) & Active Closed-Loop & Counterexamples ($s_{\text{fail}}, a_t$) & 2/4 (50\%) & 50.0\% & 4.2 $\pm$ 4.6 & 0.914 \\
+\textbf{Passive SAM} ($M=50$) & Passive AML & Random Traces ($M=50$) & 3/4 (75\%) & 75.0\% & 50.0 $\pm$ 0.0 & 0.985 \\
+\textbf{Passive SAM} ($M=250$) & Passive AML & Random Traces ($M=250$) & 3/4 (75\%) & 75.0\% & 250.0 $\pm$ 0.0 & 0.985 \\
+\textbf{Naive Replanning} (Fox 2006) & Control (No Learning) & Execution Halt Only & 1/4 (25\%) & 25.0\% & 4.8 $\pm$ 2.2 & 0.000 \\
+\bottomrule
+\end{tabular}
+\end{table*}

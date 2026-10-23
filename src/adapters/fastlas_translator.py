@@ -26,11 +26,11 @@ def parse_prolog_atom(atom_str: str) -> tuple[str, list[str], bool]:
     if atom_str.startswith("not "):
         is_neg = True
         atom_str = atom_str[4:].strip()
-    
+
     match = re.match(r'^([a-zA-Z0-9_\-]+)(?:\((.*)\))?$', atom_str)
     if not match:
         return atom_str, [], is_neg
-    
+
     pred = match.group(1).replace("_", "").lower()
     args_raw = match.group(2)
     args = [a.strip() for a in args_raw.split(",")] if args_raw else []
@@ -58,7 +58,7 @@ def translate_fastlas_rules_to_pddl(rules_text: str, domain_name: str = "Blocksw
             head_str, body_str = line_clean.split(":-", 1)
         else:
             head_str, body_str = line_clean, ""
-            
+
         head_pred, head_args, _ = parse_prolog_atom(head_str)
         body_literals = []
         if body_str.strip():
@@ -108,30 +108,30 @@ def translate_fastlas_rules_to_pddl(rules_text: str, domain_name: str = "Blocksw
     for act_name in sorted(actions.keys()):
         data = actions[act_name]
         param_str = " ".join(f"?{v}" for v in data["args"])
-        
+
         output_lines.append(f"  (:action {act_name}")
         output_lines.append(f"    :parameters ({param_str})")
-        
+
         preconds = [format_pddl_literal(p, a, neg) for p, a, neg in data["preconditions"]]
         if preconds:
             output_lines.append(f"    :precondition (and {' '.join(sorted(preconds))})")
         else:
             output_lines.append("    :precondition (and)")
-            
+
         effects = [format_pddl_literal(p, a, neg) for p, a, neg in data["effects"]]
         if effects:
             output_lines.append(f"    :effect (and {' '.join(sorted(effects))})")
         else:
             output_lines.append("    :effect (and)")
         output_lines.append("  )\n")
-        
+
     output_lines.append(")\n")
     return "\n".join(output_lines)
 
 if __name__ == "__main__":
     import sys
     if len(sys.argv) > 1:
-        with open(sys.argv[1], "r", encoding="utf-8") as f:
+        with open(sys.argv[1], encoding="utf-8") as f:
             content = f.read()
         print(translate_fastlas_rules_to_pddl(content))
     else:

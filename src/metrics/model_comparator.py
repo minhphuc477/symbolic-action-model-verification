@@ -40,7 +40,7 @@ def normalize_atom(atom_str: str, param_map: dict[str, str]) -> str:
 def parse_pddl_actions(pddl_text: str) -> dict[str, dict[str, set[str]]]:
     actions = {}
     act_blocks = re.split(r'\(:action\s+', pddl_text, flags=re.IGNORECASE)[1:]
-    
+
     for block in act_blocks:
         name = block.split()[0].strip().lower().replace("_", "-")
         if name == "pick":
@@ -92,12 +92,12 @@ def compare_action_models(ground_truth_pddl: str, learned_pddl: str, domain_file
     pred_actions = parse_pddl_actions(learned_pddl)
 
     all_action_names = sorted(set(gt_actions.keys()).union(set(pred_actions.keys())))
-    
+
     total_d_triangle = 0
     total_tp = 0
     total_fp = 0
     total_fn = 0
-    
+
     action_breakdown = {}
 
     for a in all_action_names:
@@ -134,7 +134,7 @@ def compare_action_models(ground_truth_pddl: str, learned_pddl: str, domain_file
     precision = total_tp / (total_tp + total_fp) if (total_tp + total_fp) > 0 else 0.0
     recall = total_tp / (total_tp + total_fn) if (total_tp + total_fn) > 0 else 0.0
     f1 = 2 * precision * recall / (precision + recall) if (precision + recall) > 0 else 0.0
-    
+
     # Calculate genuine passive transition prediction accuracy A_pred over observed trajectories
     trans_eval = evaluate_transition_accuracy(learned_pddl)
     a_pred = trans_eval["a_pred"]
@@ -161,9 +161,9 @@ def compare_action_models(ground_truth_pddl: str, learned_pddl: str, domain_file
 if __name__ == "__main__":
     import sys
     if len(sys.argv) >= 3:
-        with open(sys.argv[1], "r", encoding="utf-8") as f:
+        with open(sys.argv[1], encoding="utf-8") as f:
             gt = f.read()
-        with open(sys.argv[2], "r", encoding="utf-8") as f:
+        with open(sys.argv[2], encoding="utf-8") as f:
             pred = f.read()
         res = compare_action_models(gt, pred, sys.argv[2])
         print(f"PDDL Valid: {res['pddl_valid']} ({res['validation_message']})")

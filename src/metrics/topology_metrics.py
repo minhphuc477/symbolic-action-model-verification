@@ -24,13 +24,13 @@ class TopologyMetricsCalculator:
     def calculate_omega(self, predicate_name):
         if not self.E_pred_raw:
             return 0.0
-        
+
         violated_count = 0
         for edge in self.E_pred_raw:
             violated_list = edge[3] if len(edge) > 3 else []
             if predicate_name in violated_list:
                 violated_count += 1
-                
+
         return violated_count / len(self.E_pred_raw)
 
     def calculate_per(self):
@@ -54,10 +54,10 @@ class TopologyMetricsCalculator:
         """
         if not self.E_pred:
             return 0.0, 0.0
-            
+
         sum_omega = sum(self.calculate_omega(pred) for pred in self.critical_preds)
         lower_bound = len(self.E_pred) * sum_omega
-        
+
         # Upper bound cascades through descendant subtree of depth (D - depth(p*))
         upper_bound = len(self.E_pred) * sum_omega * (branching_factor ** (max_depth - min_depth_omega))
         return lower_bound, upper_bound
@@ -87,14 +87,14 @@ class TopologyMetricsCalculator:
         per = self.calculate_per()
         cpr = self.calculate_cpr(learned_predicates)
         acc = self.calculate_accuracy()
-        
+
         omega_dict = {}
         for pred in self.critical_preds:
             omega_dict[pred] = self.calculate_omega(pred)
-            
+
         lower_b, upper_b = self.calculate_theorem1_bounds(branching_factor, max_depth)
         t_ratio = self.calculate_tightness_ratio(ged, lower_b)
-            
+
         return {
             "GED": ged,
             "Deleted_Real_Edges": deleted,

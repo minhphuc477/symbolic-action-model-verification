@@ -141,7 +141,7 @@ def compare_fairly(gt_pddl: str, learned_pddl: str, pddl_filepath: str | None = 
             act_d_tri = p_fp + p_fn
         else:
             act_d_tri = (p_fp + p_fn) + (e_fp + e_fn)
-            
+
         total_d_triangle += act_d_tri
 
         per_action_breakdown[a] = {
