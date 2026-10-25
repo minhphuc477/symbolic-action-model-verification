@@ -75,6 +75,7 @@ class CEGOMRConfig:
     problem_path: str              # Path to PDDL problem file
     ground_truth_domain: str = "" # Path to M* (ground truth) domain; if empty, same as domain_path
     max_repair_iterations: int = 100
+    max_environment_steps: int = 100
     seed: int = 42
     # Fast Downward invocation settings
     fast_downward_bin: str = "/opt/downward/fast-downward.py"  # Installed location in WSL
@@ -119,7 +120,7 @@ class Counterexample:
 
     def __str__(self) -> str:
         return (
-            f"ξ_{self.step_index}: action={self.action} | "
+            f"xi_{self.step_index}: action={self.action} | "
             f"predicted={self.predicted_next[:40]}... | "
             f"actual={self.actual_next[:40]}... | type={self.failure_type}"
         )
@@ -1094,7 +1095,7 @@ class CEGOMREngine:
                             elapsed = relaxed_elapsed
                             print(
                                 f"[CEG-OMR] Iter {iteration}: Minimal-Relaxation Abduction resolved structural "
-                                f"over-constraint → {Path(relaxed_path).name} ({len(plan)} steps)"
+                                f"over-constraint -> {Path(relaxed_path).name} ({len(plan)} steps)"
                             )
 
                     # 2. If the last added candidate was a low-confidence / speculative guess (score < 10)
@@ -1120,13 +1121,13 @@ class CEGOMREngine:
                             elapsed = relaxed_elapsed
                             print(
                                 f"[CEG-OMR] Iter {iteration}: Minimal-Relaxation Abduction resolved compound "
-                                f"over-constraint → {Path(relaxed_path).name} ({len(plan)} steps)"
+                                f"over-constraint -> {Path(relaxed_path).name} ({len(plan)} steps)"
                             )
 
                     if not plan_found:
                         rolled_back, rolled_path = self.synthesizer.rollback(iteration)
                         if rolled_back and rolled_path:
-                            print(f"[CEG-OMR] Planner unsolvable. Backtracking to alternative hypothesis → {Path(rolled_path).name}")
+                            print(f"[CEG-OMR] Planner unsolvable. Backtracking to alternative hypothesis -> {Path(rolled_path).name}")
                             current_domain = rolled_path
                             continue
 
@@ -1147,7 +1148,7 @@ class CEGOMREngine:
                                 elapsed = relaxed_elapsed
                                 print(
                                     f"[CEG-OMR] Iter {iteration}: Minimal-Relaxation Abduction restored solvability "
-                                    f"→ {Path(relaxed_path).name} ({len(plan)} steps)"
+                                    f"-> {Path(relaxed_path).name} ({len(plan)} steps)"
                                 )
                             else:
                                 result.error_message = f"Generator returned no plan at iteration {iteration} and no backtrack/relaxation hypothesis remaining"
@@ -1183,12 +1184,12 @@ class CEGOMREngine:
                 break
 
             result.counterexamples.append(counterexample)
-            print(f"[CEG-OMR] Iter {iteration}: counterexample found — {counterexample}")
+            print(f"[CEG-OMR] Iter {iteration}: counterexample found -- {counterexample}")
 
             # ── SYNTHESIZER ──────────────────────────────────────────────
             repaired_path = self.synthesizer.repair(current_domain, counterexample, iteration)
             current_domain = repaired_path
-            print(f"[CEG-OMR] Iter {iteration}: domain repaired → {Path(repaired_path).name}")
+            print(f"[CEG-OMR] Iter {iteration}: domain repaired -> {Path(repaired_path).name}")
 
         result.wall_clock_seconds = time.perf_counter() - t_start
         result.repaired_domain_path = current_domain

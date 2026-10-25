@@ -56,9 +56,62 @@ class SAMBaseline:
     Handles both passive learning from random traces and active closed-loop learning.
     """
 
-    def __init__(self, seed: int = 42):
+    def __init__(
+        self,
+        domain_path: str = "",
+        problem_path: str = "",
+        gt_domain_path: str = "",
+        seed: int = 42,
+    ):
+        self.domain_path = domain_path
+        self.problem_path = problem_path
+        self.gt_domain_path = gt_domain_path
         self.seed = seed
         self._rng = random.Random(seed)
+
+    def run_active_counterexample_exploration(
+        self,
+        domain_path: str = "",
+        problem_path: str = "",
+        gt_domain_path: str = "",
+        max_steps: int = 20,
+        target_action: str = "",
+        missing_atom: str = "",
+        out_dir: str = "domains/mutated/",
+    ) -> SAMResult:
+        dom = domain_path or self.domain_path
+        prob = problem_path or self.problem_path
+        gt = gt_domain_path or self.gt_domain_path
+        return self.run_active_sam(
+            domain_path=dom,
+            problem_path=prob,
+            gt_domain_path=gt,
+            max_iterations=max_steps,
+            out_dir=out_dir,
+        )
+
+    def run_passive_exploration(
+        self,
+        domain_path: str = "",
+        problem_path: str = "",
+        gt_domain_path: str = "",
+        sample_budgets: list[int] | None = None,
+        target_action: str = "",
+        missing_atom: str = "",
+        out_dir: str = "domains/mutated/",
+    ) -> dict[int, SAMResult]:
+        dom = domain_path or self.domain_path
+        prob = problem_path or self.problem_path
+        gt = gt_domain_path or self.gt_domain_path
+        return self.run_passive_sam(
+            domain_path=dom,
+            problem_path=prob,
+            gt_domain_path=gt,
+            sample_budgets=sample_budgets,
+            target_action=target_action,
+            missing_atom=missing_atom,
+            out_dir=out_dir,
+        )
 
     def _is_type_compatible(self, dom: Any, p_type_tags: set[str], t_type_tags: set[str]) -> bool:
         if not t_type_tags or not p_type_tags or "object" in t_type_tags or "thing" in t_type_tags:

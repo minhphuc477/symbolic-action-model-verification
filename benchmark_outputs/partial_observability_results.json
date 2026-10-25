@@ -3,13 +3,13 @@
     "1.0": {
       "success": true,
       "queries": 5,
-      "iterations": 4,
+      "iterations": 3,
       "error": ""
     },
     "0.8": {
       "success": true,
       "queries": 5,
-      "iterations": 4,
+      "iterations": 3,
       "error": ""
     },
     "0.6": {
@@ -23,19 +23,19 @@
     "1.0": {
       "success": true,
       "queries": 9,
-      "iterations": 3,
+      "iterations": 4,
       "error": ""
     },
     "0.8": {
       "success": true,
       "queries": 9,
-      "iterations": 3,
+      "iterations": 4,
       "error": ""
     },
     "0.6": {
       "success": true,
       "queries": 9,
-      "iterations": 3,
+      "iterations": 4,
       "error": ""
     }
   },

@@ -479,7 +479,7 @@ def evaluate_single_run(
 PLAN_CACHE = {}
 GT_COST_CACHE = {}
 
-def main():
+def main(config_file: str | None = None):
     print("=" * 80)
     print("PHASE 4 WEEK 3 & 4: MEASURING LEARNING BURDEN B_bounded (1,080-RUN MATRIX)")
     print("=" * 80)

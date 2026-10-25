@@ -50,6 +50,8 @@ locm_repo/
 sas_plan*
 *.soln
 repair_logs/
+domains/mutated/ablation/
+domains/mutated/bidirectional_bench/
 .agents/*
 !.agents/skills/
 .aris/

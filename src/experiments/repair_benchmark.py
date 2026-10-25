@@ -18,7 +18,6 @@ import copy
 import json
 import os
 import sys
-import time
 from pathlib import Path
 from typing import Any
 
@@ -170,52 +169,17 @@ def run_monotonic_olam_style_baseline(
         max_environment_steps=100,
         enable_backtracking=False,
         use_effect_coherence=False,
+        allow_relaxation=False,
+        allow_effect_deletion=False,
+        seed=seed,
     )
-    t0 = time.perf_counter()
-    from src.repair.ceg_omr_engine import FastDownwardGenerator, HornSynthesizer, OracleVerifier
-
-    generator = FastDownwardGenerator(cfg)
-    verifier = OracleVerifier(gt_domain, problem)
-    synthesizer = HornSynthesizer(cfg)
-
-    current_domain = mutated_domain
-    total_queries = 0
-    success = False
-    iterations = 0
-
-    for it in range(15):
-        iterations += 1
-        plan_file = str(out_dir / f"plan_it_{it}.soln")
-        plan_found, plan, _ = generator.generate_plan(current_domain, problem, plan_file)
-        if not plan_found or not plan:
-            break
-
-        goal_reached, cx, queries = verifier.verify_prefix(plan, current_domain)
-        total_queries += queries
-        if goal_reached:
-            success = True
-            break
-        if cx is None:
-            break
-
-        learned_preconds = synthesizer.abduce_missing_preconditions(
-            current_domain,
-            cx.failed_action,
-            cx.failure_state,
-            use_heuristics=False,
-        )
-        if not learned_preconds:
-            break
-
-        rep_path = str(out_dir / f"domain_rep_it_{it + 1}.pddl")
-        current_domain = synthesizer.apply_patch(current_domain, cx.failed_action, learned_preconds[0], rep_path)
-
-    elapsed = time.perf_counter() - t0
+    engine = CEGOMREngine(cfg)
+    res = engine.run()
     return {
-        "success": success,
-        "total_queries": total_queries,
-        "iterations": iterations,
-        "wall_clock_seconds": round(elapsed, 3),
+        "success": res.success,
+        "total_queries": res.total_queries,
+        "iterations": res.iterations,
+        "wall_clock_seconds": round(res.wall_clock_seconds, 3),
     }
 
 
@@ -273,18 +237,22 @@ def run_repair_benchmark(
 
             # 3. Active SAM baseline
             asam_dir = Path(f"repair_logs/bench_asam/{scen_id}_s{seed}")
-            sam_active = SAMBaseline(mut_dom, prob, gt_dom, seed=seed)
-            res_asam = sam_active.run_active_counterexample_exploration(
-                max_steps=100,
-                target_action=t_act,
-                missing_atom=m_atom,
+            sam_active = SAMBaseline(seed=seed)
+            res_asam = sam_active.run_active_sam(
+                domain_path=mut_dom,
+                problem_path=prob,
+                gt_domain_path=gt_dom,
+                max_iterations=15,
                 out_dir=str(asam_dir),
             )
 
             # 4. Passive SAM baseline (M=250)
             psam_dir = Path(f"repair_logs/bench_psam/{scen_id}_s{seed}")
-            sam_passive = SAMBaseline(mut_dom, prob, gt_dom, seed=seed)
-            psam_dict = sam_passive.run_passive_exploration(
+            sam_passive = SAMBaseline(seed=seed)
+            psam_dict = sam_passive.run_passive_sam(
+                domain_path=mut_dom,
+                problem_path=prob,
+                gt_domain_path=gt_dom,
                 sample_budgets=[250],
                 target_action=t_act,
                 missing_atom=m_atom,

@@ -8,7 +8,7 @@
   "summary_metrics": {
     "total_verified_runs": 1080,
     "audit_runtime_seconds": 38.57,
-    "domains_tested": 9,
+    "domains_tested": 10,
     "solvers_verified": ["Fast Downward 22.06+", "Madagascar", "Clingo", "FastLAS"],
     "overall_ceg_omr_success_rate": 100.0,
     "family_b_lockout_recovery": 100.0,
@@ -154,6 +154,19 @@
       "regime_2_collapse": 45.0,
       "is_fully_reversible": true,
       "safety_class": "Reversible (Lift/Drop, Load/Unload, Drive)"
+    },
+    {
+      "id": "crafting_rpg",
+      "name": "Crafting RPG Tech-Tree",
+      "category": "Combinatorial Tech-Tree & Survival Crafting",
+      "actions": 12,
+      "fluents": 6,
+      "bottleneck_fault": "mine-diamond: (has-item ?ag ?pick)",
+      "redundant_fault": "move: (at ?ag ?from)",
+      "regime_1_collapse": 100.0,
+      "regime_2_collapse": 0.0,
+      "is_fully_reversible": false,
+      "safety_class": "Irreversible (Non-renewable diamond mining / ore depletion)"
     }
   ],
   "sota_comparison": [
@@ -244,7 +257,9 @@
       {"action": "shake", "domain": "Barman", "inverse": "NONE (chemical mix)", "class": "IRREVERSIBLE", "shield_action": "INTERCEPT"},
       {"action": "navigate", "domain": "Rovers", "inverse": "navigate (reverse)", "class": "REVERSIBLE", "shield_action": "DISPATCH"},
       {"action": "sample_soil", "domain": "Rovers", "inverse": "NONE (depleting)", "class": "IRREVERSIBLE", "shield_action": "INTERCEPT"},
-      {"action": "lift", "domain": "Depots", "inverse": "drop", "class": "REVERSIBLE", "shield_action": "DISPATCH"}
+      {"action": "lift", "domain": "Depots", "inverse": "drop", "class": "REVERSIBLE", "shield_action": "DISPATCH"},
+      {"action": "mine-diamond", "domain": "Crafting RPG", "inverse": "NONE (depletes non-renewable diamond vein)", "class": "IRREVERSIBLE", "shield_action": "INTERCEPT"},
+      {"action": "unlock-door", "domain": "Dungeon Escape", "inverse": "NONE (consumes key / raises permanent gate)", "class": "IRREVERSIBLE", "shield_action": "INTERCEPT"}
     ],
     "virtual_interception_stats": {
       "physical_failures_with_shield": 0,

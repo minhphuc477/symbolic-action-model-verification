@@ -115,12 +115,14 @@ class FastDownwardRunner:
         wsl_dom = WSLHarness.to_wsl_path(domain_file)
         wsl_prob = WSLHarness.to_wsl_path(problem_file)
         wsl_plan = WSLHarness.to_wsl_path(plan_out)
+        wsl_sas = f"{wsl_plan}.sas"
 
         cmd = (
             f"python3 {self.fd_path} "
+            f"--sas-file {wsl_sas} "
             f"--plan-file {wsl_plan} "
             f"{wsl_dom} {wsl_prob} "
-            f"--search '{search_config}'"
+            f"--search '{search_config}' && rm -f {wsl_sas}"
         )
 
         code, out, err, elapsed = WSLHarness.run_cmd(cmd, timeout=timeout)

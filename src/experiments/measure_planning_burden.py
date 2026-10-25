@@ -42,12 +42,12 @@ def get_full_24intervention_matrix(
             dom_cfg["goal"] = set(dom_cfg["goal"])
     return domains
 
-def run_planning_burden_suite() -> dict[str, Any]:
+def run_planning_burden_suite(config_path: str = "configs/interventions/matrix_24.yaml") -> dict[str, Any]:
     print("=" * 78)
     print("PHASE 4 WEEK 2: MEASURING PLANNING BURDEN H_P ACROSS 24 INTERVENTIONS")
     print("=" * 78)
 
-    matrix = get_full_24intervention_matrix()
+    matrix = get_full_24intervention_matrix(config_path)
     results = {
         "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "domains": {}

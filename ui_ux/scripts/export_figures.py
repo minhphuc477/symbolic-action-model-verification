@@ -127,6 +127,45 @@ def export_all_figures():
     plt.close(fig)
     print("  [+] Saved fig3_safety_shield_interception (.pdf & .png)")
 
+    # -------------------------------------------------------------
+    # Figure 4: Search Space Collapse in Complex Game Environments
+    # -------------------------------------------------------------
+    fig, ax = plt.subplots(figsize=(8, 4.5), dpi=300)
+    environments = [
+        "Toy Dungeon\n(5 Rooms, 1 Key)",
+        "Multi-Tier Dungeon\n(10 Rooms, 3 Keys)",
+        "Crafting RPG\n(Diamond Quest Tech-Tree)"
+    ]
+    gt_plan_lens = [6, 13, 17]
+    hallucinated_lens = [3, 2, 4]
+
+    y = np.arange(len(environments))
+    height = 0.35
+
+    rects_gt = ax.barh(y - height/2, gt_plan_lens, height, label="Ground-Truth Valid Plan (M*)", color="#059669", alpha=0.9, edgecolor="black", linewidth=0.8)
+    rects_hal = ax.barh(y + height/2, hallucinated_lens, height, label="Hallucinated Sequence Break (Omitted Prereq)", color="#e11d48", alpha=0.9, edgecolor="black", linewidth=0.8)
+
+    ax.set_xlabel("Plan Length (Actions)")
+    ax.set_title("Figure 4: Search-Tree Topology Collapse & Sequence Breaking in Game Domains")
+    ax.set_yticks(y)
+    ax.set_yticklabels(environments)
+    ax.set_xlim(0, 20)
+    ax.legend(loc="lower right", frameon=True)
+
+    for bar in rects_gt:
+        w = bar.get_width()
+        ax.annotate(f"{int(w)} steps", xy=(w, bar.get_y() + bar.get_height() / 2), xytext=(5, 0), textcoords="offset points", ha="left", va="center", fontsize=9, fontweight="bold")
+    for bar in rects_hal:
+        w = bar.get_width()
+        ax.annotate(f"{int(w)} steps", xy=(w, bar.get_y() + bar.get_height() / 2), xytext=(5, 0), textcoords="offset points", ha="left", va="center", fontsize=9, fontweight="bold")
+
+    ax.invert_yaxis()
+    plt.tight_layout()
+    fig.savefig(export_dir / "fig4_complex_game_topology_collapse.pdf", format="pdf")
+    fig.savefig(export_dir / "fig4_complex_game_topology_collapse.png", format="png", dpi=300)
+    plt.close(fig)
+    print("  [+] Saved fig4_complex_game_topology_collapse (.pdf & .png)")
+
     print("[*] All publication figures successfully generated!")
 
 

@@ -71,6 +71,7 @@ def run_ablation_suite(
 
             for mode in ablation_modes:
                 mode_name = mode["name"]
+                mode_slug = mode.get("id", mode_name.replace(" ", "_").replace(":", "_"))
                 bt = mode["enable_backtracking"]
                 coh = mode["use_effect_coherence"]
 
@@ -80,7 +81,7 @@ def run_ablation_suite(
                     ground_truth_domain=dgt,
                     max_repair_iterations=20,
                     seed=42,
-                    out_dir=f"repair_logs/ablation_{dname}_{pname}_k{k}_{mode_name.replace(' ', '_')}/",
+                    out_dir=f"repair_logs/ablation_{dname}_{pname}_k{k}_{mode_slug}/",
                     enable_backtracking=bt,
                     use_effect_coherence=coh,
                 )
