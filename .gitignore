@@ -50,7 +50,8 @@ locm_repo/
 sas_plan*
 *.soln
 repair_logs/
-.agents/
+.agents/*
+!.agents/skills/
 .aris/
 .licenses/
 .ruff_cache/
