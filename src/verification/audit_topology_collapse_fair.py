@@ -38,15 +38,15 @@ from pathlib import Path
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
-from src.interventions.pddl_mutator import (
-    _find_action_block,
-    _get_section,
-    _parse_sexp,
-    _sexp_to_str,
-    _tokenize,
-)
 from src.metrics.transition_accuracy import parse_pddl_model
 from src.runners.wsl_harness import WSLHarness
+from src.utils.sexp import (
+    find_action_block,
+    get_section,
+    parse_sexp,
+    sexp_to_str,
+    tokenize,
+)
 
 FD = "/opt/downward/fast-downward.py"
 PLANNERS = {
@@ -68,20 +68,20 @@ def wilson(k: int, n: int, z: float = 1.96) -> tuple[float, float]:
 
 def enumerate_omissions(domain_text: str) -> list[tuple[str, str]]:
     """Return every (action, precondition-atom-string) in the domain."""
-    sexp, _ = _parse_sexp(_tokenize(domain_text))
+    sexp, _ = parse_sexp(tokenize(domain_text))
     out = []
 
     def walk(node):
         if isinstance(node, list):
             if len(node) >= 2 and node[0] == ":action":
                 name = node[1]
-                idx = _get_section(node, ":precondition")
+                idx = get_section(node, ":precondition")
                 prec = node[idx + 1]
                 if isinstance(prec, list) and prec and prec[0] == "and":
                     for item in prec[1:]:
-                        out.append((name, _sexp_to_str(item).replace("\n", " ")))
+                        out.append((name, sexp_to_str(item).replace("\n", " ")))
                 else:
-                    out.append((name, _sexp_to_str(prec).replace("\n", " ")))
+                    out.append((name, sexp_to_str(prec).replace("\n", " ")))
             for it in node:
                 walk(it)
 
@@ -90,20 +90,20 @@ def enumerate_omissions(domain_text: str) -> list[tuple[str, str]]:
 
 
 def omit(domain_text: str, action: str, atom: str) -> str:
-    sexp, _ = _parse_sexp(_tokenize(domain_text))
-    blk = _find_action_block(sexp, action)
-    idx = _get_section(blk, ":precondition")
+    sexp, _ = parse_sexp(tokenize(domain_text))
+    blk = find_action_block(sexp, action)
+    idx = get_section(blk, ":precondition")
     prec = blk[idx + 1]
     target = re.sub(r"\s+", " ", atom)
     if isinstance(prec, list) and prec and prec[0] == "and":
         keep = [prec[0]] + [
             it for it in prec[1:]
-            if re.sub(r"\s+", " ", _sexp_to_str(it).replace("\n", " ")).replace("( ", "(").replace(" )", ")") != target
+            if re.sub(r"\s+", " ", sexp_to_str(it).replace("\n", " ")).replace("( ", "(").replace(" )", ")") != target
         ]
         blk[idx + 1] = keep
     else:
         blk[idx + 1] = ["and"]
-    return _sexp_to_str(sexp) + "\n"
+    return sexp_to_str(sexp) + "\n"
 
 
 # ------------------------------------------------------------ task generators

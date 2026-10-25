@@ -75,7 +75,11 @@ def sexp_to_str(sexp: Any, indent: int = 0) -> str:
 
 def norm_sexp(sexp: Any) -> str:
     """Normalize an S-expression into a canonical single-space lowercase string."""
-    return " ".join(sexp_to_str(sexp).split()).strip().lower()
+    raw = " ".join(sexp_to_str(sexp).split()).strip().lower()
+    raw = raw.replace("( ", "(").replace(" )", ")")
+    while "( " in raw or " )" in raw:
+        raw = raw.replace("( ", "(").replace(" )", ")")
+    return raw
 
 
 def find_action_block(sexp: list, action_name: str) -> list | None:

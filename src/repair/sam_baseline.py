@@ -27,12 +27,12 @@ from src.repair.config import CEGOMRConfig
 from src.repair.generator import FastDownwardGenerator
 from src.repair.verifier import OracleVerifier
 from src.utils.sexp import (
-    _find_action_block,
-    _get_section,
-    _parse_action_tuple,
-    _parse_sexp,
-    _sexp_to_str,
-    _tokenize,
+    find_action_block,
+    get_section,
+    parse_action_tuple,
+    parse_sexp,
+    sexp_to_str,
+    tokenize,
 )
 
 
@@ -279,8 +279,8 @@ class SAMBaseline:
             # 3. Authentic SAM Domain Patching:
             # Add ALL surviving invariant schemas not already present in the action's precondition.
             # (If target_executions is empty, all candidates survive, conservatively blocking the unobserved action.)
-            tokens = _tokenize(domain_text)
-            sexp, _ = _parse_sexp(tokens)
+            tokens = tokenize(domain_text)
+            sexp, _ = parse_sexp(tokens)
             sexp_copy = copy.deepcopy(sexp)
 
             norm_missing = missing_atom.strip().lower()
@@ -290,23 +290,23 @@ class SAMBaseline:
 
             repaired_path = domain_path
             if surviving_ordered and target_action:
-                action_block = _find_action_block(sexp_copy, target_action)
+                action_block = find_action_block(sexp_copy, target_action)
                 if action_block:
-                    prec_idx = _get_section(action_block, ":precondition")
+                    prec_idx = get_section(action_block, ":precondition")
                     if prec_idx is not None and prec_idx + 1 < len(action_block):
                         prec = action_block[prec_idx + 1]
                         existing_strs = set()
                         if isinstance(prec, list) and prec and prec[0].lower() == "and":
                             for item in prec[1:]:
-                                existing_strs.add(_sexp_to_str(item).strip().lower())
+                                existing_strs.add(sexp_to_str(item).strip().lower())
                         elif isinstance(prec, list):
-                            existing_strs.add(_sexp_to_str(prec).strip().lower())
+                            existing_strs.add(sexp_to_str(prec).strip().lower())
 
                         for cand_str in surviving_ordered:
                             if cand_str.strip().lower() in existing_strs:
                                 continue
-                            cand_tokens = _tokenize(cand_str)
-                            cand_sexp, _ = _parse_sexp(cand_tokens) if cand_tokens else (None, 0)
+                            cand_tokens = tokenize(cand_str)
+                            cand_sexp, _ = parse_sexp(cand_tokens) if cand_tokens else (None, 0)
                             if cand_sexp:
                                 if isinstance( action_block[prec_idx + 1], list) and action_block[prec_idx + 1] and action_block[prec_idx + 1][0].lower() == "and":
                                     action_block[prec_idx + 1].append(cand_sexp)
@@ -315,7 +315,7 @@ class SAMBaseline:
                                 existing_strs.add(cand_str.strip().lower())
 
                 out_pddl = out_path_dir / f"repaired_sam_passive_M{budget}.pddl"
-                out_pddl.write_text(_sexp_to_str(sexp_copy) + "\n", encoding="utf-8")
+                out_pddl.write_text(sexp_to_str(sexp_copy) + "\n", encoding="utf-8")
                 repaired_path = str(out_pddl)
 
             # 4. End-to-end evaluation via Fast Downward & OracleVerifier
@@ -396,7 +396,7 @@ class SAMBaseline:
                 break
 
             # Process negative counterexample tuple (s_fail, action, FAILURE)
-            act_name, args = _parse_action_tuple(counterexample.action)
+            act_name, args = parse_action_tuple(counterexample.action)
             act_obj = next((a for a in dom.actions if a.name.lower() == act_name.lower()), None)
             if not act_obj:
                 break
@@ -433,15 +433,15 @@ class SAMBaseline:
             chosen_candidate = self._rng.choice(violating_candidates)
 
             # Patch domain
-            tokens = _tokenize(domain_text)
-            sexp, _ = _parse_sexp(tokens)
-            action_block = _find_action_block(sexp, act_name)
+            tokens = tokenize(domain_text)
+            sexp, _ = parse_sexp(tokens)
+            action_block = find_action_block(sexp, act_name)
             if action_block:
-                prec_idx = _get_section(action_block, ":precondition")
+                prec_idx = get_section(action_block, ":precondition")
                 if prec_idx is not None and prec_idx + 1 < len(action_block):
                     prec = action_block[prec_idx + 1]
-                    cand_tokens = _tokenize(chosen_candidate)
-                    cand_sexp, _ = _parse_sexp(cand_tokens) if cand_tokens else (None, 0)
+                    cand_tokens = tokenize(chosen_candidate)
+                    cand_sexp, _ = parse_sexp(cand_tokens) if cand_tokens else (None, 0)
                     if cand_sexp:
                         if isinstance(prec, list) and prec and prec[0].lower() == "and":
                             prec.append(cand_sexp)
@@ -449,7 +449,7 @@ class SAMBaseline:
                             action_block[prec_idx + 1] = ["and", prec, cand_sexp]
 
             repaired_out = out_path_dir / f"repaired_active_sam_iter{iteration:03d}.pddl"
-            repaired_out.write_text(_sexp_to_str(sexp) + "\n", encoding="utf-8")
+            repaired_out.write_text(sexp_to_str(sexp) + "\n", encoding="utf-8")
             current_domain = str(repaired_out)
 
         elapsed = time.perf_counter() - t0

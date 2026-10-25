@@ -29,41 +29,41 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../.
 
 from src.repair import CEGOMRConfig, CEGOMREngine, SAMBaseline
 from src.utils.sexp import (
-    _find_action_block,
-    _get_section,
-    _parse_sexp,
-    _sexp_to_str,
-    _tokenize,
+    find_action_block,
+    get_section,
+    parse_sexp,
+    sexp_to_str,
+    tokenize,
 )
 
 
 def _mutate_domain_sexp(domain_path: str, mutator_fn, out_path: Path) -> str:
     text = Path(domain_path).read_text(encoding="utf-8")
-    tokens = _tokenize(text)
-    sexp, _ = _parse_sexp(tokens)
+    tokens = tokenize(text)
+    sexp, _ = parse_sexp(tokens)
     sexp_copy = copy.deepcopy(sexp)
     mutator_fn(sexp_copy)
     out_path.parent.mkdir(parents=True, exist_ok=True)
-    out_path.write_text(_sexp_to_str(sexp_copy) + "\n", encoding="utf-8")
+    out_path.write_text(sexp_to_str(sexp_copy) + "\n", encoding="utf-8")
     return str(out_path)
 
 
 def _remove_precondition_atom(sexp: list, action_name: str, target_norm: str) -> None:
-    act = _find_action_block(sexp, action_name)
+    act = find_action_block(sexp, action_name)
     if act is None:
         raise ValueError(f"Action {action_name} not found")
-    idx = _get_section(act, ":precondition")
+    idx = get_section(act, ":precondition")
     prec = act[idx + 1]
-    prec[1:] = [c for c in prec[1:] if _sexp_to_str(c).strip().lower() != target_norm.lower()]
+    prec[1:] = [c for c in prec[1:] if sexp_to_str(c).strip().lower() != target_norm.lower()]
 
 
 def _add_precondition_atom(sexp: list, action_name: str, atom_str: str) -> None:
-    act = _find_action_block(sexp, action_name)
+    act = find_action_block(sexp, action_name)
     if act is None:
         raise ValueError(f"Action {action_name} not found")
-    idx = _get_section(act, ":precondition")
+    idx = get_section(act, ":precondition")
     prec = act[idx + 1]
-    atom_sexp, _ = _parse_sexp(_tokenize(atom_str))
+    atom_sexp, _ = parse_sexp(tokenize(atom_str))
     if isinstance(prec, list) and prec and prec[0].lower() == "and":
         prec.append(atom_sexp)
     else:
@@ -71,21 +71,21 @@ def _add_precondition_atom(sexp: list, action_name: str, atom_str: str) -> None:
 
 
 def _remove_effect_atom(sexp: list, action_name: str, target_norm: str) -> None:
-    act = _find_action_block(sexp, action_name)
+    act = find_action_block(sexp, action_name)
     if act is None:
         raise ValueError(f"Action {action_name} not found")
-    idx = _get_section(act, ":effect")
+    idx = get_section(act, ":effect")
     eff = act[idx + 1]
-    eff[1:] = [c for c in eff[1:] if _sexp_to_str(c).strip().lower() != target_norm.lower()]
+    eff[1:] = [c for c in eff[1:] if sexp_to_str(c).strip().lower() != target_norm.lower()]
 
 
 def _add_effect_atom(sexp: list, action_name: str, atom_str: str) -> None:
-    act = _find_action_block(sexp, action_name)
+    act = find_action_block(sexp, action_name)
     if act is None:
         raise ValueError(f"Action {action_name} not found")
-    idx = _get_section(act, ":effect")
+    idx = get_section(act, ":effect")
     eff = act[idx + 1]
-    atom_sexp, _ = _parse_sexp(_tokenize(atom_str))
+    atom_sexp, _ = parse_sexp(tokenize(atom_str))
     if isinstance(eff, list) and eff and eff[0].lower() == "and":
         eff.append(atom_sexp)
     else:

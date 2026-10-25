@@ -48,11 +48,11 @@ from pathlib import Path
 from typing import Any, ClassVar
 
 from src.utils.sexp import (
-    _find_action_block,
-    _get_section,
-    _parse_sexp,
-    _sexp_to_str,
-    _tokenize,
+    find_action_block,
+    get_section,
+    parse_sexp,
+    sexp_to_str,
+    tokenize,
 )
 
 _PDDL_AVAILABLE = importlib.util.find_spec("pddl") is not None
@@ -81,7 +81,7 @@ class MutationRecord:
 
 def _get_preconditions(action_sexp: list) -> list | None:
     """Extract the precondition conjunction list from an action sexp."""
-    idx = _get_section(action_sexp, ":precondition")
+    idx = get_section(action_sexp, ":precondition")
     if idx is None or idx + 1 >= len(action_sexp):
         return None
     prec = action_sexp[idx + 1]
@@ -127,7 +127,7 @@ def _apply_type_i(domain_sexp: list, action_name: str, rng: random.Random) -> Mu
     Remove the first positive (non-critical, non-bottleneck) precondition atom.
     """
     record = MutationRecord(domain_path="", intervention="Type_I", target_action=action_name, seed=rng.randint(0, 99999))
-    action = _find_action_block(domain_sexp, action_name)
+    action = find_action_block(domain_sexp, action_name)
     if action is None:
         raise ValueError(f"Action '{action_name}' not found in domain.")
     prec = _get_preconditions(action)
@@ -138,7 +138,7 @@ def _apply_type_i(domain_sexp: list, action_name: str, rng: random.Random) -> Mu
         raise ValueError(f"Action '{action_name}' has no positive precondition atoms to remove.")
     # Remove the first positive atom (leaf, least critical)
     idx, atom = positive[0]
-    record.removed_atoms = [_sexp_to_str(atom)]
+    record.removed_atoms = [sexp_to_str(atom)]
     del prec[idx]
     return record
 
@@ -150,7 +150,7 @@ def _apply_type_ii(domain_sexp: list, action_name: str, rng: random.Random) -> M
     the search-tree path). This induces the phantom subtree Ω(b^(D-d)).
     """
     record = MutationRecord(domain_path="", intervention="Type_II", target_action=action_name, seed=rng.randint(0, 99999))
-    action = _find_action_block(domain_sexp, action_name)
+    action = find_action_block(domain_sexp, action_name)
     if action is None:
         raise ValueError(f"Action '{action_name}' not found in domain.")
     prec = _get_preconditions(action)
@@ -161,7 +161,7 @@ def _apply_type_ii(domain_sexp: list, action_name: str, rng: random.Random) -> M
         raise ValueError(f"Action '{action_name}' has no positive precondition atoms to remove.")
     bottleneck = _classify_bottleneck(positive)
     idx, atom = bottleneck
-    record.removed_atoms = [_sexp_to_str(atom)]
+    record.removed_atoms = [sexp_to_str(atom)]
     del prec[idx]
     return record
 
@@ -173,12 +173,12 @@ def _apply_type_iii(domain_sexp: list, action_name: str, rng: random.Random) -> 
     but shifts A_pred scores (tests our prediction accuracy metric).
     """
     record = MutationRecord(domain_path="", intervention="Type_III", target_action=action_name, seed=rng.randint(0, 99999))
-    action = _find_action_block(domain_sexp, action_name)
+    action = find_action_block(domain_sexp, action_name)
     if action is None:
         raise ValueError(f"Action '{action_name}' not found in domain.")
 
     # Insert into effect block
-    eff_idx = _get_section(action, ":effect")
+    eff_idx = get_section(action, ":effect")
     if eff_idx is None or eff_idx + 1 >= len(action):
         raise ValueError(f"Action '{action_name}' has no :effect section.")
     eff = action[eff_idx + 1]
@@ -261,8 +261,8 @@ class PDDLMutator:
 
         # Parse domain text → S-expression tree (deep copy for safety)
         raw_text = domain_path.read_text(encoding="utf-8")
-        tokens = _tokenize(raw_text)
-        domain_sexp, _ = _parse_sexp(tokens)
+        tokens = tokenize(raw_text)
+        domain_sexp, _ = parse_sexp(tokens)
         domain_sexp_mut = copy.deepcopy(domain_sexp)
 
         # Apply mutation
@@ -270,7 +270,7 @@ class PDDLMutator:
         record.domain_path = str(domain_path)
 
         # Serialize back to PDDL text
-        mutated_text = _sexp_to_str(domain_sexp_mut) + "\n"
+        mutated_text = sexp_to_str(domain_sexp_mut) + "\n"
 
         # Write output
         stem = domain_path.stem
@@ -324,14 +324,14 @@ class PDDLMutator:
         out_dir.mkdir(parents=True, exist_ok=True)
 
         domain_text = domain_path.read_text(encoding="utf-8")
-        tokens = _tokenize(domain_text)
-        domain_sexp, _ = _parse_sexp(tokens)
+        tokens = tokenize(domain_text)
+        domain_sexp, _ = parse_sexp(tokens)
 
         removed: list[tuple[str, str]] = []
 
         if target_actions_and_atoms:
             for act_name, atom_str in target_actions_and_atoms[:k]:
-                action = _find_action_block(domain_sexp, act_name)
+                action = find_action_block(domain_sexp, act_name)
                 if action is None:
                     continue
                 prec = _get_preconditions(action)
@@ -341,12 +341,12 @@ class PDDLMutator:
                 norm_target = atom_str.strip().lower()
                 matched_idx = None
                 for idx, atom in positive:
-                    if _sexp_to_str(atom).strip().lower() == norm_target:
+                    if sexp_to_str(atom).strip().lower() == norm_target:
                         matched_idx = idx
                         break
                 if matched_idx is None and positive:
                     matched_idx, atom = positive[-1]
-                    norm_target = _sexp_to_str(atom).strip().lower()
+                    norm_target = sexp_to_str(atom).strip().lower()
 
                 if matched_idx is not None:
                     del prec[matched_idx]
@@ -361,18 +361,18 @@ class PDDLMutator:
             for act_name in actions_found:
                 if len(removed) >= k:
                     break
-                action = _find_action_block(domain_sexp, act_name)
+                action = find_action_block(domain_sexp, act_name)
                 prec = _get_preconditions(action)
                 if prec is None:
                     continue
                 positive = _extract_positive_atoms(prec)
                 if positive:
                     idx, atom = positive[-1]
-                    norm_target = _sexp_to_str(atom).strip().lower()
+                    norm_target = sexp_to_str(atom).strip().lower()
                     del prec[idx]
                     removed.append((act_name, norm_target))
 
-        mutated_text = _sexp_to_str(domain_sexp) + "\n"
+        mutated_text = sexp_to_str(domain_sexp) + "\n"
         out_name = f"{domain_path.stem}_k{len(removed)}_seed{self.seed}.pddl"
         out_path = out_dir / out_name
         out_path.write_text(mutated_text, encoding="utf-8")
