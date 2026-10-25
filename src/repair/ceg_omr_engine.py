@@ -92,6 +92,8 @@ class CEGOMRConfig:
     use_effect_coherence: bool = True
     allow_relaxation: bool = True
     allow_effect_deletion: bool = True
+    max_relaxation_size: int = 3
+    max_suspects_per_level: int = 12
 
 
 # ---------------------------------------------------------------------------
@@ -379,6 +381,8 @@ class HornSynthesizer:
         seed: int = 42,
         use_effect_coherence: bool = True,
         allow_effect_deletion: bool = True,
+        max_relaxation_size: int = 3,
+        max_suspects_per_level: int = 12,
     ):
         self.out_dir = Path(out_dir)
         self.out_dir.mkdir(parents=True, exist_ok=True)
@@ -386,6 +390,8 @@ class HornSynthesizer:
         self._rng = random.Random(seed)
         self.use_effect_coherence = use_effect_coherence
         self.allow_effect_deletion = allow_effect_deletion
+        self.max_relaxation_size = max_relaxation_size
+        self.max_suspects_per_level = max_suspects_per_level
         self.version_spaces: dict[str, set[str]] = {}
         self.refuted_candidates: dict[str, set[str]] = {}
         self.repair_history: list[dict] = []
@@ -580,13 +586,15 @@ class HornSynthesizer:
 
         suspect_candidates.sort(key=lambda x: x[0], reverse=True)
 
-        # Search minimal relaxations of size k = 1, then k = 2 (bounded to top 8 suspects for k=2)
+        # Search minimal relaxations using Iterative Deepening Minimal Relaxation Search (ID-MRS)
         candidate_items = [(kind, act_name, c_norm) for _, kind, act_name, c_norm in suspect_candidates]
-        relaxation_sets: list[tuple[tuple[str, str, str], ...]] = [
-            (item,) for item in candidate_items
-        ]
-        top_k2 = candidate_items[: min(8, len(candidate_items))]
-        relaxation_sets.extend(itertools.combinations(top_k2, 2))
+        relaxation_sets: list[tuple[tuple[str, str, str], ...]] = []
+        for kappa in range(1, self.max_relaxation_size + 1):
+            if kappa == 1:
+                relaxation_sets.extend((item,) for item in candidate_items)
+            else:
+                top_k = candidate_items[: min(self.max_suspects_per_level, len(candidate_items))]
+                relaxation_sets.extend(itertools.combinations(top_k, kappa))
 
         for relax_tuple in relaxation_sets:
             canon_key = tuple(sorted((f"{k}:{a}", c) for k, a, c in relax_tuple))
@@ -1045,6 +1053,8 @@ class CEGOMREngine:
             seed=config.seed,
             use_effect_coherence=config.use_effect_coherence,
             allow_effect_deletion=config.allow_effect_deletion,
+            max_relaxation_size=config.max_relaxation_size,
+            max_suspects_per_level=config.max_suspects_per_level,
         )
         self._rng = random.Random(config.seed)
 

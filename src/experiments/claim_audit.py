@@ -37,17 +37,12 @@ def run_claim_audit(
 
     srcs = exp_cfg.get("source_files", {})
     stats_rep_path = srcs.get("statistical_report", "benchmark_outputs/statistical_analysis_report.json")
-    ablation_bench_path = srcs.get("ablation_benchmark", "benchmark_outputs/ablation_study_results.json")
     bidi_bench_path = "benchmark_outputs/bidirectional_and_compound_repair_benchmark.json"
 
     # Load available data
     stats_rep = {}
     if Path(stats_rep_path).exists():
         stats_rep = json.loads(Path(stats_rep_path).read_text(encoding="utf-8"))
-
-    ablation_bench = []
-    if Path(ablation_bench_path).exists():
-        ablation_bench = json.loads(Path(ablation_bench_path).read_text(encoding="utf-8"))
 
     bidi_bench = {}
     if Path(bidi_bench_path).exists():
@@ -83,11 +78,11 @@ def run_claim_audit(
             "source": bidi_bench_path,
         },
         {
-            "id": "CLAIM_5_BACKTRACKING_NECESSITY_LOGISTICS",
-            "claim": "Disabling backtracking collapses repair success in Logistics from 100% to 0%.",
+            "id": "CLAIM_5_MONOTONIC_LOCKOUT_FAMILY_B",
+            "claim": "Disabling backtracking and relaxation (Monotonic OLAM ablation) collapses repair success on over-constrained domains (Family B) from 100% to 0% due to permanent lockout.",
             "target_value": 0.0,
-            "actual_value": sum(1.0 for r in ablation_bench if r.get("domain") == "Logistics" and r.get("mode") == "No-Backtracking" and r.get("success")),
-            "source": ablation_bench_path,
+            "actual_value": bidi_bench.get("by_family", {}).get("Family_B_Spurious_Precondition", {}).get("monotonic_olam_style", {}).get("solve_rate_pct", 0.0),
+            "source": bidi_bench_path,
         },
     ]
 
