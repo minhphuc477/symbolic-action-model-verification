@@ -47,31 +47,28 @@ from enum import Enum
 from pathlib import Path
 from typing import Any, ClassVar
 
-# ---------------------------------------------------------------------------
-# Lightweight PDDL text-level AST manipulation
-# We parse PDDL with the `pddl` library for validation, but perform mutations
-# on the raw PDDL text using a simple S-expression tokenizer (lark-based) to
-# avoid full round-trip serialization limitations of pddl v0.4.x.
-# ---------------------------------------------------------------------------
+from src.utils.sexp import (
+    _find_action_block,
+    _get_section,
+    _parse_sexp,
+    _sexp_to_str,
+    _tokenize,
+)
 
 _PDDL_AVAILABLE = importlib.util.find_spec("pddl") is not None
 if not _PDDL_AVAILABLE:
     print("[WARNING] `pddl` library not found. Validation will be skipped.", file=sys.stderr)
 
 
-# ---------------------------------------------------------------------------
-# Data model
-# ---------------------------------------------------------------------------
-
 class InterventionType(Enum):
-    TYPE_I   = "Type_I_OmitLeafPrecondition"
-    TYPE_II  = "Type_II_OmitBottleneckPrecondition"
+    TYPE_I = "Type_I_OmitLeafPrecondition"
+    TYPE_II = "Type_II_OmitBottleneckPrecondition"
     TYPE_III = "Type_III_RedundantEffectAddition"
 
 
 @dataclass
 class MutationRecord:
-    """Immutable record of what was mutated — needed for Theorem 2 empirical validation."""
+    """Immutable record of what was mutated - needed for Theorem 2 empirical validation."""
     domain_path: str
     intervention: str
     target_action: str
@@ -79,102 +76,7 @@ class MutationRecord:
     removed_atoms: list[str] = field(default_factory=list)
     added_atoms: list[str] = field(default_factory=list)
     output_path: str = ""
-    delta_dsl: int = 1  # k in the bound K_repair ≤ k·|F|^r
-
-
-# ---------------------------------------------------------------------------
-# S-expression tokenizer (no external deps beyond stdlib)
-# ---------------------------------------------------------------------------
-
-def _tokenize(text: str) -> list[str]:
-    """Tokenize PDDL text into a flat list of tokens (parens + atoms)."""
-    tokens = []
-    i = 0
-    while i < len(text):
-        c = text[i]
-        if c in "()":
-            tokens.append(c)
-            i += 1
-        elif c == ";":
-            # Comment — skip to end of line
-            while i < len(text) and text[i] != "\n":
-                i += 1
-        elif c in " \t\r\n":
-            i += 1
-        else:
-            # Atom
-            j = i
-            while j < len(text) and text[j] not in " \t\r\n();":
-                j += 1
-            tokens.append(text[i:j])
-            i = j
-    return tokens
-
-
-def _parse_sexp(tokens: list[str], pos: int = 0):
-    """Recursive descent S-expression parser. Returns (sexp, next_pos)."""
-    if pos >= len(tokens):
-        raise ValueError("Unexpected end of tokens")
-    if tokens[pos] == "(":
-        lst = []
-        pos += 1  # consume "("
-        while pos < len(tokens) and tokens[pos] != ")":
-            item, pos = _parse_sexp(tokens, pos)
-            lst.append(item)
-        if pos >= len(tokens):
-            raise ValueError("Unmatched '('")
-        pos += 1  # consume ")"
-        return lst, pos
-    else:
-        return tokens[pos], pos + 1
-
-
-def _sexp_to_str(sexp, indent: int = 0) -> str:
-    """Serialize S-expression back to PDDL string with basic indentation."""
-    pad = "  " * indent
-    if isinstance(sexp, str):
-        return sexp
-    if len(sexp) == 0:
-        return "()"
-    # Single-atom list
-    inner_strs = [_sexp_to_str(item, indent + 1) for item in sexp]
-    # Heuristic: if all children are atoms, keep on one line
-    if all(isinstance(item, str) for item in sexp):
-        return "(" + " ".join(inner_strs) + ")"
-    # Multi-element with nested lists
-    head = _sexp_to_str(sexp[0])
-    if len(sexp) == 1:
-        return f"({head})"
-    rest = "\n".join(pad + "  " + _sexp_to_str(item, indent + 1) for item in sexp[1:])
-    return f"({head}\n{rest}\n{pad})"
-
-
-# ---------------------------------------------------------------------------
-# Core mutation logic
-# ---------------------------------------------------------------------------
-
-def _find_action_block(sexp: list, action_name: str) -> list | None:
-    """
-    Locate the :action sexp block for `action_name` inside a domain sexp.
-    Returns a reference to the sub-list (mutable).
-    """
-    if not isinstance(sexp, list):
-        return None
-    if len(sexp) >= 2 and sexp[0] == ":action" and isinstance(sexp[1], str) and sexp[1].lower() == action_name.lower():
-        return sexp
-    for item in sexp:
-        result = _find_action_block(item, action_name)
-        if result is not None:
-            return result
-    return None
-
-
-def _get_section(action_sexp: list, keyword: str) -> int | None:
-    """Return the index of `keyword` (e.g. ':precondition') in action_sexp."""
-    for i, item in enumerate(action_sexp):
-        if isinstance(item, str) and item.lower() == keyword.lower():
-            return i
-    return None
+    delta_dsl: int = 1  # k in the bound K_repair <= k * |F|^r
 
 
 def _get_preconditions(action_sexp: list) -> list | None:
