@@ -32,30 +32,19 @@ document.addEventListener('DOMContentLoaded', async () => {
         targetPanel.classList.remove('hidden');
       }
 
-      // If switching to topology tab, resize canvas
-      if (targetId === 'tab-topology' && topologyVisualizer) {
+      // If switching to gameplay tab, redraw canvas
+      if (targetId === 'tab-gameplay' && gameVisualizer) {
         setTimeout(() => {
-          topologyVisualizer.width = topologyVisualizer.canvas.width = topologyVisualizer.canvas.parentElement.clientWidth;
-          topologyVisualizer.draw();
+          gameVisualizer.render();
         }, 50);
       }
     });
   });
 
-  // 3. Initialize Interactive Canvas
-  if (window.TopologyGraphVisualizer) {
-    topologyVisualizer = new window.TopologyGraphVisualizer('topologyCanvas');
-    const toggleBtn = document.getElementById('toggleSeductionBtn');
-    if (toggleBtn) {
-      toggleBtn.addEventListener('click', () => {
-        const isCurrentlyActive = topologyVisualizer.heuristicSeductionActive;
-        topologyVisualizer.toggleSeduction(!isCurrentlyActive);
-        toggleBtn.textContent = !isCurrentlyActive ? 'Disable Heuristic Seduction' : 'Enable Heuristic Seduction';
-        toggleBtn.className = !isCurrentlyActive 
-          ? 'px-4 py-2 rounded-lg bg-rose-600/30 text-rose-300 border border-rose-500/50 hover:bg-rose-600/40 text-sm font-medium transition'
-          : 'px-4 py-2 rounded-lg bg-indigo-600/30 text-indigo-300 border border-indigo-500/50 hover:bg-indigo-600/40 text-sm font-medium transition';
-      });
-    }
+  // 3. Initialize Interactive Game Visualizer
+  let gameVisualizer = null;
+  if (window.GameAIVisualizer) {
+    gameVisualizer = new window.GameAIVisualizer('gameCanvas');
   }
 
   // 4. Branch Divergence Calculator
