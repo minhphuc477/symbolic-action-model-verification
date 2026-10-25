@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <rect width="64" height="64" fill="#090d16"/>
+  <!-- Masonry Brick Layout -->
+  <rect x="2" y="2" width="60" height="18" rx="2" fill="#1e293b" stroke="#475569" stroke-width="1.5"/>
+  <rect x="2" y="23" width="28" height="18" rx="2" fill="#334155" stroke="#475569" stroke-width="1.5"/>
+  <rect x="34" y="23" width="28" height="18" rx="2" fill="#1e293b" stroke="#475569" stroke-width="1.5"/>
+  <rect x="2" y="44" width="60" height="18" rx="2" fill="#1e293b" stroke="#475569" stroke-width="1.5"/>
+</svg>
