@@ -21,7 +21,7 @@ from typing import Any
 
 import yaml
 
-from src.repair.ceg_omr_engine import (
+from src.repair import (
     CEGOMRConfig,
     CEGOMREngine,
     Counterexample,

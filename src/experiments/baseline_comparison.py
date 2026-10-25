@@ -26,9 +26,8 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../.
 
 from src.interventions.pddl_mutator import PDDLMutator
 from src.metrics.fair_comparator import compare_fairly
-from src.repair.ceg_omr_engine import CEGOMRConfig, CEGOMREngine
+from src.repair import CEGOMRConfig, CEGOMREngine, SAMBaseline
 from src.repair.naive_baselines import run_naive_replanning_baseline
-from src.repair.sam_baseline import SAMBaseline
 
 
 def benchmark_fastlas(las_file: str = "domains/fastlas/test_fastlas.las") -> dict[str, Any]:

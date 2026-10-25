@@ -20,13 +20,13 @@ import pddl
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from src.interventions.pddl_mutator import PDDLMutator
-from src.repair.ceg_omr_engine import (
+from src.repair import (
     CEGOMRConfig,
     CEGOMREngine,
     Counterexample,
     HornSynthesizer,
+    SAMBaseline,
 )
-from src.repair.sam_baseline import SAMBaseline
 
 
 class TestCEGOMRMultiFaultAndFeatures(unittest.TestCase):
