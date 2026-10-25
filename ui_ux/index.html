@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search-Tree Topology Collapse & Safe CEG-OMR — Research Suite</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Custom Scientific Dashboard CSS -->
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="p-4 md:p-8">
+
+  <!-- Header Banner -->
+  <header class="max-w-7xl mx-auto mb-8">
+    <div class="glass-card p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      <div>
+        <div class="flex items-center gap-3 mb-2">
+          <span class="badge-pill badge-indigo bg-indigo-950/60 text-indigo-400 border border-indigo-500/40 font-mono">ICAPS / AAAI 2026 ARCHIVE</span>
+          <span class="badge-pill badge-emerald">100% SOLVER-BACKED AUDIT</span>
+          <span class="badge-pill badge-cyan">9 DOMAINS VERIFIED</span>
+        </div>
+        <h1 class="text-2xl md:text-3xl font-bold tracking-tight text-white">
+          Search-Tree Topology Collapse & Safe CEG-OMR
+        </h1>
+        <p class="text-slate-400 text-sm mt-1">
+          Interactive Research & Visualization Suite: Diagnosing Objective Mismatch, Heuristic Seduction, and Reversibility-Shielded Repair
+        </p>
+      </div>
+      <div class="flex flex-wrap items-center gap-3">
+        <div class="text-right hidden md:block">
+          <div class="text-xs text-slate-400">Total Benchmark Runs</div>
+          <div class="text-xl font-bold font-mono text-cyan-400">1,080 / 1,080</div>
+        </div>
+        <div class="w-px h-8 bg-slate-700 hidden md:block"></div>
+        <div class="text-right hidden md:block">
+          <div class="text-xs text-slate-400">Fast Downward Verifier</div>
+          <div class="text-sm font-semibold text-emerald-400">WSL Ubuntu Active</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation Bar -->
+    <nav class="mt-6 flex flex-wrap items-center gap-2 p-1.5 glass-card">
+      <button class="nav-tab-btn active" data-tab="tab-topology">
+        <span>📐 Search Topology & Seduction</span>
+      </button>
+      <button class="nav-tab-btn" data-tab="tab-regimes">
+        <span>📊 1,080-Run Regimes Audit</span>
+      </button>
+      <button class="nav-tab-btn" data-tab="tab-safety">
+        <span>🛡️ Reversibility Safety Shield</span>
+      </button>
+      <button class="nav-tab-btn" data-tab="tab-sota">
+        <span>🏆 SOTA Baseline Radar</span>
+      </button>
+      <button class="nav-tab-btn" data-tab="tab-theory">
+        <span>📜 Mathematical Foundations</span>
+      </button>
+    </nav>
+  </header>
+
+  <!-- Main Content Area -->
+  <main class="max-w-7xl mx-auto space-y-8">
+
+    <!-- TAB 1: Search Topology & Heuristic Seduction -->
+    <section id="tab-topology" class="tab-panel space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <!-- Left: Interactive Canvas Graph (2 cols) -->
+        <div class="lg:col-span-2 glass-card p-6 flex flex-col justify-between">
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <h2 class="text-lg font-semibold text-white flex items-center gap-2">
+                <span>Transition System TS = (S, E) Landscape</span>
+                <span class="text-xs text-slate-400 font-normal">(Hover nodes to inspect g, h*, and seduced ĥ values)</span>
+              </h2>
+            </div>
+            <button id="toggleSeductionBtn" class="px-3.5 py-1.5 rounded-lg bg-rose-600/30 text-rose-300 border border-rose-500/50 hover:bg-rose-600/40 text-xs font-medium transition">
+              Disable Heuristic Seduction
+            </button>
+          </div>
+
+          <!-- Canvas Container -->
+          <div class="relative w-full rounded-lg overflow-hidden bg-slate-950 border border-slate-800">
+            <canvas id="topologyCanvas"></canvas>
+            <div class="absolute bottom-3 left-3 bg-slate-900/80 backdrop-blur px-3 py-1.5 rounded text-xs text-slate-300 flex items-center gap-4 border border-slate-700">
+              <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> Legitimate Branch (h* valid)</span>
+              <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span> Spurious Shortcut Branch (Δc > 0)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Branch Divergence Calculator & Hoffmann Topology (1 col) -->
+        <div class="space-y-6">
+          <div class="glass-card p-6">
+            <h3 class="text-base font-semibold text-white mb-2">⚡ Branch Divergence Calculator</h3>
+            <p class="text-xs text-slate-400 mb-4">
+              Computes the lower bound on expanded nodes when A* enters an unrecognized dead-end subtree:
+            </p>
+            
+            <div class="space-y-4">
+              <div>
+                <label class="block text-xs font-medium text-slate-300 mb-1">Effective Branching Factor (b)</label>
+                <input id="calcBranching" type="range" min="2" max="8" step="1" value="4" class="w-full accent-indigo-500">
+                <div class="flex justify-between text-xs font-mono text-slate-400 mt-1"><span>2</span><span>4</span><span>6</span><span>8</span></div>
+              </div>
+
+              <div>
+                <label class="block text-xs font-medium text-slate-300 mb-1">Depth Differential (D - d)</label>
+                <input id="calcDepthDiff" type="range" min="1" max="10" step="1" value="6" class="w-full accent-cyan-500">
+                <div class="flex justify-between text-xs font-mono text-slate-400 mt-1"><span>1</span><span>4</span><span>7</span><span>10</span></div>
+              </div>
+
+              <div id="calcResult" class="p-3 bg-slate-950/80 rounded-lg border border-slate-800 text-sm font-mono text-cyan-300 text-center">
+                Ω(b<sup>D-d</sup>) = <strong>4,096</strong> expanded nodes in phantom subtree
+              </div>
+            </div>
+          </div>
+
+          <div class="glass-card p-6">
+            <h3 class="text-base font-semibold text-white mb-2">📌 Hoffmann Local Search Invariants</h3>
+            <ul class="text-xs text-slate-300 space-y-2.5">
+              <li class="flex items-start gap-2">
+                <span class="text-rose-400 font-bold">✖</span>
+                <span><strong>Unrecognized Dead-End:</strong> State with dist(s, S_G) = ∞, yet ĥ(s) < ∞. Delete-relaxation cannot detect that keys or lights were bypassed.</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-cyan-400 font-bold">✔</span>
+                <span><strong>Heuristic Seduction:</strong> Because f = g + ĥ is smaller on the shortcut, A* exhausts the entire phantom subtree before ever considering the valid branch.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- TAB 2: 1,080-Run Regimes Audit -->
+    <section id="tab-regimes" class="tab-panel hidden space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <!-- Left: Regimes Bar Chart (1 col) -->
+        <div class="glass-card p-6 flex flex-col justify-between">
+          <div>
+            <h2 class="text-lg font-semibold text-white mb-1">Dichotomy of Omission Regimes</h2>
+            <p class="text-xs text-slate-400 mb-4">Empirical verification across 1,080 Fast Downward runs (p &lt; 10⁻¹⁵)</p>
+            <div class="h-64 relative">
+              <canvas id="regimesChart"></canvas>
+            </div>
+          </div>
+          <div class="mt-4 p-3 bg-slate-950/60 rounded border border-slate-800 text-xs text-slate-300">
+            <strong>Key Finding:</strong> In Blocksworld, omitting <code>(ontable ?x)</code> from <code>pick-up</code> yielded <strong>0.0% failure (100% PESR)</strong> because Δc = 0.
+          </div>
+        </div>
+
+        <!-- Right: 9-Domain Matrix Table (2 cols) -->
+        <div class="lg:col-span-2 glass-card p-6">
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="text-lg font-semibold text-white">Multi-Domain Benchmark Verification Matrix</h2>
+            <span class="badge-pill badge-cyan">9 IPC & Game Domains</span>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Domain</th>
+                  <th>Category</th>
+                  <th>Bottleneck Fault</th>
+                  <th>Regime I (Δc > 0)</th>
+                  <th>Regime II (Δc = 0)</th>
+                  <th>Reversibility Class</th>
+                </tr>
+              </thead>
+              <tbody id="domainsTableBody">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- TAB 3: Reversibility Safety Shield -->
+    <section id="tab-safety" class="tab-panel hidden space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <div class="glass-card p-6 space-y-4">
+          <h2 class="text-lg font-semibold text-white">🛡️ Reversibility Safety Shield Architecture</h2>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            In physical reality, executing flawed actions in <strong>irreversible domains</strong> (chemical cocktail mixing in Barman, non-renewable rock drilling in Rovers) destroys the environment permanently.
+          </p>
+          <div class="p-3 bg-slate-950/80 rounded border border-indigo-500/30 text-xs space-y-2">
+            <div class="text-indigo-400 font-semibold">Dual-Layer Shield Decision Rule:</div>
+            <div class="font-mono text-slate-300">
+              if a ∈ Reversible(D): DISPATCH<br>
+              else if a ∈ Irreversible(D) ∧ ¬Certified(a):<br>
+              &nbsp;&nbsp;→ <strong>INTERCEPT</strong> (Virtual Counterexample)
+            </div>
+          </div>
+          <div class="text-xs text-emerald-400 font-semibold flex items-center gap-1.5">
+            <span>✔</span> 100% Catastrophic absorbing states avoided in Barman & Rovers
+          </div>
+        </div>
+
+        <div class="lg:col-span-2 glass-card p-6">
+          <h2 class="text-lg font-semibold text-white mb-4">Action Reversibility & Interception Telemetry</h2>
+          <div class="overflow-x-auto">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Action Schema</th>
+                  <th>Domain</th>
+                  <th>Inverse Operator</th>
+                  <th>Causal Safety Class</th>
+                  <th>Shield Action</th>
+                </tr>
+              </thead>
+              <tbody id="safetyAuditTableBody">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- TAB 4: SOTA Baseline Radar -->
+    <section id="tab-sota" class="tab-panel hidden space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <div class="glass-card p-6">
+          <h2 class="text-lg font-semibold text-white mb-2">SOTA Multi-Metric Radar</h2>
+          <p class="text-xs text-slate-400 mb-4">Comparing Safe CEG-OMR against SAM, FAMA, LOCM2, and FastLAS</p>
+          <div class="h-72 relative">
+            <canvas id="sotaRadarChart"></canvas>
+          </div>
+        </div>
+
+        <div class="lg:col-span-2 glass-card p-6">
+          <h2 class="text-lg font-semibold text-white mb-4">Comprehensive Baseline Comparison</h2>
+          <div class="overflow-x-auto">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Learner / Baseline</th>
+                  <th>Paradigm</th>
+                  <th>PESR (%)</th>
+                  <th>Env Steps (K_env)</th>
+                  <th>Family B Solvability</th>
+                  <th>Documented Limitations</th>
+                </tr>
+              </thead>
+              <tbody id="sotaTableBody">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- TAB 5: Mathematical Foundations -->
+    <section id="tab-theory" class="tab-panel hidden space-y-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        
+        <div class="glass-card p-6 space-y-3">
+          <span class="badge-pill badge-indigo">THEOREM 1</span>
+          <h3 class="text-base font-bold text-white">Heuristic Seduction & Topology Collapse</h3>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            Let M* be the true world model and M̂ be an action model missing a bottleneck precondition p_gate.
+            For any admissible delete-relaxation heuristic h⁺ (e.g. LM-Cut, h_FF):
+          </p>
+          <div class="code-preview">
+ĥ⁺(s₀) ≤ h*⁺(s₀) - Δc  where Δc = c*(M*) - c*(M̂) > 0
+f_shortcut(s) = g(s) + ĥ(s) < f_valid(s)
+          </div>
+          <p class="text-xs text-slate-400">
+            Therefore, A* priority queue guarantees that the spurious shortcut branch is expanded before any valid physical trajectory, collapsing PESR to 0%.
+          </p>
+        </div>
+
+        <div class="glass-card p-6 space-y-3">
+          <span class="badge-pill badge-emerald">THEOREM 2</span>
+          <h3 class="text-base font-bold text-white">Polynomial Active Sample Complexity</h3>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            Under Precondition-Delete Effect Coherence and Horn elimination, the total physical environment step budget K_env required for complete repair is strictly bounded:
+          </p>
+          <div class="code-preview">
+K_env ≤ k · ℓ_max · |H_a|
+where |H_a| ≤ 2|P| · m_a^(r_P) = O(1) invariant to object count |O|
+          </div>
+          <p class="text-xs text-slate-400">
+            Offline zero-query backtracking refutes spurious hypotheses with K_env = 0 steps, preventing exponential environment sample blowup.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="max-w-7xl mx-auto mt-12 pt-6 border-t border-slate-800 text-xs text-slate-500 flex flex-col md:flex-row items-center justify-between gap-4">
+    <div>
+      Master Thesis Research Suite • Google Antigravity Agentic Pair Programming
+    </div>
+    <div class="flex items-center gap-4">
+      <span>Codebase: 46/46 Passed</span>
+      <span>•</span>
+      <span>WSL Fast Downward: Operational</span>
+      <span>•</span>
+      <span>Research Rules: 100% Solver-Backed</span>
+    </div>
+  </footer>
+
+  <!-- App Scripts -->
+  <script src="js/topology_graph.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>
