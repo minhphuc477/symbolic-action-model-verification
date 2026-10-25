@@ -1,13 +1,34 @@
-# Experiment Configuration: Search-Tree Topology Collapse & Planning Burden
-# Measures H_P(M*, x) and H_P(M_hat, x) across 24 interventions and scale verification tasks
+# Experiment Configuration: Search-Tree Topology Collapse & Fair Planning Audit
+# Dual-Layer Diagnostic Suite:
+#   Layer 1: 1,080-run Fast Downward Fair Audit (A* LM-Cut vs LAMA-first, Dichotomy Bifurcation)
+#   Layer 2: 24-Intervention Matrix across 8 IPC domains with Scale & Binding Verifications
 
 experiment_name: "topology_collapse"
-description: "Measures search-tree topology collapse and planning burden across 24 interventions in 8 IPC domains"
+description: "Empirical proof of Search-Tree Topology Collapse & Omission Dichotomy under heuristic search"
 
 matrix_config: "configs/interventions/matrix_24.yaml"
 output_dir: "benchmark_outputs"
+
+# Outputs
+fair_audit_summary_output: "benchmark_outputs/topology_collapse_fair_audit_summary.json"
+fair_audit_rows_output: "benchmark_outputs/topology_collapse_fair_audit_rows.json"
 planning_burden_output: "benchmark_outputs/planning_burden_results.json"
 scale_verification_output: "benchmark_outputs/scale_and_binding_results.json"
+
+# Fair Audit Parameters
+fair_audit:
+  domains:
+    - name: "Blocksworld"
+      path: "domains/blocksworld/domain.pddl"
+      sizes: [4, 5, 6]
+    - name: "Gripper"
+      path: "domains/gripper/domain.pddl"
+      sizes: [3, 4, 5]
+  tasks_per_size_full: 12
+  tasks_per_size_quick: 3
+  planners:
+    optimal: "astar(lmcut())"
+    satisficing: "lama-first"
 
 max_nodes_per_search: 100000
 

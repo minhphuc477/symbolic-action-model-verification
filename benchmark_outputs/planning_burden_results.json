@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-09-30T20:55:26Z",
+  "timestamp": "2026-10-25T06:55:59Z",
   "domains": {
     "Blocksworld": {
       "ground_truth": {
@@ -91,8 +91,8 @@
         "H_P": 7.1085,
         "plan_length": 5,
         "plan": [
-          "(pick-up ball1 rooma left)",
-          "(pick-up ball2 rooma right)",
+          "(pick ball1 rooma left)",
+          "(pick ball2 rooma right)",
           "(move rooma roomb)",
           "(drop ball1 roomb left)",
           "(drop ball2 roomb right)"
@@ -105,31 +105,16 @@
           "omitted_precondition": "(free ?o3)",
           "archetype": "Physical Capacity Exclusivity",
           "description": "Omit free condition, allowing multiple balls in one gripper",
-          "nodes_expanded": 1472,
-          "H_P": 10.5245,
-          "delta_H_P": 3.416,
+          "nodes_expanded": 1451,
+          "H_P": 10.5038,
+          "delta_H_P": 3.3953,
           "plan_length": 5,
           "divergence_type": "Phantom Detour",
-          "phantom_edges_detected": 2,
-          "phantom_edge_details": [
-            {
-              "step": 1,
-              "action": "(pick-up ball1 rooma rooma)",
-              "missing_literals": [
-                "(free ?o3)"
-              ]
-            },
-            {
-              "step": 2,
-              "action": "(pick-up ball2 rooma rooma)",
-              "missing_literals": [
-                "(free ?o3)"
-              ]
-            }
-          ],
-          "PESR": 0.0,
-          "R_play": "INFINITY",
-          "execution_failure_reason": "Precondition violation at step 1 (pick-up ball1 rooma rooma): missing ['(free rooma)']"
+          "phantom_edges_detected": 0,
+          "phantom_edge_details": [],
+          "PESR": 1.0,
+          "R_play": 0.0,
+          "execution_failure_reason": null
         },
         {
           "id": "GRP_I2",
@@ -701,7 +686,7 @@
     "phantom_shortcuts_count": 6,
     "phantom_detours_count": 13,
     "preserved_searches_count": 5,
-    "execution_failures_count": 16,
-    "decoupling_evidence_percentage": 66.67
+    "execution_failures_count": 15,
+    "decoupling_evidence_percentage": 62.5
   }
 }

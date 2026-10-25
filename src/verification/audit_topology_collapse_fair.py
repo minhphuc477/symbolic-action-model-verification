@@ -32,7 +32,6 @@ import math
 import os
 import random
 import re
-import subprocess
 import sys
 import tempfile
 from pathlib import Path
@@ -47,6 +46,7 @@ from src.interventions.pddl_mutator import (
     _tokenize,
 )
 from src.metrics.transition_accuracy import parse_pddl_model
+from src.runners.wsl_harness import WSLHarness
 
 FD = "/opt/downward/fast-downward.py"
 PLANNERS = {
@@ -165,20 +165,30 @@ def run_fd(domain: Path, problem: Path, planner_args: list[str], work: Path) -> 
     plan = work / "plan"
     if plan.exists():
         plan.unlink()
+    sas_file = work / "o.sas"
+
     # --alias must precede the input files; --search goes after them.
     pre = planner_args if planner_args and planner_args[0] == "--alias" else []
     post = [] if pre else planner_args
-    try:
-        r = subprocess.run(
-            ["python3", FD] + pre + ["--plan-file", str(plan), "--sas-file", str(work / "o.sas"),
-             str(domain), str(problem)] + post,
-            capture_output=True, text=True, timeout=90, cwd=str(work), check=False,
-        )
-    except subprocess.TimeoutExpired:
+
+    wsl_dom = WSLHarness.to_wsl_path(domain)
+    wsl_prob = WSLHarness.to_wsl_path(problem)
+    wsl_plan = WSLHarness.to_wsl_path(plan)
+    wsl_sas = WSLHarness.to_wsl_path(sas_file)
+
+    pre_str = " ".join(pre)
+    post_str = " ".join(post)
+
+    cmd = (
+        f"python3 {FD} {pre_str} "
+        f"--plan-file '{wsl_plan}' --sas-file '{wsl_sas}' "
+        f"'{wsl_dom}' '{wsl_prob}' {post_str}"
+    ).strip()
+
+    code, stdout, stderr, elapsed = WSLHarness.run_cmd(cmd, timeout=90)
+    if code != 0 or not plan.exists():
         return None
-    if r.returncode != 0 or not plan.exists():
-        return None
-    return [ln.strip() for ln in plan.read_text().splitlines() if ln.startswith("(")]
+    return [ln.strip() for ln in plan.read_text(encoding="utf-8").splitlines() if ln.startswith("(")]
 
 
 def execute_in_gt(plan: list[str], gt_actions, init: set[str], goal: set[str]) -> bool:
