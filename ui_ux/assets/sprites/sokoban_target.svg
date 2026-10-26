@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
-  <!-- Target Pad Floor Recess -->
-  <rect x="8" y="8" width="48" height="48" rx="6" fill="#064e3b" fill-opacity="0.3" stroke="#059669" stroke-width="2"/>
-  <!-- Concentric Target Reticle -->
-  <circle cx="32" cy="32" r="16" stroke="#10b981" stroke-width="2" stroke-dasharray="4 2"/>
-  <circle cx="32" cy="32" r="8" fill="#059669" stroke="#34d399" stroke-width="2"/>
-  <circle cx="32" cy="32" r="3" fill="#ffffff"/>
-</svg>

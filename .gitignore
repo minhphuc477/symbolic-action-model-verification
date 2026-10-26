@@ -1,64 +1,51 @@
-# Byte-compiled / optimized / DLL files
+# Python
 __pycache__/
 *.py[cod]
-*$py.class
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
 
-# Virtual Environment
+# Virtual environments
 venv/
 venv_linux/
 .venv/
-env/
-ENV/
 wsl_ubuntu/
 
+# External code and benchmarks (fetched by scripts/fetch_external.ps1, never vendored)
+external/
+FastLAS_repo/
+locm_repo/
+daineto-meta-planning/
+PuzzleScript/
 
-# Large PDF downloads & binary assets
-papers/*.pdf
-papers/*.txt
-papers/images/
-*.tar.gz
+# Paper full texts and PDFs (copyrighted; kept locally only)
+papers/
+*.pdf
 
-# Output logs & cache
-*.log
+# Run artefacts (raw per-run outputs are regenerated; only curated results/summary is tracked)
+results/raw/
+results/work/
+repair_logs/
+sas_plan*
+*.soln
+*.sas
+
+# Tooling
+.agents/
+.aris/
+.licenses/
+
+# LaTeX build files
 *.aux
+*.log
 *.out
 *.toc
 *.fls
 *.fdb_latexmk
 *.synctex.gz
-.pytest_cache/
-.coverage
-htmlcov/
 
-# Madagascar / FAMA temporary compilation artifacts
-compiled_domain
-compiled_problem
-planner_out
-
-# OS generated files
+# OS
 .DS_Store
 Thumbs.db
-
-# External repositories
-daineto-meta-planning/
-PuzzleScript/
-FastLAS/
-FastLAS_repo/
-locm_repo/
-
-# Planner temporary execution files & logs
-sas_plan*
-*.soln
-repair_logs/
-domains/mutated/ablation/
-domains/mutated/bidirectional_bench/
-.agents/*
-!.agents/skills/
-.aris/
-.licenses/
-.ruff_cache/
-
-# Binary data ledgers
-*.xlsx
-
-

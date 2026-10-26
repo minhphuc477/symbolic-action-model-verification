@@ -1,7 +1,0 @@
-# Planning Burden Experiment Configuration
-# Measures Search Effort H_P(M*, x) vs H_P(M_hat, x) across canonical interventions
-experiment: planning_burden
-
-interventions_config: configs/interventions/matrix_24.yaml
-output_path: benchmark_outputs/proposition1_full_matrix.json
-max_expansions: 10000
