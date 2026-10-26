@@ -27,6 +27,7 @@ papers/
 # Run artefacts (raw per-run outputs are regenerated; only curated results/summary is tracked)
 results/raw/
 results/work/
+results/smoke/
 repair_logs/
 sas_plan*
 *.soln

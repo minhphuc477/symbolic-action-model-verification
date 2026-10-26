@@ -1,0 +1,12 @@
+out_dir: results/smoke
+domains: [blocksworld, grippers]
+families: [missing_prec, spurious_prec, corrupt_effect, compound]
+seeds: 2
+k: 1
+n_learn: 3
+n_solve: 5
+budgets: [50, 300]
+planner_timeout_s: 20
+modes: [full, "partial:0.5", binary]
+methods: [ours, monotonic, random_repair, random_sam]
+scrambled: [false]

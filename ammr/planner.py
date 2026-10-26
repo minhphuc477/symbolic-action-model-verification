@@ -8,7 +8,7 @@ import subprocess
 import sys
 import time
 from collections.abc import Sequence
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from enum import StrEnum
 from typing import Protocol
 
@@ -177,10 +177,13 @@ class FastDownwardPlanner:
     def solve(self, domain: Domain, problem: Problem, timeout_s: float = 15.0) -> PlanResult:
         t0 = time.perf_counter()
         proc = self._ensure_proc()
+        # Some benchmark files spell the domain name differently in the problem header
+        # (e.g. AMLGym visitall: grid-visit-all vs grid_visit_all); FD rejects mismatches.
+        aligned = replace(problem, domain_name=domain.name)
         payload = json.dumps(
             {
                 "domain": write_domain(domain),
-                "problem": write_problem(problem),
+                "problem": write_problem(aligned),
                 "search": self.search,
                 "fd_bin": self.fd_bin,
                 "timeout": timeout_s,
