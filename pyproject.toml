@@ -3,19 +3,24 @@ requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.backends.legacy:build"
 
 [project]
-name = "ceg-omr-thesis"
-version = "0.1.0"
-description = "Counterexample-Guided Online Model Repair (CEG-OMR) for Game World Models"
-requires-python = ">=3.13"
+name = "ammr"
+version = "0.2.0"
+description = "Version-Space and Minimum-Edit Online Repair of Symbolic Action Models"
+requires-python = ">=3.12"
+dependencies = [
+    "numpy>=1.24",
+    "scipy>=1.10",
+    "pyyaml>=6.0",
+]
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["src*"]
+include = ["ammr*", "experiments*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["."]
-addopts = "-v --tb=short"
+addopts = "-q --tb=short"
 
 [tool.mypy]
 python_version = "3.13"
@@ -23,8 +28,8 @@ strict = false
 ignore_missing_imports = true
 
 [tool.ruff]
-line-length = 120
-target-version = "py313"
+line-length = 100
+target-version = "py312"
 exclude = [
     ".git",
     ".pytest_cache",
@@ -32,35 +37,16 @@ exclude = [
     "venv",
     "venv_linux",
     ".venv",
+    "external",
     "FastLAS_repo",
     "locm_repo",
     "daineto-meta-planning",
-    "literature",
-    "scratch",
+    "papers",
 ]
 
 [tool.ruff.lint]
-select = [
-    "E",   # pycodestyle errors
-    "W",   # pycodestyle warnings
-    "F",   # pyflakes
-    "I",   # isort
-    "B",   # flake8-bugbear
-    "C4",  # flake8-comprehensions
-    "UP",  # pyupgrade
-    "SIM", # flake8-simplify
-]
-ignore = [
-    "E501",  # line length handled by ruff format
-    "B008",  # function call in argument default (dataclass field)
-    "B905",  # zip without strict=
-    "E741",  # single-letter mathematical variables (e.g., O for observations, l for literal)
-    "SIM108", # ternary operator over if/else
-    "C416",  # dict comprehension vs dict(zip(...))
-    "C401",  # set comprehension
-    "C414",  # list within sorted
-    "SIM105", # suppress(OSError)
-]
+select = ["E", "W", "F", "I", "B", "UP", "SIM"]
+ignore = ["B905"]
 
 [tool.ruff.lint.isort]
-known-first-party = ["src"]
+known-first-party = ["ammr", "experiments"]
